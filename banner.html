@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music and Mastery - Banner</title>
+  <style>
+
+    /* Self-hosted Google Fonts (latin subset) */
+    @font-face {
+      font-family: "Montserrat";
+      font-style: normal;
+      font-weight: 400 900;
+      font-display: swap;
+      src: url(/brand_assets/fonts/montserrat-latin.woff2) format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Questrial";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(/brand_assets/fonts/questrial-latin.woff2) format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --purple-dark: #726edd;
+      --purple-light: #e4e3ff;
+      --purple-mid: #9b95f0;
+      --orange: #fc4e1a;
+      --orange-light: #fff0eb;
+      --black: #1a1a1a;
+      --gray: #555;
+      --gray-light: #888;
+      --white: #ffffff;
+
+      /* Banner is 33:81 aspect ratio. Design at 990px x 2430px */
+      --banner-w: 990px;
+      --banner-h: 2430px;
+    }
+
+    body {
+      background: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      padding: 40px 0;
+      font-family: 'Questrial', sans-serif;
+    }
+
+    .banner {
+      width: var(--banner-w);
+      height: var(--banner-h);
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    /* ============================================
+       SECTION 1: HERO HEADER (~25%)
+       ============================================ */
+    .hero {
+      background: var(--purple-dark);
+      height: 608px; /* ~25% of 2430 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 30px 60px 30px;
+    }
+
+    /* Decorative musical notes - scattered SVGs */
+    .hero-note {
+      position: absolute;
+      opacity: 0.18;
+      fill: white;
+    }
+    .hero-note-1 { top: 30px; left: 40px; width: 60px; transform: rotate(-15deg); }
+    .hero-note-2 { top: 80px; right: 50px; width: 45px; transform: rotate(20deg); }
+    .hero-note-3 { bottom: 60px; left: 60px; width: 50px; transform: rotate(10deg); }
+    .hero-note-4 { bottom: 40px; right: 70px; width: 55px; transform: rotate(-25deg); }
+    .hero-note-5 { top: 200px; left: 150px; width: 35px; transform: rotate(30deg); }
+    .hero-note-6 { top: 160px; right: 160px; width: 40px; transform: rotate(-10deg); }
+
+    /* Subtle radial glow */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(155, 149, 240, 0.4) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-logo {
+      width: 280px;
+      height: auto;
+      filter: brightness(0) invert(1);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 20px;
+    }
+
+    .hero-company {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 32px;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 14px;
+    }
+
+    .hero-headline {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 66px;
+      color: var(--white);
+      text-align: center;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .hero-headline em {
+      font-style: normal;
+      color: var(--orange);
+    }
+
+    /* ============================================
+       SECTION 2: ILLUSTRATION BAND (~15%)
+       ============================================ */
+    .illustration-band {
+      background: var(--purple-light);
+      height: 365px; /* ~15% of 2430 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 50px;
+      padding: 50px 60px 40px;
+      position: relative;
+    }
+
+    /* Wavy top border */
+    .illustration-band::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--purple-light);
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+
+    .instrument-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--purple-dark);
+    }
+
+    .instrument-icon svg {
+      width: 120px;
+      height: 120px;
+    }
+
+    .instrument-icon span {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 22px;
+      color: var(--purple-dark);
+      letter-spacing: 0.02em;
+    }
+
+    /* Decorative dots pattern */
+    .illustration-band::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--purple-dark) 0px,
+        var(--purple-dark) 8px,
+        transparent 8px,
+        transparent 20px
+      );
+      opacity: 0.3;
+    }
+
+    /* ============================================
+       SECTION 3: THREE BENEFITS (~35%)
+       ============================================ */
+    .benefits {
+      height: 850px; /* ~35% of 2430 */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 70px;
+      gap: 50px;
+      background: var(--white);
+      position: relative;
+    }
+
+    .benefit {
+      display: flex;
+      align-items: flex-start;
+      gap: 36px;
+    }
+
+    .benefit-icon {
+      width: 110px;
+      height: 110px;
+      min-width: 110px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(252, 78, 26, 0.25);
+    }
+
+    .benefit-icon svg {
+      width: 50px;
+      height: 50px;
+      fill: white;
+    }
+
+    .benefit-text {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 8px;
+    }
+
+    .benefit-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 44px;
+      color: var(--black);
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+    }
+
+    .benefit-desc {
+      font-family: 'Questrial', sans-serif;
+      font-size: 28px;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    /* Subtle dividers between benefits */
+    .benefit + .benefit {
+      padding-top: 50px;
+      border-top: 2px solid var(--purple-light);
+    }
+
+    /* ============================================
+       SECTION 4: CTA + CONTACT (~25%)
+       ============================================ */
+    .cta-section {
+      height: 607px; /* ~25% of 2430 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 10px 80px 80px;
+      background: linear-gradient(180deg, var(--white) 0%, #f8f7ff 100%);
+      position: relative;
+    }
+
+    /* Top accent line */
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 80px;
+      right: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--purple-dark), transparent);
+      opacity: 0.3;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--orange);
+      color: var(--white);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 40px;
+      padding: 32px 72px;
+      border-radius: 60px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      box-shadow:
+        0 8px 24px rgba(252, 78, 26, 0.3),
+        0 2px 8px rgba(252, 78, 26, 0.2);
+      text-transform: uppercase;
+    }
+
+    .qr-area {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-top: 10px;
+    }
+
+    .qr-code {
+      width: 250px;
+      height: 250px;
+      background: var(--white);
+      border: 3px solid var(--black);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+    }
+
+    .qr-code svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact-line {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Questrial', sans-serif;
+      font-size: 28px;
+      color: var(--black);
+    }
+
+    .contact-line svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--purple-dark);
+      flex-shrink: 0;
+    }
+
+    .contact-line strong {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+    }
+
+    .scan-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 22px;
+      color: var(--gray-light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: -16px;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+        margin: 0;
+      }
+      .banner {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+
+    <!-- HERO HEADER -->
+    <section class="hero">
+      <!-- Decorative musical notes -->
+      <svg class="hero-note hero-note-1" viewBox="0 0 50 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 5 L20 40 C20 50 5 55 5 45 C5 35 20 35 20 40 M20 5 L45 0 L45 10 L20 15"/>
+      </svg>
+      <svg class="hero-note hero-note-2" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 5 L15 40 C15 50 0 55 0 45 C0 35 15 35 15 40 M40 0 L40 35 C40 45 25 50 25 40 C25 30 40 30 40 35 M15 5 L40 0 M15 15 L40 10"/>
+      </svg>
+      <svg class="hero-note hero-note-3" viewBox="0 0 50 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 5 L20 40 C20 50 5 55 5 45 C5 35 20 35 20 40 M20 5 L45 0 L45 10 L20 15"/>
+      </svg>
+      <svg class="hero-note hero-note-4" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 5 L15 40 C15 50 0 55 0 45 C0 35 15 35 15 40 M40 0 L40 35 C40 45 25 50 25 40 C25 30 40 30 40 35 M15 5 L40 0 M15 15 L40 10"/>
+      </svg>
+      <svg class="hero-note hero-note-5" viewBox="0 0 50 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 5 L20 40 C20 50 5 55 5 45 C5 35 20 35 20 40"/>
+      </svg>
+      <svg class="hero-note hero-note-6" viewBox="0 0 50 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 5 L20 40 C20 50 5 55 5 45 C5 35 20 35 20 40"/>
+      </svg>
+
+      <!-- Logo -->
+      <img class="hero-logo" src="brand_assets/Logo - Transparent & Black.png" alt="Music and Mastery Logo">
+
+      <div class="hero-company">Music and Mastery</div>
+
+      <h1 class="hero-headline">Music Lessons<br>That Come <em>to You</em></h1>
+    </section>
+
+    <!-- ILLUSTRATION BAND -->
+    <section class="illustration-band">
+      <div class="instrument-icon">
+        <!-- Guitar (Font Awesome) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M502.63 39L473 9.37a32 32 0 0 0-45.26 0L381.46 55.7a35.14 35.14 0 0 0-8.53 13.79L360.77 106l-76.26 76.26c-12.16-8.76-25.5-15.74-40.1-19.14c-33.45-7.78-67-.88-89.88 22a82.45 82.45 0 0 0-20.24 33.47c-6 18.56-23.21 32.69-42.15 34.46c-23.7 2.27-45.73 11.45-62.61 28.44C-16.11 327-7.9 409 47.58 464.45S185 528 230.56 482.52c17-16.88 26.16-38.9 28.45-62.71c1.76-18.85 15.89-36.13 34.43-42.14a82.6 82.6 0 0 0 33.48-20.25c22.87-22.88 29.74-56.36 22-89.75c-3.39-14.64-10.37-28-19.16-40.2L406 151.23l36.48-12.16a35.14 35.14 0 0 0 13.79-8.53l46.33-46.32a32 32 0 0 0 .03-45.22M208 352a48 48 0 1 1 48-48a48 48 0 0 1-48 48"/></svg>
+        <span>Guitar</span>
+      </div>
+
+      <div class="instrument-icon">
+        <!-- Piano (Icon Park) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M4 8h40v16H4zm0 16h40v16H4zm6 0v8m6-8v8m10-8v8m6-8v8m6-8v8"/></svg>
+        <span>Piano</span>
+      </div>
+
+      <div class="instrument-icon">
+        <!-- Microphone / Voice (MDI) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3m7 9c0 3.53-2.61 6.44-6 6.93V21h-2v-3.07c-3.39-.49-6-3.4-6-6.93h2a5 5 0 0 0 5 5a5 5 0 0 0 5-5z"/></svg>
+        <span>Voice</span>
+      </div>
+
+      <div class="instrument-icon">
+        <!-- More (MDI music note plus) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M17 9v3h-3v2h3v3h2v-3h3v-2h-3V9zM9 3v10.55c-.59-.34-1.27-.55-2-.55c-2.21 0-4 1.79-4 4s1.79 4 4 4s4-1.79 4-4V7h4V3z"/></svg>
+        <span>& More</span>
+      </div>
+    </section>
+
+    <!-- THREE BENEFITS -->
+    <section class="benefits">
+      <div class="benefit">
+        <div class="benefit-icon">
+          <!-- Heart icon -->
+          <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25 42 C12 35 5 27 5 19 C5 12 10 7 17 7 C21 7 24 9 25 12 C26 9 29 7 33 7 C40 7 45 12 45 19 C45 27 38 35 25 42Z" fill="white"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <div class="benefit-title">Learn What You Love</div>
+          <div class="benefit-desc">Your songs. Your goals. Your pace.</div>
+        </div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <!-- Star / award icon -->
+          <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25 5 L30 18 L44 18 L33 27 L37 41 L25 33 L13 41 L17 27 L6 18 L20 18 Z" fill="white"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <div class="benefit-title">Expert Instructors</div>
+          <div class="benefit-desc">Passionate, qualified teachers.</div>
+        </div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <!-- House icon -->
+          <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 24 L25 8 L42 24 L42 42 L30 42 L30 30 L20 30 L20 42 L8 42 Z" fill="white"/>
+            <path d="M5 24 L25 5 L45 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <div class="benefit-title">Lessons at Your Home</div>
+          <div class="benefit-desc">No driving. No hassle. We come to you.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA + CONTACT -->
+    <section class="cta-section">
+      <div class="cta-button">3 Lessons at 50% Off!</div>
+
+      <div class="scan-label">Scan to Get Started</div>
+
+      <div class="qr-area">
+        <div class="qr-code">
+          <!-- Real QR Code for JotForm -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h29v29H0z"/><path stroke="#1a1a1a" d="M0 0.5h7m1 0h2m1 0h5m2 0h1m3 0h7M0 1.5h1m5 0h1m3 0h3m2 0h1m1 0h2m1 0h1m1 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h2m3 0h1m2 0h1m1 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m2 0h2m1 0h1m2 0h4m3 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m3 0h1m4 0h2m1 0h1m3 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m3 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 7.5h3m1 0h1m4 0h3M0 8.5h1m1 0h1m3 0h2m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1M1 9.5h1m2 0h1m2 0h1m2 0h1m1 0h1m3 0h2m1 0h1m2 0h1m4 0h2M0 10.5h4m2 0h2m1 0h2m1 0h3m1 0h1m2 0h1m4 0h3m1 0h1M0 11.5h2m1 0h2m4 0h1m2 0h1m1 0h3m1 0h1m1 0h1m1 0h4M0 12.5h1m3 0h1m1 0h2m4 0h3m1 0h3m1 0h1m1 0h2m4 0h1M0 13.5h1m1 0h1m2 0h1m2 0h2m1 0h1m1 0h2m3 0h3m1 0h2m3 0h2M3 14.5h4m2 0h2m1 0h1m2 0h1m1 0h5m1 0h1m4 0h1M1 15.5h1m6 0h1m4 0h1m1 0h1m3 0h1m2 0h1M0 16.5h1m1 0h1m1 0h1m1 0h8m4 0h2m2 0h1m5 0h1M1 17.5h3m4 0h2m7 0h4m1 0h2m2 0h3M0 18.5h4m2 0h1m1 0h4m1 0h2m1 0h2m1 0h1m5 0h1m2 0h1M3 19.5h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h1m1 0h7M0 20.5h2m1 0h6m3 0h4m1 0h2m1 0h6m1 0h1M8 21.5h3m1 0h3m1 0h1m3 0h1m3 0h3m1 0h1M0 22.5h7m1 0h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1M0 23.5h1m5 0h1m2 0h1m1 0h3m1 0h1m1 0h1m1 0h2m3 0h1m2 0h1M0 24.5h1m1 0h3m1 0h1m3 0h2m1 0h1m1 0h11m1 0h1M0 25.5h1m1 0h3m1 0h1m2 0h3m3 0h1m4 0h2m2 0h4M0 26.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m3 0h1m2 0h2M0 27.5h1m5 0h1m2 0h1m1 0h1m1 0h1m4 0h1m1 0h2m2 0h2M0 28.5h7m1 0h1m2 0h1m3 0h1m2 0h1m1 0h3m1 0h2m2 0h1"/></svg>
+        </div>
+
+        <div class="contact-info">
+          <div class="contact-line">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <strong>(760) 573-2120</strong>
+          </div>
+          <div class="contact-line">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="#726edd" stroke-width="2"/>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="#726edd" stroke-width="2"/>
+            </svg>
+            <strong>musicandmastery.com</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
