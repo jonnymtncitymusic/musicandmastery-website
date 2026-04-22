@@ -12,7 +12,7 @@ Landing pages cover **all instruments** (guitar, piano, voice, bass, ukulele, dr
 - Email: `jonny@mtncitymusic.com`
 - Google Ads tag: `AW-11066542604`
 - GA4 Measurement ID: `G-SPQ1FGTKTV`
-- JotForm ID: `260520648689164` (beginner pages) and whatever index.html uses — reused across brands via a hidden `brand_source` URL param
+- JotForm ID: `260516786213155` (used on **all M&M pages** — index, instructors, and all 22 location pages) — reused across brands via a hidden `brand_source` URL param. M&M does not use the guitar-specific form `260520648689164` that MCMC location pages use, because M&M launches generic music lessons.
 - Instagram: `@mountain_city_music`
 - TikTok: `@mountain_city_music`
 - Brand system: logo, palette (`--dark-purple #726edd`, `--light-purple #e4e3ff`, `--accent #fc4e1a`), fonts (Montserrat + Questrial)
@@ -54,7 +54,7 @@ Placeholder: `https://www.musicandmastery.com` — all canonical URLs, OG URLs, 
 - When referenced in HTML, logo alt text should say "Music and Mastery" (not "Mountain City Music Co.").
 
 ## JotForm — brand_source hidden field
-Both sites use the same JotForm. M&M pages pass `?brand_source=Music%20and%20Mastery` on the iframe `src` (the form must have a matching hidden field for this to land in the submission). MCMC pages keep their current URL (no param). This lets lead routing/reporting distinguish brands without splitting forms.
+Both M&M and MCMC's index/instructors pages use JotForm `260516786213155`. M&M pages pass `?brand_source=Music%20and%20Mastery` on the iframe `src` (the form must have a matching hidden field for this to land in the submission). MCMC pages keep their current URL (no param). This lets lead routing/reporting distinguish brands without splitting forms. Since M&M consolidated to this single form (2026-04-21), you only need the `brand_source` hidden field on form `260516786213155` — not the guitar-specific `260520648689164` which M&M no longer uses.
 
 ## Anti-Generic Guardrails
 - **Colors:** Only `--dark-purple`, `--light-purple`, `--accent`, `--black`, `--off-white`. Never framework-default blue/indigo.
