@@ -58,9 +58,30 @@
       startTiming: '',  // 'asap' | 'within_month' | 'exploring'
       notes: '',
       loading: false,
-      error: '',
+      error: '',           // global/system errors (network, payment, server)
+      fieldErrors: {},     // per-field validation errors keyed by field id
       confirmation: null,
     };
+  }
+
+  // Helpers for inline field errors
+  function setFieldError(field, msg) {
+    state.fieldErrors[field] = msg;
+  }
+  function clearFieldError(field) {
+    if (state.fieldErrors[field]) delete state.fieldErrors[field];
+  }
+  function clearAllErrors() {
+    state.error = '';
+    state.fieldErrors = {};
+  }
+  // Render an inline error message + apply error class to a field
+  function fieldErrorHtml(field) {
+    const msg = state.fieldErrors[field];
+    return msg ? `<div class="sw-field-error-msg">${msg}</div>` : '';
+  }
+  function fieldErrorClass(field) {
+    return state.fieldErrors[field] ? 'sw-field-error' : '';
   }
 
   const DAYS_OF_WEEK = [
@@ -228,27 +249,30 @@
         <h3 class="sw-heading">Find Your Perfect Lesson</h3>
         <p class="sw-subtext">Tell us what you're looking for and we'll match you with the best instructor.</p>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('instrument')}">
           <label class="sw-label">Instrument</label>
           <select id="sw-instrument" class="sw-select">
             <option value="">Choose an instrument...</option>
             ${instrumentOptions}
           </select>
+          ${fieldErrorHtml('instrument')}
         </div>
 
         ${state.instrument === 'Other' ? `
-          <div class="sw-field">
+          <div class="sw-field ${fieldErrorClass('instrumentOther')}">
             <label class="sw-label">Which instrument?</label>
             <input type="text" id="sw-instrument-other" class="sw-input" placeholder="e.g., Violin, Saxophone, Drums" value="${state.instrumentOther}">
+            ${fieldErrorHtml('instrumentOther')}
           </div>
         ` : ''}
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('city')}">
           <label class="sw-label">Your City</label>
           <select id="sw-city" class="sw-select">
             <option value="">Choose your city...</option>
             ${cityOptions}
           </select>
+          ${fieldErrorHtml('city')}
         </div>
 
         <div class="sw-field">
@@ -328,6 +352,7 @@
     const slotKey = s => s ? `${s.instructor_id}|${s.date}|${s.time}` : '';
     const recommendedKey = state.slots?.recommended ? slotKey(state.slots.recommended) : '';
     const selectedKey = slotKey(state.selectedSlot);
+    const hasSelection = !!state.selectedSlot;
 
     let slotsHtml = '';
     for (const group of groups) {
@@ -336,12 +361,18 @@
       slotsHtml += `<div class="sw-slots-row">`;
       for (const slot of group.slots) {
         const thisKey = slotKey(slot);
-        const isRecommended = thisKey === recommendedKey && !state.filterInstructor;
         const isSelected = thisKey === selectedKey;
+        // Only show 'Best Match' treatment when nothing is selected, OR when
+        // the recommended slot IS what's selected. This way picking a different
+        // time visually demotes the previously-recommended slot back to normal.
+        const showAsRecommended = thisKey === recommendedKey
+          && !state.filterInstructor
+          && (!hasSelection || isSelected);
         slotsHtml += `
-          <button class="sw-slot ${isSelected ? 'sw-slot-selected' : ''} ${isRecommended ? 'sw-slot-recommended' : ''}"
+          <button class="sw-slot ${isSelected ? 'sw-slot-selected' : ''} ${showAsRecommended ? 'sw-slot-recommended' : ''}"
                   data-slot='${JSON.stringify(slot)}'>
-            ${isRecommended ? '<span class="sw-badge">Best Match</span>' : ''}
+            ${showAsRecommended ? '<span class="sw-badge">Best Match</span>' : ''}
+            ${isSelected ? '<span class="sw-badge sw-badge-selected">&#10003; Selected</span>' : ''}
             <span class="sw-slot-time">${formatTime(slot.time)}</span>
             <span class="sw-slot-instructor">${slot.instructor_name}</span>
           </button>
@@ -374,24 +405,28 @@
           First lesson of your <strong>3-lesson trial</strong> (${state.lessonLength} min ${state.instrument})
         </div>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('name')}">
           <label class="sw-label">Your Name</label>
           <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
+          ${fieldErrorHtml('name')}
         </div>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('email')}">
           <label class="sw-label">Email</label>
           <input type="email" id="sw-email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
+          ${fieldErrorHtml('email')}
         </div>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('phone')}">
           <label class="sw-label">Phone</label>
           <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
+          ${fieldErrorHtml('phone')}
         </div>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('address')}">
           <label class="sw-label">Lesson Address</label>
           <input type="text" id="sw-address-final" class="sw-input" placeholder="Full address where lessons will take place" value="${state.address}">
+          ${fieldErrorHtml('address')}
         </div>
 
         <!-- Honeypot -->
@@ -546,47 +581,54 @@
         <h3 class="sw-heading">${headline}</h3>
         <p class="sw-subtext">${subtext}</p>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('name')}">
           <label class="sw-label">Your Name</label>
           <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
+          ${fieldErrorHtml('name')}
         </div>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('email')}">
           <label class="sw-label">Email</label>
           <input type="email" id="sw-email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
+          ${fieldErrorHtml('email')}
         </div>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('phone')}">
           <label class="sw-label">Phone</label>
           <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
+          ${fieldErrorHtml('phone')}
         </div>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('instrument')}">
           <label class="sw-label">Instrument of Interest</label>
           <select id="sw-instrument" class="sw-select">
             <option value="">Choose an instrument...</option>
             ${instrumentOptions}
           </select>
+          ${fieldErrorHtml('instrument')}
         </div>
 
         ${state.instrument === 'Other' ? `
-          <div class="sw-field">
+          <div class="sw-field ${fieldErrorClass('instrumentOther')}">
             <label class="sw-label">Which instrument?</label>
             <input type="text" id="sw-instrument-other" class="sw-input" placeholder="e.g., Violin, Saxophone" value="${state.instrumentOther}">
+            ${fieldErrorHtml('instrumentOther')}
           </div>
         ` : ''}
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('studentAge')}">
           <label class="sw-label">Student Age</label>
           <input type="text" id="sw-age" class="sw-input" placeholder='e.g. "8" or "Adult"' value="${state.studentAge}">
+          ${fieldErrorHtml('studentAge')}
         </div>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('city')}">
           <label class="sw-label">City</label>
           <input type="text" id="sw-city-text" class="sw-input" placeholder="Your city" value="${state.city}">
+          ${fieldErrorHtml('city')}
         </div>
 
-        <div class="sw-field">
+        <div class="sw-field ${fieldErrorClass('startTiming')}">
           <label class="sw-label">How soon would you like to start?</label>
           <select id="sw-timing" class="sw-select">
             <option value="">Choose...</option>
@@ -594,6 +636,7 @@
             <option value="within_month" ${state.startTiming === 'within_month' ? 'selected' : ''}>Within the next month</option>
             <option value="exploring" ${state.startTiming === 'exploring' ? 'selected' : ''}>Just exploring</option>
           </select>
+          ${fieldErrorHtml('startTiming')}
         </div>
 
         <div class="sw-field">
@@ -641,7 +684,7 @@
     const instrumentSel = document.getElementById('sw-instrument');
     if (instrumentSel) instrumentSel.addEventListener('change', e => {
       state.instrument = e.target.value;
-      state.error = '';
+      clearFieldError('instrument');
       // Re-render so "Other" text input appears/disappears
       render();
     });
@@ -649,10 +692,11 @@
     const instrumentOtherInput = document.getElementById('sw-instrument-other');
     if (instrumentOtherInput) instrumentOtherInput.addEventListener('input', e => {
       state.instrumentOther = e.target.value;
+      clearFieldError('instrumentOther');
     });
 
     const citySel = document.getElementById('sw-city');
-    if (citySel) citySel.addEventListener('change', e => { state.city = e.target.value; state.error = ''; });
+    if (citySel) citySel.addEventListener('change', e => { state.city = e.target.value; clearFieldError('city'); });
 
     const lengthSel = document.getElementById('sw-length');
     if (lengthSel) lengthSel.addEventListener('change', e => { state.lessonLength = parseInt(e.target.value); });
@@ -704,16 +748,16 @@
 
     // Step 3
     const nameInput = document.getElementById('sw-name');
-    if (nameInput) nameInput.addEventListener('input', e => { state.clientName = e.target.value; });
+    if (nameInput) nameInput.addEventListener('input', e => { state.clientName = e.target.value; clearFieldError('name'); });
 
     const emailInput = document.getElementById('sw-email');
-    if (emailInput) emailInput.addEventListener('input', e => { state.clientEmail = e.target.value; });
+    if (emailInput) emailInput.addEventListener('input', e => { state.clientEmail = e.target.value; clearFieldError('email'); });
 
     const phoneInput = document.getElementById('sw-phone');
-    if (phoneInput) phoneInput.addEventListener('input', e => { state.clientPhone = e.target.value; });
+    if (phoneInput) phoneInput.addEventListener('input', e => { state.clientPhone = e.target.value; clearFieldError('phone'); });
 
     const addrFinal = document.getElementById('sw-address-final');
-    if (addrFinal) addrFinal.addEventListener('input', e => { state.address = e.target.value; });
+    if (addrFinal) addrFinal.addEventListener('input', e => { state.address = e.target.value; clearFieldError('address'); });
 
     const submitBtn = document.getElementById('sw-submit');
     if (submitBtn) submitBtn.addEventListener('click', handleBooking);
@@ -723,13 +767,13 @@
     if (notesInput) notesInput.addEventListener('input', e => { state.notes = e.target.value; });
 
     const ageInput = document.getElementById('sw-age');
-    if (ageInput) ageInput.addEventListener('input', e => { state.studentAge = e.target.value; });
+    if (ageInput) ageInput.addEventListener('input', e => { state.studentAge = e.target.value; clearFieldError('studentAge'); });
 
     const cityTextInput = document.getElementById('sw-city-text');
-    if (cityTextInput) cityTextInput.addEventListener('input', e => { state.city = e.target.value; });
+    if (cityTextInput) cityTextInput.addEventListener('input', e => { state.city = e.target.value; clearFieldError('city'); });
 
     const timingSel = document.getElementById('sw-timing');
-    if (timingSel) timingSel.addEventListener('change', e => { state.startTiming = e.target.value; });
+    if (timingSel) timingSel.addEventListener('change', e => { state.startTiming = e.target.value; clearFieldError('startTiming'); });
 
     const submitLeadBtn = document.getElementById('sw-submit-lead');
     if (submitLeadBtn) submitLeadBtn.addEventListener('click', handleLeadSubmit);
@@ -747,11 +791,14 @@
   }
 
   async function handleFindSlots() {
-    if (!state.instrument) { state.error = 'Please select an instrument.'; render(); return; }
+    clearAllErrors();
+    let bad = false;
+    if (!state.instrument) { setFieldError('instrument', 'Please select an instrument.'); bad = true; }
     if (state.instrument === 'Other' && !state.instrumentOther.trim()) {
-      state.error = 'Please tell us which instrument.'; render(); return;
+      setFieldError('instrumentOther', 'Please tell us which instrument.'); bad = true;
     }
-    if (!state.city) { state.error = 'Please select your city.'; render(); return; }
+    if (!state.city) { setFieldError('city', 'Please select your city.'); bad = true; }
+    if (bad) { render(); return; }
 
     // "Other" instruments skip availability lookup — go straight to lead capture
     if (state.instrument === 'Other') {
@@ -800,20 +847,23 @@
   }
 
   async function handleLeadSubmit() {
-    if (!state.clientName.trim()) { state.error = 'Please enter your name.'; render(); return; }
+    clearAllErrors();
+    let bad = false;
+    if (!state.clientName.trim()) { setFieldError('name', 'Please enter your name.'); bad = true; }
     if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) {
-      state.error = 'Please enter a valid email.'; render(); return;
+      setFieldError('email', 'Please enter a valid email.'); bad = true;
     }
     if (LEAD_ONLY) {
-      if (!state.clientPhone.trim()) { state.error = 'Please enter your phone number.'; render(); return; }
-      if (!state.instrument) { state.error = 'Please select an instrument.'; render(); return; }
+      if (!state.clientPhone.trim()) { setFieldError('phone', 'Please enter your phone number.'); bad = true; }
+      if (!state.instrument) { setFieldError('instrument', 'Please select an instrument.'); bad = true; }
       if (state.instrument === 'Other' && !state.instrumentOther.trim()) {
-        state.error = 'Please tell us which instrument.'; render(); return;
+        setFieldError('instrumentOther', 'Please tell us which instrument.'); bad = true;
       }
-      if (!state.studentAge.trim()) { state.error = 'Please enter the student age.'; render(); return; }
-      if (!state.city.trim()) { state.error = 'Please enter your city.'; render(); return; }
-      if (!state.startTiming) { state.error = 'Please tell us how soon you want to start.'; render(); return; }
+      if (!state.studentAge.trim()) { setFieldError('studentAge', 'Please enter the student age.'); bad = true; }
+      if (!state.city.trim()) { setFieldError('city', 'Please enter your city.'); bad = true; }
+      if (!state.startTiming) { setFieldError('startTiming', 'Please tell us how soon you want to start.'); bad = true; }
     }
+    if (bad) { render(); return; }
 
     const hp = document.getElementById('sw-hp');
     if (hp && hp.value) return;
@@ -868,9 +918,12 @@
   }
 
   async function handleBooking() {
-    if (!state.clientName.trim()) { state.error = 'Please enter your name.'; render(); return; }
-    if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) { state.error = 'Please enter a valid email.'; render(); return; }
-    if (!state.address.trim()) { state.error = 'Please enter your lesson address.'; render(); return; }
+    clearAllErrors();
+    let bad = false;
+    if (!state.clientName.trim()) { setFieldError('name', 'Please enter your name.'); bad = true; }
+    if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) { setFieldError('email', 'Please enter a valid email.'); bad = true; }
+    if (!state.address.trim()) { setFieldError('address', 'Please enter your lesson address.'); bad = true; }
+    if (bad) { render(); return; }
 
     // Honeypot check
     const hp = document.getElementById('sw-hp');
@@ -942,22 +995,25 @@
     loadPaypalSdk(clientId).then(paypal => {
       // Validate fields BEFORE letting PayPal open. Errors shown inline.
       const validateBeforePay = () => {
-        if (!state.clientName.trim()) { state.error = 'Please enter your name.'; render(); return false; }
+        clearAllErrors();
+        let bad = false;
+        if (!state.clientName.trim()) { setFieldError('name', 'Please enter your name.'); bad = true; }
         if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) {
-          state.error = 'Please enter a valid email.'; render(); return false;
+          setFieldError('email', 'Please enter a valid email.'); bad = true;
         }
         if (LEAD_ONLY) {
-          if (!state.clientPhone.trim()) { state.error = 'Please enter your phone number.'; render(); return false; }
-          if (!state.instrument) { state.error = 'Please select an instrument.'; render(); return false; }
+          if (!state.clientPhone.trim()) { setFieldError('phone', 'Please enter your phone number.'); bad = true; }
+          if (!state.instrument) { setFieldError('instrument', 'Please select an instrument.'); bad = true; }
           if (state.instrument === 'Other' && !state.instrumentOther.trim()) {
-            state.error = 'Please tell us which instrument.'; render(); return false;
+            setFieldError('instrumentOther', 'Please tell us which instrument.'); bad = true;
           }
-          if (!state.studentAge.trim()) { state.error = 'Please enter the student age.'; render(); return false; }
-          if (!state.city.trim()) { state.error = 'Please enter your city.'; render(); return false; }
-          if (!state.startTiming) { state.error = 'Please tell us how soon you want to start.'; render(); return false; }
+          if (!state.studentAge.trim()) { setFieldError('studentAge', 'Please enter the student age.'); bad = true; }
+          if (!state.city.trim()) { setFieldError('city', 'Please enter your city.'); bad = true; }
+          if (!state.startTiming) { setFieldError('startTiming', 'Please tell us how soon you want to start.'); bad = true; }
         } else {
-          if (!state.address.trim()) { state.error = 'Please enter your lesson address.'; render(); return false; }
+          if (!state.address.trim()) { setFieldError('address', 'Please enter your lesson address.'); bad = true; }
         }
+        if (bad) { render(); return false; }
         return true;
       };
 
@@ -1364,6 +1420,19 @@
         margin-bottom: 16px;
         border: 1px solid rgba(192,57,43,0.15);
       }
+      /* Inline field validation errors */
+      .sw-field-error .sw-input,
+      .sw-field-error .sw-select {
+        border-color: #c0392b;
+        box-shadow: 0 0 0 3px rgba(192,57,43,0.12);
+      }
+      .sw-field-error-msg {
+        color: #c0392b;
+        font-family: 'Questrial', sans-serif;
+        font-size: 12px;
+        margin-top: 5px;
+        font-weight: 600;
+      }
       .sw-spinner {
         width: 16px; height: 16px;
         border: 2px solid rgba(255,255,255,0.3);
@@ -1406,9 +1475,12 @@
       }
       .sw-slot-selected {
         border-color: #726edd;
-        background: #f9f8ff;
-        box-shadow: 0 2px 12px rgba(114,110,221,0.2);
+        border-width: 2.5px;
+        background: linear-gradient(135deg, #ede9ff 0%, #d8d2ff 100%);
+        box-shadow: 0 4px 20px rgba(114,110,221,0.35);
+        transform: translateY(-2px);
       }
+      .sw-slot-selected .sw-slot-time { color: #5f5bc8; }
       .sw-slot-recommended {
         border-color: #726edd;
         background: linear-gradient(135deg, #f9f8ff 0%, #ede9ff 100%);
@@ -1426,6 +1498,10 @@
         text-transform: uppercase;
         padding: 2px 8px;
         border-radius: 9999px;
+      }
+      .sw-badge-selected {
+        background: #fc4e1a;
+        right: auto; left: -4px;
       }
       .sw-slot-time {
         font-family: 'Montserrat', sans-serif;
