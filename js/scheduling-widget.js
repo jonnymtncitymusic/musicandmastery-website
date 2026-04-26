@@ -51,6 +51,7 @@
       clientEmail: '',
       clientPhone: '',
       studentAge: '',
+      startTiming: '',  // 'asap' | 'within_month' | 'exploring'
       notes: '',
       loading: false,
       error: '',
@@ -451,10 +452,16 @@
       `<option value="${i}" ${state.instrument === i ? 'selected' : ''}>${i}</option>`
     ).join('');
 
+    const cityName = state.city || 'your area';
+    const headline = state.city
+      ? `Music Lessons in ${cityName} — Reserve Your Spot`
+      : 'Reserve Your Spot for Music Lessons';
+    const subtext = `We're matching new students with instructors in ${cityName} and will reach out within 24 hours to confirm your fit. Most students start lessons within 1–3 weeks.`;
+
     return `
       <div class="sw-step">
-        <h3 class="sw-heading">Get Started With A Lesson</h3>
-        <p class="sw-subtext">Tell us a bit about yourself and we'll reach out within 24 hours to schedule.</p>
+        <h3 class="sw-heading">${headline}</h3>
+        <p class="sw-subtext">${subtext}</p>
 
         <div class="sw-field">
           <label class="sw-label">Your Name</label>
@@ -497,6 +504,16 @@
         </div>
 
         <div class="sw-field">
+          <label class="sw-label">How soon would you like to start?</label>
+          <select id="sw-timing" class="sw-select">
+            <option value="">Choose...</option>
+            <option value="asap" ${state.startTiming === 'asap' ? 'selected' : ''}>As soon as possible</option>
+            <option value="within_month" ${state.startTiming === 'within_month' ? 'selected' : ''}>Within the next month</option>
+            <option value="exploring" ${state.startTiming === 'exploring' ? 'selected' : ''}>Just exploring</option>
+          </select>
+        </div>
+
+        <div class="sw-field">
           <label class="sw-label">Anything else we should know? <span class="sw-optional">(optional)</span></label>
           <textarea id="sw-notes" class="sw-input" rows="3" placeholder="Goals, preferred days/times, experience level">${state.notes}</textarea>
         </div>
@@ -504,7 +521,7 @@
         <div style="position:absolute;left:-9999px;"><input type="text" id="sw-hp" tabindex="-1" autocomplete="off"></div>
 
         <button id="sw-submit-lead" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
-          ${state.loading ? '<span class="sw-spinner"></span> Sending...' : 'Get Started'}
+          ${state.loading ? '<span class="sw-spinner"></span> Sending...' : 'Reserve My Spot'}
         </button>
         <p class="sw-fineprint">We'll get back to you within 24 hours. Your info stays private.</p>
       </div>
@@ -609,6 +626,9 @@
     const cityTextInput = document.getElementById('sw-city-text');
     if (cityTextInput) cityTextInput.addEventListener('input', e => { state.city = e.target.value; });
 
+    const timingSel = document.getElementById('sw-timing');
+    if (timingSel) timingSel.addEventListener('change', e => { state.startTiming = e.target.value; });
+
     const submitLeadBtn = document.getElementById('sw-submit-lead');
     if (submitLeadBtn) submitLeadBtn.addEventListener('click', handleLeadSubmit);
 
@@ -683,6 +703,7 @@
       }
       if (!state.studentAge.trim()) { state.error = 'Please enter the student age.'; render(); return; }
       if (!state.city.trim()) { state.error = 'Please enter your city.'; render(); return; }
+      if (!state.startTiming) { state.error = 'Please tell us how soon you want to start.'; render(); return; }
     }
 
     const hp = document.getElementById('sw-hp');
@@ -701,6 +722,7 @@
         instrument_other: state.instrumentOther.trim() || undefined,
         city: state.city.trim() || undefined,
         student_age: state.studentAge.trim() || undefined,
+        start_timing: state.startTiming || undefined,
         notes: state.notes.trim() || undefined,
         brand_source: BRAND_SOURCE,
         honeypot: '',
