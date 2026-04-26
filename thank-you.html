@@ -191,6 +191,51 @@
       font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
     }
+    .ty-booking-card {
+      background: linear-gradient(135deg, #f9f8ff 0%, #ede9ff 100%);
+      border: 1.5px solid rgba(114,110,221,0.25);
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      text-align: left;
+      animation: fade-up 0.6s 0.4s ease-out both;
+      box-shadow: 0 4px 16px rgba(114,110,221,0.12);
+    }
+    .ty-booking-card h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dark-purple);
+      margin: 0 0 16px;
+    }
+    .ty-booking-details {
+      margin: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 18px;
+    }
+    .ty-booking-details dt {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      align-self: center;
+    }
+    .ty-booking-details dd {
+      margin: 0;
+      font-family: 'Questrial', sans-serif;
+      font-size: 16px;
+      color: var(--black);
+    }
+    .ty-booking-details .ty-paid {
+      color: #1a8a3e;
+      font-weight: 700;
+    }
+
     .ty-actions {
       display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
       animation: fade-up 0.6s 0.55s ease-out both;
@@ -357,14 +402,20 @@
       <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
 
-    <div class="ty-eyebrow">Form Received</div>
+    <div class="ty-eyebrow" id="ty-eyebrow">Form Received</div>
 
-    <h1 class="ty-heading">You're all set,<br><span class="accent">we'll be in touch.</span></h1>
+    <h1 class="ty-heading" id="ty-headline">You're all set,<br><span class="accent">we'll be in touch.</span></h1>
 
-    <p class="ty-sub">
+    <p class="ty-sub" id="ty-sub">
       Thank you for reaching out to Music and Mastery.
       We'll get back to you within <strong>24 hours</strong> to confirm your first lesson.
     </p>
+
+    <!-- Personalized booking summary (populated by JS if URL params are present) -->
+    <div class="ty-booking-card" id="ty-booking-card" style="display:none;">
+      <h2>Your Booking</h2>
+      <dl class="ty-booking-details" id="ty-booking-details"></dl>
+    </div>
 
     <div class="ty-what-next">
       <h2>What happens next</h2>
@@ -401,6 +452,74 @@
 </footer>
 
 <script>
+// Personalize the thank-you page with booking details from URL params.
+// The widget sends these on redirect after a successful booking.
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var type = params.get('type');  // 'paid' | 'callback' | 'lead' | 'deposit'
+  if (!type) return;
+
+  var instructor = params.get('instructor');
+  var day        = params.get('day');
+  var time       = params.get('time');
+  var duration   = params.get('duration');
+  var instrument = params.get('instrument');
+  var city       = params.get('city');
+  var deposit    = params.get('deposit');
+
+  function fmtTime(t) {
+    if (!t || !t.includes(':')) return t || '';
+    var p = t.split(':').map(Number);
+    var ampm = p[0] >= 12 ? 'PM' : 'AM';
+    var h = p[0] % 12 || 12;
+    return h + ':' + String(p[1]).padStart(2, '0') + ' ' + ampm;
+  }
+
+  var headline = document.getElementById('ty-headline');
+  var sub = document.getElementById('ty-sub');
+  var eyebrow = document.getElementById('ty-eyebrow');
+
+  if (type === 'paid') {
+    eyebrow.textContent = 'Trial Confirmed';
+    headline.innerHTML = "Your trial is <span class=\"accent\">booked!</span>";
+    sub.innerHTML = "We'll see you for your first lesson with <strong>" + (instructor || 'your instructor') + "</strong>. We'll email a confirmation and reach out within 24 hours.";
+  } else if (type === 'callback') {
+    eyebrow.textContent = 'Slot Reserved';
+    headline.innerHTML = "We'll <span class=\"accent\">call you soon.</span>";
+    sub.innerHTML = "Your slot is held. We'll call within 24 hours to walk through everything and confirm payment.";
+  } else if (type === 'deposit') {
+    eyebrow.textContent = 'Deposit Received';
+    headline.innerHTML = "You're on the <span class=\"accent\">M&amp;M list!</span>";
+    sub.innerHTML = "Thanks for your $" + (deposit || '20') + " deposit. We'll match you with an instructor in <strong>" + (city || 'your area') + "</strong> and reach out within 24 hours.";
+  } else if (type === 'lead') {
+    eyebrow.textContent = 'Info Received';
+    sub.innerHTML = "Thanks! We'll match you with an instructor in <strong>" + (city || 'your area') + "</strong> and reach out within 24 hours.";
+  }
+
+  var details = document.getElementById('ty-booking-details');
+  function row(label, value) {
+    if (!value) return;
+    var dt = document.createElement('dt'); dt.textContent = label;
+    var dd = document.createElement('dd'); dd.innerHTML = value;
+    details.appendChild(dt); details.appendChild(dd);
+  }
+
+  if (type === 'paid' || type === 'callback') {
+    row('Instructor',    instructor);
+    row('Day',           day);
+    row('Time',          fmtTime(time));
+    if (duration)   row('Duration',  duration + ' min');
+    if (instrument) row('Instrument', instrument);
+    if (type === 'paid') row('Status', '<span class="ty-paid">PAID — your trial is locked in</span>');
+    document.getElementById('ty-booking-card').style.display = 'block';
+  } else if (type === 'deposit') {
+    if (instrument) row('Instrument', instrument);
+    if (city)       row('City',       city);
+    row('Deposit',  '<span class="ty-paid">$' + (deposit || '20') + ' PAID</span>');
+    document.getElementById('ty-booking-card').style.display = 'block';
+  }
+})();
+
 document.addEventListener('click', function(e) {
   var link = e.target.closest('a[href^="tel:"]');
   if (link) {

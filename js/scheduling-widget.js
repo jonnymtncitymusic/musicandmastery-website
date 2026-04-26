@@ -132,6 +132,14 @@
     return res.json();
   }
 
+  function buildRedirectUrl(params) {
+    const url = new URL(THANK_YOU_REDIRECT, window.location.origin);
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, String(v));
+    });
+    return url.toString();
+  }
+
   async function submitLead(params) {
     const res = await fetch(`${API_BASE}/api/scheduling/lead`, {
       method: 'POST',
@@ -841,7 +849,11 @@
       // Conversion redirect (Google Ads conversion tracking lives on the
       // thank-you page). If set, send the user there as a top-level navigation.
       if (THANK_YOU_REDIRECT) {
-        window.location.href = THANK_YOU_REDIRECT;
+        window.location.href = buildRedirectUrl({
+          type: 'lead',
+          instrument: state.instrument === 'Other' ? state.instrumentOther : state.instrument,
+          city: state.city,
+        });
         return;
       }
 
@@ -1031,7 +1043,17 @@
       if (typeof gtag === 'function') {
         gtag('event', 'form_submission', { event_category: 'booking_paid', event_label: state.instrument });
       }
-      if (THANK_YOU_REDIRECT) { window.location.href = THANK_YOU_REDIRECT; return; }
+      if (THANK_YOU_REDIRECT) {
+        window.location.href = buildRedirectUrl({
+          type: 'paid',
+          instructor: result.instructor_name,
+          day: result.day,
+          time: result.time,
+          duration: state.lessonLength,
+          instrument: state.instrument,
+        });
+        return;
+      }
       state.confirmation = result; state.step = 4;
     } catch (e) {
       // Critical: payment was captured but booking failed. Show a banner-style
@@ -1067,6 +1089,17 @@
       if (typeof gtag === 'function') {
         gtag('event', 'form_submission', { event_category: 'callback_request', event_label: state.instrument });
       }
+      if (THANK_YOU_REDIRECT) {
+        window.location.href = buildRedirectUrl({
+          type: 'callback',
+          instructor: result.instructor_name,
+          day: result.day,
+          time: result.time,
+          duration: state.lessonLength,
+          instrument: state.instrument,
+        });
+        return;
+      }
       state.confirmation = { ...result, isCallback: true }; state.step = 4;
     } catch (e) {
       state.error = e.message || 'Could not submit callback request.';
@@ -1094,7 +1127,15 @@
       if (typeof gtag === 'function') {
         gtag('event', 'form_submission', { event_category: 'lead_paid', event_label: state.instrument });
       }
-      if (THANK_YOU_REDIRECT) { window.location.href = THANK_YOU_REDIRECT; return; }
+      if (THANK_YOU_REDIRECT) {
+        window.location.href = buildRedirectUrl({
+          type: 'deposit',
+          instrument: state.instrument === 'Other' ? state.instrumentOther : state.instrument,
+          city: state.city,
+          deposit: state.config?.mm_deposit,
+        });
+        return;
+      }
       state.confirmation = { ...result, isLead: true, isPaid: true }; state.step = 4;
     } catch (e) {
       state.error = e.message || 'Submission failed after payment. Please contact us.';
