@@ -879,6 +879,7 @@
         instructor_id: state.selectedSlot.instructor_id,
         day_of_week: state.selectedSlot.day_of_week,
         start_time: state.selectedSlot.time,
+        lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
         honeypot: '',
       });
@@ -1022,6 +1023,7 @@
         instructor_id: state.selectedSlot.instructor_id,
         day_of_week: state.selectedSlot.day_of_week,
         start_time: state.selectedSlot.time,
+        lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
         paypal_order_id: orderId,
         honeypot: '',
@@ -1057,6 +1059,7 @@
         instructor_id: state.selectedSlot.instructor_id,
         day_of_week: state.selectedSlot.day_of_week,
         start_time: state.selectedSlot.time,
+        lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
         callback_requested: true,
         honeypot: '',
