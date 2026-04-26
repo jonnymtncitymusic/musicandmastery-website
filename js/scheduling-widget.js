@@ -25,10 +25,13 @@
   const LEAD_ONLY = window.MCMC_LEAD_ONLY || (BRAND_SOURCE !== 'mcmc');
 
   const INSTRUMENTS = ['Guitar', 'Piano', 'Voice', 'Bass', 'Ukulele', 'Drums', 'Music Production', 'Other'];
+  // Lesson length labels show TRIAL pricing — 3 lessons at 50% off the
+  // standard per-lesson rate ($40/$60/$75). Total trial price is what the
+  // client actually pays today via PayPal.
   const LESSON_LENGTHS = [
-    { value: 30, label: '30 min — $40' },
-    { value: 45, label: '45 min — $60' },
-    { value: 60, label: '60 min — $75' },
+    { value: 30, label: '30 min — $60 trial (3 lessons, 50% off)' },
+    { value: 45, label: '45 min — $90 trial (3 lessons, 50% off)' },
+    { value: 60, label: '60 min — $112.50 trial (3 lessons, 50% off)' },
   ];
 
   // ─── State ─────────────────────────────────────────────────────────────────
@@ -208,6 +211,12 @@
 
     return `
       <div class="sw-step">
+        ${LEAD_ONLY ? '' : `
+          <div class="sw-trial-banner">
+            <div class="sw-trial-banner-eyebrow">Trial Special</div>
+            <div class="sw-trial-banner-headline">Your first 3 lessons — 50% off</div>
+          </div>
+        `}
         <h3 class="sw-heading">Find Your Perfect Lesson</h3>
         <p class="sw-subtext">Tell us what you're looking for and we'll match you with the best instructor.</p>
 
@@ -239,6 +248,7 @@
           <select id="sw-length" class="sw-select">
             ${lengthOptions}
           </select>
+          <div class="sw-bucket-hint">Trial covers your first 3 lessons. Standard rates apply after ($40/$60/$75 per lesson).</div>
         </div>
 
         <div class="sw-field">
@@ -352,7 +362,8 @@
       <div class="sw-step">
         <h3 class="sw-heading">Your Information</h3>
         <div class="sw-selection-summary">
-          <strong>${slot.instructor_name}</strong> — ${slot.day}, ${formatTime(slot.time)} (${state.lessonLength} min ${state.instrument})
+          <strong>${slot.instructor_name}</strong> — ${slot.day}, ${formatTime(slot.time)}<br>
+          First lesson of your <strong>3-lesson trial</strong> (${state.lessonLength} min ${state.instrument})
         </div>
 
         <div class="sw-field">
@@ -391,17 +402,24 @@
     const price = state.config?.mcmc_prices?.[state.lessonLength];
     const hasPaypal = state.config?.paypal_client_id && price != null;
     if (!hasPaypal) {
-      // PayPal not configured — fall back to plain submit (callback flow)
       return `
         <button id="sw-submit" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
           ${state.loading ? '<span class="sw-spinner"></span> Booking...' : 'Book Trial Lesson'}
         </button>
       `;
     }
+    // Per-lesson math so the discount feels concrete
+    const standardPerLesson = state.lessonLength === 30 ? 40 : state.lessonLength === 45 ? 60 : 75;
+    const trialPerLesson = standardPerLesson / 2;
+    const standardTotal = standardPerLesson * 3;
     return `
       <div class="sw-pay-card">
-        <div class="sw-pay-headline">Pay $${price.toFixed(2)} to lock in your spot</div>
-        <div class="sw-pay-subtext">Covers your first 3 lessons at 50% off. Refundable up to 48 hours before your first lesson.</div>
+        <div class="sw-pay-eyebrow">Trial Special — 50% off</div>
+        <div class="sw-pay-headline">3 ${state.lessonLength}-min Lessons for $${price.toFixed(2)}</div>
+        <div class="sw-pay-price-breakdown">
+          That's <strong>$${trialPerLesson.toFixed(2)}/lesson</strong> instead of <s>$${standardPerLesson.toFixed(2)}</s> — you save $${(standardTotal - price).toFixed(2)}.
+        </div>
+        <div class="sw-pay-subtext">After your trial, lessons continue at the standard rate ($${standardPerLesson}/lesson). Refundable up to 48 hours before your first lesson.</div>
         <div id="sw-paypal-button" class="sw-paypal-button"></div>
       </div>
       <button id="sw-callback" class="sw-text-link" ${state.loading ? 'disabled' : ''}>
@@ -432,10 +450,10 @@
       `;
     }
 
-    const headline = c.isCallback ? "We'll Call You Soon" : "You're Booked!";
+    const headline = c.isCallback ? "We'll Call You Soon" : "Your Trial Is Booked!";
     const text = c.isCallback
       ? "Thanks! We've got your slot reserved and will call within 24 hours to walk you through everything."
-      : c.message;
+      : `${c.message} You're set for your 3-lesson trial — we'll confirm the exact times for your 2nd and 3rd lessons within 24 hours.`;
 
     return `
       <div class="sw-step sw-step-confirm">
@@ -1148,6 +1166,32 @@
       textarea.sw-input { resize: vertical; min-height: 88px; font-family: 'Questrial', sans-serif; }
       .sw-fineprint { font-family: 'Questrial', sans-serif; font-size: 12px; color: #888; text-align: center; margin: 14px 0 0; }
 
+      /* Trial banner (top of step 1) */
+      .sw-trial-banner {
+        background: linear-gradient(135deg, #726edd 0%, #5f5bc8 100%);
+        color: #fff;
+        border-radius: 14px;
+        padding: 14px 18px;
+        margin: -8px -4px 20px;
+        text-align: center;
+        box-shadow: 0 4px 16px rgba(114,110,221,0.28);
+      }
+      .sw-trial-banner-eyebrow {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.85);
+        margin-bottom: 4px;
+      }
+      .sw-trial-banner-headline {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        font-size: 17px;
+        letter-spacing: -0.01em;
+      }
+
       /* Payment card */
       .sw-pay-card {
         background: linear-gradient(135deg, #f9f8ff 0%, #ede9ff 100%);
@@ -1156,17 +1200,34 @@
         padding: 18px;
         margin: 12px 0 8px;
       }
+      .sw-pay-eyebrow {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #fc4e1a;
+        margin-bottom: 6px;
+      }
       .sw-pay-headline {
         font-family: 'Montserrat', sans-serif;
         font-weight: 800;
-        font-size: 16px;
+        font-size: 18px;
         color: #0d0d0d;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
+        letter-spacing: -0.01em;
       }
+      .sw-pay-price-breakdown {
+        font-family: 'Questrial', sans-serif;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .sw-pay-price-breakdown s { color: #999; }
       .sw-pay-subtext {
         font-family: 'Questrial', sans-serif;
-        font-size: 13px;
-        color: #555;
+        font-size: 12px;
+        color: #666;
         margin-bottom: 14px;
         line-height: 1.5;
       }
