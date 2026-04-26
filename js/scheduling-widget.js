@@ -305,14 +305,21 @@
 
     const groups = groupSlotsByDay(filtered);
 
+    // Compose a stable identity key for each slot so equality checks survive
+    // round-trips through JSON.parse(button.dataset.slot).
+    const slotKey = s => s ? `${s.instructor_id}|${s.date}|${s.time}` : '';
+    const recommendedKey = state.slots?.recommended ? slotKey(state.slots.recommended) : '';
+    const selectedKey = slotKey(state.selectedSlot);
+
     let slotsHtml = '';
     for (const group of groups) {
       slotsHtml += `<div class="sw-day-group">`;
       slotsHtml += `<div class="sw-day-label">${group.day}, ${new Date(group.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>`;
       slotsHtml += `<div class="sw-slots-row">`;
       for (const slot of group.slots) {
-        const isRecommended = slot === state.slots.recommended && !state.filterInstructor;
-        const isSelected = state.selectedSlot === slot;
+        const thisKey = slotKey(slot);
+        const isRecommended = thisKey === recommendedKey && !state.filterInstructor;
+        const isSelected = thisKey === selectedKey;
         slotsHtml += `
           <button class="sw-slot ${isSelected ? 'sw-slot-selected' : ''} ${isRecommended ? 'sw-slot-recommended' : ''}"
                   data-slot='${JSON.stringify(slot)}'>
