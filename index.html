@@ -1114,17 +1114,7 @@
 <div id="booking-overlay" class="modal-overlay" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-label="Book a Trial Lesson">
   <div class="modal-card">
     <button class="modal-close" onclick="closeModalDirect()" aria-label="Close">✕</button>
-    <iframe
-      id="JotFormIFrame-260516786213155"
-      title="Book a Trial Lesson"
-      loading="lazy"
-      allowtransparency="true"
-      allow="geolocation; microphone; camera; fullscreen; payment"
-      src="https://form.jotform.com/260516786213155?brand_source=Music%20and%20Mastery"
-      frameborder="0"
-      style="min-width:100%;max-width:100%;height:539px;border:none;border-radius:0 0 24px 24px;"
-      scrolling="no"
-    ></iframe>
+    <!-- Scheduling widget renders here on modal open -->
   </div>
 </div>
 
@@ -1233,10 +1223,6 @@ const testimonialsObserver = new IntersectionObserver((entries) => {
 const testimonialsSection = document.querySelector('.testimonials-section');
 if (testimonialsSection) testimonialsObserver.observe(testimonialsSection);
 </script>
-
-<script defer src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
-<script>addEventListener("DOMContentLoaded",function(){window.jotformEmbedHandler('iframe[id=\'JotFormIFrame-260516786213155\']', 'https://form.jotform.com/')})</script>
-
 <script>
 document.addEventListener('click', function(e) {
   var link = e.target.closest('a[href^="tel:"]');
@@ -1249,5 +1235,11 @@ document.addEventListener('click', function(e) {
 });
 </script>
 
+
+<!-- Music & Mastery lead capture widget -->
+<script>window.MCMC_SCHEDULING_API = 'https://cron-runner-production-a510.up.railway.app';</script>
+<script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
+<script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
+<script src="/js/scheduling-widget.js"></script>
 </body>
 </html>
