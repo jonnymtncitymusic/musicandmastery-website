@@ -950,8 +950,38 @@
 
       paypal.Buttons({
         style: { color: 'gold', shape: 'rect', label: 'pay', height: 44 },
-        onClick: (data, actions) => {
+        onClick: async (data, actions) => {
           if (!validateBeforePay()) return actions.reject();
+
+          // For MCMC bookings only: re-check that the selected slot is still
+          // available before opening PayPal. Avoids the case where a user pays
+          // and then can't be booked because the slot was just taken.
+          if (!LEAD_ONLY && state.selectedSlot) {
+            try {
+              const refreshed = await fetchAvailability({
+                instrument: state.instrument,
+                city: state.city,
+                lesson_length: state.lessonLength,
+                address: state.address || undefined,
+              });
+              const slotKeyOf = s => s ? `${s.instructor_id}|${s.date}|${s.time}` : '';
+              const targetKey = slotKeyOf(state.selectedSlot);
+              const allRefreshed = ([refreshed.recommended].concat(refreshed.alternatives || [])).filter(Boolean);
+              const stillAvailable = allRefreshed.some(s => slotKeyOf(s) === targetKey);
+              if (!stillAvailable) {
+                state.error = 'That time slot was just taken. Please go back and pick another time — no payment was charged.';
+                state.step = 2;
+                state.selectedSlot = null;
+                state.slots = refreshed;
+                render();
+                return actions.reject();
+              }
+            } catch (e) {
+              // If the check fails, let the user proceed anyway
+              console.warn('Slot pre-check failed:', e);
+            }
+          }
+
           return actions.resolve();
         },
         createOrder: (data, actions) => actions.order.create({
@@ -1002,7 +1032,9 @@
       if (THANK_YOU_REDIRECT) { window.location.href = THANK_YOU_REDIRECT; return; }
       state.confirmation = result; state.step = 4;
     } catch (e) {
-      state.error = e.message || 'Booking failed after payment. Please contact us.';
+      // Critical: payment was captured but booking failed. Show a banner-style
+      // error and surface the PayPal order ID so support can refund manually.
+      state.error = `IMPORTANT: Your payment of $${(state.config?.mcmc_prices?.[state.lessonLength] || 0).toFixed(2)} went through, but we couldn't save your booking (${e.message || 'unknown error'}). PayPal order ID: ${orderId}. Please call us at (760) 573-2120 right away — we'll either book you in or refund you immediately.`;
     }
     state.loading = false; render();
   }
