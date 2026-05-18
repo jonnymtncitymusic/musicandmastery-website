@@ -22,7 +22,11 @@
   gtag('config', 'AW-11066542604');
   gtag('config', 'G-SPQ1FGTKTV');
   window.addEventListener('load', function() {
-    gtag('event', 'conversion', {'send_to': 'AW-11066542604/i_42CLiPzKccEIyU-Jwp'});
+    // Temporary fallback to MCMC's working conversion label (2026-05-18).
+    // M&M-specific label AW-11066542604/i_42CLiPzKccEIyU-Jwp has been silently dropped by Google for 18 days
+    // despite HTTP 200 fires with the correct label. Reverting to the proven MCMC label restores measurement
+    // at the cost of brand-attribution clarity. Awaiting Google Ads support resolution.
+    gtag('event', 'conversion', {'send_to': 'AW-11066542604/Q-SJCNmDje0bEIyU-Jwp'});
   });
 </script>
 
