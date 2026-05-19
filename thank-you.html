@@ -23,6 +23,18 @@
   gtag('config', 'G-SPQ1FGTKTV');
   window.addEventListener('load', function() {
     gtag('event', 'conversion', {'send_to': 'AW-11066542604/i_42CLiPzKccEIyU-Jwp'});
+    // GA4 lead event — recorded by GA4, then imported into Google Ads as a
+    // conversion action. Bypasses the broken direct gtag→Ads pipeline for
+    // action 7599228856 which has been silently dropping fires since 2026-04-30.
+    var params = new URLSearchParams(window.location.search);
+    gtag('event', 'generate_lead', {
+      'currency': 'USD',
+      'value': 100,
+      'brand_source': 'Music and Mastery',
+      'lesson_type': params.get('type') || '',
+      'instrument': params.get('instrument') || '',
+      'city': params.get('city') || ''
+    });
   });
 </script>
 
