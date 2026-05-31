@@ -27,14 +27,20 @@
     // conversion action. Bypasses the broken direct gtag→Ads pipeline for
     // action 7599228856 which has been silently dropping fires since 2026-04-30.
     var params = new URLSearchParams(window.location.search);
-    gtag('event', 'generate_lead', {
+    var leadPayload = {
       'currency': 'USD',
       'value': 100,
       'brand_source': 'Music and Mastery',
       'lesson_type': params.get('type') || '',
       'instrument': params.get('instrument') || '',
       'city': params.get('city') || ''
-    });
+    };
+    // Standard GA4 recommended event (long-term clean name).
+    gtag('event', 'generate_lead', leadPayload);
+    // Existing pre-registered key event in GA4 with corresponding Google Ads
+    // import action 7552928555 already wired. Faster path to measurement than
+    // pre-registering generate_lead from scratch.
+    gtag('event', 'Form_Submission_via_Google_Ads', leadPayload);
   });
 </script>
 
