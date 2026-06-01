@@ -15,7 +15,7 @@ Landing pages cover **all instruments** (guitar, piano, voice, bass, ukulele, dr
 - JotForm ID: `260516786213155` (used on **all M&M pages** — index, instructors, and all 22 location pages) — reused across brands via a hidden `brand_source` URL param. M&M does not use the guitar-specific form `260520648689164` that MCMC location pages use, because M&M launches generic music lessons.
 - Instagram: `@mountain_city_music`
 - TikTok: `@mountain_city_music`
-- Brand system: logo, palette (`--dark-purple #726edd`, `--light-purple #e4e3ff`, `--accent #fc4e1a`), fonts (Montserrat + Questrial)
+- Brand system: logo, palette (`--dark-purple #726edd`, `--light-purple #e4e3ff`, `--accent #d63e0d`), fonts (Montserrat + Questrial). Note: `#d63e0d` is the accessibility-compliant orange shipped 2026-06-01 to clear WCAG AA contrast (was `#fc4e1a`, 3.36 contrast → now 4.63). Buttons also use `#5f5bc8` (not `--dark-purple` itself) for the same reason. Don't revert.
 
 ## Domain
 Placeholder: `https://www.musicandmastery.com` — all canonical URLs, OG URLs, sitemap, schema.org URLs point here. If the final domain differs, do a global find/replace.
