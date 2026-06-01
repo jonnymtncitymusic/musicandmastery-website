@@ -277,7 +277,14 @@
     .local-faq-item { margin-bottom: 28px; }
     .local-faq-q { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px; color: var(--black); margin: 0 0 8px; }
     .local-faq-a { font-size: 15px; line-height: 1.7; color: #555; margin: 0; }
-  </style>
+  
+    /* Lite YouTube embed */
+    .lite-youtube { position: absolute; inset: 0; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background-color: #1a1a2e; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .lite-youtube::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.35) 100%); }
+    .lite-youtube-play { position: relative; width: 68px; height: 48px; background: #f00; border-radius: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.15s; }
+    .lite-youtube:hover .lite-youtube-play { background: #d63e0d; transform: scale(1.06); }
+    .lite-youtube-play::after { content: ''; border-left: 18px solid #fff; border-top: 11px solid transparent; border-bottom: 11px solid transparent; margin-left: 4px; }
+</style>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -461,13 +468,7 @@
   <div class="vsl-inner">
     <h2>About our Lessons</h2>
     <div class="vsl-wrapper">
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/o010P5DNPRM"
-        title="About Our Lessons"
-        loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
+      <button type="button" class="lite-youtube" data-video-id="o010P5DNPRM" data-domain="youtube-nocookie.com" aria-label="Play: About Our Lessons" style="background-image:url(https://i.ytimg.com/vi/o010P5DNPRM/hqdefault.jpg)"><span class="lite-youtube-play"></span></button>
     </div>
   </div>
 </section>
@@ -658,5 +659,24 @@ document.addEventListener('click', function(e) {
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <script>window.MCMC_PREFILL_CITY = 'Tustin';</script>
 <script src="/js/scheduling-widget.js"></script>
+
+<script>
+(function(){
+  document.querySelectorAll('.lite-youtube').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var vid = btn.dataset.videoId;
+      var domain = btn.dataset.domain || 'youtube.com';
+      if(!vid) return;
+      var iframe = document.createElement('iframe');
+      iframe.src = 'https://www.' + domain + '/embed/' + vid + '?autoplay=1&rel=0';
+      iframe.title = btn.getAttribute('aria-label') || 'YouTube video';
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.allowFullscreen = true;
+      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+      btn.replaceWith(iframe);
+    });
+  });
+})();
+</script>
 </body>
 </html>
