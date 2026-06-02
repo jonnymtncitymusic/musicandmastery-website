@@ -496,7 +496,18 @@
     .hero::before { animation: none; opacity: 1; }
     .hero::after  { animation: none; opacity: 0; }
   }
-  </style>
+  
+    /* Respect users' OS-level reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+</style>
 </head>
 <body>
 
@@ -1242,5 +1253,22 @@ document.addEventListener('click', function(e) {
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <script src="/js/scheduling-widget.js"></script>
+
+<script>
+(function(){
+  if (!('IntersectionObserver' in window)) return;
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var tracks = entry.target.querySelectorAll('.chips-track, .testimonials-track');
+      tracks.forEach(function(t){
+        t.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+      });
+    });
+  }, { rootMargin: '100px' });
+  document.querySelectorAll('.chips-section, .testimonials-section').forEach(function(s){
+    observer.observe(s);
+  });
+})();
+</script>
 </body>
 </html>

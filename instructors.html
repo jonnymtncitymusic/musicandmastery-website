@@ -193,7 +193,18 @@
       .trust-badge-label { font-size: 12px; }
       .trust-badge-sub { font-size: 11px; }
   }
-  </style>
+  
+    /* Respect users' OS-level reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+</style>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",

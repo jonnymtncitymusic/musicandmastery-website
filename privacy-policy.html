@@ -126,7 +126,18 @@
     }
     footer a { color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 12px; }
     footer a:hover { color: #fff; }
-  </style>
+  
+    /* Respect users' OS-level reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+</style>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
