@@ -15,7 +15,7 @@ Landing pages cover **all instruments** (guitar, piano, voice, bass, ukulele, dr
 - JotForm ID: `260516786213155` (used on **all M&M pages** — index, instructors, and all 22 location pages) — reused across brands via a hidden `brand_source` URL param. M&M does not use the guitar-specific form `260520648689164` that MCMC location pages use, because M&M launches generic music lessons.
 - Instagram: `@mountain_city_music`
 - TikTok: `@mountain_city_music`
-- Brand system: logo, palette (`--dark-purple #726edd`, `--light-purple #e4e3ff`, `--accent #d63e0d`), fonts (Montserrat + Questrial). Note: `#d63e0d` is the accessibility-compliant orange shipped 2026-06-01 to clear WCAG AA contrast (was `#fc4e1a`, 3.36 contrast → now 4.63). Buttons also use `#5f5bc8` (not `--dark-purple` itself) for the same reason. Don't revert.
+- Brand system (REBRANDED 2026-06-28): M&M logo = treble clef + gold shooting-star (files in `brand_assets/logo/`). Palette is PURPLE + GOLD + neutrals: `--dark-purple #726edd` (primary), `--accent #4f4ab8` (deep purple, buttons/links), `--light-purple #e4e3ff` (tints), `--gold #c6954f` (premium accent), `--cream #f6f1e8` / `--cream-deep #efe7d8` (warm section backgrounds), `--black #0d0d0d`, `--off-white #f9f8ff`. Red-orange (`#d63e0d`) is RETIRED, do not reintroduce it. Fonts: Playfair Display (display/headings) + Work Sans (body). Hero/warm sections use the cream-to-soft-lavender gradient `linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%)`. The canonical brand kit is `brand_assets/BRAND_KIT.md`.
 
 ## Domain
 Placeholder: `https://www.musicandmastery.com` — all canonical URLs, OG URLs, sitemap, schema.org URLs point here. If the final domain differs, do a global find/replace.
@@ -42,7 +42,7 @@ Placeholder: `https://www.musicandmastery.com` — all canonical URLs, OG URLs, 
 - **Do NOT add Tailwind via CDN.** The MCMC site removed it for performance reasons. The inline `<style>` block starts with a "Baseline reset" that replaces the preflight subset the pages relied on — keep those rules.
 
 ## External Resources — What's Hosted Where
-- **Fonts are self-hosted.** Montserrat (variable, weight 400–900) and Questrial (400) live as woff2 files in `brand_assets/fonts/`, declared via `@font-face` in each page. Do NOT re-add Google Fonts `<link>` tags.
+- **Fonts are self-hosted.** Playfair Display (600/700/800) and Work Sans (variable 400-700) live as woff2 files in `brand_assets/fonts/` (`playfair-display-*-latin.woff2`, `worksans-latin.woff2`), declared via `@font-face` in each page. Display/headings use Playfair Display; body and UI use Work Sans. Do NOT re-add Google Fonts `<link>` tags. (Legacy Montserrat/Questrial/Cormorant woff2 may still sit in the folder but are no longer used.)
 - **Hero image uses `<picture>` with WebP + JPEG fallback.** `brand_assets/Home_Page_Image.webp` (84 KB, preferred) falls back to `Home_Page_Image.jpg` on browsers without WebP.
 - **Videos: YouTube embeds only, never Google Drive.** Existing pages use `https://www.youtube.com/embed/y5hxyfuIbOs` for the "About our Lessons" VSL.
 - **Keep `loading="lazy"`** on all iframes (JotForm, YouTube).
@@ -50,16 +50,18 @@ Placeholder: `https://www.musicandmastery.com` — all canonical URLs, OG URLs, 
 
 ## Brand Assets
 - `brand_assets/` — logos, fonts, hero images, instrument photos, instructor photos (all inherited from MCMC).
-- Logos: `Logo - Transparent & Black.png`, `Logo - White Background No Name.png`, `Logo - White Background.png`.
+- Logos (in `brand_assets/logo/`): `mm-logo-primary.png` (black clef + gold star + wordmark, for LIGHT backgrounds), `mm-logo-reversed.png` (white version, for DARK/purple backgrounds), `mm-icon.png` / `mm-icon-reversed.png` (mark only), `mm-favicon-64.png` / `mm-apple-touch-180.png` / `mm-icon-512.png`. Old MCMC-clone logos were archived to `brand_assets/_archive-mcmc-logos/`.
+- Logo usage rule: light bg = primary (black) logo; dark AND purple bg = reversed (white) logo. Never black-on-purple.
+- The nav uses `mm-icon.png` + a Playfair "Music & Mastery" wordmark (gold ampersand), not a single image.
 - When referenced in HTML, logo alt text should say "Music and Mastery" (not "Mountain City Music Co.").
 
 ## JotForm — brand_source hidden field
 Both M&M and MCMC's index/instructors pages use JotForm `260516786213155`. M&M pages pass `?brand_source=Music%20and%20Mastery` on the iframe `src` (the form must have a matching hidden field for this to land in the submission). MCMC pages keep their current URL (no param). This lets lead routing/reporting distinguish brands without splitting forms. Since M&M consolidated to this single form (2026-04-21), you only need the `brand_source` hidden field on form `260516786213155` — not the guitar-specific `260520648689164` which M&M no longer uses.
 
 ## Anti-Generic Guardrails
-- **Colors:** Only `--dark-purple`, `--light-purple`, `--accent`, `--black`, `--off-white`. Never framework-default blue/indigo.
+- **Colors:** Use `--dark-purple`, `--accent` (deep purple buttons), `--light-purple`, `--gold` (premium accent only), `--cream` / `--cream-deep`, `--black`, `--off-white`. No red-orange, no framework-default blue/indigo.
 - **Shadows:** Layered, color-tinted, low opacity (see `.btn-primary` pattern).
-- **Typography:** Montserrat for headings, Questrial for body. Tight tracking (`letter-spacing: -0.03em`) on large headings, `1.7` line-height on body.
+- **Typography:** Playfair Display for display/headings, Work Sans for body and UI. `1.7` line-height on body.
 - **Animations:** Only animate `transform` and `opacity`. Never `transition: all`. Spring easing: `cubic-bezier(0.34, 1.2, 0.64, 1)`.
 - **Interactive states:** Every clickable element needs hover, focus-visible, active.
 - **Spacing:** 16/24/32/48/64/96px increments.

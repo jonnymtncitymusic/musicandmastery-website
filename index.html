@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
     <link rel="canonical" href="https://www.musicandmastery.com/">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Music and Mastery — In-Home Music Lessons in Orange County & Los Angeles">
+    <meta name="twitter:title" content="Music and Mastery, In-Home Music Lessons in Orange County & Los Angeles">
     <meta name="twitter:description" content="Music and Mastery offers private, in-home music lessons across Orange County and Los Angeles. Guitar, piano, voice, and more. 50% off your first 3 lessons.">
     <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
-    <meta property="og:title" content="Music and Mastery — In-Home Music Lessons in Orange County & Los Angeles">
+    <meta property="og:title" content="Music and Mastery, In-Home Music Lessons in Orange County & Los Angeles">
     <meta property="og:description" content="Music and Mastery offers private, in-home music lessons across Orange County and Los Angeles. Guitar, piano, voice, and more. 50% off your first 3 lessons.">
     <meta property="og:url" content="https://www.musicandmastery.com/">
     <meta property="og:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
@@ -54,7 +54,8 @@
   ]
 }
 </script>
-  <link rel="icon" href="brand_assets/Logo - White Background No Name.png" type="image/png" />
+  <link rel="icon" href="brand_assets/logo/mm-favicon-64.png" type="image/png" />
+  <link rel="apple-touch-icon" href="brand_assets/logo/mm-apple-touch-180.png" />
   <link rel="preload" as="image" href="brand_assets/Home_Page_Image.webp" type="image/webp" fetchpriority="high" media="(min-width: 769px)" />
   <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/questrial-latin.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/montserrat-latin.woff2" crossorigin>
@@ -62,22 +63,26 @@
 
     /* Self-hosted Google Fonts (latin subset) */
     @font-face {
-      font-family: "Montserrat";
-      font-style: normal;
-      font-weight: 400 900;
-      font-display: swap;
-      src: url(/brand_assets/fonts/montserrat-latin.woff2) format("woff2");
-      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      font-family: "Playfair Display";
+      font-style: normal; font-weight: 600; font-display: swap;
+      src: url(/brand_assets/fonts/playfair-display-600-latin.woff2) format("woff2");
     }
     @font-face {
-      font-family: "Questrial";
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url(/brand_assets/fonts/questrial-latin.woff2) format("woff2");
-      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      font-family: "Playfair Display";
+      font-style: normal; font-weight: 700; font-display: swap;
+      src: url(/brand_assets/fonts/playfair-display-700-latin.woff2) format("woff2");
     }
-    /* Baseline reset — replaces the subset of Tailwind preflight this page relied on */
+    @font-face {
+      font-family: "Playfair Display";
+      font-style: normal; font-weight: 800; font-display: swap;
+      src: url(/brand_assets/fonts/playfair-display-800-latin.woff2) format("woff2");
+    }
+    @font-face {
+      font-family: "Work Sans";
+      font-style: normal; font-weight: 400 700; font-display: swap;
+      src: url(/brand_assets/fonts/worksans-latin.woff2) format("woff2");
+    }
+    /* Baseline reset, replaces the subset of Tailwind preflight this page relied on */
     html { line-height: 1.5; -webkit-text-size-adjust: 100%; }
     a { color: inherit; text-decoration: inherit; }
     button { cursor: pointer; }
@@ -87,21 +92,27 @@
     :root {
       --light-purple: #e4e3ff;
       --dark-purple: #726edd;
-      --accent: #d63e0d;
+      --accent: #4f4ab8;
+      --gold: #c6954f;
+      --cream: #f6f1e8;
+      --cream-grad: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
+      --cream-deep: #efe7d8;
       --black: #0d0d0d;
       --off-white: #f9f8ff;
     }
     * { box-sizing: border-box; }
-    body { font-family: 'Questrial', sans-serif; color: var(--black); background: #fff; margin: 0; padding: 0; }
-    h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; }
+    body { font-family: 'Work Sans', sans-serif; color: var(--black); background: #fff; margin: 0; padding: 0; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Playfair Display', serif; }
 
     /* NAV */
     .nav { background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 22px rgba(116,130,151,0.15); }
     .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-    .nav-logo img { height: 56px; width: auto; }
+    .nav-logo img { height: 48px; width: auto; }
+    .nav-brand { font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(20px, 4.5vw, 26px); color: var(--black); line-height: 1; letter-spacing: 0.01em; }
+    .nav-amp { color: var(--gold); }
     .nav-right { display: flex; align-items: center; gap: 8px; }
-    .nav-review-link { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 15px; color: var(--black); text-decoration: none; transition: background 0.15s, color 0.15s; border-radius: 9999px; padding: 6px 14px; }
+    .nav-review-link { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 15px; color: var(--black); text-decoration: none; transition: background 0.15s, color 0.15s; border-radius: 9999px; padding: 6px 14px; }
     .nav-review-link:hover { background: rgba(24,29,31,0.07); }
 
     /* BUTTONS */
@@ -109,7 +120,7 @@
       0%, 100% { box-shadow: 0 4px 20px rgba(114,110,221,0.45), 0 0 40px rgba(114,110,221,0.15); }
       50%       { box-shadow: 0 6px 30px rgba(114,110,221,0.65), 0 0 60px rgba(114,110,221,0.28); }
     }
-    .btn { display: inline-flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; border-radius: 9999px; padding: 12px 26px; text-decoration: none; cursor: pointer; border: none; transition: transform 0.15s, box-shadow 0.15s, background 0.2s; position: relative; overflow: hidden; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px; border-radius: 9999px; padding: 12px 26px; text-decoration: none; cursor: pointer; border: none; transition: transform 0.15s, box-shadow 0.15s, background 0.2s; position: relative; overflow: hidden; }
     .btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.38) 50%, transparent 80%); transform: translateX(-150%); pointer-events: none; border-radius: inherit; }
     .btn:hover::after { transform: translateX(150%); transition: transform 0.55s ease; }
     .btn:active { transform: scale(0.96) !important; }
@@ -117,8 +128,8 @@
     .btn-primary:hover { background: #4d4aab; animation: none; box-shadow: 0 6px 28px rgba(114,110,221,0.6), 0 0 60px rgba(114,110,221,0.2); transform: translateY(-1px); }
     .btn-secondary { background: #fff; color: var(--black); border: 2px solid var(--black); }
     .btn-secondary:hover { background: var(--black); color: #fff; transform: translateY(-1px); }
-    .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(214,62,13,0.32); }
-    .btn-accent:hover { background: #b8350a; box-shadow: 0 6px 24px rgba(214,62,13,0.42); transform: translateY(-1px); }
+    .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(79,74,184,0.32); }
+    .btn-accent:hover { background: #b8350a; box-shadow: 0 6px 24px rgba(79,74,184,0.42); transform: translateY(-1px); }
     .btn-white { background: #fff; color: var(--dark-purple); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
     .btn-white:hover { background: var(--light-purple); box-shadow: 0 6px 24px rgba(0,0,0,0.18); transform: translateY(-1px); }
     .btn-outline-purple { background: transparent; color: var(--dark-purple); border: 2px solid var(--dark-purple); }
@@ -146,48 +157,48 @@
     .blur-fade-3 { animation-delay: 0.28s; }
     .blur-fade-4 { animation-delay: 0.40s; }
     .blur-fade-5 { animation-delay: 0.52s; }
-    .hero { background: #d8d5ff; padding: 96px 32px 0; position: relative; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #d8d5ff 0%, #ffd6c8 50%, #e4e3ff 100%); animation: hero-fade-a 12s ease-in-out infinite; z-index: 0; }
-    .hero::after  { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #ccc8ff 0%, #e4e3ff 45%, #ffd0bc 100%); animation: hero-fade-b 12s ease-in-out infinite; z-index: 0; }
+    .hero { background: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%); padding: 96px 32px 0; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%); animation: hero-fade-a 12s ease-in-out infinite; z-index: 0; }
+    .hero::after  { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, #f1ece2 0%, #e9e3f3 50%, #dcd6f0 100%); animation: hero-fade-b 12s ease-in-out infinite; z-index: 0; }
     .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 55% 45%; gap: 64px; align-items: flex-end; min-height: 680px; position: relative; z-index: 1; }
     .hero-text { padding-bottom: 96px; text-align: center; }
-    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dark-purple); background: rgba(114,110,221,0.12); border: 1px solid rgba(114,110,221,0.25); border-radius: 9999px; padding: 6px 14px; margin-bottom: 28px; }
-    .hero-heading { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(48px, 6.5vw, 84px); line-height: 1.06; letter-spacing: -0.035em; color: var(--black); margin: 0 0 24px; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.12); border: 1px solid rgba(198,149,79,0.25); border-radius: 9999px; padding: 6px 14px; margin-bottom: 28px; }
+    .hero-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(48px, 6.5vw, 84px); line-height: 1.06; letter-spacing: -0.035em; color: var(--black); margin: 0 0 24px; }
     .hero-heading .accent-word { color: var(--dark-purple); }
-    .hero-body { font-size: 18px; line-height: 1.7; color: #3a3a4a; margin: 0 auto 32px; max-width: 480px; }
+    .hero-body { font-size: 18px; line-height: 1.7; color: #3a3a4a; margin: 0 auto 32px; max-width: 700px; }
     .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; }
-    .hero-stats { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: #444; margin: 0 0 6px; flex-wrap: wrap; }
+    .hero-stats { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 14px; color: #444; margin: 0 0 6px; flex-wrap: wrap; }
     .hero-stats .stat-dot { color: var(--dark-purple); font-size: 9px; }
-    .hero-since { font-size: 13px; color: #666; margin: 0 0 20px; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+    .hero-since { font-size: 13px; color: #666; margin: 0 0 20px; font-family: 'Work Sans', sans-serif; font-weight: 600; }
     .hero-google-stars { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0 0 12px; }
-    .hero-google-stars .stars { color: #FFB800; font-size: 24px; letter-spacing: 2px; line-height: 1; }
-    .hero-google-stars .stars-label { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; color: var(--black); }
+    .hero-google-stars .stars { color: #c6954f; font-size: 24px; letter-spacing: 2px; line-height: 1; }
+    .hero-google-stars .stars-label { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 16px; color: var(--black); }
     .hero-review { margin: 0; }
     .hero-review blockquote { margin: 0 0 8px; font-size: 14px; line-height: 1.7; color: #444; font-style: italic; }
-    .hero-review cite { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; color: #666; font-style: normal; }
+    .hero-review cite { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; color: #666; font-style: normal; }
     .hero-illustration { display: flex; align-items: flex-end; }
     .hero-illust-img { width: 100%; border-radius: 24px 24px 0 0; display: block; min-height: 600px; object-fit: cover; }
 
     /* SOCIAL PROOF */
     .social-proof { background: #ffffff; border-bottom: 1px solid #f0eeff; padding: 48px 32px; text-align: center; }
     .social-proof-inner { max-width: 680px; margin: 0 auto; }
-    .social-proof-stars { color: #FFB800; font-size: 28px; letter-spacing: 4px; line-height: 1; margin-bottom: 8px; }
-    .social-proof-label { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px; color: var(--black); margin-bottom: 20px; }
+    .social-proof-stars { color: #c6954f; font-size: 28px; letter-spacing: 4px; line-height: 1; margin-bottom: 8px; }
+    .social-proof-label { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 18px; color: var(--black); margin-bottom: 20px; }
     .social-proof-quote { font-size: 16px; line-height: 1.75; color: #444; font-style: italic; margin: 0 0 12px; }
-    .social-proof-cite { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; color: #888; }
+    .social-proof-cite { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; color: #888; }
 
     /* SECTION SHARED */
     .section { padding: 96px 32px; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-light { background: var(--off-white); }
     /* 2-COLOR ALTERNATING PALETTE: light-purple / white */
-    .why-section             { background: #EDE9FF; }
+    .why-section             { background: var(--cream-grad); }
     .lessons-section         { background: #ffffff !important; }
-    .getting-started-section { background: #EDE9FF; }
-    .pricing-section         { background: #EDE9FF !important; }
+    .getting-started-section { background: var(--cream-grad); }
+    .pricing-section         { background: var(--cream-grad) !important; }
     .faq-section             { background: #ffffff; }
-    .section-tag { display: inline-block; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark-purple); background: rgba(114,110,221,0.1); border-radius: 9999px; padding: 5px 12px; margin-bottom: 20px; }
-    .section-heading { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; letter-spacing: -0.03em; color: var(--black); margin: 0 0 16px; }
+    .section-tag { display: inline-block; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.1); border-radius: 9999px; padding: 5px 12px; margin-bottom: 20px; }
+    .section-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; letter-spacing: -0.03em; color: var(--black); margin: 0 0 16px; }
     .section-subheading { font-size: 18px; line-height: 1.65; color: #555; max-width: 600px; margin: 0 auto; }
     .section-header-center { text-align: center; margin-bottom: 64px; }
 
@@ -201,7 +212,7 @@
     .why-card:nth-child(4).animate-in { transition-delay: 0.36s; }
     .why-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(114,110,221,0.12); transition: transform 0.2s, box-shadow 0.2s; }
     .why-svg { width: 64px; height: 64px; margin-bottom: 18px; display: block; mix-blend-mode: multiply; }
-    .why-card h3 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; margin: 0 0 10px; letter-spacing: -0.01em; }
+    .why-card h3 { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 20px; margin: 0 0 10px; letter-spacing: -0.01em; }
     .why-card p { font-size: 15px; line-height: 1.7; color: #555; margin: 0; }
 
     /* LESSONS WE OFFER */
@@ -217,7 +228,7 @@
     .lesson-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(114,110,221,0.14); border-color: var(--dark-purple); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
     .lesson-card-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; margin-bottom: 16px; }
     .lesson-card-body { padding: 0 18px; }
-    .lesson-card h3 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; margin: 0 0 6px; }
+    .lesson-card h3 { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 16px; margin: 0 0 6px; }
     .lesson-card p { font-size: 13px; color: #666; line-height: 1.55; margin: 0; }
     .lessons-cta { text-align: center; }
 
@@ -230,16 +241,16 @@
     .step:nth-child(3).animate-in { transition-delay: 0.3s; }
     .step:hover { transform: translateY(-4px); transition: transform 0.2s cubic-bezier(0.34,1.2,0.64,1); }
     .step-svg { width: 72px; height: 72px; margin: 0 auto 16px; display: block; }
-    .step-number { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 64px; color: var(--dark-purple); line-height: 1; margin-bottom: 20px; letter-spacing: -0.04em; }
-    .step h3 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; margin: 0 0 10px; letter-spacing: -0.01em; }
+    .step-number { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 64px; color: var(--dark-purple); line-height: 1; margin-bottom: 20px; letter-spacing: -0.04em; }
+    .step h3 { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 20px; margin: 0 0 10px; letter-spacing: -0.01em; }
     .step p { font-size: 15px; line-height: 1.7; color: #555; margin: 0; max-width: 260px; margin-left: auto; margin-right: auto; }
     .steps-cta { text-align: center; }
 
     /* SCROLLING CHIPS */
     .chips-section { background: #ffffff; padding: 96px 0; overflow: hidden; }
     .chips-header { max-width: 1200px; margin: 0 auto 60px; padding: 0 32px; text-align: center; }
-    .chips-tag { display: inline-block; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark-purple); background: rgba(114,110,221,0.1); border-radius: 9999px; padding: 5px 12px; margin-bottom: 20px; }
-    .chips-heading { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(32px, 4vw, 52px); line-height: 1.1; letter-spacing: -0.03em; color: var(--black); margin: 0 0 16px; }
+    .chips-tag { display: inline-block; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.1); border-radius: 9999px; padding: 5px 12px; margin-bottom: 20px; }
+    .chips-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(32px, 4vw, 52px); line-height: 1.1; letter-spacing: -0.03em; color: var(--black); margin: 0 0 16px; }
     .chips-subheading { font-size: 18px; line-height: 1.6; color: #555; max-width: 560px; margin: 0 auto; }
     .chips-track-wrapper { display: flex; flex-direction: column; gap: 12px; position: relative; }
     .chips-track-wrapper::before,
@@ -252,7 +263,7 @@
     .chips-track.playing { animation-play-state: running; }
     @keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     @keyframes scroll-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-    .chip { display: inline-flex; align-items: center; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 14px; color: var(--black); background: #fff; border: 1.5px solid rgba(0,0,0,0.1); border-radius: 9999px; padding: 10px 18px; white-space: nowrap; flex-shrink: 0; }
+    .chip { cursor: pointer; display: inline-flex; align-items: center; font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px; color: var(--black); background: #fff; border: 1.5px solid rgba(0,0,0,0.1); border-radius: 9999px; padding: 10px 18px; white-space: nowrap; flex-shrink: 0; }
 
     /* TRANSPARENT PRICING */
     .pricing-inner { max-width: 1000px; margin: 0 auto; }
@@ -265,13 +276,13 @@
     .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(114,110,221,0.18); border-color: var(--dark-purple); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
     .pricing-card.popular { border-color: var(--dark-purple); box-shadow: 0 8px 40px rgba(114,110,221,0.18); }
     .pricing-card.popular:hover { box-shadow: 0 16px 52px rgba(114,110,221,0.28); }
-    .pricing-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--dark-purple); color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 9999px; padding: 5px 16px; white-space: nowrap; }
-    .pricing-length { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
+    .pricing-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--dark-purple); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 9999px; padding: 5px 16px; white-space: nowrap; }
+    .pricing-length { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
     .pricing-trial-label { font-size: 13px; color: #888; margin: 0 0 16px; }
-    .pricing-trial-price { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; color: var(--accent); background: rgba(214,62,13,0.08); border-radius: 8px; padding: 8px 14px; display: inline-block; margin-bottom: 20px; }
+    .pricing-trial-price { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 15px; color: var(--accent); background: rgba(79,74,184,0.08); border-radius: 8px; padding: 8px 14px; display: inline-block; margin-bottom: 20px; }
     .pricing-divider { height: 1px; background: #f0eeff; margin: 20px 0; }
     .pricing-monthly-label { font-size: 13px; color: #888; margin: 0 0 4px; }
-    .pricing-monthly { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 42px; letter-spacing: -0.03em; margin: 0 0 4px; line-height: 1; }
+    .pricing-monthly { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 42px; letter-spacing: -0.03em; margin: 0 0 4px; line-height: 1; }
     .pricing-monthly .mo { font-size: 18px; font-weight: 600; color: #888; }
     .pricing-sessions { font-size: 13px; color: #888; margin: 0 0 28px; }
     .pricing-features { list-style: none; padding: 0; margin: 0 0 32px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
@@ -279,10 +290,10 @@
     .pricing-check { color: var(--dark-purple); font-weight: 900; flex-shrink: 0; font-size: 15px; }
 
     /* TESTIMONIALS */
-    .testimonials-section { background: var(--light-purple); padding: 96px 0; overflow: hidden; }
+    .testimonials-section { background: var(--cream-grad); padding: 96px 0; overflow: hidden; }
     .testimonials-header { text-align: center; margin-bottom: 60px; padding: 0 32px; }
-    .testimonials-tag { display: inline-block; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark-purple); background: rgba(114,110,221,0.15); border-radius: 9999px; padding: 5px 12px; margin-bottom: 20px; }
-    .testimonials-heading { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(30px, 3.5vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0; }
+    .testimonials-tag { display: inline-block; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.15); border-radius: 9999px; padding: 5px 12px; margin-bottom: 20px; }
+    .testimonials-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(30px, 3.5vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0; }
     .testimonials-track-wrapper { position: relative; overflow: hidden; }
     .testimonials-track-wrapper::before,
     .testimonials-track-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none; }
@@ -292,9 +303,9 @@
     .testimonials-track.playing { animation-play-state: running; }
     .testimonials-track.playing:hover { animation-play-state: paused; }
     .tcard { background: #fff; border-radius: 16px; padding: 28px; width: 340px; flex-shrink: 0; box-shadow: 0 4px 20px rgba(114,110,221,0.1); }
-    .tcard-stars { color: #FFB800; font-size: 15px; letter-spacing: 2px; margin-bottom: 12px; }
+    .tcard-stars { color: #c6954f; font-size: 15px; letter-spacing: 2px; margin-bottom: 12px; }
     .tcard-quote { font-size: 13.5px; line-height: 1.7; color: #333; margin: 0 0 16px; font-style: italic; }
-    .tcard-author { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; color: var(--dark-purple); }
+    .tcard-author { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; color: var(--dark-purple); }
 
     /* MEET THE TEAM */
     .team-section { background: #ffffff; padding: 96px 32px; }
@@ -305,7 +316,7 @@
     .team-card:nth-child(5) { grid-column: 4 / span 2; }
     .team-card:nth-child(6) { grid-column: 2 / span 2; }
     .team-card:nth-child(7) { grid-column: 4 / span 2; }
-    .team-card { text-align: center; opacity: 0; transform: translateY(40px); transition: opacity 3s cubic-bezier(0.34,1.2,0.64,1), transform 3s cubic-bezier(0.34,1.2,0.64,1); }
+    .team-card { cursor: pointer; text-align: center; opacity: 0; transform: translateY(40px); transition: opacity 3s cubic-bezier(0.34,1.2,0.64,1), transform 3s cubic-bezier(0.34,1.2,0.64,1); }
     .team-card.animate-in { opacity: 1; transform: translateY(0); }
     .team-card:nth-child(1).animate-in { transition-delay: 0s; }
     .team-card:nth-child(2).animate-in { transition-delay: 0.1s; }
@@ -318,40 +329,40 @@
     .team-card:hover .team-photo img { transform: scale(1.04); }
     .team-photo { width: 100%; aspect-ratio: 1 / 1; border-radius: 16px; overflow: hidden; margin-bottom: 14px; background: var(--light-purple); }
     .team-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; transition: transform 0.4s ease; }
-    .team-name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 17px; margin: 0 0 4px; }
-    .team-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; color: var(--dark-purple); margin: 0 0 4px; letter-spacing: 0.02em; }
+    .team-name { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; margin: 0 0 4px; }
+    .team-title { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; color: var(--dark-purple); margin: 0 0 4px; letter-spacing: 0.02em; }
     .team-instruments { font-size: 13px; color: #888; line-height: 1.4; }
     .team-service-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 6px; }
-    .team-service-tag { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dark-purple); background: rgba(114,110,221,0.1); border-radius: 9999px; padding: 3px 10px; }
+    .team-service-tag { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.1); border-radius: 9999px; padding: 3px 10px; }
     .team-cta { text-align: center; }
 
-    /* TEAM — single founder + coming soon card (M&M launch state) */
+    /* TEAM, single founder + coming soon card (M&M launch state) */
     .team-grid-single { display: grid; grid-template-columns: 320px 1fr; gap: 48px; align-items: center; max-width: 960px; margin: 0 auto; }
     .team-grid-single .team-card:nth-child(n) { grid-column: auto; }
-    .team-coming-soon { background: linear-gradient(135deg, var(--light-purple) 0%, #ffd6c8 100%); border-radius: 20px; padding: 48px 40px; text-align: left; box-shadow: 0 8px 32px rgba(114,110,221,0.14); }
+    .team-coming-soon { background: linear-gradient(135deg, #f1ece2 0%, #e7e1f7 100%); border-radius: 20px; padding: 48px 40px; text-align: left; box-shadow: 0 8px 32px rgba(114,110,221,0.14); }
     .team-coming-soon-inner { max-width: 500px; }
     .team-coming-soon-icon { width: 60px; height: 60px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--dark-purple); box-shadow: 0 4px 14px rgba(114,110,221,0.15); }
-    .team-coming-soon-heading { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; margin: 0 0 14px; color: var(--black); }
+    .team-coming-soon-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; margin: 0 0 14px; color: var(--black); }
     .team-coming-soon-body { font-size: 15px; line-height: 1.65; color: #3a3a4a; margin: 0 0 28px; }
 
     /* READY CTA */
-    .ready-section { background: linear-gradient(135deg, #1a1240 0%, #312b99 55%, #726edd 100%); padding: 112px 32px; text-align: center; position: relative; overflow: hidden; }
-    .ready-section::before { content: '♪'; position: absolute; font-size: 520px; color: rgba(255,255,255,0.03); top: 50%; left: 50%; transform: translate(-50%, -52%) rotate(-15deg); pointer-events: none; font-family: serif; line-height: 1; user-select: none; }
-    .ready-section::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(114,110,221,0.35) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-    .ready-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.13); border-radius: 28px; padding: 64px 56px; box-shadow: 0 0 80px rgba(114,110,221,0.4), 0 24px 60px rgba(0,0,0,0.25); backdrop-filter: blur(12px); }
-    .ready-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 9999px; padding: 6px 16px; margin-bottom: 28px; }
-    .ready-heading { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(48px, 6.5vw, 86px); line-height: 1.05; letter-spacing: -0.04em; color: #fff; margin: 0 0 24px; }
-    .ready-heading .ready-accent { color: #ff8040; text-shadow: 0 0 48px rgba(255,128,64,0.4); }
-    .ready-body { font-size: 19px; line-height: 1.7; color: rgba(255,255,255,0.78); margin: 0 0 48px; }
-    .ready-trust { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.5); margin-top: 24px; letter-spacing: 0.04em; }
+    .ready-section { background: radial-gradient(120% 135% at 50% 0%, #e4e1f6 0%, #efe9ee 42%, #f7f2ea 100%); padding: 112px 32px; text-align: center; position: relative; overflow: hidden; }
+    .ready-section::before { content: '♪'; position: absolute; font-size: 520px; color: rgba(114,110,221,0.06); top: 50%; left: 50%; transform: translate(-50%, -52%) rotate(-15deg); pointer-events: none; font-family: serif; line-height: 1; user-select: none; }
+    .ready-section::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(126,110,221,0.10) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+    .ready-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; padding: 48px 40px; }
+    .ready-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #9c6f28; background: rgba(198,149,79,0.14); border: 1px solid rgba(198,149,79,0.32); border-radius: 9999px; padding: 6px 16px; margin-bottom: 28px; }
+    .ready-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(48px, 6.5vw, 86px); line-height: 1.05; letter-spacing: -0.04em; color: #0d0d0d; margin: 0 0 24px; }
+    .ready-heading .ready-accent { color: #4f4ab8; }
+    .ready-body { font-size: 19px; line-height: 1.7; color: #4a4658; margin: 0 0 48px; }
+    .ready-trust { font-family: 'Work Sans', sans-serif; font-size: 13px; font-weight: 600; color: #9089a8; margin-top: 24px; letter-spacing: 0.04em; }
     .ready-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
     /* FAQ */
     .faq-section { background: #ffffff; padding: 96px 32px; }
     .faq-inner { max-width: 760px; margin: 0 auto; }
-    .faq-heading { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(28px, 3.5vw, 44px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0 0 56px; text-align: center; }
+    .faq-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(28px, 3.5vw, 44px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0 0 56px; text-align: center; }
     .faq-item { border-bottom: 1.5px solid #e8e6ff; }
-    .faq-question { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; background: none; border: none; text-align: left; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 17px; color: var(--black); transition: color 0.2s; }
+    .faq-question { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; background: none; border: none; text-align: left; cursor: pointer; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 17px; color: var(--black); transition: color 0.2s; }
     .faq-question:hover { color: var(--dark-purple); }
     .faq-icon { width: 32px; height: 32px; border-radius: 9999px; background: var(--light-purple); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
     .faq-icon svg { width: 16px; height: 16px; stroke: var(--dark-purple); fill: none; stroke-width: 2.5; stroke-linecap: round; transition: transform 0.3s; }
@@ -369,7 +380,7 @@
     .trust-badge:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: rgba(114,110,221,0.12); }
     .trust-badge-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; flex-shrink: 0; }
     .trust-badge-icon svg { width: 24px; height: 24px; }
-    .trust-badge-icon.icon-offer { background: rgba(214,62,13,0.1); }
+    .trust-badge-icon.icon-offer { background: rgba(79,74,184,0.1); }
     .trust-badge-icon.icon-offer svg { stroke: var(--accent); }
     .trust-badge-icon.icon-home { background: rgba(114,110,221,0.1); }
     .trust-badge-icon.icon-home svg { stroke: var(--dark-purple); }
@@ -379,8 +390,8 @@
     .trust-badge-icon.icon-guarantee svg { stroke: var(--dark-purple); }
     .trust-badge-icon.icon-contract { background: rgba(114,110,221,0.1); }
     .trust-badge-icon.icon-contract svg { stroke: var(--dark-purple); }
-    .trust-badge-label { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px; color: var(--black); line-height: 1.3; margin-bottom: 2px; }
-    .trust-badge-label.label-accent { color: #d63e0d; }
+    .trust-badge-label { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 13px; color: var(--black); line-height: 1.3; margin-bottom: 2px; }
+    .trust-badge-label.label-accent { color: #4f4ab8; }
     .trust-badge-sub { font-size: 12px; color: #595959; line-height: 1.3; }
 
     /* MODAL */
@@ -465,7 +476,7 @@
     .team-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 24px; }
     .team-card:nth-child(n) { grid-column: auto; }
     .team-grid-single { grid-template-columns: 1fr !important; gap: 32px; }
-    .team-grid-single .team-card { max-width: 280px; margin: 0 auto; }
+    .team-grid-single .team-card { cursor: pointer; max-width: 280px; margin: 0 auto; }
     .team-coming-soon { padding: 32px 24px; }
 
     /* READY CTA */
@@ -485,14 +496,14 @@
     .footer-contact { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 
     /* DISABLE EXPENSIVE GPU ANIMATIONS ON MOBILE */
-    /* 1. Remove filter:blur from hero text fade-in — opacity+translate only */
+    /* 1. Remove filter:blur from hero text fade-in, opacity+translate only */
     @keyframes blur-fade-in {
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     /* 2. Stop glow-pulse box-shadow animation on primary button */
     .btn-primary { animation: none; box-shadow: 0 4px 20px rgba(114,110,221,0.45); }
-    /* 3. Stop hero gradient crossfade — show first gradient statically */
+    /* 3. Stop hero gradient crossfade, show first gradient statically */
     .hero::before { animation: none; opacity: 1; }
     .hero::after  { animation: none; opacity: 0; }
   }
@@ -515,7 +526,8 @@
 <nav class="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <img src="brand_assets/Logo - Transparent & Black.png" width="220" height="220" alt="Music and Mastery" />
+      <img src="brand_assets/logo/mm-icon.png" width="48" height="48" alt="Music and Mastery" />
+      <span class="nav-brand">Music <span class="nav-amp">&amp;</span> Mastery</span>
     </a>
     <div class="nav-right">
       <a href="https://share.google/vff7oOhVweOWzDic5" class="nav-review-link" target="_blank" rel="noopener">Reviews</a>
@@ -538,7 +550,7 @@
         Music Lessons<br />that <span class="accent-word">Come to You.</span>
       </h1>
       <p class="hero-body blur-fade blur-fade-3">
-        Private guitar, piano, voice, &amp; more — taught in your home.<br />
+        Private guitar, piano, voice, &amp; more, taught in your home.<br />
         DOJ &amp; FBI background-checked instructors. 50% off your first 3 lessons.<br />
         Money-back guarantee. Month-to-month, no contracts.
       </p>
@@ -570,7 +582,7 @@
     <div class="social-proof-stars">★★★★★</div>
     <div class="social-proof-label">5 Stars on Google</div>
     <p class="social-proof-quote">"I love that the instructors come to our home for lessons... They are encouraging and know how to engage my children in their lessons. Both of my kids have had private lessons before we started private lessons, but never have they grown so fast in their knowledge, skill, and passion for music as they have since joining"</p>
-    <div class="social-proof-cite">— Melissa G.</div>
+    <div class="social-proof-cite">Melissa G.</div>
   </div>
 </div>
 
@@ -631,12 +643,12 @@
           <rect x="24" y="42" width="16" height="14" rx="2" stroke="#726edd" stroke-width="2.5" stroke-linejoin="round"/>
         </svg>
         <h3>We Come to You</h3>
-        <p>No commute, no traffic, no rushing. Your teacher shows up at your door, ready to go — all across Orange County and Los Angeles.</p>
+        <p>No commute, no traffic, no rushing. Your teacher shows up at your door, ready to go, all across Orange County and Los Angeles.</p>
       </div>
       <div class="why-card">
         <img class="why-svg" src="brand_assets/website%20references/Music%20Notes%20Vector.png" width="350" height="403" alt="Music notes" />
         <h3>Real Skills, Real Progress</h3>
-        <p>Every lesson builds rhythm, ear training, and technique — skills that stick for life. Good playing is learnable, and we prove it every week.</p>
+        <p>Every lesson builds rhythm, ear training, and technique, skills that stick for life. Good playing is learnable, and we prove it every week.</p>
       </div>
       <div class="why-card">
         <!-- Calendar outline -->
@@ -652,7 +664,7 @@
           <rect x="28" y="44" width="8" height="8" rx="1" stroke="#726edd" stroke-width="2"/>
         </svg>
         <h3>Your Schedule, Your Pace</h3>
-        <p>We match you with a teacher who fits your instrument, your age, and your goals. Weekly lessons built around your timeline — not ours.</p>
+        <p>We match you with a teacher who fits your instrument, your age, and your goals. Weekly lessons built around your timeline, not ours.</p>
       </div>
       <div class="why-card">
         <img class="why-svg" src="brand_assets/website%20references/Microphone%20Vector.png" width="290" height="373" alt="Microphone" />
@@ -676,7 +688,7 @@
         <img class="lesson-card-img" src="brand_assets/instruments/Guitar.jpg" width="533" height="800" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Guitar'" alt="Guitar lessons" />
         <div class="lesson-card-body">
           <h3>Guitar</h3>
-          <p>Electric, acoustic, and classical — beginner to advanced.</p>
+          <p>Electric, acoustic, and classical, beginner to advanced.</p>
         </div>
       </div>
       <div class="lesson-card">
@@ -690,14 +702,14 @@
         <img class="lesson-card-img" src="brand_assets/instruments/Voice.jpg" width="533" height="800" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Voice'" alt="Voice lessons" />
         <div class="lesson-card-body">
           <h3>Voice</h3>
-          <p>Technique, breath control, and performance — any genre.</p>
+          <p>Technique, breath control, and performance, any genre.</p>
         </div>
       </div>
       <div class="lesson-card">
         <img class="lesson-card-img" src="brand_assets/instruments/Bass.jpg" width="600" height="800" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Bass'" alt="Bass lessons" />
         <div class="lesson-card-body">
           <h3>Bass</h3>
-          <p>Electric bass for all styles — rock, jazz, R&amp;B, and more.</p>
+          <p>Electric bass for all styles, rock, jazz, R&amp;B, and more.</p>
         </div>
       </div>
       <div class="lesson-card">
@@ -711,7 +723,7 @@
         <img class="lesson-card-img" src="brand_assets/instruments/Ukulele.jpg" width="533" height="800" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Ukulele'" alt="Ukulele lessons" />
         <div class="lesson-card-body">
           <h3>Ukulele</h3>
-          <p>A great first instrument — fun, accessible, and musical.</p>
+          <p>A great first instrument, fun, accessible, and musical.</p>
         </div>
       </div>
     </div>
@@ -745,7 +757,7 @@
         </svg>
         <div class="step-number">1</div>
         <h3>Book Your Trial Lessons</h3>
-        <p>Choose a time that works for you. Your first 3 sessions are 50% off — no commitment required.</p>
+        <p>Choose a time that works for you. Your first 3 sessions are 50% off, no commitment required.</p>
       </div>
       <div class="step">
         <!-- House outline -->
@@ -788,95 +800,95 @@
     <!-- Row 1 scroll left -->
     <div style="overflow:hidden;width:100%;">
       <div class="chips-track left">
-        <div class="chip">Guitar</div>
-        <div class="chip">Piano</div>
-        <div class="chip">Voice</div>
-        <div class="chip">Bass</div>
-        <div class="chip">Drums</div>
-        <div class="chip">Ukulele</div>
-        <div class="chip">Music Theory</div>
-        <div class="chip">Guitar</div>
-        <div class="chip">Piano</div>
-        <div class="chip">Voice</div>
-        <div class="chip">Bass</div>
-        <div class="chip">Drums</div>
-        <div class="chip">Ukulele</div>
-        <div class="chip">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Guitar</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Piano</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Voice</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Bass</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Drums</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Ukulele</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Guitar</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Piano</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Voice</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Bass</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Drums</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Ukulele</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Music Theory</div>
       </div>
     </div>
     <!-- Row 2 scroll right -->
     <div style="overflow:hidden;width:100%;">
       <div class="chips-track right">
-        <div class="chip">Music Theory</div>
-        <div class="chip">Ear Training</div>
-        <div class="chip">Rhythm &amp; Timing</div>
-        <div class="chip">Scales &amp; Modes</div>
-        <div class="chip">Chord Progressions</div>
-        <div class="chip">Sight-Reading</div>
-        <div class="chip">Improvisation</div>
-        <div class="chip">Composition</div>
-        <div class="chip">Songwriting</div>
-        <div class="chip">Arranging</div>
-        <div class="chip">Music Theory</div>
-        <div class="chip">Ear Training</div>
-        <div class="chip">Rhythm &amp; Timing</div>
-        <div class="chip">Scales &amp; Modes</div>
-        <div class="chip">Chord Progressions</div>
-        <div class="chip">Sight-Reading</div>
-        <div class="chip">Improvisation</div>
-        <div class="chip">Composition</div>
-        <div class="chip">Songwriting</div>
-        <div class="chip">Arranging</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Ear Training</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Rhythm &amp; Timing</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Scales &amp; Modes</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Chord Progressions</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Sight-Reading</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Improvisation</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Composition</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Songwriting</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Arranging</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Ear Training</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Rhythm &amp; Timing</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Scales &amp; Modes</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Chord Progressions</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Sight-Reading</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Improvisation</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Composition</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Songwriting</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Arranging</div>
       </div>
     </div>
     <!-- Row 3 scroll left -->
     <div style="overflow:hidden;width:100%;">
       <div class="chips-track left" style="animation-duration:50s;">
-        <div class="chip">Classical</div>
-        <div class="chip">Jazz</div>
-        <div class="chip">Rock</div>
-        <div class="chip">Pop</div>
-        <div class="chip">Folk</div>
-        <div class="chip">Blues</div>
-        <div class="chip">R&amp;B</div>
-        <div class="chip">Country</div>
-        <div class="chip">Musical Theatre</div>
-        <div class="chip">Celtic</div>
-        <div class="chip">Gospel</div>
-        <div class="chip">Reggae</div>
-        <div class="chip">Classical</div>
-        <div class="chip">Jazz</div>
-        <div class="chip">Rock</div>
-        <div class="chip">Pop</div>
-        <div class="chip">Folk</div>
-        <div class="chip">Blues</div>
-        <div class="chip">R&amp;B</div>
-        <div class="chip">Country</div>
-        <div class="chip">Musical Theatre</div>
-        <div class="chip">Celtic</div>
-        <div class="chip">Gospel</div>
-        <div class="chip">Reggae</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Classical</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Jazz</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Rock</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Pop</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Folk</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Blues</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">R&amp;B</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Country</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Musical Theatre</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Celtic</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Gospel</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Reggae</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Classical</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Jazz</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Rock</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Pop</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Folk</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Blues</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">R&amp;B</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Country</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Musical Theatre</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Celtic</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Gospel</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Reggae</div>
       </div>
     </div>
     <!-- Row 4 scroll right -->
     <div style="overflow:hidden;width:100%;">
       <div class="chips-track right" style="animation-duration:55s;">
-        <div class="chip">Beginner</div>
-        <div class="chip">Intermediate</div>
-        <div class="chip">Advanced</div>
-        <div class="chip">Kids (Ages 5+)</div>
-        <div class="chip">Adults</div>
-        <div class="chip">In-Home</div>
-        <div class="chip">Exam Prep</div>
-        <div class="chip">Performance Coaching</div>
-        <div class="chip">Beginner</div>
-        <div class="chip">Intermediate</div>
-        <div class="chip">Advanced</div>
-        <div class="chip">Kids (Ages 5+)</div>
-        <div class="chip">Adults</div>
-        <div class="chip">In-Home</div>
-        <div class="chip">Exam Prep</div>
-        <div class="chip">Performance Coaching</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Beginner</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Intermediate</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Advanced</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Kids (Ages 5+)</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Adults</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">In-Home</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Exam Prep</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Performance Coaching</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Beginner</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Intermediate</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Advanced</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Kids (Ages 5+)</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Adults</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">In-Home</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Exam Prep</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="0">Performance Coaching</div>
       </div>
     </div>
   </div>
@@ -887,7 +899,7 @@
   <div class="pricing-inner">
     <div class="section-header-center">
       <div class="section-tag">Pricing</div>
-      <h2 class="section-heading">Transparent Pricing — No Surprises</h2>
+      <h2 class="section-heading">Transparent Pricing, No Surprises</h2>
       <p class="section-subheading">Your first 3 sessions are 50% off. After that, a simple monthly rate with no hidden fees.</p>
     </div>
     <div class="pricing-grid">
@@ -963,27 +975,27 @@
   </div>
   <div class="testimonials-track-wrapper">
     <div class="testimonials-track">
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"I love that the instructors come to our home for lessons... They are encouraging and know how to engage my children in their lessons. Both of my kids have had private lessons before we started private lessons, but never have they grown so fast in their knowledge, skill, and passion for music as they have since joining"</p><div class="tcard-author">— Melissa G.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery is a great company, if you are looking for music lessons. It is well organized and well operated. My son's guitar instructor teaches him the fundamentals of music as well and working on songs my son specifically wants to learn. My son really looks forward to his lesson. And it's very convenient that they come to your home."</p><div class="tcard-author">— Emily K.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery has been great! My daughter has taken both guitar lessons and voice lessons with their instructors. They are knowledgeable and give helpful tips that have helped my daughter improve immensely. The instructors come to our home, which is so convenient. I love that they work with our charter school. I can't recommend them enough!"</p><div class="tcard-author">— Sarah N.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"The owner, Johnny, is easy to reach and was very helpful from the start. My daughter has been taking singing classes, and her instructor is incredibly patient, always on time, with a lovely voice. We recently added piano lessons in and it has been just as great. The progress my daughter has made since starting these lessons is remarkable, and she always looks forward to her classes."</p><div class="tcard-author">— Jane A.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Our instructor has been amazing! It is so comfortable and convenient to have someone come to the house. My daughter enjoys each lesson. It has made a huge difference in her confidence and ability to use her voice."</p><div class="tcard-author">— Brooke P.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery company is very convenient, they come to your house and work around your schedule. Our piano teacher is patient and kind with my daughter. My daughter's piano skills improve every week. Definitely would recommend to others looking for music lessons."</p><div class="tcard-author">— Angelica K.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher is amazing — she is learning so quickly and is constantly affirming her and being so positive, giving her that confidence she needs but also giving her areas to practice that help so much for the week to come."</p><div class="tcard-author">— Yessenia N.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"I am extremely impressed with how excellent these private music lessons are. I literally recommend them to everyone I know. My kids are a bit over active at times, but Johnny has done such an exceptional job keeping them on task and intrigued to keep going. I love the fact that he gives them a variety of options with the songs they would like to learn."</p><div class="tcard-author">— Gabi T.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My son looks forward to and enjoys his weekly guitar lessons. His instructor is always on time and conducts themselves in a very professional manner. As a teacher, he communicates clearly and is very patient. Our experience with Music and Mastery has been nothing but positive, and would recommend them highly."</p><div class="tcard-author">— Samantha A.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher is amazing, she is learning so quickly and is constantly affirming her and being so positive giving her that confidence she needs but also giving her areas to practice that helps so much for the week to come."</p><div class="tcard-author">— Jackie S.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"I love that the instructors come to our home for lessons... They are encouraging and know how to engage my children in their lessons. Both of my kids have had private lessons before we started private lessons, but never have they grown so fast in their knowledge, skill, and passion for music as they have since joining"</p><div class="tcard-author">Melissa G.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery is a great company, if you are looking for music lessons. It is well organized and well operated. My son's guitar instructor teaches him the fundamentals of music as well and working on songs my son specifically wants to learn. My son really looks forward to his lesson. And it's very convenient that they come to your home."</p><div class="tcard-author">Emily K.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery has been great! My daughter has taken both guitar lessons and voice lessons with their instructors. They are knowledgeable and give helpful tips that have helped my daughter improve immensely. The instructors come to our home, which is so convenient. I love that they work with our charter school. I can't recommend them enough!"</p><div class="tcard-author">Sarah N.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"The owner, Johnny, is easy to reach and was very helpful from the start. My daughter has been taking singing classes, and her instructor is incredibly patient, always on time, with a lovely voice. We recently added piano lessons in and it has been just as great. The progress my daughter has made since starting these lessons is remarkable, and she always looks forward to her classes."</p><div class="tcard-author">Jane A.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Our instructor has been amazing! It is so comfortable and convenient to have someone come to the house. My daughter enjoys each lesson. It has made a huge difference in her confidence and ability to use her voice."</p><div class="tcard-author">Brooke P.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery company is very convenient, they come to your house and work around your schedule. Our piano teacher is patient and kind with my daughter. My daughter's piano skills improve every week. Definitely would recommend to others looking for music lessons."</p><div class="tcard-author">Angelica K.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher is amazing, she is learning so quickly and is constantly affirming her and being so positive, giving her that confidence she needs but also giving her areas to practice that help so much for the week to come."</p><div class="tcard-author">Yessenia N.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"I am extremely impressed with how excellent these private music lessons are. I literally recommend them to everyone I know. My kids are a bit over active at times, but Johnny has done such an exceptional job keeping them on task and intrigued to keep going. I love the fact that he gives them a variety of options with the songs they would like to learn."</p><div class="tcard-author">Gabi T.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My son looks forward to and enjoys his weekly guitar lessons. His instructor is always on time and conducts themselves in a very professional manner. As a teacher, he communicates clearly and is very patient. Our experience with Music and Mastery has been nothing but positive, and would recommend them highly."</p><div class="tcard-author">Samantha A.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher is amazing, she is learning so quickly and is constantly affirming her and being so positive giving her that confidence she needs but also giving her areas to practice that helps so much for the week to come."</p><div class="tcard-author">Jackie S.</div></div>
       <!-- Duplicate set for seamless loop -->
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"I love that the instructors come to our home for lessons... They are encouraging and know how to engage my children in their lessons. Both of my kids have had private lessons before we started private lessons, but never have they grown so fast in their knowledge, skill, and passion for music as they have since joining"</p><div class="tcard-author">— Melissa G.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery is a great company, if you are looking for music lessons. It is well organized and well operated. My son's guitar instructor teaches him the fundamentals of music as well and working on songs my son specifically wants to learn. My son really looks forward to his lesson. And it's very convenient that they come to your home."</p><div class="tcard-author">— Emily K.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery has been great! My daughter has taken both guitar lessons and voice lessons with their instructors. They are knowledgeable and give helpful tips that have helped my daughter improve immensely. The instructors come to our home, which is so convenient. I love that they work with our charter school. I can't recommend them enough!"</p><div class="tcard-author">— Sarah N.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"The owner, Johnny, is easy to reach and was very helpful from the start. My daughter has been taking singing classes, and her instructor is incredibly patient, always on time, with a lovely voice. We recently added piano lessons in and it has been just as great. The progress my daughter has made since starting these lessons is remarkable, and she always looks forward to her classes."</p><div class="tcard-author">— Jane A.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Our instructor has been amazing! It is so comfortable and convenient to have someone come to the house. My daughter enjoys each lesson. It has made a huge difference in her confidence and ability to use her voice."</p><div class="tcard-author">— Brooke P.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery company is very convenient, they come to your house and work around your schedule. Our piano teacher is patient and kind with my daughter. My daughter's piano skills improve every week. Definitely would recommend to others looking for music lessons."</p><div class="tcard-author">— Angelica K.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher is amazing — she is learning so quickly and is constantly affirming her and being so positive, giving her that confidence she needs but also giving her areas to practice that help so much for the week to come."</p><div class="tcard-author">— Yessenia N.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"I am extremely impressed with how excellent these private music lessons are. I literally recommend them to everyone I know. My kids are a bit over active at times, but Johnny has done such an exceptional job keeping them on task and intrigued to keep going. I love the fact that he gives them a variety of options with the songs they would like to learn."</p><div class="tcard-author">— Gabi T.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My son looks forward to and enjoys his weekly guitar lessons. His instructor is always on time and conducts themselves in a very professional manner. As a teacher, he communicates clearly and is very patient. Our experience with Music and Mastery has been nothing but positive, and would recommend them highly."</p><div class="tcard-author">— Samantha A.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher is amazing, she is learning so quickly and is constantly affirming her and being so positive giving her that confidence she needs but also giving her areas to practice that helps so much for the week to come."</p><div class="tcard-author">— Jackie S.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"I love that the instructors come to our home for lessons... They are encouraging and know how to engage my children in their lessons. Both of my kids have had private lessons before we started private lessons, but never have they grown so fast in their knowledge, skill, and passion for music as they have since joining"</p><div class="tcard-author">Melissa G.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery is a great company, if you are looking for music lessons. It is well organized and well operated. My son's guitar instructor teaches him the fundamentals of music as well and working on songs my son specifically wants to learn. My son really looks forward to his lesson. And it's very convenient that they come to your home."</p><div class="tcard-author">Emily K.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery has been great! My daughter has taken both guitar lessons and voice lessons with their instructors. They are knowledgeable and give helpful tips that have helped my daughter improve immensely. The instructors come to our home, which is so convenient. I love that they work with our charter school. I can't recommend them enough!"</p><div class="tcard-author">Sarah N.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"The owner, Johnny, is easy to reach and was very helpful from the start. My daughter has been taking singing classes, and her instructor is incredibly patient, always on time, with a lovely voice. We recently added piano lessons in and it has been just as great. The progress my daughter has made since starting these lessons is remarkable, and she always looks forward to her classes."</p><div class="tcard-author">Jane A.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Our instructor has been amazing! It is so comfortable and convenient to have someone come to the house. My daughter enjoys each lesson. It has made a huge difference in her confidence and ability to use her voice."</p><div class="tcard-author">Brooke P.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Music and Mastery company is very convenient, they come to your house and work around your schedule. Our piano teacher is patient and kind with my daughter. My daughter's piano skills improve every week. Definitely would recommend to others looking for music lessons."</p><div class="tcard-author">Angelica K.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher is amazing, she is learning so quickly and is constantly affirming her and being so positive, giving her that confidence she needs but also giving her areas to practice that help so much for the week to come."</p><div class="tcard-author">Yessenia N.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"I am extremely impressed with how excellent these private music lessons are. I literally recommend them to everyone I know. My kids are a bit over active at times, but Johnny has done such an exceptional job keeping them on task and intrigued to keep going. I love the fact that he gives them a variety of options with the songs they would like to learn."</p><div class="tcard-author">Gabi T.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My son looks forward to and enjoys his weekly guitar lessons. His instructor is always on time and conducts themselves in a very professional manner. As a teacher, he communicates clearly and is very patient. Our experience with Music and Mastery has been nothing but positive, and would recommend them highly."</p><div class="tcard-author">Samantha A.</div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher is amazing, she is learning so quickly and is constantly affirming her and being so positive giving her that confidence she needs but also giving her areas to practice that helps so much for the week to come."</p><div class="tcard-author">Jackie S.</div></div>
     </div>
   </div>
 </section>
@@ -994,10 +1006,10 @@
     <div class="section-header-center">
       <div class="section-tag">Our Team</div>
       <h2 class="section-heading">Now Hiring Instructors in OC &amp; LA</h2>
-      <p class="section-subheading">Music and Mastery is growing. Every instructor we bring on is DOJ &amp; FBI background-checked via LiveScan — working musicians who love to teach. Meet our founder below.</p>
+      <p class="section-subheading">Music and Mastery is growing. Every instructor we bring on is DOJ &amp; FBI background-checked via LiveScan, working musicians who love to teach. Meet our founder below.</p>
     </div>
     <div class="team-grid team-grid-single">
-      <div class="team-card">
+      <div class="team-card" onclick="openModal()" role="button" tabindex="0">
         <div class="team-photo">
           <picture>
             <source srcset="brand_assets/instructors/Jonny%20Dolan.webp" type="image/webp" />
@@ -1035,10 +1047,10 @@
     <h2 class="ready-heading">Your first 3 sessions<br>are <span class="ready-accent">50% off.</span></h2>
     <p class="ready-body">Private in-home lessons in guitar, piano, voice &amp; more.<br>DOJ &amp; FBI background-checked instructors. Money-back guarantee. No contracts.</p>
     <div class="ready-buttons">
-      <a href="#" class="btn btn-white" onclick="openModal(); return false;">Book a Trial Lesson →</a>
-      <a href="tel:7605732120" class="btn btn-outline-white">Call (760) 573-2120</a>
+      <a href="#" class="btn btn-primary" onclick="openModal(); return false;">Book a Trial Lesson →</a>
+      <a href="tel:7605732120" class="btn btn-outline-purple">Call (760) 573-2120</a>
     </div>
-    <div class="ready-trust">Now expanding in Orange County &amp; Los Angeles — 200+ students served across our lesson network</div>
+    <div class="ready-trust">Now expanding in Orange County &amp; Los Angeles, 200+ students served across our lesson network</div>
   </div>
 </section>
 
@@ -1052,7 +1064,7 @@
         Who are Music and Mastery lessons for?
         <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
       </button>
-      <div class="faq-answer"><div class="faq-answer-inner">Our lessons are for everyone — complete beginners who've never touched an instrument, kids as young as 5, busy adults picking music back up after years away, and advanced students looking to level up. If you want to learn, we have a teacher who's right for you.</div></div>
+      <div class="faq-answer"><div class="faq-answer-inner">Our lessons are for everyone, complete beginners who've never touched an instrument, kids as young as 5, busy adults picking music back up after years away, and advanced students looking to level up. If you want to learn, we have a teacher who's right for you.</div></div>
     </div>
 
     <div class="faq-item">
@@ -1060,7 +1072,7 @@
         What instruments do you teach?
         <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
       </button>
-      <div class="faq-answer"><div class="faq-answer-inner">Our main instruments are guitar, piano, and voice. We also teach bass, drums, ukulele, and music production. Music theory and songwriting are woven into every lesson as part of learning your instrument — not sold as standalone courses. Not sure what's right for you? Book a trial lesson and we'll help you figure it out.</div></div>
+      <div class="faq-answer"><div class="faq-answer-inner">Our main instruments are guitar, piano, and voice. We also teach bass, drums, ukulele, and music production. Music theory and songwriting are woven into every lesson as part of learning your instrument, not sold as standalone courses. Not sure what's right for you? Book a trial lesson and we'll help you figure it out.</div></div>
     </div>
 
     <div class="faq-item">
@@ -1068,7 +1080,7 @@
         How do lessons work?
         <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
       </button>
-      <div class="faq-answer"><div class="faq-answer-inner">Lessons are one-on-one, 30, 45, or 60 minutes, typically once a week. After your first session, your teacher will put together a curriculum based on your goals and skill level. Lessons are in-home — your teacher comes to you, so there's no commute or hassle.</div></div>
+      <div class="faq-answer"><div class="faq-answer-inner">Lessons are one-on-one, 30, 45, or 60 minutes, typically once a week. After your first session, your teacher will put together a curriculum based on your goals and skill level. Lessons are in-home, your teacher comes to you, so there's no commute or hassle.</div></div>
     </div>
 
     <div class="faq-item">
@@ -1076,7 +1088,7 @@
         What if I've never played before?
         <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
       </button>
-      <div class="faq-answer"><div class="faq-answer-inner">Perfect. Most of our students start from zero. Our teachers are experienced at building complete beginners from the ground up — and making it enjoyable from day one. You don't need to own an instrument before your first lesson; we'll talk through what you'll need.</div></div>
+      <div class="faq-answer"><div class="faq-answer-inner">Perfect. Most of our students start from zero. Our teachers are experienced at building complete beginners from the ground up, and making it enjoyable from day one. You don't need to own an instrument before your first lesson; we'll talk through what you'll need.</div></div>
     </div>
 
     <div class="faq-item">
@@ -1092,7 +1104,7 @@
         Do you offer a free trial lesson?
         <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
       </button>
-      <div class="faq-answer"><div class="faq-answer-inner">We offer discounted trial lessons for new students — your first three sessions are 50% off regular pricing. It's a great way to meet your teacher, explore the material, and make sure it's a good fit before committing to a monthly plan. No long-term contracts, no pressure.</div></div>
+      <div class="faq-answer"><div class="faq-answer-inner">We offer discounted trial lessons for new students, your first three sessions are 50% off regular pricing. It's a great way to meet your teacher, explore the material, and make sure it's a good fit before committing to a monthly plan. No long-term contracts, no pressure.</div></div>
     </div>
 
     <div class="faq-item">

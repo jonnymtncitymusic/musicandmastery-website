@@ -24,7 +24,7 @@
   gtag('config', 'G-SPQ1FGTKTV');
   window.addEventListener('load', function() {
     gtag('event', 'conversion', {'send_to': 'AW-11066542604/i_42CLiPzKccEIyU-Jwp'});
-    // GA4 lead event — recorded by GA4, then imported into Google Ads as a
+    // GA4 lead event, recorded by GA4, then imported into Google Ads as a
     // conversion action. Bypasses the broken direct gtag→Ads pipeline for
     // action 7599228856 which has been silently dropping fires since 2026-04-30.
     var params = new URLSearchParams(window.location.search);
@@ -46,37 +46,46 @@
 </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thank You for Reaching Out | Music and Mastery</title>
-  <link rel="icon" href="brand_assets/Logo - White Background No Name.png" type="image/png" />
+  <link rel="icon" href="brand_assets/logo/mm-favicon-64.png" type="image/png" />
+  <link rel="apple-touch-icon" href="brand_assets/logo/mm-apple-touch-180.png" />
   <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/questrial-latin.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/montserrat-latin.woff2" crossorigin>
   <style>
 
     /* Self-hosted Google Fonts (latin subset) */
-    @font-face {
-      font-family: "Montserrat";
-      font-style: normal;
-      font-weight: 400 900;
-      font-display: swap;
-      src: url(/brand_assets/fonts/montserrat-latin.woff2) format("woff2");
-      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        @font-face {
+      font-family: "Playfair Display";
+      font-style: normal; font-weight: 600; font-display: swap;
+      src: url(/brand_assets/fonts/playfair-display-600-latin.woff2) format("woff2");
     }
     @font-face {
-      font-family: "Questrial";
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url(/brand_assets/fonts/questrial-latin.woff2) format("woff2");
-      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      font-family: "Playfair Display";
+      font-style: normal; font-weight: 700; font-display: swap;
+      src: url(/brand_assets/fonts/playfair-display-700-latin.woff2) format("woff2");
+    }
+    @font-face {
+      font-family: "Playfair Display";
+      font-style: normal; font-weight: 800; font-display: swap;
+      src: url(/brand_assets/fonts/playfair-display-800-latin.woff2) format("woff2");
+    }
+    @font-face {
+      font-family: "Work Sans";
+      font-style: normal; font-weight: 400 700; font-display: swap;
+      src: url(/brand_assets/fonts/worksans-latin.woff2) format("woff2");
     }
     :root {
       --light-purple: #e4e3ff;
       --dark-purple: #726edd;
-      --accent: #d63e0d;
+      --accent: #4f4ab8;
+      --gold: #c6954f;
+      --cream: #f6f1e8;
+      --cream-grad: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
+      --cream-deep: #efe7d8;
       --black: #0d0d0d;
     }
     * { box-sizing: border-box; }
-    body { font-family: 'Questrial', sans-serif; color: var(--black); background: #fff; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
-    h1,h2,h3 { font-family: 'Montserrat', sans-serif; }
+    body { font-family: 'Work Sans', sans-serif; color: var(--black); background: #fff; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    h1,h2,h3 { font-family: 'Work Sans', sans-serif; }
 
     /* NAV */
     .nav { background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 22px rgba(116,130,151,0.15); }
@@ -97,7 +106,7 @@
     /* MAIN */
     .ty-section {
       flex: 1;
-      background: #d8d5ff;
+      background: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
       position: relative;
       overflow: hidden;
       display: flex;
@@ -109,14 +118,14 @@
     .ty-section::before {
       content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(135deg, #d8d5ff 0%, #ffd6c8 50%, #e4e3ff 100%);
+      background: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
       animation: hero-fade-a 12s ease-in-out;
       z-index: 0;
     }
     .ty-section::after {
       content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(135deg, #ccc8ff 0%, #e4e3ff 45%, #ffd0bc 100%);
+      background: linear-gradient(125deg, #f1ece2 0%, #e9e3f3 50%, #dcd6f0 100%);
       animation: hero-fade-b 12s ease-in-out;
       z-index: 0;
     }
@@ -151,14 +160,14 @@
 
     .ty-eyebrow {
       display: inline-block;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 700;
       font-size: 13px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--dark-purple);
-      background: rgba(114,110,221,0.12);
-      border: 1px solid rgba(114,110,221,0.25);
+      color: var(--gold);
+      background: rgba(198,149,79,0.12);
+      border: 1px solid rgba(198,149,79,0.30);
       border-radius: 9999px;
       padding: 6px 14px;
       margin-bottom: 24px;
@@ -193,7 +202,7 @@
       backdrop-filter: blur(8px);
     }
     .ty-what-next h2 {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 800;
       font-size: 16px;
       letter-spacing: 0.06em;
@@ -207,7 +216,7 @@
       content: counter(step);
       width: 26px; height: 26px; border-radius: 50%;
       background: var(--dark-purple); color: #fff;
-      font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+      font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 13px;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
     }
     .ty-booking-card {
@@ -221,7 +230,7 @@
       box-shadow: 0 4px 16px rgba(114,110,221,0.12);
     }
     .ty-booking-card h2 {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 800;
       font-size: 14px;
       letter-spacing: 0.08em;
@@ -236,7 +245,7 @@
       gap: 10px 18px;
     }
     .ty-booking-details dt {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 700;
       font-size: 12px;
       color: #777;
@@ -246,7 +255,7 @@
     }
     .ty-booking-details dd {
       margin: 0;
-      font-family: 'Questrial', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 16px;
       color: var(--black);
     }
@@ -268,7 +277,7 @@
     /* BUTTONS */
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
-      font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px;
+      font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px;
       border-radius: 9999px; padding: 14px 32px; text-decoration: none;
       cursor: pointer; border: none;
       transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
@@ -296,7 +305,7 @@
     .trust-badge:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: rgba(114,110,221,0.12); }
     .trust-badge-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; flex-shrink: 0; }
     .trust-badge-icon svg { width: 24px; height: 24px; }
-    .trust-badge-icon.icon-offer { background: rgba(214,62,13,0.1); }
+    .trust-badge-icon.icon-offer { background: rgba(79,74,184,0.1); }
     .trust-badge-icon.icon-offer svg { stroke: var(--accent); }
     .trust-badge-icon.icon-home { background: rgba(114,110,221,0.1); }
     .trust-badge-icon.icon-home svg { stroke: var(--dark-purple); }
@@ -306,8 +315,8 @@
     .trust-badge-icon.icon-guarantee svg { stroke: var(--dark-purple); }
     .trust-badge-icon.icon-contract { background: rgba(114,110,221,0.1); }
     .trust-badge-icon.icon-contract svg { stroke: var(--dark-purple); }
-    .trust-badge-label { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px; color: var(--black); line-height: 1.3; margin-bottom: 2px; }
-    .trust-badge-label.label-accent { color: #d63e0d; }
+    .trust-badge-label { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 13px; color: var(--black); line-height: 1.3; margin-bottom: 2px; }
+    .trust-badge-label.label-accent { color: #4f4ab8; }
     .trust-badge-sub { font-size: 12px; color: #595959; line-height: 1.3; }
 
     @media (max-width: 768px) {
@@ -365,7 +374,7 @@
 <nav class="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <img src="brand_assets/Logo - Transparent & Black.png" width="220" height="220" alt="Music and Mastery" />
+      <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon.png" alt="Music and Mastery" style="height:44px;width:auto;" /><span style="font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <span style="color:var(--gold);">&amp;</span> Mastery</span></span>
     </a>
   </div>
 </nav>
@@ -439,10 +448,10 @@
     <div class="ty-what-next">
       <h2>What happens next</h2>
       <ol class="ty-steps">
-        <li><span>Our AI Agent will give you a call to confirm a few details — this helps us match you with the right instructor and get your schedule set up smoothly.</span></li>
+        <li><span>Our AI Agent will give you a call to confirm a few details, this helps us match you with the right instructor and get your schedule set up smoothly.</span></li>
         <li><span>We review your submission and match you with the right instructor for your goals and schedule.</span></li>
         <li><span>You'll hear from us within 24 hours to confirm your first lesson time and answer any questions.</span></li>
-        <li><span>Your instructor comes to you — no commute, no hassle. Your first 3 sessions are 50% off.</span></li>
+        <li><span>Your instructor comes to you, no commute, no hassle. Your first 3 sessions are 50% off.</span></li>
       </ol>
     </div>
 
@@ -529,7 +538,7 @@
     row('Time',          fmtTime(time));
     if (duration)   row('Duration',  duration + ' min');
     if (instrument) row('Instrument', instrument);
-    if (type === 'paid') row('Status', '<span class="ty-paid">PAID — your trial is locked in</span>');
+    if (type === 'paid') row('Status', '<span class="ty-paid">PAID, your trial is locked in</span>');
     document.getElementById('ty-booking-card').style.display = 'block';
   } else if (type === 'deposit') {
     if (instrument) row('Instrument', instrument);
