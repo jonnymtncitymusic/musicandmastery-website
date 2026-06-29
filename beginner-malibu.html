@@ -74,6 +74,7 @@
     .nav-logo img { height: 56px; width: auto; }
     .nav-phone { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px; color: var(--black); text-decoration: none; border: 2px solid var(--black); border-radius: 9999px; padding: 8px 20px; transition: background 0.2s, color 0.2s; }
     .nav-phone:hover { background: var(--black); color: #fff; }
+    .cta-short { display: none; }
 
     /* BUTTONS */
     @keyframes glow-pulse {
@@ -214,6 +215,9 @@
     @media (max-width: 768px) {
       .nav-inner { padding: 0 20px; }
       .nav-logo img { height: 40px; }
+      .cta-full { display: none; }
+      .cta-short { display: inline; }
+      .nav-inner .btn-primary { padding: 9px 16px; font-size: 13px; white-space: nowrap; }
       .nav-phone { font-size: 13px; padding: 7px 14px; }
 
       .hero { padding: 72px 20px 60px; }
@@ -309,7 +313,8 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    @media (max-width: 359px) { .nav-inner .btn-primary { display: none; } }
+  </style>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -401,7 +406,7 @@
     <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
       <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" style="height:56px;width:auto;" /><span style="font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
     </a>
-    <a href="#form" class="btn btn-primary">Book Your Trial Lessons</a>
+    <a href="#form" class="btn btn-primary"><span class="cta-full">Book Your Trial Lessons</span><span class="cta-short">Book Trial</span></a>
   </div>
 </nav>
 
