@@ -35,8 +35,7 @@
   ];
 
   // Standard per-lesson rates, charged only AFTER the free first lesson.
-  // Keys match LESSON_LENGTHS[].value. Deliberately NOT derived from
-  // config.mcmc_prices, which holds the retired discounted trial totals.
+  // Keys match LESSON_LENGTHS[].value. The first lesson is never charged.
   const STANDARD_RATES = { 30: 40, 45: 60, 60: 75 };
 
   // ─── State ─────────────────────────────────────────────────────────────────
@@ -52,7 +51,7 @@
       preferredDays: [],     // array of day-of-week ints (0=Mon..6=Sun)
       preferredTimes: [],    // array of strings: 'morning' | 'afternoon' | 'evening'
       cities: [],
-      config: null,           // {paypal_client_id, mcmc_prices, mm_deposit, paypal_env}
+      config: null,           // scheduling config; no payment fields are used
       slots: null,
       selectedSlot: null,
       filterInstructor: '',
@@ -106,33 +105,6 @@
     const res = await fetch(`${API_BASE}/api/scheduling/config`);
     if (!res.ok) throw new Error('Could not load config');
     return res.json();
-  }
-
-  // True when the backend reports the first lesson is free.
-  //
-  // Defaults to FALSE when the field is missing, so a widget deployed before the
-  // backend change degrades to the existing paid path. On this brand LEAD_ONLY is
-  // always true, so the free copy shows regardless; the helper exists so the two
-  // brands' widgets stay structurally identical and neither depends on
-  // short-circuit evaluation to avoid a ReferenceError.
-  function isFirstLessonFree() {
-    return state.config?.mcmc_first_lesson_free === true;
-  }
-
-  // PayPal SDK loader — only loads once per page
-  let _paypalSdkPromise = null;
-  function loadPaypalSdk(clientId) {
-    if (_paypalSdkPromise) return _paypalSdkPromise;
-    _paypalSdkPromise = new Promise((resolve, reject) => {
-      if (window.paypal) return resolve(window.paypal);
-      const s = document.createElement('script');
-      s.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=USD&intent=capture`;
-      s.async = true;
-      s.onload = () => resolve(window.paypal);
-      s.onerror = () => reject(new Error('PayPal SDK failed to load'));
-      document.head.appendChild(s);
-    });
-    return _paypalSdkPromise;
   }
 
   async function fetchCities() {
@@ -256,7 +228,7 @@
 
     return `
       <div class="sw-step">
-        ${LEAD_ONLY || !isFirstLessonFree() ? '' : `
+        ${LEAD_ONLY ? '' : `
           <div class="sw-trial-banner">
             <div class="sw-trial-banner-eyebrow">Free Trial Lesson</div>
             <div class="sw-trial-banner-headline">Your first lesson is free</div>
@@ -296,9 +268,7 @@
           <select id="sw-length" class="sw-select">
             ${lengthOptions}
           </select>
-          <div class="sw-bucket-hint">${LEAD_ONLY || isFirstLessonFree()
-            ? 'Your first lesson is free. Standard rates apply after ($40/$60/$75 per lesson).'
-            : 'Trial covers your first 3 lessons. Standard rates apply after ($40/$60/$75 per lesson).'}</div>
+          <div class="sw-bucket-hint">Your first lesson is free. Standard rates apply after ($40/$60/$75 per lesson).</div>
         </div>
 
         <div class="sw-field">
@@ -460,28 +430,17 @@
   }
 
   function renderMcmcPayment() {
-    const price = state.config?.mcmc_prices?.[state.lessonLength];
-    const hasPaypal = state.config?.paypal_client_id && price != null;
-    if (!hasPaypal) {
-      return `
-        <button id="sw-submit" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
-          ${state.loading ? '<span class="sw-spinner"></span> Booking...' : 'Book Trial Lesson'}
-        </button>
-      `;
-    }
-    // Per-lesson math so the discount feels concrete
-    const standardPerLesson = state.lessonLength === 30 ? 40 : state.lessonLength === 45 ? 60 : 75;
-    const trialPerLesson = standardPerLesson / 2;
-    const standardTotal = standardPerLesson * 3;
+    // The first lesson is always free. There is no trial charge and no payment
+    // step anywhere in this widget. The button id must stay 'sw-submit' so the
+    // existing handleBooking binding (the no-payment path) picks it up.
     return `
       <div class="sw-pay-card">
-        <div class="sw-pay-eyebrow">Trial Special — 50% off</div>
-        <div class="sw-pay-headline">3 ${state.lessonLength}-min Lessons for $${price.toFixed(2)}</div>
-        <div class="sw-pay-price-breakdown">
-          That's <strong>$${trialPerLesson.toFixed(2)}/lesson</strong> instead of <s>$${standardPerLesson.toFixed(2)}</s> — you save $${(standardTotal - price).toFixed(2)}.
-        </div>
-        <div class="sw-pay-subtext">After your trial, lessons continue at the standard rate ($${standardPerLesson}/lesson). Refundable up to 48 hours before your first lesson.</div>
-        <div id="sw-paypal-button" class="sw-paypal-button"></div>
+        <div class="sw-pay-eyebrow">Free First Lesson</div>
+        <div class="sw-pay-headline">Your first lesson is free</div>
+        <div class="sw-pay-subtext">Nothing to pay today. This is a relaxed first lesson to meet your teacher, with no obligation to continue. If you keep going, lessons are $${STANDARD_RATES[state.lessonLength]}/lesson.</div>
+        <button id="sw-submit" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
+          ${state.loading ? '<span class="sw-spinner"></span> Booking...' : 'Book My Free Lesson'}
+        </button>
       </div>
       <button id="sw-callback" class="sw-text-link" ${state.loading ? 'disabled' : ''}>
         Or have an instructor call you first &rarr;
@@ -669,25 +628,14 @@
     `;
   }
 
+  // No deposit and no payment at booking. The first lesson is free, so this is a
+  // plain submission. The deposit path was removed with the paid trial.
   function renderMmDeposit() {
-    const deposit = state.config?.mm_deposit;
-    const hasPaypal = state.config?.paypal_client_id && deposit != null;
-    if (!hasPaypal) {
-      // PayPal not configured yet — fall back to no-deposit submission
-      return `
-        <button id="sw-submit-lead" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
-          ${state.loading ? '<span class="sw-spinner"></span> Sending...' : 'Reserve My Spot'}
-        </button>
-        <p class="sw-fineprint">We'll get back to you within 24 hours. Your info stays private.</p>
-      `;
-    }
     return `
-      <div class="sw-pay-card">
-        <div class="sw-pay-headline">Reserve with a $${deposit.toFixed(2)} deposit</div>
-        <div class="sw-pay-subtext">Applied to your first lesson. Refundable up to 48 hours before your scheduled start.</div>
-        <div id="sw-paypal-button" class="sw-paypal-button"></div>
-      </div>
-      <p class="sw-fineprint">We'll reach out within 24 hours to confirm your fit. Your info stays private.</p>
+      <button id="sw-submit-lead" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
+        ${state.loading ? '<span class="sw-spinner"></span> Sending...' : 'Reserve My Spot'}
+      </button>
+      <p class="sw-fineprint">We'll get back to you within 24 hours. Your info stays private.</p>
     `;
   }
 
@@ -799,9 +747,6 @@
     // Callback link (MCMC step 3 alternative to paying)
     const callbackBtn = document.getElementById('sw-callback');
     if (callbackBtn) callbackBtn.addEventListener('click', handleCallbackRequest);
-
-    // Mount PayPal Smart Buttons if container is present
-    mountPaypalButton();
 
     // Step 4
     const doneBtn = document.getElementById('sw-done');
@@ -990,157 +935,10 @@
     render();
   }
 
-  function mountPaypalButton() {
-    const container = document.getElementById('sw-paypal-button');
-    if (!container) return;
-    const clientId = state.config?.paypal_client_id;
-    if (!clientId) return;
-
-    let amount = 0;
-    let onApproveHandler = null;
-
-    if (LEAD_ONLY) {
-      amount = state.config?.mm_deposit;
-      onApproveHandler = (orderId) => handleLeadSubmitWithPayment(orderId);
-    } else {
-      // MCMC booking flow
-      amount = state.config?.mcmc_prices?.[state.lessonLength];
-      onApproveHandler = (orderId) => handleBookingWithPayment(orderId);
-    }
-
-    if (!amount) return;
-
-    loadPaypalSdk(clientId).then(paypal => {
-      // Validate fields BEFORE letting PayPal open. Errors shown inline.
-      const validateBeforePay = () => {
-        clearAllErrors();
-        let bad = false;
-        if (!state.clientName.trim()) { setFieldError('name', 'Please enter your name.'); bad = true; }
-        if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) {
-          setFieldError('email', 'Please enter a valid email.'); bad = true;
-        }
-        if (LEAD_ONLY) {
-          if (!state.clientPhone.trim()) { setFieldError('phone', 'Please enter your phone number.'); bad = true; }
-          if (!state.instrument) { setFieldError('instrument', 'Please select an instrument.'); bad = true; }
-          if (state.instrument === 'Other' && !state.instrumentOther.trim()) {
-            setFieldError('instrumentOther', 'Please tell us which instrument.'); bad = true;
-          }
-          if (!state.studentAge.trim()) { setFieldError('studentAge', 'Please enter the student age.'); bad = true; }
-          if (!state.city.trim()) { setFieldError('city', 'Please enter your city.'); bad = true; }
-          if (!state.startTiming) { setFieldError('startTiming', 'Please tell us how soon you want to start.'); bad = true; }
-        } else {
-          if (!state.address.trim()) { setFieldError('address', 'Please enter your lesson address.'); bad = true; }
-        }
-        if (bad) { render(); return false; }
-        return true;
-      };
-
-      paypal.Buttons({
-        style: { color: 'gold', shape: 'rect', label: 'pay', height: 44 },
-        onClick: async (data, actions) => {
-          if (!validateBeforePay()) return actions.reject();
-
-          // For MCMC bookings only: re-check that the selected slot is still
-          // available before opening PayPal. Avoids the case where a user pays
-          // and then can't be booked because the slot was just taken.
-          if (!LEAD_ONLY && state.selectedSlot) {
-            try {
-              const refreshed = await fetchAvailability({
-                instrument: state.instrument,
-                city: state.city,
-                lesson_length: state.lessonLength,
-                address: state.address || undefined,
-              });
-              const slotKeyOf = s => s ? `${s.instructor_id}|${s.date}|${s.time}` : '';
-              const targetKey = slotKeyOf(state.selectedSlot);
-              const allRefreshed = ([refreshed.recommended].concat(refreshed.alternatives || [])).filter(Boolean);
-              const stillAvailable = allRefreshed.some(s => slotKeyOf(s) === targetKey);
-              if (!stillAvailable) {
-                state.error = 'That time slot was just taken. Please go back and pick another time — no payment was charged.';
-                state.step = 2;
-                state.selectedSlot = null;
-                state.slots = refreshed;
-                render();
-                return actions.reject();
-              }
-            } catch (e) {
-              // If the check fails, let the user proceed anyway
-              console.warn('Slot pre-check failed:', e);
-            }
-          }
-
-          return actions.resolve();
-        },
-        createOrder: (data, actions) => actions.order.create({
-          purchase_units: [{
-            description: LEAD_ONLY
-              ? 'Music & Mastery — Lesson reservation deposit'
-              : `Mountain City Music — First 3 ${state.lessonLength}-min ${state.instrument} lessons (50% off)`,
-            amount: { value: amount.toFixed(2), currency_code: 'USD' },
-          }],
-        }),
-        onApprove: async (data, actions) => {
-          await actions.order.capture();  // captures the funds via PayPal SDK
-          await onApproveHandler(data.orderID);
-        },
-        onError: (err) => {
-          console.error('PayPal error:', err);
-          state.error = 'Payment failed. Please try again or use the callback option.';
-          render();
-        },
-      }).render('#sw-paypal-button');
-    }).catch(err => {
-      console.warn('PayPal SDK load failed:', err);
-      // Hide the deposit card so the user isn't stuck with a broken button
-      container.parentElement && container.parentElement.remove();
-    });
-  }
-
-  async function handleBookingWithPayment(orderId) {
-    state.loading = true; state.error = ''; render();
-    try {
-      const result = await bookLesson({
-        client_name: state.clientName.trim(),
-        email: state.clientEmail.trim(),
-        phone: state.clientPhone.trim(),
-        instrument: state.instrument,
-        address: state.address.trim(),
-        city: state.city,
-        instructor_id: state.selectedSlot.instructor_id,
-        day_of_week: state.selectedSlot.day_of_week,
-        start_time: state.selectedSlot.time,
-        lesson_date: state.selectedSlot.date,
-        lesson_length: state.lessonLength,
-        paypal_order_id: orderId,
-        honeypot: '',
-      });
-      if (typeof gtag === 'function') {
-        gtag('event', 'form_submission', { event_category: 'booking_paid', event_label: state.instrument });
-      }
-      if (THANK_YOU_REDIRECT) {
-        window.location.href = buildRedirectUrl({
-          type: 'paid',
-          instructor: result.instructor_name,
-          day: result.day,
-          time: result.time,
-          duration: state.lessonLength,
-          instrument: state.instrument,
-        });
-        return;
-      }
-      state.confirmation = result; state.step = 4;
-    } catch (e) {
-      // Critical: payment was captured but booking failed. Show a banner-style
-      // error and surface the PayPal order ID so support can refund manually.
-      state.error = `IMPORTANT: Your payment of $${(state.config?.mcmc_prices?.[state.lessonLength] || 0).toFixed(2)} went through, but we couldn't save your booking (${e.message || 'unknown error'}). PayPal order ID: ${orderId}. Please call us at (760) 573-2120 right away — we'll either book you in or refund you immediately.`;
-    }
-    state.loading = false; render();
-  }
-
   async function handleCallbackRequest() {
     state.loading = true; state.error = ''; render();
     try {
-      // Collect contact info exactly like a paid booking, but no PayPal
+      // Collect contact info exactly like a normal booking, but no slot is held
       if (!state.clientName.trim()) throw new Error('Please enter your name.');
       if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) throw new Error('Please enter a valid email.');
       if (!state.address.trim()) throw new Error('Please enter your lesson address.');
@@ -1177,42 +975,6 @@
       state.confirmation = { ...result, isCallback: true }; state.step = 4;
     } catch (e) {
       state.error = e.message || 'Could not submit callback request.';
-    }
-    state.loading = false; render();
-  }
-
-  async function handleLeadSubmitWithPayment(orderId) {
-    state.loading = true; state.error = ''; render();
-    try {
-      const result = await submitLead({
-        client_name: state.clientName.trim(),
-        email: state.clientEmail.trim(),
-        phone: state.clientPhone.trim(),
-        instrument: state.instrument,
-        instrument_other: state.instrumentOther.trim() || undefined,
-        city: state.city.trim() || undefined,
-        student_age: state.studentAge.trim() || undefined,
-        start_timing: state.startTiming || undefined,
-        notes: state.notes.trim() || undefined,
-        brand_source: BRAND_SOURCE,
-        paypal_order_id: orderId,
-        honeypot: '',
-      });
-      if (typeof gtag === 'function') {
-        gtag('event', 'form_submission', { event_category: 'lead_paid', event_label: state.instrument });
-      }
-      if (THANK_YOU_REDIRECT) {
-        window.location.href = buildRedirectUrl({
-          type: 'deposit',
-          instrument: state.instrument === 'Other' ? state.instrumentOther : state.instrument,
-          city: state.city,
-          deposit: state.config?.mm_deposit,
-        });
-        return;
-      }
-      state.confirmation = { ...result, isLead: true, isPaid: true }; state.step = 4;
-    } catch (e) {
-      state.error = e.message || 'Submission failed after payment. Please contact us.';
     }
     state.loading = false; render();
   }
@@ -1381,7 +1143,6 @@
         margin-bottom: 14px;
         line-height: 1.5;
       }
-      .sw-paypal-button { min-height: 44px; }
       .sw-text-link {
         background: transparent;
         border: none;
@@ -1590,7 +1351,7 @@
       }
     }
 
-    // Load config (PayPal client ID + pricing) up front so payment buttons are ready
+    // Load scheduling config up front; there is no payment step to prepare
     try {
       state.config = await fetchConfig();
     } catch (e) {
