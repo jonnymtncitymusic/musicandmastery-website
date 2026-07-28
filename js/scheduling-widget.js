@@ -25,14 +25,19 @@
   const LEAD_ONLY = window.MCMC_LEAD_ONLY || (BRAND_SOURCE !== 'mcmc');
 
   const INSTRUMENTS = ['Guitar', 'Piano', 'Voice', 'Bass', 'Ukulele', 'Drums', 'Music Production', 'Other'];
-  // Lesson length labels show TRIAL pricing — 3 lessons at 50% off the
-  // standard per-lesson rate ($40/$60/$75). Total trial price is what the
-  // client actually pays today via PayPal.
+  // Lesson length labels carry no price. The first lesson is free on both
+  // brands, and the standard per-lesson rate is shown as post-trial
+  // information in the bucket hint below, never charged at booking.
   const LESSON_LENGTHS = [
-    { value: 30, label: '30 min — $60 trial (3 lessons, 50% off)' },
-    { value: 45, label: '45 min — $90 trial (3 lessons, 50% off)' },
-    { value: 60, label: '60 min — $112.50 trial (3 lessons, 50% off)' },
+    { value: 30, label: '30 min' },
+    { value: 45, label: '45 min' },
+    { value: 60, label: '60 min' },
   ];
+
+  // Standard per-lesson rates, charged only AFTER the free first lesson.
+  // Keys match LESSON_LENGTHS[].value. Deliberately NOT derived from
+  // config.mcmc_prices, which holds the retired discounted trial totals.
+  const STANDARD_RATES = { 30: 40, 45: 60, 60: 75 };
 
   // ─── State ─────────────────────────────────────────────────────────────────
   function freshState() {
@@ -280,7 +285,7 @@
           <select id="sw-length" class="sw-select">
             ${lengthOptions}
           </select>
-          <div class="sw-bucket-hint">Trial covers your first 3 lessons. Standard rates apply after ($40/$60/$75 per lesson).</div>
+          <div class="sw-bucket-hint">Your first lesson is free. Standard rates apply after ($40/$60/$75 per lesson).</div>
         </div>
 
         <div class="sw-field">
