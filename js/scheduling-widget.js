@@ -108,6 +108,17 @@
     return res.json();
   }
 
+  // True when the backend reports the first lesson is free.
+  //
+  // Defaults to FALSE when the field is missing, so a widget deployed before the
+  // backend change degrades to the existing paid path. On this brand LEAD_ONLY is
+  // always true, so the free copy shows regardless; the helper exists so the two
+  // brands' widgets stay structurally identical and neither depends on
+  // short-circuit evaluation to avoid a ReferenceError.
+  function isFirstLessonFree() {
+    return state.config?.mcmc_first_lesson_free === true;
+  }
+
   // PayPal SDK loader — only loads once per page
   let _paypalSdkPromise = null;
   function loadPaypalSdk(clientId) {
@@ -245,10 +256,10 @@
 
     return `
       <div class="sw-step">
-        ${LEAD_ONLY ? '' : `
+        ${LEAD_ONLY || !isFirstLessonFree() ? '' : `
           <div class="sw-trial-banner">
-            <div class="sw-trial-banner-eyebrow">Trial Special</div>
-            <div class="sw-trial-banner-headline">Your first 3 lessons — 50% off</div>
+            <div class="sw-trial-banner-eyebrow">Free Trial Lesson</div>
+            <div class="sw-trial-banner-headline">Your first lesson is free</div>
           </div>
         `}
         <h3 class="sw-heading">Find Your Perfect Lesson</h3>
@@ -285,7 +296,9 @@
           <select id="sw-length" class="sw-select">
             ${lengthOptions}
           </select>
-          <div class="sw-bucket-hint">Your first lesson is free. Standard rates apply after ($40/$60/$75 per lesson).</div>
+          <div class="sw-bucket-hint">${LEAD_ONLY || isFirstLessonFree()
+            ? 'Your first lesson is free. Standard rates apply after ($40/$60/$75 per lesson).'
+            : 'Trial covers your first 3 lessons. Standard rates apply after ($40/$60/$75 per lesson).'}</div>
         </div>
 
         <div class="sw-field">
