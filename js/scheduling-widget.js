@@ -272,12 +272,12 @@
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Your Address <span class="sw-optional">(optional — for more accurate matching)</span></label>
+          <label class="sw-label">Your Address <span class="sw-optional">(optional, for more accurate matching)</span></label>
           <input type="text" id="sw-address" class="sw-input" placeholder="123 Main St" value="${state.address}">
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Preferred Days <span class="sw-optional">(optional — leave blank for any day)</span></label>
+          <label class="sw-label">Preferred Days <span class="sw-optional">(optional, leave blank for any day)</span></label>
           <div class="sw-pill-row">
             ${DAYS_OF_WEEK.map(d => `
               <button type="button" class="sw-pill ${state.preferredDays.includes(d.v) ? 'sw-pill-on' : ''}" data-day="${d.v}">${d.label}</button>
@@ -389,8 +389,8 @@
       <div class="sw-step">
         <h3 class="sw-heading">Your Information</h3>
         <div class="sw-selection-summary">
-          <strong>${slot.instructor_name}</strong> — ${slot.day}, ${formatTime(slot.time)}<br>
-          First lesson of your <strong>3-lesson trial</strong> (${state.lessonLength} min ${state.instrument})
+          <strong>${slot.instructor_name}</strong>, ${slot.day} at ${formatTime(slot.time)}<br>
+          Your <strong>free first lesson</strong> (${state.lessonLength} min ${state.instrument})
         </div>
 
         <div class="sw-field ${fieldErrorClass('name')}">
@@ -461,7 +461,7 @@
           <p class="sw-confirm-text">${c.message}</p>
           <div class="sw-confirm-details">
             <div><strong>Instrument:</strong> ${instrumentLabel}</div>
-            <div><strong>City:</strong> ${state.city || '—'}</div>
+            <div><strong>City:</strong> ${state.city || 'Not given'}</div>
             <div><strong>Email:</strong> ${state.clientEmail}</div>
           </div>
           <p class="sw-subtext">Questions? Call us at <a href="tel:7605732120">(760) 573-2120</a>.</p>
@@ -470,10 +470,10 @@
       `;
     }
 
-    const headline = c.isCallback ? "We'll Call You Soon" : "Your Trial Is Booked!";
+    const headline = c.isCallback ? "We'll Call You Soon" : "Your Free Lesson Is Booked!";
     const text = c.isCallback
       ? "Thanks! We've got your slot reserved and will call within 24 hours to walk you through everything."
-      : `${c.message} You're set for your 3-lesson trial — we'll confirm the exact times for your 2nd and 3rd lessons within 24 hours.`;
+      : `${c.message} Your first lesson is free, and there is nothing to pay today. We'll confirm the details by email shortly.`;
 
     return `
       <div class="sw-step sw-step-confirm">
@@ -549,7 +549,7 @@
 
     const cityName = state.city || 'your area';
     const headline = state.city
-      ? `Music Lessons in ${cityName} — Reserve Your Spot`
+      ? `Music Lessons in ${cityName}: Reserve Your Spot`
       : 'Reserve Your Spot for Music Lessons';
     const subtext = `We're matching new students with instructors in ${cityName} and will reach out within 24 hours to confirm your fit. Most students start lessons within 1–3 weeks.`;
 
@@ -1221,7 +1221,7 @@
       }
       @keyframes sw-spin { to { transform: rotate(360deg); } }
 
-      /* Step 2 — Slots */
+      /* Step 2: Slots */
       .sw-slots-container { margin: 16px 0; max-height: 360px; overflow-y: auto; }
       .sw-day-group { margin-bottom: 16px; }
       .sw-day-label {
@@ -1291,7 +1291,7 @@
       .sw-step2-actions { display: flex; gap: 12px; margin-top: 16px; }
       .sw-step2-actions .sw-btn-primary { flex: 1; }
 
-      /* Step 3 — Contact */
+      /* Step 3: Contact */
       .sw-selection-summary {
         background: #f9f8ff;
         border: 1px solid rgba(114,110,221,0.2);
@@ -1301,7 +1301,7 @@
         margin-bottom: 20px;
       }
 
-      /* Step 4 — Confirmation */
+      /* Step 4: Confirmation */
       .sw-step-confirm { text-align: center; }
       .sw-check-icon {
         width: 56px; height: 56px;

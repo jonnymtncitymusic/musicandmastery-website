@@ -484,7 +484,7 @@
 // The widget sends these on redirect after a successful booking.
 (function() {
   var params = new URLSearchParams(window.location.search);
-  var type = params.get('type');  // 'paid' | 'callback' | 'lead' | 'deposit'
+  var type = params.get('type');  // 'callback' | 'lead'
   if (!type) return;
 
   var instructor = params.get('instructor');
@@ -493,7 +493,6 @@
   var duration   = params.get('duration');
   var instrument = params.get('instrument');
   var city       = params.get('city');
-  var deposit    = params.get('deposit');
 
   function fmtTime(t) {
     if (!t || !t.includes(':')) return t || '';
@@ -507,18 +506,14 @@
   var sub = document.getElementById('ty-sub');
   var eyebrow = document.getElementById('ty-eyebrow');
 
-  if (type === 'paid') {
-    eyebrow.textContent = 'Trial Confirmed';
-    headline.innerHTML = "Your trial is <span class=\"accent\">booked!</span>";
-    sub.innerHTML = "We'll see you for your first lesson with <strong>" + (instructor || 'your instructor') + "</strong>. We'll email a confirmation and reach out within 24 hours.";
-  } else if (type === 'callback') {
+  // The widget only ever sends 'callback' or 'lead'. The old 'paid' and 'deposit'
+  // types went with the retired paid trial and its deposit, and nothing can reach
+  // them any more, so they are gone rather than left describing a flow that no
+  // longer exists.
+  if (type === 'callback') {
     eyebrow.textContent = 'Slot Reserved';
     headline.innerHTML = "We'll <span class=\"accent\">call you soon.</span>";
-    sub.innerHTML = "Your slot is held. We'll call within 24 hours to walk through everything and confirm payment.";
-  } else if (type === 'deposit') {
-    eyebrow.textContent = 'Deposit Received';
-    headline.innerHTML = "You're on the <span class=\"accent\">M&amp;M list!</span>";
-    sub.innerHTML = "Thanks for your $" + (deposit || '20') + " deposit. We'll match you with an instructor in <strong>" + (city || 'your area') + "</strong> and reach out within 24 hours.";
+    sub.innerHTML = "Your slot is held. We'll call within 24 hours to walk through everything. Your first lesson is free, so there is nothing to pay.";
   } else if (type === 'lead') {
     eyebrow.textContent = 'Info Received';
     sub.innerHTML = "Thanks! We'll match you with an instructor in <strong>" + (city || 'your area') + "</strong> and reach out within 24 hours.";
@@ -532,18 +527,13 @@
     details.appendChild(dt); details.appendChild(dd);
   }
 
-  if (type === 'paid' || type === 'callback') {
+  if (type === 'callback') {
     row('Instructor',    instructor);
     row('Day',           day);
     row('Time',          fmtTime(time));
     if (duration)   row('Duration',  duration + ' min');
     if (instrument) row('Instrument', instrument);
-    if (type === 'paid') row('Status', '<span class="ty-paid">PAID, your trial is locked in</span>');
-    document.getElementById('ty-booking-card').style.display = 'block';
-  } else if (type === 'deposit') {
-    if (instrument) row('Instrument', instrument);
-    if (city)       row('City',       city);
-    row('Deposit',  '<span class="ty-paid">$' + (deposit || '20') + ' PAID</span>');
+    row('Cost',          'Free first lesson');
     document.getElementById('ty-booking-card').style.display = 'block';
   }
 })();
