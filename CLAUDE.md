@@ -72,3 +72,28 @@ Both M&M and MCMC's index/instructors pages use JotForm `260516786213155`. M&M p
 - **Never add** `<script src="https://cdn.tailwindcss.com"></script>`
 - Do not commit or push to GitHub until explicitly told to
 - Always test on localhost first
+
+## Scheduling widget cache-busting (REQUIRED on every widget change)
+
+`/js/scheduling-widget.js` is served `public, max-age=86400, stale-while-revalidate=604800`
+and has no content hash, so returning visitors would run a widget up to 24h stale. Every
+include therefore carries a version query param:
+
+    <script src="/js/scheduling-widget.js?v=20260729"></script>
+
+**When you change `js/scheduling-widget.js`, you MUST bump that `?v=` token in every HTML
+file that references it, or returning visitors never receive the change.** This bit for real:
+a stale widget sent no `lesson_for` field at all, and was only survivable because the backend
+has a neutral branch. Bump with a sweep, not by hand:
+
+    python3 - <<'EOF'
+    import pathlib, re
+    NEW = "YYYYMMDD"
+    for f in pathlib.Path(".").glob("*.html"):
+        t = f.read_text()
+        n = re.sub(r'(/js/scheduling-widget\.js\?v=)[0-9]+', rf'\g<1>{NEW}', t)
+        if n != t: f.write_text(n); print(f.name)
+    EOF
+
+Note one include is injected dynamically via `s.src = '/js/scheduling-widget.js?v=...'`, so a
+naive grep for `<script src=` will miss it. The regex above catches both forms.
