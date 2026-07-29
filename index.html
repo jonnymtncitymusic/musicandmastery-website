@@ -220,6 +220,28 @@
     .why-card h3 { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 20px; margin: 0 0 10px; letter-spacing: -0.01em; }
     .why-card p { font-size: 15px; line-height: 1.7; color: #555; margin: 0; }
 
+    /* FOR ADULT STUDENTS
+       Sits directly after "Why Families Choose" on purpose: that heading is the
+       exclusion an adult reads, so this answers it immediately. Bespoke deep-purple
+       band rather than the cream/white alternation, for two reasons: the page's
+       2-colour rhythm has no free slot here (cream then white), and the four existing
+       bespoke sections are precisely how this page already separates same-coloured
+       neighbours. Purple is the one surface treatment not yet used, so it marks a
+       change of audience using an existing brand token instead of a new colour. */
+    .adults-section { background: var(--accent); padding: 96px 32px; text-align: center; position: relative; overflow: hidden; }
+    .adults-section::before { content: '♪'; position: absolute; font-size: 420px; line-height: 1; color: rgba(255,255,255,0.05); top: 50%; left: 50%; transform: translate(-50%, -52%) rotate(12deg); pointer-events: none; font-family: serif; }
+    .adults-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+    /* Gold is a FILL here, never text. Measured on this band gold text is 2.60:1,
+       which fails even the large-text bar, so the eyebrow and CTA carry the gold as
+       backgrounds with near-black type (6.37:1) and all copy stays white. */
+    .adults-eyebrow { display: inline-block; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #241a08; background: var(--gold); border-radius: 9999px; padding: 6px 14px; margin-bottom: 20px; }
+    .adults-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(32px, 4.4vw, 54px); line-height: 1.1; letter-spacing: -0.03em; color: #fff; margin: 0 0 20px; text-wrap: balance; }
+    .adults-body { font-size: 18px; line-height: 1.7; color: rgba(255,255,255,0.88); margin: 0 0 32px; }
+    .adults-trust { font-family: 'Work Sans', sans-serif; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.82); margin-top: 22px; letter-spacing: 0.04em; }
+    .adults-section .btn-gold { background: var(--gold); color: #241a08; }
+    .adults-section .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(0,0,0,0.22); }
+    .adults-section .btn-gold:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
     /* LESSONS WE OFFER */
     .lessons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 48px; }
     .lesson-card { background: #fff; border-radius: 16px; padding: 0 0 22px; border: 1.5px solid rgba(114,110,221,0.15); box-shadow: 0 2px 12px rgba(114,110,221,0.06); opacity: 0; transform: translateY(40px); transition: opacity 3s cubic-bezier(0.34,1.2,0.64,1), transform 3s cubic-bezier(0.34,1.2,0.64,1), box-shadow 0.2s, border-color 0.2s; cursor: default; overflow: hidden; }
@@ -485,6 +507,9 @@
     .team-coming-soon { padding: 32px 24px; }
 
     /* READY CTA */
+    .adults-section { padding: 64px 20px; }
+    .adults-section::before { font-size: 260px; }
+    .adults-body { font-size: 16px; }
     .ready-section { padding: 80px 20px; }
     .ready-inner { padding: 40px 28px; border-radius: 20px; }
     .ready-body { font-size: 16px; }
@@ -677,6 +702,17 @@
         <p>When students are ready, we celebrate it. We host seasonal recitals and community showcases so students can share their music with an audience.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- FOR ADULT STUDENTS -->
+<section class="adults-section">
+  <div class="adults-inner">
+    <div class="adults-eyebrow">For adult students</div>
+    <h2 class="adults-heading">Finally nail the solo you&rsquo;ve always wanted to play.</h2>
+    <p class="adults-body">You do not need to have started at seven. Some of our adult students are complete beginners. Others are picking an instrument back up after years away. Your teacher builds lessons around the songs you actually want to play, not a stack of scales. Most students are playing something real sooner than they expect.</p>
+    <a href="#" class="btn btn-gold" onclick="openModal(); return false;">Book your free first lesson</a>
+    <div class="adults-trust">About a third of our students are adults. Your instructor comes to you, at a time that fits your week.</div>
   </div>
 </section>
 
@@ -1069,7 +1105,7 @@
         Who are Music and Mastery lessons for?
         <div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
       </button>
-      <div class="faq-answer"><div class="faq-answer-inner">Our lessons are for everyone, complete beginners who've never touched an instrument, kids as young as 5, busy adults picking music back up after years away, and advanced students looking to level up. If you want to learn, we have a teacher who's right for you.</div></div>
+      <div class="faq-answer"><div class="faq-answer-inner">Our lessons are for everyone. Busy adults picking music back up after years away, complete beginners who've never touched an instrument, kids as young as 5, and advanced students looking to level up. If you want to learn, we have a teacher who's right for you.</div></div>
     </div>
 
     <div class="faq-item">
