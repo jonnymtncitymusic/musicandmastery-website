@@ -59,6 +59,7 @@
       clientEmail: '',
       clientPhone: '',
       studentAge: '',
+      lessonFor: '',    // 'child' | 'self'. Empty until answered; the API treats empty as unknown.
       startTiming: '',  // 'asap' | 'within_month' | 'exploring'
       notes: '',
       loading: false,
@@ -188,6 +189,28 @@
       }
     }
     return instructors;
+  }
+
+  const LESSON_FOR_OPTIONS = [
+    { v: 'child', label: 'My child' },
+    { v: 'self',  label: 'Myself' },
+  ];
+
+  // One helper for all three forms (booking, no-match lead, lead-only). The three
+  // used to differ in what they asked, which is how the booking path ended up
+  // with no student information at all.
+  function renderLessonForField() {
+    return `
+      <div class="sw-field ${fieldErrorClass('lessonFor')}">
+        <label class="sw-label">Who is this lesson for?</label>
+        <div class="sw-pill-row">
+          ${LESSON_FOR_OPTIONS.map(o => `
+            <button type="button" class="sw-pill ${state.lessonFor === o.v ? 'sw-pill-on' : ''}" data-lessonfor="${o.v}">${o.label}</button>
+          `).join('')}
+        </div>
+        ${fieldErrorHtml('lessonFor')}
+      </div>
+    `;
   }
 
   // ─── Render ────────────────────────────────────────────────────────────────
@@ -393,6 +416,8 @@
           Your <strong>free first lesson</strong> (${state.lessonLength} min ${state.instrument})
         </div>
 
+        ${renderLessonForField()}
+
         <div class="sw-field ${fieldErrorClass('name')}">
           <label class="sw-label">Your Name</label>
           <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
@@ -510,6 +535,8 @@
         <h3 class="sw-heading">${headline}</h3>
         <p class="sw-subtext">${subtext}</p>
 
+        ${renderLessonForField()}
+
         <div class="sw-field">
           <label class="sw-label">Your Name</label>
           <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
@@ -592,6 +619,8 @@
             ${fieldErrorHtml('instrumentOther')}
           </div>
         ` : ''}
+
+        ${renderLessonForField()}
 
         <div class="sw-field ${fieldErrorClass('studentAge')}">
           <label class="sw-label">Student Age</label>
@@ -684,6 +713,14 @@
         const k = btn.dataset.time;
         const i = state.preferredTimes.indexOf(k);
         if (i >= 0) state.preferredTimes.splice(i, 1); else state.preferredTimes.push(k);
+        render();
+      });
+    });
+
+    document.querySelectorAll('.sw-pill[data-lessonfor]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.lessonFor = btn.dataset.lessonfor;
+        clearFieldError('lessonFor');
         render();
       });
     });
@@ -816,6 +853,7 @@
     if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) {
       setFieldError('email', 'Please enter a valid email.'); bad = true;
     }
+    if (!state.lessonFor) { setFieldError('lessonFor', 'Please tell us who the lesson is for.'); bad = true; }
     if (LEAD_ONLY) {
       if (!state.clientPhone.trim()) { setFieldError('phone', 'Please enter your phone number.'); bad = true; }
       if (!state.instrument) { setFieldError('instrument', 'Please select an instrument.'); bad = true; }
@@ -844,6 +882,7 @@
         instrument_other: state.instrumentOther.trim() || undefined,
         city: state.city.trim() || undefined,
         student_age: state.studentAge.trim() || undefined,
+        lesson_for: state.lessonFor || undefined,
         start_timing: state.startTiming || undefined,
         notes: state.notes.trim() || undefined,
         brand_source: BRAND_SOURCE,
@@ -886,6 +925,7 @@
     if (!state.clientName.trim()) { setFieldError('name', 'Please enter your name.'); bad = true; }
     if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) { setFieldError('email', 'Please enter a valid email.'); bad = true; }
     if (!state.address.trim()) { setFieldError('address', 'Please enter your lesson address.'); bad = true; }
+    if (!state.lessonFor) { setFieldError('lessonFor', 'Please tell us who the lesson is for.'); bad = true; }
     if (bad) { render(); return; }
 
     // Honeypot check
@@ -909,6 +949,7 @@
         start_time: state.selectedSlot.time,
         lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
+        lesson_for: state.lessonFor || undefined,
         honeypot: '',
       });
 
@@ -942,6 +983,7 @@
       if (!state.clientName.trim()) throw new Error('Please enter your name.');
       if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) throw new Error('Please enter a valid email.');
       if (!state.address.trim()) throw new Error('Please enter your lesson address.');
+      if (!state.lessonFor) throw new Error('Please tell us who the lesson is for.');
 
       const result = await bookLesson({
         client_name: state.clientName.trim(),
@@ -955,6 +997,7 @@
         start_time: state.selectedSlot.time,
         lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
+        lesson_for: state.lessonFor || undefined,
         callback_requested: true,
         honeypot: '',
       });
