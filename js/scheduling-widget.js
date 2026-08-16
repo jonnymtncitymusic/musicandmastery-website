@@ -260,7 +260,7 @@
       <div class="sw-step">
         ${LEAD_ONLY ? '' : `
           <div class="sw-trial-banner">
-            <div class="sw-trial-banner-eyebrow">Free Trial Lesson</div>
+            <div class="sw-trial-banner-eyebrow">Free First Lesson</div>
             <div class="sw-trial-banner-headline">Your first lesson is free</div>
           </div>
         `}

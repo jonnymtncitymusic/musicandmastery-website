@@ -22,6 +22,31 @@ Placeholder: `https://www.musicandmastery.com` — all canonical URLs, OG URLs, 
 
 ## Always Do First
 - **Invoke the `frontend-design` skill** before writing any frontend code (when doing new design work — not for text/branding edits).
+- **Changing any customer-facing WORD? Read `~/.claude/skills/marketing-expert/references/website-copy.md` first.** This file governs markup and design; that one governs copy. Until 2026-08-16 this file carried no copy standard at all, which is how the FAQ ended up refusing to state a published price and the instructors page ended up recruiting for Orange County only while the site sells to 7 LA cities.
+
+## Copy rules (the short version — the full playbook is `website-copy.md`)
+
+These are business rules, not style preferences. They beat any design instinct.
+
+| Rule | What it means here |
+|---|---|
+| **Lead with the outcome, not the offer or the mechanics** | The first screenful names something the visitor wants. The 4 `*-lessons-orange-county.html` pages are the reference implementation: one concrete, instrument-specific dream line each. Background checks, no-commute and the free lesson are PROOF and come after. |
+| **No promised rate of progress, ever** | Banned: "progress happens fast", "you'll be amazed at what a few months can do", "we prove it every week", any number of weeks. Approved: "sooner than they expect". |
+| **The offer is ONE FREE FIRST LESSON** | Not a "trial", and never plural. "Book Your Trial Lessons" was a fossil of a retired 50%-off-3-lessons offer and survived on 53 buttons here. |
+| **Pricing is 60/$300, 45/$240, 30/$160, quoted MONTHLY, most-expensive-first** | Identical to Mountain City's ladder by decision (2026-08-11) while M&M establishes itself; the premium positioning is not cancelled, it is unfunded until the proof carries it. Never quote a per-lesson price. |
+| **Attribution is load-bearing on this brand** | M&M has no testimonial of its own. Every citation of a Mountain City review must say in the same block that the two are one company, and every stat bar leads with "Mountain City Music Co.". Do not strip that for tidiness. |
+| **This brand serves BOTH Orange County and Los Angeles** | 4 OC cities and 7 LA cities, 22 landing pages. Any page that names only OC is wrong. |
+| **No invented specifics, no internal contradictions, no fabricated scarcity** | "Right now Jonny is the only instructor" is real capacity and fine. "Limited spots" is not. |
+| **No em dashes. No exclamation on a sales line.** | Run `bash scripts/install-hooks.sh` once per clone — the em-dash guard is a real script but the hook is untracked and was missing from this clone until 2026-08-16. |
+| **Review quotes are verbatim and never edited** | The 2026-07-30 restoration (487 changes, 27 files) put these right. Do not re-touch them. |
+
+**Surfaces a `*.html` edit misses:** `js/scheduling-widget.js` (~40 customer-facing strings, and
+changing it REQUIRES the `?v=` bump documented at the bottom of this file); the `FAQPage` and
+`Person` JSON-LD, which mirror the FAQ answers and the founder bio; `<title>` and
+`meta description` on all 34 pages; `alt` and `aria-label` text.
+
+**This site mirrors `mtncitymusic.com` on purpose.** The mirror is deliberate, but fixes do NOT
+propagate on their own. When you fix copy here, check the sibling repo in the same pass.
 
 ## Local Server
 - Dev server: `node serve.mjs` → `http://localhost:3001` (note: 3001, not 3000 — 3000 is reserved for the MCMC site so both can run simultaneously).
