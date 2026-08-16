@@ -28,15 +28,22 @@
   // Lesson length labels carry no price. The first lesson is free on both
   // brands, and the standard per-lesson rate is shown as post-trial
   // information in the bucket hint below, never charged at booking.
+  // Ordered most-expensive-first to match the rate card on every page. The 45
+  // is the anchor and is the default selection below, never the 30.
   const LESSON_LENGTHS = [
-    { value: 30, label: '30 min' },
-    { value: 45, label: '45 min' },
     { value: 60, label: '60 min' },
+    { value: 45, label: '45 min' },
+    { value: 30, label: '30 min' },
   ];
 
   // Standard per-lesson rates, charged only AFTER the free first lesson.
   // Keys match LESSON_LENGTHS[].value. The first lesson is never charged.
   const STANDARD_RATES = { 30: 40, 45: 60, 60: 75 };
+
+  // What the customer is actually SHOWN. Every other surface on both sites quotes a
+  // monthly rate against four weekly lessons, so the widget does too. A per-lesson
+  // unit price reads as proration, and we have no proration policy to stand behind.
+  const MONTHLY_RATES = { 30: 160, 45: 240, 60: 300 };
 
   // ─── State ─────────────────────────────────────────────────────────────────
   function freshState() {
@@ -47,7 +54,7 @@
       instrumentOther: '',  // free-text when instrument === 'Other'
       city: '',
       address: '',
-      lessonLength: 30,
+      lessonLength: 45,   // the anchor tier, never the shortest
       preferredDays: [],     // array of day-of-week ints (0=Mon..6=Sun)
       preferredTimes: [],    // array of strings: 'morning' | 'afternoon' | 'evening'
       cities: [],
@@ -253,7 +260,7 @@
       <div class="sw-step">
         ${LEAD_ONLY ? '' : `
           <div class="sw-trial-banner">
-            <div class="sw-trial-banner-eyebrow">Free Trial Lesson</div>
+            <div class="sw-trial-banner-eyebrow">Free First Lesson</div>
             <div class="sw-trial-banner-headline">Your first lesson is free</div>
           </div>
         `}
@@ -291,7 +298,7 @@
           <select id="sw-length" class="sw-select">
             ${lengthOptions}
           </select>
-          <div class="sw-bucket-hint">Your first lesson is free. Standard rates apply after ($40/$60/$75 per lesson).</div>
+          <div class="sw-bucket-hint">Your first lesson is free. After that it's $300/mo for 60 minutes, $240/mo for 45, or $160/mo for 30, based on four weekly lessons a month.</div>
         </div>
 
         <div class="sw-field">
@@ -462,7 +469,7 @@
       <div class="sw-pay-card">
         <div class="sw-pay-eyebrow">Free First Lesson</div>
         <div class="sw-pay-headline">Your first lesson is free</div>
-        <div class="sw-pay-subtext">Nothing to pay today. This is a relaxed first lesson to meet your teacher, with no obligation to continue. If you keep going, lessons are $${STANDARD_RATES[state.lessonLength]}/lesson.</div>
+        <div class="sw-pay-subtext">Nothing to pay today. This is a relaxed first lesson to meet your teacher, with no obligation to continue. If you keep going, it's $${MONTHLY_RATES[state.lessonLength]}/mo for your weekly ${state.lessonLength}-minute lesson, based on four lessons a month.</div>
         <button id="sw-submit" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
           ${state.loading ? '<span class="sw-spinner"></span> Booking...' : 'Book My Free Lesson'}
         </button>
@@ -495,7 +502,7 @@
       `;
     }
 
-    const headline = c.isCallback ? "We'll Call You Soon" : "Your Free Lesson Is Booked!";
+    const headline = c.isCallback ? "We'll Call You Soon" : "Your Free Lesson Is Booked";
     const text = c.isCallback
       ? "Thanks! We've got your slot reserved and will call within 24 hours to walk you through everything."
       : `${c.message} Your first lesson is free, and there is nothing to pay today. We'll confirm the details by email shortly.`;
