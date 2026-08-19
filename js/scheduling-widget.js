@@ -59,7 +59,6 @@
       preferredDays: [],     // array of day-of-week ints (0=Mon..6=Sun)
       preferredTimes: [],    // array of strings: 'morning' | 'afternoon' | 'evening'
       cities: [],
-      config: null,           // scheduling config; no payment fields are used
       slots: null,
       selectedSlot: null,
       filterInstructor: '',
@@ -110,12 +109,6 @@
   let state = freshState();
 
   // ─── API ───────────────────────────────────────────────────────────────────
-  async function fetchConfig() {
-    const res = await fetch(`${API_BASE}/api/scheduling/config`);
-    if (!res.ok) throw new Error('Could not load config');
-    return res.json();
-  }
-
   async function fetchCities() {
     const res = await fetch(`${API_BASE}/api/scheduling/cities`);
     if (!res.ok) throw new Error('Could not load cities');
@@ -919,6 +912,40 @@
     return undefined;
   }
 
+  // Key is read and deleted by thank-you.html. Keep the two in sync.
+  const USER_DATA_KEY = 'mm_ec_user_data';
+
+  // Hand enhanced-conversion identifiers to thank-you.html, where the Ads
+  // conversion actually fires. Everything here is best-effort: sessionStorage
+  // throws in Safari private mode and under some cookie blockers, and a lead is
+  // worth more than its measurement, so a failure here must never surface to
+  // the visitor or interrupt the redirect.
+  function stashUserData() {
+    try {
+      const nameParts = state.clientName.trim().split(/\s+/).filter(Boolean);
+      const email = state.clientEmail.trim().toLowerCase();
+      const phone = normalizeE164(state.clientPhone);
+      const address = {};
+      if (nameParts[0]) address.first_name = nameParts[0];
+      if (nameParts.length > 1) address.last_name = nameParts[nameParts.length - 1];
+
+      const ud = {};
+      if (email) ud.email = email;
+      if (phone) ud.phone_number = phone;
+      if (Object.keys(address).length) ud.address = address;
+
+      // Nothing usable means nothing to match on. Clear any earlier submission's
+      // key rather than leaving it to be attributed to this conversion.
+      if (!Object.keys(ud).length) {
+        window.sessionStorage.removeItem(USER_DATA_KEY);
+        return;
+      }
+      window.sessionStorage.setItem(USER_DATA_KEY, JSON.stringify(ud));
+    } catch (e) {
+      // Storage unavailable. The conversion still fires, just unenhanced.
+    }
+  }
+
   async function handleLeadSubmit() {
     clearAllErrors();
     let bad = false;
@@ -970,21 +997,14 @@
         honeypot: '',
       });
 
-      // Enhanced conversions. The Ads conversion itself fires on thank-you.html,
-      // by which point these fields are gone from the DOM, so the identifiers have
-      // to be set here while we still hold them. gtag('set', ...) persists across
-      // the top-level navigation via the shared gtag config.
-      if (typeof gtag === 'function') {
-        const nameParts = state.clientName.trim().split(/\s+/);
-        gtag('set', 'user_data', {
-          email: state.clientEmail.trim().toLowerCase(),
-          phone_number: normalizeE164(state.clientPhone),
-          address: {
-            first_name: nameParts[0] || undefined,
-            last_name: nameParts.length > 1 ? nameParts[nameParts.length - 1] : undefined,
-          },
-        });
-      }
+      // Enhanced conversions. The Ads conversion fires on thank-you.html, one
+      // full top-level navigation from here, and gtag state does NOT survive a
+      // page load — an earlier gtag('set','user_data',...) on this page reached
+      // nothing. Hand the identifiers over through sessionStorage instead: same
+      // origin (the apex 308s to www), and unlike the redirect query string it
+      // keeps PII out of URLs, referrers and server logs. thank-you.html reads
+      // this key, sets user_data, fires the conversion, then deletes it.
+      stashUserData();
 
       // Fire conversion event regardless of redirect path so it counts even if
       // the redirect itself fails for some reason.
@@ -1121,10 +1141,8 @@
 
   function resetState() {
     const cachedCities = state.cities;
-    const cachedConfig = state.config;
     state = freshState();
     state.cities = cachedCities;
-    state.config = cachedConfig;
     if (typeof window.MCMC_PREFILL_CITY === 'string' && window.MCMC_PREFILL_CITY) {
       if (LEAD_ONLY || cachedCities.includes(window.MCMC_PREFILL_CITY)) {
         state.city = window.MCMC_PREFILL_CITY;
@@ -1217,7 +1235,7 @@
       }
       .sw-btn-ghost {
         background: transparent;
-        color: #726edd;
+        color: #5f5bc8;
         width: 100%;
         margin-top: 8px;
         box-shadow: none;
@@ -1517,19 +1535,25 @@
       }
     }
 
+    if (!inlineMode) {
+      // Modal mode — wrap openModal so we render on each open. This has to be
+      // installed before any await: the wrapper is the only thing that renders
+      // into the modal, so while init was suspended on a network call a click
+      // reached the unwrapped openModal and opened an empty card.
+      const origOpenModal = window.openModal;
+      window.openModal = function() {
+        origOpenModal();
+        resetState();
+        render();
+      };
+    }
+
     if (inlineMode) {
       // Render BEFORE any network call. These containers sit on paid landing
       // pages, and a cold or unreachable backend previously left the form area
       // blank with nothing but a console warning. Nothing the lead form needs
       // comes from the network, so it paints first and enriches after.
       render();
-    }
-
-    // Config and cities load after first paint. Neither gates the lead form.
-    try {
-      state.config = await fetchConfig();
-    } catch (e) {
-      console.warn('Could not load widget config:', e);
     }
 
     // Load cities on init (skip in lead-only mode — that flow uses a city text input)
@@ -1546,16 +1570,6 @@
       }
       // Re-render so the freshly loaded cities appear.
       if (inlineMode) render();
-    }
-
-    if (!inlineMode) {
-      // Modal mode — wrap openModal/closeModal so we render on each open
-      const origOpenModal = window.openModal;
-      window.openModal = function() {
-        origOpenModal();
-        resetState();
-        render();
-      };
     }
   }
 
