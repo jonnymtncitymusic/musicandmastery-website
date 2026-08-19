@@ -212,6 +212,31 @@
     .footer-cities { font-size: 13px; color: rgba(255,255,255,0.8); }
 
     /* MOBILE */
+
+    /* Price ladder: 60/45/30, most expensive first, monthly. Anchor 45 sits centre
+       so "Most Popular" lands on it. Never a per-lesson unit price. */
+    .lp-pricing { background: var(--cream-grad); padding: 88px 32px; }
+    .lp-pricing-inner { max-width: 1000px; margin: 0 auto; }
+    .lp-pricing-head { text-align: center; margin-bottom: 44px; }
+    .lp-pricing-head h2 { font-family: 'Playfair Display', serif; font-weight: 800; font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.02em; margin: 0 0 10px; }
+    .lp-pricing-head p { font-size: 16px; color: #555; margin: 0; }
+    .lp-pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+    .lp-price-card { background: #fff; border-radius: 20px; padding: 34px 26px; border: 1.5px solid rgba(114,110,221,0.15); box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; display: flex; flex-direction: column; }
+    .lp-price-card.popular { border-color: var(--dark-purple); box-shadow: 0 8px 40px rgba(114,110,221,0.18); }
+    .lp-price-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 9999px; padding: 5px 16px; white-space: nowrap; }
+    .lp-price-length { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 21px; margin: 0 0 12px; letter-spacing: -0.01em; }
+    .lp-price-free { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 14px; color: var(--accent); background: rgba(79,74,184,0.08); border-radius: 8px; padding: 7px 13px; display: inline-block; align-self: flex-start; margin: 0 0 18px; }
+    .lp-price-divider { height: 1px; background: #f0eeff; margin: 0 0 18px; }
+    .lp-price-label { font-size: 13px; color: #5f5f5f; margin: 0 0 4px; }
+    .lp-price-monthly { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 40px; letter-spacing: -0.03em; line-height: 1; margin: 0 0 6px; }
+    .lp-price-monthly .mo { font-size: 17px; font-weight: 600; color: #5f5f5f; }
+    .lp-price-note { font-size: 13px; color: #5f5f5f; margin: 0 0 26px; flex: 1; }
+    .lp-price-cta { margin-top: auto; }
+    @media (max-width: 860px) {
+      .lp-pricing { padding: 64px 20px; }
+      .lp-pricing-grid { grid-template-columns: 1fr; gap: 18px; }
+    }
+
     @media (max-width: 768px) {
       .nav-inner { padding: 0 20px; }
       .nav-logo img { height: 40px; }
@@ -402,6 +427,13 @@
   }
 }
 </script>
+  <noscript>
+    <style>
+      /* The objection bullets carry the page's three answers, so they must not
+         depend on the IntersectionObserver that normally fades them in. */
+      .lp-bullet-item { opacity: 1 !important; transform: none !important; }
+    </style>
+  </noscript>
 </head>
 <body>
 
@@ -409,7 +441,7 @@
 <nav class="nav">
   <div class="nav-inner">
     <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-      <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" style="height:56px;width:auto;" /><span style="font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
+      <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
     </a>
     <a href="#form" class="btn btn-primary"><span class="cta-full">Book Your Free Lesson</span><span class="cta-short">Book Free Lesson</span></a>
   </div>
@@ -425,15 +457,15 @@
       In-Home Voice Lessons<br>in <span class="accent-word">Orange County</span>
     </h1>
     <p class="hero-sub blur-fade blur-fade-2">Help your child find their voice, and the confidence that comes with it.</p>
-    <a href="#form" class="hero-offer blur-fade blur-fade-3" aria-label="Claim your free first lesson"><span class="g">Free</span> First Lesson <span class="arw">&#8594;</span></a>
+
+    <div class="hero-cta-wrap blur-fade blur-fade-3">
+      <a href="#form" class="btn btn-accent btn-accent-lg">Book Your Free First Lesson</a>
+      <a href="tel:7605732120" class="btn btn-secondary">&#128222;&nbsp; (760) 573-2120</a>
+    </div>
     <p class="hero-body blur-fade blur-fade-4">
       Private, one-on-one voice lessons for kids and adults, brought to your door in Irvine, Newport Beach, Costa Mesa &amp; Tustin. DOJ &amp; FBI background-checked instructors.<br>
       No commute. Money-back guarantee. Month-to-month, no contracts.
     </p>
-    <div class="hero-cta-wrap blur-fade blur-fade-5">
-      <a href="#form" class="btn btn-accent btn-accent-lg">Book Your Free Lesson</a>
-      <a href="tel:7605732120" class="btn btn-secondary">&#128222;&nbsp; (760) 573-2120</a>
-    </div>
   </div>
 </section>
 
@@ -458,34 +490,27 @@
 <section class="why-section">
   <div class="why-inner">
     <div class="why-text-col">
-      <h2>Why Families Choose <span>Music and Mastery</span></h2>
+      <h2>What Parents Ask <span>Before Booking</span></h2>
       <ul class="lp-bullet-list">
         <li class="lp-bullet-item">
-          <div class="lp-check">✓</div>
+          <div class="lp-check">?</div>
           <div>
-            <strong>Voice lessons in your home</strong>
-            <p>Our instructors drive to your door across Irvine, Newport Beach, Costa Mesa, and Tustin. No commute, no crosstown traffic after school.</p>
+            <strong>Will they stick with it?</strong>
+            <p>Every singer starts with breath, tension release, and tone, and your child picks the songs. If the instructor is not the right fit, we re-match you at no charge.</p>
           </div>
         </li>
         <li class="lp-bullet-item">
-          <div class="lp-check">✓</div>
+          <div class="lp-check">?</div>
           <div>
-            <strong>The songs they actually want to play</strong>
-            <p>Lessons are built around the songs your child loves to sing, not dry exercises. That's what keeps young singers practicing between lessons.</p>
+            <strong>Who is coming into our home?</strong>
+            <p>Every instructor is LiveScan cleared through the Department of Justice and the FBI before they meet your family. Your first lesson is free, so you can meet them before anything is committed.</p>
           </div>
         </li>
         <li class="lp-bullet-item">
-          <div class="lp-check">✓</div>
+          <div class="lp-check">?</div>
           <div>
-            <strong>DOJ & FBI background-checked instructors</strong>
-            <p>Every instructor is LiveScan cleared through the Department of Justice and FBI. Your family's safety comes first.</p>
-          </div>
-        </li>
-        <li class="lp-bullet-item">
-          <div class="lp-check">✓</div>
-          <div>
-            <strong>a free first lesson</strong>
-            <p>Your first lesson is free, month-to-month after that, with a money-back guarantee.</p>
+            <strong>What if we need to stop?</strong>
+            <p>Month to month, no contracts, and a money-back guarantee. You are never locked into a term.</p>
           </div>
         </li>
       </ul>
@@ -493,7 +518,7 @@
     <div class="why-photo-col">
       <div class="lp-instructor-circle">
         <picture>
-          <source srcset="brand_assets/instruments/Voice.jpg" type="image/jpeg" />
+          <source srcset="brand_assets/instruments/Voice.webp" type="image/webp" />
           <img src="brand_assets/instruments/Voice.jpg" width="533" height="800" loading="lazy" alt="Microphone set up for an in-home Music and Mastery voice lesson in Orange County" />
         </picture>
       </div>
@@ -516,7 +541,7 @@
   <div class="testimonials-header">
     <div class="testimonials-stars">★★★★★</div>
     <div class="testimonials-google">5 Stars on Google for Mountain City Music Co.</div>
-    <h2 class="testimonials-heading">What Families Say About Mountain City Music Co.</h2>
+    <h2 class="testimonials-heading">What Families Say</h2>
     <p class="testimonials-subline" style="font-family:'Work Sans',sans-serif;font-size:15px;line-height:1.6;color:#555;max-width:620px;margin:16px auto 0;">Music &amp; Mastery and Mountain City Music Co. are the same company. Mountain City Music Co. is our original name. These are verified Google reviews from Mountain City Music families in the High Desert and Inland Empire, quoted exactly as they were written.</p>
   </div>
   <div class="testimonials-track-wrapper">
@@ -610,6 +635,46 @@
   </div>
 </div>
 
+<!-- PRICING -->
+<section class="lp-pricing">
+  <div class="lp-pricing-inner">
+    <div class="lp-pricing-head">
+      <h2>What Voice Lessons Cost</h2>
+      <p>Your first lesson is free. After that it is a flat monthly rate, month to month, with no contract.</p>
+    </div>
+    <div class="lp-pricing-grid">
+      <div class="lp-price-card">
+        <div class="lp-price-length">60-Minute</div>
+        <div class="lp-price-free">First lesson free</div>
+        <div class="lp-price-divider"></div>
+        <div class="lp-price-label">Then, monthly</div>
+        <div class="lp-price-monthly">$300<span class="mo">/mo</span></div>
+        <div class="lp-price-note">Four weekly lessons a month. The most room to work in a single sitting.</div>
+        <a href="#form" class="btn btn-primary lp-price-cta" style="width:100%;justify-content:center;">Book Your Free First Lesson</a>
+      </div>
+      <div class="lp-price-card popular">
+        <div class="lp-price-badge">Most Popular</div>
+        <div class="lp-price-length">45-Minute</div>
+        <div class="lp-price-free">First lesson free</div>
+        <div class="lp-price-divider"></div>
+        <div class="lp-price-label">Then, monthly</div>
+        <div class="lp-price-monthly">$240<span class="mo">/mo</span></div>
+        <div class="lp-price-note">Four weekly lessons a month. The length most of our students settle on.</div>
+        <a href="#form" class="btn btn-accent lp-price-cta" style="width:100%;justify-content:center;">Book Your Free First Lesson</a>
+      </div>
+      <div class="lp-price-card">
+        <div class="lp-price-length">30-Minute</div>
+        <div class="lp-price-free">First lesson free</div>
+        <div class="lp-price-divider"></div>
+        <div class="lp-price-label">Then, monthly</div>
+        <div class="lp-price-monthly">$160<span class="mo">/mo</span></div>
+        <div class="lp-price-note">Four weekly lessons a month. Suits our youngest students best.</div>
+        <a href="#form" class="btn btn-primary lp-price-cta" style="width:100%;justify-content:center;">Book Your Free First Lesson</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FORM -->
 <section id="form" class="form-section">
   <div class="form-inner">
@@ -623,7 +688,7 @@
 <div class="prefer-call">
   <div class="prefer-call-inner">
     <h3>Prefer a Call?</h3>
-    <p>Leave your name and number and we'll report back within 24 hours.</p>
+    <p>Leave your name and number and we'll get back to you within 24 hours.</p>
     <a href="tel:7605732120" class="prefer-call-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11.5a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .84h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
       (760) 573-2120
@@ -696,7 +761,7 @@ document.addEventListener('click', function(e) {
 <script>window.MCMC_SCHEDULING_API = 'https://cron-runner-production-a510.up.railway.app';</script>
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
-<script src="/js/scheduling-widget.js?v=20260816"></script>
+<script src="/js/scheduling-widget.js?v=20260818"></script>
 
 <script>
 (function(){
