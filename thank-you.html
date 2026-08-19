@@ -23,6 +23,27 @@
   gtag('config', 'AW-11066542604');
   gtag('config', 'G-SPQ1FGTKTV');
   window.addEventListener('load', function() {
+    // Only an actual submission may record a conversion. This page used to fire
+    // on EVERY load, so a refresh, a Back, or a shared link each counted again,
+    // inflating the number the cost-per-lead is measured against. Worse, on any
+    // such visit no user_data is present, and gtag falls back to AUTOMATIC
+    // enhanced conversions, which scrapes this page and finds the only address
+    // on it: our own. Every one of those conversions was reporting the
+    // advertiser's email as the customer's.
+    //
+    // The widget always redirects here with type=lead on a fresh navigation.
+    // A refresh reports 'reload' and Back reports 'back_forward', so both are
+    // refused. Deliberately NOT gated on a token written by the widget: /js/ is
+    // served immutable, so a visitor on a stale widget would write no token and
+    // lose a real conversion. Over-counting is a measurement problem;
+    // under-counting is a lost lead.
+    var navType = ((performance.getEntriesByType &&
+                    performance.getEntriesByType('navigation')[0]) || {}).type;
+    var qs = new URLSearchParams(window.location.search);
+    if (navType === 'reload' || navType === 'back_forward' || qs.get('type') !== 'lead') {
+      return;
+    }
+
     // Enhanced conversions. The identifiers were collected by the lead form on
     // the previous page and handed over through sessionStorage, because gtag
     // 'set' state does not survive a top-level navigation. This MUST run before
