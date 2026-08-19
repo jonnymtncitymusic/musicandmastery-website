@@ -25,6 +25,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.musicandmastery.com/beginner-lake-forest.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.musicandmastery.com/beginner-newport-beach.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -80,6 +85,11 @@
   <!-- Orange County — In-home landing pages -->
   <url>
     <loc>https://www.musicandmastery.com/in-home-irvine.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.musicandmastery.com/in-home-lake-forest.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
