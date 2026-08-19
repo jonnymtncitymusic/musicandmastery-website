@@ -49,6 +49,7 @@
   function freshState() {
     return {
       step: 1,
+      leadStep: 1,   // lead form is split in two; >5 fields on one screen suppresses completion
       mode: 'booking',  // 'booking' or 'lead' (no-match flow)
       instrument: '',
       instrumentOther: '',  // free-text when instrument === 'Other'
@@ -576,43 +577,70 @@
     `;
   }
 
+  // The lead form is split across two screens. Nine required fields on a single
+  // screen measurably suppresses completion; the qualifying minimum comes first
+  // and the matching detail second.
   function renderLeadOnlyForm() {
-    const instrumentOptions = INSTRUMENTS.map(i =>
-      `<option value="${i}" ${state.instrument === i ? 'selected' : ''}>${i}</option>`
-    ).join('');
+    return state.leadStep === 2 ? renderLeadStep2() : renderLeadStep1();
+  }
 
+  function leadHeader() {
     const cityName = state.city || 'your area';
     const headline = state.city
       ? `Music Lessons in ${cityName}: Reserve Your Spot`
       : 'Reserve Your Spot for Music Lessons';
-    const subtext = `We're matching new students with instructors in ${cityName} and will reach out within 24 hours to confirm your fit. Most students start lessons within 1–3 weeks.`;
-
+    const subtext = `We're matching new students with instructors in ${cityName} and will reach out within 24 hours to confirm your fit.`;
     return `
-      <div class="sw-step">
         <h3 class="sw-heading">${headline}</h3>
         <p class="sw-subtext">${subtext}</p>
+        <div class="sw-leadprogress" aria-hidden="true">
+          <span class="sw-leaddot ${state.leadStep === 1 ? 'on' : 'done'}"></span>
+          <span class="sw-leadbar ${state.leadStep === 2 ? 'on' : ''}"></span>
+          <span class="sw-leaddot ${state.leadStep === 2 ? 'on' : ''}"></span>
+        </div>`;
+  }
+
+  function renderLeadStep1() {
+    return `
+      <div class="sw-step">
+        ${leadHeader()}
 
         <div class="sw-field ${fieldErrorClass('name')}">
-          <label class="sw-label">Your Name</label>
-          <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
+          <label class="sw-label" for="sw-name">Your Name</label>
+          <input type="text" id="sw-name" name="name" autocomplete="name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
           ${fieldErrorHtml('name')}
         </div>
 
         <div class="sw-field ${fieldErrorClass('email')}">
-          <label class="sw-label">Email</label>
-          <input type="email" id="sw-email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
+          <label class="sw-label" for="sw-email">Email</label>
+          <input type="email" id="sw-email" name="email" autocomplete="email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
           ${fieldErrorHtml('email')}
         </div>
 
         <div class="sw-field ${fieldErrorClass('phone')}">
-          <label class="sw-label">Phone</label>
-          <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
+          <label class="sw-label" for="sw-phone">Phone</label>
+          <input type="tel" id="sw-phone" name="phone" autocomplete="tel" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
           ${fieldErrorHtml('phone')}
         </div>
 
+        <button id="sw-lead-next" class="sw-btn sw-btn-primary">Continue</button>
+        <p class="sw-fineprint">Two short steps. Your info stays private.</p>
+      </div>
+    `;
+  }
+
+  function renderLeadStep2() {
+    const instrumentOptions = INSTRUMENTS.map(i =>
+      `<option value="${i}" ${state.instrument === i ? 'selected' : ''}>${i}</option>`
+    ).join('');
+
+    return `
+      <div class="sw-step">
+        ${leadHeader()}
+
         <div class="sw-field ${fieldErrorClass('instrument')}">
-          <label class="sw-label">Instrument of Interest</label>
-          <select id="sw-instrument" class="sw-select">
+          <label class="sw-label" for="sw-instrument">Instrument of Interest</label>
+          <select id="sw-instrument" name="instrument" class="sw-select">
             <option value="">Choose an instrument...</option>
             ${instrumentOptions}
           </select>
@@ -621,8 +649,8 @@
 
         ${state.instrument === 'Other' ? `
           <div class="sw-field ${fieldErrorClass('instrumentOther')}">
-            <label class="sw-label">Which instrument?</label>
-            <input type="text" id="sw-instrument-other" class="sw-input" placeholder="e.g., Violin, Saxophone" value="${state.instrumentOther}">
+            <label class="sw-label" for="sw-instrument-other">Which instrument?</label>
+            <input type="text" id="sw-instrument-other" name="instrument_other" class="sw-input" placeholder="e.g., Violin, Saxophone" value="${state.instrumentOther}">
             ${fieldErrorHtml('instrumentOther')}
           </div>
         ` : ''}
@@ -630,20 +658,20 @@
         ${renderLessonForField()}
 
         <div class="sw-field ${fieldErrorClass('studentAge')}">
-          <label class="sw-label">Student Age</label>
-          <input type="text" id="sw-age" class="sw-input" placeholder='e.g. "8" or "Adult"' value="${state.studentAge}">
+          <label class="sw-label" for="sw-age">Student Age</label>
+          <input type="text" id="sw-age" name="student_age" class="sw-input" placeholder='e.g. "8" or "Adult"' value="${state.studentAge}">
           ${fieldErrorHtml('studentAge')}
         </div>
 
         <div class="sw-field ${fieldErrorClass('city')}">
-          <label class="sw-label">City</label>
-          <input type="text" id="sw-city-text" class="sw-input" placeholder="Your city" value="${state.city}">
+          <label class="sw-label" for="sw-city-text">City</label>
+          <input type="text" id="sw-city-text" name="city" autocomplete="address-level2" class="sw-input" placeholder="Your city" value="${state.city}">
           ${fieldErrorHtml('city')}
         </div>
 
         <div class="sw-field ${fieldErrorClass('startTiming')}">
-          <label class="sw-label">How soon would you like to start?</label>
-          <select id="sw-timing" class="sw-select">
+          <label class="sw-label" for="sw-timing">How soon would you like to start?</label>
+          <select id="sw-timing" name="start_timing" class="sw-select">
             <option value="">Choose...</option>
             <option value="asap" ${state.startTiming === 'asap' ? 'selected' : ''}>As soon as possible</option>
             <option value="within_month" ${state.startTiming === 'within_month' ? 'selected' : ''}>Within the next month</option>
@@ -653,13 +681,14 @@
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Anything else we should know? <span class="sw-optional">(optional)</span></label>
-          <textarea id="sw-notes" class="sw-input" rows="3" placeholder="Goals, preferred days/times, experience level">${state.notes}</textarea>
+          <label class="sw-label" for="sw-notes">Anything else we should know? <span class="sw-optional">(optional)</span></label>
+          <textarea id="sw-notes" name="notes" class="sw-input" rows="3" placeholder="Goals, preferred days/times, experience level">${state.notes}</textarea>
         </div>
 
-        <div style="position:absolute;left:-9999px;"><input type="text" id="sw-hp" tabindex="-1" autocomplete="off"></div>
+        <div style="position:absolute;left:-9999px;"><input type="text" id="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 
         ${renderMmDeposit()}
+        <button id="sw-lead-back" class="sw-btn sw-btn-ghost" ${state.loading ? 'disabled' : ''}>Back</button>
       </div>
     `;
   }
@@ -788,6 +817,18 @@
     const submitLeadBtn = document.getElementById('sw-submit-lead');
     if (submitLeadBtn) submitLeadBtn.addEventListener('click', handleLeadSubmit);
 
+    // Lead form is two screens; step one gates on the qualifying minimum.
+    const leadNextBtn = document.getElementById('sw-lead-next');
+    if (leadNextBtn) leadNextBtn.addEventListener('click', () => {
+      if (!validateLeadStep1()) { render(); return; }
+      state.leadStep = 2; state.error = ''; render();
+    });
+
+    const leadBackBtn = document.getElementById('sw-lead-back');
+    if (leadBackBtn) leadBackBtn.addEventListener('click', () => {
+      state.leadStep = 1; state.error = ''; render();
+    });
+
     // Callback link (MCMC step 3 alternative to paying)
     const callbackBtn = document.getElementById('sw-callback');
     if (callbackBtn) callbackBtn.addEventListener('click', handleCallbackRequest);
@@ -853,6 +894,31 @@
     render();
   }
 
+  // Name, email and phone are the qualifying minimum and live on screen one.
+  // Returns true when screen one is clean.
+  function validateLeadStep1() {
+    clearAllErrors();
+    let ok = true;
+    if (!state.clientName.trim()) { setFieldError('name', 'Please enter your name.'); ok = false; }
+    if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) {
+      setFieldError('email', 'Please enter a valid email.'); ok = false;
+    }
+    if (LEAD_ONLY && !state.clientPhone.trim()) {
+      setFieldError('phone', 'Please enter your phone number.'); ok = false;
+    }
+    return ok;
+  }
+
+  // Google requires E.164 for enhanced-conversion phone matching. These are US
+  // numbers typed by hand, so anything that is not a plain 10-digit (or leading-1
+  // 11-digit) number is dropped rather than guessed at.
+  function normalizeE164(raw) {
+    const d = (raw || '').replace(/\D/g, '');
+    if (d.length === 10) return '+1' + d;
+    if (d.length === 11 && d[0] === '1') return '+' + d;
+    return undefined;
+  }
+
   async function handleLeadSubmit() {
     clearAllErrors();
     let bad = false;
@@ -871,7 +937,15 @@
       if (!state.city.trim()) { setFieldError('city', 'Please enter your city.'); bad = true; }
       if (!state.startTiming) { setFieldError('startTiming', 'Please tell us how soon you want to start.'); bad = true; }
     }
-    if (bad) { render(); return; }
+    if (bad) {
+      // An error on a screen-one field is invisible from screen two, so go back
+      // to it rather than failing silently under the user.
+      if (LEAD_ONLY && (state.fieldErrors.name || state.fieldErrors.email || state.fieldErrors.phone)) {
+        state.leadStep = 1;
+      }
+      render();
+      return;
+    }
 
     const hp = document.getElementById('sw-hp');
     if (hp && hp.value) return;
@@ -895,6 +969,22 @@
         brand_source: BRAND_SOURCE,
         honeypot: '',
       });
+
+      // Enhanced conversions. The Ads conversion itself fires on thank-you.html,
+      // by which point these fields are gone from the DOM, so the identifiers have
+      // to be set here while we still hold them. gtag('set', ...) persists across
+      // the top-level navigation via the shared gtag config.
+      if (typeof gtag === 'function') {
+        const nameParts = state.clientName.trim().split(/\s+/);
+        gtag('set', 'user_data', {
+          email: state.clientEmail.trim().toLowerCase(),
+          phone_number: normalizeE164(state.clientPhone),
+          address: {
+            first_name: nameParts[0] || undefined,
+            last_name: nameParts.length > 1 ? nameParts[nameParts.length - 1] : undefined,
+          },
+        });
+      }
 
       // Fire conversion event regardless of redirect path so it counts even if
       // the redirect itself fails for some reason.
@@ -1111,7 +1201,7 @@
       .sw-btn:active:not(:disabled) { transform: translateY(0); }
       .sw-btn:disabled { opacity: 0.5; cursor: not-allowed; }
       .sw-btn-primary {
-        background: #726edd;
+        background: #5f5bc8;
         color: #fff;
         box-shadow: 0 4px 16px rgba(114,110,221,0.3);
         width: 100%;
@@ -1125,8 +1215,22 @@
         color: #726edd;
         border: 1.5px solid rgba(114,110,221,0.3);
       }
+      .sw-btn-ghost {
+        background: transparent;
+        color: #726edd;
+        width: 100%;
+        margin-top: 8px;
+        box-shadow: none;
+      }
+      .sw-btn-ghost:hover:not(:disabled) { background: #f4f3ff; }
+      /* Two-screen progress. Purely positional, so it is hidden from a11y. */
+      .sw-leadprogress { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 0 22px; }
+      .sw-leaddot { width: 9px; height: 9px; border-radius: 50%; background: rgba(114,110,221,0.22); transition: background 0.2s; }
+      .sw-leaddot.on, .sw-leaddot.done { background: #726edd; }
+      .sw-leadbar { width: 34px; height: 2px; border-radius: 2px; background: rgba(114,110,221,0.22); transition: background 0.2s; }
+      .sw-leadbar.on { background: #726edd; }
       textarea.sw-input { resize: vertical; min-height: 88px; font-family: 'Questrial', sans-serif; }
-      .sw-fineprint { font-family: 'Questrial', sans-serif; font-size: 12px; color: #888; text-align: center; margin: 14px 0 0; }
+      .sw-fineprint { font-family: 'Questrial', sans-serif; font-size: 12px; color: #5f5f5f; text-align: center; margin: 14px 0 0; }
 
       /* Trial banner (top of step 1) */
       .sw-trial-banner {
@@ -1401,7 +1505,27 @@
       }
     }
 
-    // Load scheduling config up front; there is no payment step to prepare
+    // Mode and pre-fill come from page globals alone, so they are settled before
+    // any network call.
+    if (LEAD_ONLY) {
+      // In lead-only mode the multi-step booking flow doesn't apply.
+      // Open straight to the lead form (step 5).
+      state.step = 5;
+      state.mode = 'lead_only';
+      if (typeof window.MCMC_PREFILL_CITY === 'string' && window.MCMC_PREFILL_CITY) {
+        state.city = window.MCMC_PREFILL_CITY;
+      }
+    }
+
+    if (inlineMode) {
+      // Render BEFORE any network call. These containers sit on paid landing
+      // pages, and a cold or unreachable backend previously left the form area
+      // blank with nothing but a console warning. Nothing the lead form needs
+      // comes from the network, so it paints first and enriches after.
+      render();
+    }
+
+    // Config and cities load after first paint. Neither gates the lead form.
     try {
       state.config = await fetchConfig();
     } catch (e) {
@@ -1415,27 +1539,16 @@
       } catch (e) {
         console.warn('Could not pre-load cities:', e);
       }
-    }
-
-    // Apply city pre-fill. In MCMC mode this matches the cities dropdown;
-    // in lead-only mode the city is just text.
-    if (typeof window.MCMC_PREFILL_CITY === 'string' && window.MCMC_PREFILL_CITY) {
-      if (LEAD_ONLY || state.cities.includes(window.MCMC_PREFILL_CITY)) {
+      // Apply city pre-fill; in MCMC mode this must match the cities dropdown.
+      if (typeof window.MCMC_PREFILL_CITY === 'string' && window.MCMC_PREFILL_CITY
+          && state.cities.includes(window.MCMC_PREFILL_CITY)) {
         state.city = window.MCMC_PREFILL_CITY;
       }
+      // Re-render so the freshly loaded cities appear.
+      if (inlineMode) render();
     }
 
-    // In lead-only mode, the multi-step booking flow doesn't apply.
-    // Open straight to the lead form (step 5).
-    if (LEAD_ONLY) {
-      state.step = 5;
-      state.mode = 'lead_only';
-    }
-
-    if (inlineMode) {
-      // Inline mode — render immediately and stay rendered
-      render();
-    } else {
+    if (!inlineMode) {
       // Modal mode — wrap openModal/closeModal so we render on each open
       const origOpenModal = window.openModal;
       window.openModal = function() {
