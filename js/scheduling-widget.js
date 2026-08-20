@@ -203,10 +203,10 @@
   function renderLessonForField() {
     return `
       <div class="sw-field ${fieldErrorClass('lessonFor')}">
-        <label class="sw-label">Who is this lesson for?</label>
-        <div class="sw-pill-row">
+        <span class="sw-label" id="sw-lessonfor-label">Who is this lesson for?</span>
+        <div class="sw-pill-row" role="group" aria-labelledby="sw-lessonfor-label">
           ${LESSON_FOR_OPTIONS.map(o => `
-            <button type="button" class="sw-pill ${state.lessonFor === o.v ? 'sw-pill-on' : ''}" data-lessonfor="${o.v}">${o.label}</button>
+            <button type="button" class="sw-pill ${state.lessonFor === o.v ? 'sw-pill-on' : ''}" aria-pressed="${state.lessonFor === o.v ? 'true' : 'false'}" data-lessonfor="${o.v}">${o.label}</button>
           `).join('')}
         </div>
         ${fieldErrorHtml('lessonFor')}
@@ -262,7 +262,7 @@
         <p class="sw-subtext">Tell us what you're looking for and we'll match you with the best instructor.</p>
 
         <div class="sw-field ${fieldErrorClass('instrument')}">
-          <label class="sw-label">Instrument</label>
+          <span class="sw-label" id="sw-days-label">Instrument</label>
           <select id="sw-instrument" class="sw-select">
             <option value="">Choose an instrument...</option>
             ${instrumentOptions}
@@ -301,19 +301,19 @@
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Preferred Days <span class="sw-optional">(optional, leave blank for any day)</span></label>
-          <div class="sw-pill-row">
+          <label class="sw-label">Preferred Days <span class="sw-optional">(optional, leave blank for any day)</span></span>
+          <div class="sw-pill-row" role="group" aria-labelledby="sw-days-label">
             ${DAYS_OF_WEEK.map(d => `
-              <button type="button" class="sw-pill ${state.preferredDays.includes(d.v) ? 'sw-pill-on' : ''}" data-day="${d.v}">${d.label}</button>
+              <button type="button" class="sw-pill ${state.preferredDays.includes(d.v) ? 'sw-pill-on' : ''}" aria-pressed="${state.preferredDays.includes(d.v) ? 'true' : 'false'}" data-day="${d.v}">${d.label}</button>
             `).join('')}
           </div>
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Preferred Times <span class="sw-optional">(optional)</span></label>
-          <div class="sw-pill-row">
+          <span class="sw-label" id="sw-times-label">Preferred Times <span class="sw-optional">(optional)</span></span>
+          <div class="sw-pill-row" role="group" aria-labelledby="sw-times-label">
             ${TIME_BUCKETS.map(t => `
-              <button type="button" class="sw-pill ${state.preferredTimes.includes(t.key) ? 'sw-pill-on' : ''}" data-time="${t.key}">${t.label}</button>
+              <button type="button" class="sw-pill ${state.preferredTimes.includes(t.key) ? 'sw-pill-on' : ''}" aria-pressed="${state.preferredTimes.includes(t.key) ? 'true' : 'false'}" data-time="${t.key}">${t.label}</button>
             `).join('')}
           </div>
           <div class="sw-bucket-hint">Morning 8a–12p · Afternoon 12p–5p · Evening 5p–9p</div>
