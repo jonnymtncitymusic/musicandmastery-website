@@ -100,8 +100,10 @@ Both M&M and MCMC's index/instructors pages use JotForm `260516786213155`. M&M p
 
 ## Scheduling widget cache-busting (REQUIRED on every widget change)
 
-`/js/scheduling-widget.js` is served `public, max-age=86400, stale-while-revalidate=604800`
-and has no content hash, so returning visitors would run a widget up to 24h stale. Every
+`/js/scheduling-widget.js` is served `public, max-age=31536000, immutable` (see
+`vercel.json`) and has no content hash. `immutable` means a returning visitor's browser
+reuses its cached copy for a year and never revalidates, so the version query param is the
+ONLY thing that can deliver a widget change to someone who has already visited. Every
 include therefore carries a version query param:
 
     <script src="/js/scheduling-widget.js?v=20260729"></script>
@@ -122,3 +124,11 @@ has a neutral branch. Bump with a sweep, not by hand:
 
 Note one include is injected dynamically via `s.src = '/js/scheduling-widget.js?v=...'`, so a
 naive grep for `<script src=` will miss it. The regex above catches both forms.
+
+**Same-day second bump:** the sweep regex is digit-only (`[0-9]+`), so if the token already
+carries today's date, re-running with `YYYYMMDD` silently changes nothing and every returning
+visitor keeps the old widget. Use a `YYYYMMDDNN` suffix instead (`2026081902`). Do not reach for
+tomorrow's date: a session running tomorrow would bump to it and collide, producing the same
+silent no-op. Always confirm the sweep afterwards with
+`grep -rhoE '/js/scheduling-widget\.js\?v=[0-9]+' --include='*.html' . | sort | uniq -c`,
+which should report one token across all includes.
