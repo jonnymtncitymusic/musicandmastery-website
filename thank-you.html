@@ -31,7 +31,18 @@
     // on it: our own. Every one of those conversions was reporting the
     // advertiser's email as the customer's.
     //
-    // The widget always redirects here with type=lead on a fresh navigation.
+    // This brand is lead-only: LEAD_ONLY is unconditionally true whenever
+    // MCMC_BRAND_SOURCE is not 'mcmc', and no page overrides it. The lead form
+    // is therefore the only flow that can reach this page, and it redirects
+    // with type=lead.
+    //
+    // The widget's other two handlers do NOT satisfy this gate. handleBooking
+    // redirects to the bare THANK_YOU_REDIRECT with no query string at all, and
+    // handleCallbackRequest sends type=callback. Both are dead code on this
+    // brand, but anyone porting this gate to a brand where they are reachable
+    // must widen the accepted types first, or those conversions silently
+    // stop being recorded.
+    //
     // A refresh reports 'reload' and Back reports 'back_forward', so both are
     // refused. Deliberately NOT gated on a token written by the widget: /js/ is
     // served immutable, so a visitor on a stale widget would write no token and
@@ -551,14 +562,25 @@
     sub.innerHTML = "Your slot is held. We'll call within 24 hours to walk through everything. Your first lesson is free, so there is nothing to pay.";
   } else if (type === 'lead') {
     eyebrow.textContent = 'Info Received';
-    sub.innerHTML = "Thanks! We'll match you with an instructor in <strong>" + (city || 'your area') + "</strong> and reach out within 24 hours.";
+    // city arrives from the query string. This sentence is assembled from DOM
+    // nodes so the value can only ever become text. The innerHTML concatenation
+    // that used to live here let ?city=<img src=x onerror=...> run script on our
+    // own origin, and the conversion gate made such links worth crafting.
+    sub.textContent = "Thanks! We'll match you with an instructor in ";
+    var cityEl = document.createElement('strong');
+    cityEl.textContent = city || 'your area';
+    sub.appendChild(cityEl);
+    sub.appendChild(document.createTextNode(' and reach out within 24 hours.'));
   }
 
   var details = document.getElementById('ty-booking-details');
   function row(label, value) {
     if (!value) return;
     var dt = document.createElement('dt'); dt.textContent = label;
-    var dd = document.createElement('dd'); dd.innerHTML = value;
+    // textContent, not innerHTML: every value here (instructor, day, time,
+    // duration, instrument) comes from the query string, and no caller passes
+    // markup, so there is nothing to lose and an injection sink to close.
+    var dd = document.createElement('dd'); dd.textContent = value;
     details.appendChild(dt); details.appendChild(dd);
   }
 
