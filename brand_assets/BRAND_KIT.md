@@ -49,6 +49,29 @@ Roles: purple = primary action color (buttons, links) and main brand color; gold
 - Cormorant Garamond is delicate at small sizes; use it for the logo and large display headings only, and keep body copy in Work Sans.
 - Both are free Google fonts and should be self-hosted as woff2 (same pattern as the current fonts) when reflected onto the sites.
 
+### What the sites actually ship (verified 2026-08-20)
+
+This section above describes the INTENDED direction. It is not what is deployed, and the
+gap is wide enough that reading this file as a description of the live sites will mislead you:
+
+| | Display face | Body face |
+|---|---|---|
+| Intended (above) | Cormorant Garamond | Work Sans |
+| musicandmastery.com | **Playfair Display** (600/700/800) | Work Sans |
+| mtncitymusic.com | **Montserrat** | **Questrial** |
+
+So the body-face half of the move landed on M&M only, and the display face there became
+Playfair Display rather than Cormorant Garamond. Mountain City never moved at all. The
+`cormorant-garamond-{500,600,700}-latin.woff2` files are present in `brand_assets/fonts/`
+but are referenced by no `@font-face` rule on either site.
+
+Whether Cormorant Garamond is still the target or Playfair Display is now the real display
+face is Jonny's call, not a documentation question. Until he settles it, treat the table
+above as the source of truth for what a visitor sees, and this file's Type section as an
+unshipped proposal.
+
 ## History / corrections
 
-- The previous `BRAND_KIT.md` in `mtncitymusic-website/brand_assets/` listed a blue palette (`#15aeea` etc.) and Archivo/Gabarito fonts. That was stale and WRONG. The real, live brand is the purple palette and Montserrat/Questrial above. Montserrat is now being retired as the display face in favor of Cormorant Garamond.
+- The previous `BRAND_KIT.md` in `mtncitymusic-website/brand_assets/` listed a blue palette (`#15aeea` etc.) and Archivo/Gabarito fonts. That was stale and WRONG. The real, live brand is the purple palette and Montserrat/Questrial above. Montserrat was to be retired as the display face in favor of Cormorant Garamond. That
+  retirement never happened on Mountain City, and on M&M the display face became Playfair
+  Display instead. See "What the sites actually ship" above.
