@@ -1546,6 +1546,17 @@
         resetState();
         render();
       };
+
+      // Handle the lazy-load race: if the modal is already open when the widget
+      // finishes loading (the visitor clicked before the script arrived), the
+      // wrapper above will never fire for that click, so render into the open
+      // card now. Without this a lazily loaded widget shows an empty modal until
+      // the visitor closes and reopens it. Mirrors the mtncitymusic copy.
+      const overlay = document.getElementById('booking-overlay');
+      if (overlay && overlay.classList.contains('open')) {
+        resetState();
+        render();
+      }
     }
 
     if (inlineMode) {
