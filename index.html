@@ -58,29 +58,15 @@
   <link rel="icon" href="brand_assets/logo/mm-favicon-64.png" type="image/png" />
   <link rel="apple-touch-icon" href="brand_assets/logo/mm-apple-touch-180.png" />
   <link rel="preload" as="image" href="brand_assets/Home_Page_Image.webp" type="image/webp" fetchpriority="high" media="(min-width: 769px)" />
-  <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/playfair-display-800-latin.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/worksans-latin.woff2" crossorigin>
   <style>
 
     /* Self-hosted Google Fonts (latin subset) */
-    @font-face {
-      font-family: "Playfair Display";
-      font-style: normal; font-weight: 600; font-display: swap;
-      src: url(/brand_assets/fonts/playfair-display-600-latin.woff2) format("woff2");
-    }
-    @font-face {
-      font-family: "Playfair Display";
-      font-style: normal; font-weight: 700; font-display: swap;
-      src: url(/brand_assets/fonts/playfair-display-700-latin.woff2) format("woff2");
-    }
-    @font-face {
-      font-family: "Playfair Display";
-      font-style: normal; font-weight: 800; font-display: swap;
-      src: url(/brand_assets/fonts/playfair-display-800-latin.woff2) format("woff2");
-    }
+
+
     @font-face {
       font-family: "Work Sans";
-      font-style: normal; font-weight: 400 700; font-display: swap;
+      font-style: normal; font-weight: 100 900; font-display: swap;
       src: url(/brand_assets/fonts/worksans-latin.woff2) format("woff2");
     }
     /* Baseline reset, replaces the subset of Tailwind preflight this page relied on */
@@ -103,14 +89,14 @@
     }
     * { box-sizing: border-box; }
     body { font-family: 'Work Sans', sans-serif; color: var(--black); background: #fff; margin: 0; padding: 0; }
-    h1,h2,h3,h4,h5,h6 { font-family: 'Playfair Display', serif; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Work Sans', sans-serif; }
 
     /* NAV */
     .nav { background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 22px rgba(116,130,151,0.15); }
     .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
     .nav-logo img { height: 56px; width: auto; }
-    .nav-brand { font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(20px, 4.5vw, 26px); color: var(--black); line-height: 1; letter-spacing: 0.01em; }
+    .nav-brand { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: clamp(20px, 4.5vw, 26px); color: var(--black); line-height: 1; letter-spacing: 0.01em; }
     .nav-amp { color: var(--black); }
     .nav-right { display: flex; align-items: center; gap: 8px; }
     .nav-review-link { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 15px; color: var(--black); text-decoration: none; transition: background 0.15s, color 0.15s; border-radius: 9999px; padding: 6px 14px; }
@@ -165,7 +151,7 @@
     .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 55% 45%; gap: 64px; align-items: flex-end; min-height: 680px; position: relative; z-index: 1; }
     .hero-text { padding-bottom: 96px; text-align: center; }
     .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.12); border: 1px solid rgba(198,149,79,0.25); border-radius: 9999px; padding: 6px 14px; margin-bottom: 28px; }
-    .hero-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(48px, 6.5vw, 84px); line-height: 1.06; letter-spacing: -0.035em; color: var(--black); margin: 0 0 24px; }
+    .hero-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(48px, 6.5vw, 84px); line-height: 1.06; letter-spacing: -0.035em; color: var(--black); margin: 0 0 24px; }
     .hero-heading .accent-word { color: var(--dark-purple); }
     .hero-body { font-size: 18px; line-height: 1.7; color: #3a3a4a; margin: 0 auto 32px; max-width: 700px; }
     .hero-offer { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; padding: 15px 30px; border-radius: 12px; box-shadow: 0 8px 22px rgba(79,74,184,0.35); text-decoration: none; cursor: pointer; margin: 0 0 24px; transition: transform 0.15s, box-shadow 0.2s; }
@@ -204,7 +190,7 @@
     .pricing-section         { background: var(--cream-grad) !important; }
     .faq-section             { background: #ffffff; }
     .section-tag { display: inline-block; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.1); border-radius: 9999px; padding: 5px 12px; margin-bottom: 20px; }
-    .section-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; letter-spacing: -0.03em; color: var(--black); margin: 0 0 16px; }
+    .section-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; letter-spacing: -0.03em; color: var(--black); margin: 0 0 16px; }
     .section-subheading { font-size: 18px; line-height: 1.65; color: #555; max-width: 600px; margin: 0 auto; }
     .section-header-center { text-align: center; margin-bottom: 64px; }
 
@@ -236,7 +222,7 @@
        which fails even the large-text bar, so the eyebrow and CTA carry the gold as
        backgrounds with near-black type (6.37:1) and all copy stays white. */
     .adults-eyebrow { display: inline-block; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #241a08; background: var(--gold); border-radius: 9999px; padding: 6px 14px; margin-bottom: 20px; }
-    .adults-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(32px, 4.4vw, 54px); line-height: 1.1; letter-spacing: -0.03em; color: #fff; margin: 0 0 20px; text-wrap: balance; }
+    .adults-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(32px, 4.4vw, 54px); line-height: 1.1; letter-spacing: -0.03em; color: #fff; margin: 0 0 20px; text-wrap: balance; }
     .adults-body { font-size: 18px; line-height: 1.7; color: rgba(255,255,255,0.88); margin: 0 0 32px; }
     .adults-trust { font-family: 'Work Sans', sans-serif; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.82); margin-top: 22px; letter-spacing: 0.04em; }
     .adults-section .btn-gold { background: var(--gold); color: #241a08; }
@@ -278,7 +264,7 @@
     .chips-section { background: #ffffff; padding: 96px 0; overflow: hidden; }
     .chips-header { max-width: 1200px; margin: 0 auto 60px; padding: 0 32px; text-align: center; }
     .chips-tag { display: inline-block; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.1); border-radius: 9999px; padding: 5px 12px; margin-bottom: 20px; }
-    .chips-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(32px, 4vw, 52px); line-height: 1.1; letter-spacing: -0.03em; color: var(--black); margin: 0 0 16px; }
+    .chips-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(32px, 4vw, 52px); line-height: 1.1; letter-spacing: -0.03em; color: var(--black); margin: 0 0 16px; }
     .chips-subheading { font-size: 18px; line-height: 1.6; color: #555; max-width: 560px; margin: 0 auto; }
     .chips-track-wrapper { display: flex; flex-direction: column; gap: 12px; position: relative; }
     .chips-track-wrapper::before,
@@ -321,7 +307,7 @@
     .testimonials-section { background: var(--cream-grad); padding: 96px 0; overflow: hidden; }
     .testimonials-header { text-align: center; margin-bottom: 60px; padding: 0 32px; }
     .testimonials-tag { display: inline-block; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.15); border-radius: 9999px; padding: 5px 12px; margin-bottom: 20px; }
-    .testimonials-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(30px, 3.5vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0; }
+    .testimonials-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(30px, 3.5vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0; }
     .testimonials-track-wrapper { position: relative; overflow: hidden; }
     .testimonials-track-wrapper::before,
     .testimonials-track-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none; }
@@ -370,7 +356,7 @@
     .team-coming-soon { background: linear-gradient(135deg, #f1ece2 0%, #e7e1f7 100%); border-radius: 20px; padding: 48px 40px; text-align: left; box-shadow: 0 8px 32px rgba(114,110,221,0.14); }
     .team-coming-soon-inner { max-width: 500px; }
     .team-coming-soon-icon { width: 60px; height: 60px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--dark-purple); box-shadow: 0 4px 14px rgba(114,110,221,0.15); }
-    .team-coming-soon-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; margin: 0 0 14px; color: var(--black); }
+    .team-coming-soon-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; margin: 0 0 14px; color: var(--black); }
     .team-coming-soon-body { font-size: 15px; line-height: 1.65; color: #3a3a4a; margin: 0 0 28px; }
 
     /* READY CTA */
@@ -379,7 +365,7 @@
     .ready-section::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(126,110,221,0.10) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
     .ready-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; padding: 48px 40px; }
     .ready-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #9c6f28; background: rgba(198,149,79,0.14); border: 1px solid rgba(198,149,79,0.32); border-radius: 9999px; padding: 6px 16px; margin-bottom: 28px; }
-    .ready-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(48px, 6.5vw, 86px); line-height: 1.05; letter-spacing: -0.04em; color: #0d0d0d; margin: 0 0 24px; }
+    .ready-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(48px, 6.5vw, 86px); line-height: 1.05; letter-spacing: -0.04em; color: #0d0d0d; margin: 0 0 24px; }
     .ready-heading .ready-accent { color: #4f4ab8; }
     .ready-body { font-size: 19px; line-height: 1.7; color: #4a4658; margin: 0 0 48px; }
     .ready-trust { font-family: 'Work Sans', sans-serif; font-size: 13px; font-weight: 600; color: #9089a8; margin-top: 24px; letter-spacing: 0.04em; }
@@ -388,7 +374,7 @@
     /* FAQ */
     .faq-section { background: #ffffff; padding: 96px 32px; }
     .faq-inner { max-width: 760px; margin: 0 auto; }
-    .faq-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(28px, 3.5vw, 44px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0 0 56px; text-align: center; }
+    .faq-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(28px, 3.5vw, 44px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0 0 56px; text-align: center; }
     .faq-item { border-bottom: 1.5px solid #e8e6ff; }
     .faq-question { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; background: none; border: none; text-align: left; cursor: pointer; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 17px; color: var(--black); transition: color 0.2s; }
     .faq-question:hover { color: var(--dark-purple); }

@@ -27,29 +27,15 @@
   <title>In-Home Music Lessons Near Me in Costa Mesa | Music and Mastery</title>
   <link rel="icon" href="brand_assets/logo/mm-favicon-64.png" type="image/png" />
   <link rel="apple-touch-icon" href="brand_assets/logo/mm-apple-touch-180.png" />
-  <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/playfair-display-800-latin.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/worksans-latin.woff2" crossorigin>
   <style>
 
     /* Self-hosted Google Fonts (latin subset) */
-        @font-face {
-      font-family: "Playfair Display";
-      font-style: normal; font-weight: 600; font-display: swap;
-      src: url(/brand_assets/fonts/playfair-display-600-latin.woff2) format("woff2");
-    }
-    @font-face {
-      font-family: "Playfair Display";
-      font-style: normal; font-weight: 700; font-display: swap;
-      src: url(/brand_assets/fonts/playfair-display-700-latin.woff2) format("woff2");
-    }
-    @font-face {
-      font-family: "Playfair Display";
-      font-style: normal; font-weight: 800; font-display: swap;
-      src: url(/brand_assets/fonts/playfair-display-800-latin.woff2) format("woff2");
-    }
+
+
     @font-face {
       font-family: "Work Sans";
-      font-style: normal; font-weight: 400 700; font-display: swap;
+      font-style: normal; font-weight: 100 900; font-display: swap;
       src: url(/brand_assets/fonts/worksans-latin.woff2) format("woff2");
     }
     :root {
@@ -65,7 +51,7 @@
     }
     * { box-sizing: border-box; }
     body { font-family: 'Work Sans', sans-serif; color: var(--black); background: #fff; margin: 0; padding: 0; }
-    h1,h2,h3,h4,h5,h6 { font-family: 'Playfair Display', serif; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Work Sans', sans-serif; }
 
     /* NAV */
     .nav { background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 22px rgba(116,130,151,0.15); }
@@ -118,7 +104,7 @@
     .hero::after  { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, #f1ece2 0%, #e9e3f3 50%, #dcd6f0 100%); animation: hero-fade-b 12s ease-in-out infinite; z-index: 0; }
     .hero-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
     .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.12); border: 1px solid rgba(198,149,79,0.25); border-radius: 9999px; padding: 6px 14px; margin-bottom: 28px; }
-    .hero-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(40px, 6vw, 72px); line-height: 1.06; letter-spacing: -0.035em; color: var(--black); margin: 0 0 20px; }
+    .hero-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(40px, 6vw, 72px); line-height: 1.06; letter-spacing: -0.035em; color: var(--black); margin: 0 0 20px; }
     .hero-heading .accent-word { color: var(--dark-purple); }
     .hero-sub { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: clamp(20px, 2.5vw, 28px); color: var(--dark-purple); margin: 0 0 20px; letter-spacing: -0.01em; }
     .hero-offer { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; padding: 15px 30px; border-radius: 12px; box-shadow: 0 8px 22px rgba(79,74,184,0.35); text-decoration: none; cursor: pointer; margin: 0 0 22px; transition: transform 0.15s, box-shadow 0.2s; }
@@ -173,7 +159,7 @@
     .testimonials-header { text-align: center; margin-bottom: 60px; padding: 0 32px; }
     .testimonials-stars { color: #c6954f; font-size: 28px; letter-spacing: 3px; line-height: 1; margin-bottom: 8px; }
     .testimonials-google { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 16px; color: #555; margin-bottom: 20px; }
-    .testimonials-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(30px, 3.5vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0; }
+    .testimonials-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(30px, 3.5vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0; }
     .testimonials-track-wrapper { position: relative; overflow: hidden; }
     .testimonials-track-wrapper::before,
     .testimonials-track-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none; }
@@ -405,7 +391,7 @@
 <nav class="nav">
   <div class="nav-inner">
     <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-      <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
+      <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family: 'Work Sans', sans-serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
     </a>
     <a href="#form" class="btn btn-primary"><span class="cta-full">Book Your Free Lesson</span><span class="cta-short">Book Free Lesson</span></a>
   </div>
