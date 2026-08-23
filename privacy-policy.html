@@ -139,6 +139,8 @@
     .modal-close { position: absolute; top: 20px; right: 20px; width: 36px; height: 36px; border-radius: 9999px; border: none; background: var(--light-purple); color: var(--black); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .modal-close:hover { background: #d0cff5; }
     .modal-loading { display: none; margin: 0; padding: 0 28px 28px; text-align: center; font-size: 15px; line-height: 1.6; color: #555; }
+    /* Programmatic focus target on open. Never reachable by Tab, and the overlay fills the viewport, so a ring here would outline the whole screen. */
+    #booking-overlay:focus { outline: none; }
   </style>
     <script type="application/ld+json">
 {
@@ -259,7 +261,7 @@ document.addEventListener('click', function(e) {
 </script>
 
 
-<div id="booking-overlay" class="modal-overlay" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-label="Book a Free Lesson">
+<div id="booking-overlay" class="modal-overlay" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-label="Book a Free Lesson" tabindex="-1">
   <div class="modal-card">
     <button class="modal-close" onclick="closeModalDirect()" aria-label="Close">&#10005;</button>
     <p id="sw-loading" class="modal-loading" role="status" aria-live="polite"></p>
@@ -276,52 +278,143 @@ document.addEventListener('click', function(e) {
   // intent rather than on page load. Safe because scheduling-widget.js renders into
   // a modal that is already open by the time the script arrives.
   let widgetLoadPromise = null;
+  let widgetLoadFailed = false;
   function loadSchedulingWidget() {
     if (widgetLoadPromise) return widgetLoadPromise;
-    widgetLoadPromise = new Promise(function(resolve, reject) {
+    var p = new Promise(function(resolve, reject) {
       var s = document.createElement('script');
       s.src = '/js/scheduling-widget.js?v=2026082101';
       s.async = true;
       s.onload = resolve;
-      s.onerror = reject;
+      s.onerror = function () {
+        // The failure IS memoized, so the hover preload stops retrying. Only a
+        // click clears it (see openModal). musicandmastery's index slides 74
+        // marquee chips under a parked cursor, so retrying from pointerover
+        // would turn one dead connection into a stream of 65KB requests.
+        s.remove();
+        widgetLoadFailed = true;
+        reject();
+      };
       document.head.appendChild(s);
     });
-    return widgetLoadPromise;
+    // The intent preload calls this bare, so a failed fetch would surface as an
+    // unhandled rejection with nothing listening. Settle that branch here;
+    // openModal still attaches its own catch and is what shows the fallback.
+    p.catch(function () {});
+    widgetLoadPromise = p;
+    return p;
   }
+  var _modalReturnFocus = null;
   function openModal() {
+    _modalReturnFocus = document.activeElement;
     document.getElementById('booking-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+
+    // Clear a previous failure so this click gets a real retry. Only a click does
+    // this; the hover preload must not, or a dead connection becomes a request
+    // storm.
+    if (widgetLoadFailed) {
+      widgetLoadPromise = null;
+      widgetLoadFailed = false;
+    }
 
     // The widget arrives over the network, so the card would otherwise sit empty
     // with nothing but a close button while it downloads, and stay that way
     // forever if the request fails. Say what is happening, and fall back to the
     // phone number rather than leaving a visitor with no way to book.
     var note = document.getElementById('sw-loading');
+    function showNote(html) {
+      if (!note) return;
+      // Reveal the live region BEFORE writing to it. Text added to a display:none
+      // role="status" is never announced, and the phone number is the only route
+      // to booking a visitor has left once the widget has failed.
+      note.style.display = 'block';
+      note.innerHTML = html;
+    }
+    function showPhoneFallback() {
+      showNote('The booking form could not load. Please call ' +
+        '<a href="tel:7605732120">(760) 573-2120</a> and we will get you booked in.');
+    }
     var mounted = document.getElementById('scheduling-widget');
     var alreadyRendered = mounted && mounted.innerHTML.length > 100;
-    if (note && !alreadyRendered) {
-      note.textContent = 'Loading the booking form...';
-      note.style.display = 'block';
-    }
+    if (!alreadyRendered) showNote('Loading the booking form...');
     loadSchedulingWidget().then(function () {
-      if (note) note.style.display = 'none';
-    }).catch(function () {
-      if (note) {
-        note.innerHTML = 'The booking form could not load. Please call ' +
-          '<a href="tel:7605732120">(760) 573-2120</a> and we will get you booked in.';
-        note.style.display = 'block';
-      }
+      // onload only proves the file executed, not that the widget painted. A
+      // script that arrives mid-parse defers its init to DOMContentLoaded, so
+      // give it a moment rather than pinning a stale failure message above a
+      // form that renders right afterwards. Keep showing the loading text while
+      // we wait; only a widget that never paints at all gets the fallback.
+      var tries = 0;
+      (function settle() {
+        var m = document.getElementById('scheduling-widget');
+        if (m && m.innerHTML.length > 100) {
+          if (note) note.style.display = 'none';
+        } else if (++tries < 30) {
+          setTimeout(settle, 50);
+        } else {
+          showPhoneFallback();
+        }
+      })();
+    }).catch(showPhoneFallback);
+
+    // The widget wraps openModal and renders into the card the moment this
+    // returns, discarding anything focused now, so take focus a frame later.
+    requestAnimationFrame(function () {
+      var overlay = document.getElementById('booking-overlay');
+      if (overlay && overlay.classList.contains('open')) overlay.focus({ preventScroll: true });
     });
   }
   function closeModalDirect() {
     document.getElementById('booking-overlay').classList.remove('open');
     document.body.style.overflow = '';
+    // Hand focus back to whatever opened the modal. Some browsers never focus a
+    // clicked trigger at all, hence the body check before restoring.
+    if (_modalReturnFocus && _modalReturnFocus !== document.body &&
+        document.contains(_modalReturnFocus)) {
+      // preventScroll: restoring focus to a chip inside the marquee's
+      // overflow:hidden wrapper would set that container's scrollLeft and leave
+      // the row permanently offset. The page never scrolled, so nothing is lost.
+      _modalReturnFocus.focus({ preventScroll: true });
+    }
+    _modalReturnFocus = null;
   }
   function closeModal(e) {
     if (e.target === document.getElementById('booking-overlay')) closeModalDirect();
   }
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModalDirect();
+  });
+  // FOCUS TRAP. The overlay is aria-modal, but the page behind it is still in the
+  // DOM and still focusable, so Tab would walk a keyboard visitor straight out of
+  // the booking form and into content a screen reader has been told is hidden.
+  function _modalFocusables() {
+    var card = document.querySelector('#booking-overlay .modal-card');
+    if (!card) return [];
+    // Queried on every keypress rather than cached: the widget re-renders the
+    // card at each step of the form, so a list captured once goes stale.
+    var sel = 'a[href], button:not([disabled]), input:not([disabled]), ' +
+      'select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    return Array.prototype.filter.call(card.querySelectorAll(sel), function (el) {
+      return el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement;
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+    var overlay = document.getElementById('booking-overlay');
+    if (!overlay || !overlay.classList.contains('open')) return;
+    var items = _modalFocusables();
+    if (!items.length) { e.preventDefault(); overlay.focus(); return; }
+    var first = items[0], last = items[items.length - 1];
+    if (!overlay.contains(document.activeElement)) {
+      e.preventDefault();
+      (e.shiftKey ? last : first).focus();
+    } else if (e.shiftKey && (document.activeElement === first || document.activeElement === overlay)) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   });
 </script>
 </body>
