@@ -298,8 +298,17 @@ document.addEventListener('click', function(e) {
     return p;
   }
   var _modalReturnFocus = null;
+  // Capture phase, so this runs before the inline onclick that opens the modal.
+  // document.activeElement alone is not enough: Safari does not focus a clicked
+  // link or button, so a tap would leave nothing to hand focus back to.
+  document.addEventListener('click', function (e) {
+    var t = e.target && e.target.closest && e.target.closest('[onclick*="openModal"]');
+    if (t) _modalReturnFocus = t;
+  }, true);
   function openModal() {
-    _modalReturnFocus = document.activeElement;
+    if (document.activeElement && document.activeElement !== document.body) {
+      _modalReturnFocus = document.activeElement;
+    }
     document.getElementById('booking-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
 
@@ -358,7 +367,12 @@ document.addEventListener('click', function(e) {
     });
   }
   function closeModalDirect() {
-    document.getElementById('booking-overlay').classList.remove('open');
+    var overlay = document.getElementById('booking-overlay');
+    // Take focus out of the dialog BEFORE hiding it. Left alone, a visitor whose
+    // trigger was never focused keeps focus on an element that is about to
+    // become display:none, and the next Tab resumes from nowhere in particular.
+    if (overlay.contains(document.activeElement)) document.activeElement.blur();
+    overlay.classList.remove('open');
     document.body.style.overflow = '';
     // Hand focus back to whatever opened the modal. Some browsers never focus a
     // clicked trigger at all, hence the body check before restoring.
