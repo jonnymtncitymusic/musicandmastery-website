@@ -25,6 +25,82 @@
   const LEAD_ONLY = window.MCMC_LEAD_ONLY || (BRAND_SOURCE !== 'mcmc');
 
   const INSTRUMENTS = ['Guitar', 'Piano', 'Voice', 'Bass', 'Ukulele', 'Drums', 'Music Production', 'Other'];
+
+  // ─── Deep links ────────────────────────────────────────────────────────────
+  // /?book=piano preselects piano. Slugs are DERIVED from INSTRUMENTS, so the
+  // accepted set cannot drift from the set the form actually offers.
+  // 'Other' is deliberately excluded: it opens a free-text field, and nothing
+  // outside this file gets to put text in front of a visitor.
+  // Object.create(null), not {}: a plain object literal resolves inherited keys,
+  // so ?book=constructor came back as the Object function, sailed past the
+  // "is an instrument set?" guard, and then vanished from the JSON payload.
+  const BOOK_SLUGS = Object.create(null);
+  INSTRUMENTS.forEach(function (name) {
+    if (name !== 'Other') BOOK_SLUGS[name.toLowerCase().replace(/\s+/g, '-')] = name;
+  });
+
+  // Returns a canonical member of INSTRUMENTS, or ''. The raw parameter is used
+  // ONLY as a lookup key. It is never written to the DOM, into the form, or into
+  // the submitted payload, so an unrecognised or hostile value can do nothing
+  // except fail to match.
+  //
+  // A ?book= value outranks the page default, so ?book=voice on the piano
+  // landing page means voice.
+  function requestedInstrument() {
+    let raw = '';
+    try { raw = new URLSearchParams(window.location.search).get('book') || ''; } catch (e) {}
+    // Checked against INSTRUMENTS on the way out as well as on the way in. The
+    // map is the lookup; this is the invariant, and it holds even if the map is
+    // ever rebuilt from something less careful.
+    const fromUrl = BOOK_SLUGS[raw.trim().toLowerCase()];
+    if (typeof fromUrl === 'string' && INSTRUMENTS.indexOf(fromUrl) !== -1) return fromUrl;
+    const pageDefault = window.MCMC_PREFILL_INSTRUMENT;
+    if (typeof pageDefault === 'string' && INSTRUMENTS.indexOf(pageDefault) !== -1) return pageDefault;
+    return '';
+  }
+
+  // Presence, not value. A ?book with no usable instrument still means the
+  // visitor asked to book, so the form is still brought to them.
+  function bookParamPresent() {
+    try { return new URLSearchParams(window.location.search).has('book'); } catch (e) { return false; }
+  }
+
+  // Bring an inline page's form to the visitor when they arrived on a booking
+  // link. Only ever called when ?book is present, so ordinary and paid traffic
+  // on these pages is untouched.
+  function scrollToInlineForm() {
+    const target = document.getElementById('form') || document.getElementById('scheduling-widget');
+    if (!target) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const behavior = reduce ? 'auto' : 'smooth';
+    // Images above the form, and the form itself, finish sizing AFTER this first
+    // runs. That slides the target out from under a smooth scroll already in
+    // flight and lands 150-220px short of it on a fast connection, measured.
+    //
+    // So re-aim, but ONLY when the document height actually changed, because
+    // that is the one thing that can invalidate the target. Once the page has
+    // settled this stops issuing scrolls entirely, which is what keeps a visitor
+    // who took over from being yanked back: dragging the scrollbar fires no
+    // wheel, touch or key event, so the listeners below cannot be the only
+    // guard. They stop it early when they do fire.
+    const EVENTS = ['wheel', 'touchstart', 'keydown'];
+    let ticks = 0, lastHeight = -1, done = false;
+    function stop() {
+      done = true;
+      EVENTS.forEach(function (evt) { window.removeEventListener(evt, stop); });
+    }
+    EVENTS.forEach(function (evt) { window.addEventListener(evt, stop, { passive: true }); });
+    (function aim() {
+      if (done) return;
+      const height = document.documentElement.scrollHeight;
+      if (height !== lastHeight) {
+        lastHeight = height;
+        target.scrollIntoView({ behavior, block: 'start' });
+      }
+      if (++ticks >= 12) { stop(); return; }
+      setTimeout(aim, 250);
+    })();
+  }
   // Lesson length labels carry no price. The first lesson is free on both
   // brands, and the standard per-lesson rate is shown as post-trial
   // information in the bucket hint below, never charged at booking.
@@ -1148,6 +1224,10 @@
         state.city = window.MCMC_PREFILL_CITY;
       }
     }
+    // Re-applied on every modal open, so closing and reopening a ?book=piano
+    // page still lands on piano. Needs no reconciliation against a fetched list
+    // the way city does: requestedInstrument() is itself the allowlist.
+    state.instrument = requestedInstrument();
     if (LEAD_ONLY) {
       state.step = 5;
       state.mode = 'lead_only';
@@ -1523,8 +1603,11 @@
       }
     }
 
-    // Mode and pre-fill come from page globals alone, so they are settled before
-    // any network call.
+    // Mode and the pre-fills come from page globals and the URL alone, so they
+    // are settled before any network call. requestedInstrument() only ever
+    // returns a member of INSTRUMENTS, so unlike city it needs no reconciling
+    // against a fetched list.
+    state.instrument = requestedInstrument();
     if (LEAD_ONLY) {
       // In lead-only mode the multi-step booking flow doesn't apply.
       // Open straight to the lead form (step 5).
@@ -1565,6 +1648,8 @@
       // blank with nothing but a console warning. Nothing the lead form needs
       // comes from the network, so it paints first and enriches after.
       render();
+      // These pages have no modal, so a booking link means the form itself.
+      if (bookParamPresent()) scrollToInlineForm();
     }
 
     // Load cities on init (skip in lead-only mode — that flow uses a city text input)

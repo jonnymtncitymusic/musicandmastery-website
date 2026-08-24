@@ -257,7 +257,9 @@
     .nav-links .nav-cta { display: inline-flex; align-items: center; justify-content: center; background: #5f5bc8; color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 14px; border-radius: 9999px; padding: 9px 18px; text-decoration: none; transition: background 0.2s; }
     .nav-links .nav-cta:hover { background: #4d4aab; text-decoration: none; }
     .faq-a-cta { margin-top: 14px; }
-    .modal-loading { display: none; margin: 0; padding: 0 28px 28px; text-align: center; font-size: 15px; line-height: 1.6; color: #555; }
+    /* Never display:none. A role="status" that is not rendered is not in the accessibility tree, and text written into it is never announced. Empty, it has no height, so it costs nothing until it has something to say. */
+    .modal-loading { margin: 0; padding: 0; text-align: center; font-size: 15px; line-height: 1.6; color: #555; }
+    .modal-loading:not(:empty) { padding: 0 28px 28px; }
     /* Programmatic focus target on open. Never reachable by Tab, and the overlay fills the viewport, so a ring here would outline the whole screen. */
     #booking-overlay:focus { outline: none; }
   </style>
@@ -611,7 +613,7 @@ document.addEventListener('click', function(e) {
     if (widgetLoadPromise) return widgetLoadPromise;
     var p = new Promise(function(resolve, reject) {
       var s = document.createElement('script');
-      s.src = '/js/scheduling-widget.js?v=2026082101';
+      s.src = '/js/scheduling-widget.js?v=2026082301';
       s.async = true;
       s.onload = resolve;
       s.onerror = function () {
@@ -633,17 +635,32 @@ document.addEventListener('click', function(e) {
     return p;
   }
   var _modalReturnFocus = null;
+  var _modalClickTrigger = null;
+  var noteSeq = 0;
   // Capture phase, so this runs before the inline onclick that opens the modal.
   // document.activeElement alone is not enough: Safari does not focus a clicked
   // link or button, so a tap would leave nothing to hand focus back to.
+  // Assigned unconditionally, null included: a click that misses a trigger is a
+  // new interaction, and must not leave a stale trigger to win a later open.
   document.addEventListener('click', function (e) {
     var t = e.target && e.target.closest && e.target.closest('[onclick*="openModal"]');
-    if (t) _modalReturnFocus = t;
+    _modalClickTrigger = t || null;
   }, true);
   function openModal() {
-    if (document.activeElement && document.activeElement !== document.body) {
+    // The listener above wins for click-opens. Reading document.activeElement
+    // first clobbered it: in Safari a clicked CTA is never focused, so
+    // activeElement is still whatever the visitor last tabbed to, and focus came
+    // back to that stale element on close.
+    if (_modalClickTrigger && document.contains(_modalClickTrigger)) {
+      _modalReturnFocus = _modalClickTrigger;
+    } else if (document.activeElement && document.activeElement !== document.body) {
       _modalReturnFocus = document.activeElement;
+    } else {
+      // Opened from the URL, with nothing focused. Leave focus where the browser
+      // put it on load rather than restoring somewhere arbitrary.
+      _modalReturnFocus = null;
     }
+    _modalClickTrigger = null;
     document.getElementById('booking-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
 
@@ -662,11 +679,26 @@ document.addEventListener('click', function(e) {
     var note = document.getElementById('sw-loading');
     function showNote(html) {
       if (!note) return;
-      // Reveal the live region BEFORE writing to it. Text added to a display:none
-      // role="status" is never announced, and the phone number is the only route
-      // to booking a visitor has left once the widget has failed.
-      note.style.display = 'block';
-      note.innerHTML = html;
+      // The note is no longer display:none (see .modal-loading), but the OVERLAY
+      // around it was, until the line above opened it. A role="status" inside a
+      // hidden ancestor is not in the accessibility tree, so text written in this
+      // same task is never announced and the phone fallback is silent. Let the
+      // reveal settle, then write. Two frames: a rAF callback still runs before
+      // the render steps of the frame that reveals the overlay.
+      var seq = ++noteSeq;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          // A faster path already superseded this message. Writing now would
+          // paint "Loading..." over a form that has finished rendering.
+          if (seq !== noteSeq) return;
+          note.innerHTML = html;
+        });
+      });
+    }
+    function clearNote() {
+      if (!note) return;
+      noteSeq++;
+      note.innerHTML = '';
     }
     function showPhoneFallback() {
       showNote('The booking form could not load. Please call ' +
@@ -685,7 +717,7 @@ document.addEventListener('click', function(e) {
       (function settle() {
         var m = document.getElementById('scheduling-widget');
         if (m && m.innerHTML.length > 100) {
-          if (note) note.style.display = 'none';
+          clearNote();
         } else if (++tries < 30) {
           setTimeout(settle, 50);
         } else {
@@ -758,6 +790,44 @@ document.addEventListener('click', function(e) {
       first.focus();
     }
   });
+  // Preload the widget as soon as the visitor shows intent (hovers or focuses any
+  // trigger) so click-to-modal-ready is instant on non-touch devices. There is
+  // deliberately NO idle warm-up: fetching the 65KB widget on a timer lands it
+  // inside the LCP window and cost the two index pages 300-370ms of LCP, measured
+  // n=5 per arm. Intent preload costs nothing at page load.
+  // Touch visitors, who never fire pointerover, get the loading state instead.
+  function _widgetPreloadOnIntent(e) {
+    var t = e.target;
+    if (t && t.closest && t.closest('[onclick*="openModal"]')) loadSchedulingWidget();
+  }
+  document.addEventListener('pointerover', _widgetPreloadOnIntent, { passive: true });
+  document.addEventListener('focusin', _widgetPreloadOnIntent, { passive: true });
+
+  // DEEP LINK. /?book=piano opens the booking modal with piano preselected, so a
+  // lead can be sent a link that lands on the form instead of on the homepage.
+  //
+  // This page reads PRESENCE only. The value is matched against the instrument
+  // list inside scheduling-widget.js and is never read into this page, the form,
+  // or the payload.
+  //
+  // Routed through openModal() rather than touching the widget directly, so it
+  // inherits the lazy load, the loading state and the phone fallback instead of
+  // racing the script. If the widget is not here yet, its init() sees an overlay
+  // that is already open and renders into it.
+  //
+  // No pushState and no replaceState: the back button then behaves exactly as it
+  // does on any other page, and the parameter survives in the URL for analytics.
+  (function () {
+    var wants = false;
+    try { wants = new URLSearchParams(window.location.search).has('book'); } catch (e) {}
+    if (!wants) return;
+    function autoOpen() { if (typeof window.openModal === 'function') window.openModal(); }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', autoOpen);
+    } else {
+      autoOpen();
+    }
+  })();
 </script>
 
 </body>
