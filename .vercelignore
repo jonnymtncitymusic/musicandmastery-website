@@ -1,1 +1,107 @@
 scripts/
+
+# Source masters and unused exports. Kept in the repo, not shipped to the CDN.
+# Nothing here is referenced by any page; generated and gated by a reference
+# scan on 2026-08-24. Adding an entry that IS referenced 404s a live image,
+# so regenerate rather than hand-editing.
+brand_assets/.DS_Store
+brand_assets/BRAND_KIT.md
+brand_assets/CTA.jpg
+brand_assets/Feature 1.jpg
+brand_assets/Feature 1.png
+brand_assets/Feature 1.webp
+brand_assets/Feature 2.jpg
+brand_assets/Feature 4.png
+brand_assets/Feature 5  Bottom Right- .png
+brand_assets/Feature 5 - top right.jpg
+brand_assets/Feature 5 Tall.jpeg
+brand_assets/Feauture 3.png
+brand_assets/Hero Image.jpg
+brand_assets/Hero Image.png
+brand_assets/Hero Image.webp
+brand_assets/Home_Page_Image.png
+brand_assets/Landing Pages/beginner_san_bernardino.png
+brand_assets/Landing Pages/in_home_lesson_san_bernardino.png
+brand_assets/_archive-mcmc-logos/Logo - Transparent & Black.png
+brand_assets/_archive-mcmc-logos/Logo - White Background No Name.png
+brand_assets/_archive-mcmc-logos/Logo - White Background.png
+brand_assets/_archive-mcmc-logos/MCMC Brand Assets.jpg
+brand_assets/_archive-mcmc-logos/_original_Logo - Transparent & Black.png
+brand_assets/_archive-mcmc-logos/_original_Logo - White Background No Name.png
+brand_assets/_archive-mcmc-logos/_original_Logo - White Background.png
+brand_assets/drum-lesson-alt.jpg
+brand_assets/drum-lesson-alt.webp
+brand_assets/drum-lesson-overhead.webp
+brand_assets/fonts/cormorant-garamond-500-latin.woff2
+brand_assets/fonts/cormorant-garamond-600-latin.woff2
+brand_assets/fonts/cormorant-garamond-700-latin.woff2
+brand_assets/fonts/montserrat-latin.woff2
+brand_assets/fonts/playfair-display-600-latin.woff2
+brand_assets/fonts/playfair-display-700-latin.woff2
+brand_assets/fonts/playfair-display-800-latin.woff2
+brand_assets/fonts/questrial-latin.woff2
+brand_assets/instructors/Bryce Wilson.jpg
+brand_assets/instructors/Bryce Wilson.png
+brand_assets/instructors/Bryce Wilson.webp
+brand_assets/instructors/Caitlynn Moen.jpg
+brand_assets/instructors/Caitlynn Moen.png
+brand_assets/instructors/Caitlynn Moen.webp
+brand_assets/instructors/Christopher Salinas.jpg
+brand_assets/instructors/Christopher Salinas.png
+brand_assets/instructors/Christopher Salinas.webp
+brand_assets/instructors/Connor Hernandez.jpg
+brand_assets/instructors/Connor Hernandez.png
+brand_assets/instructors/Connor Hernandez.webp
+brand_assets/instructors/Frank Quiroz.jpg
+brand_assets/instructors/Frank Quiroz.png
+brand_assets/instructors/Frank Quiroz.webp
+brand_assets/instructors/Jonny Dolan.png
+brand_assets/instructors/Ray Valdez.jpg
+brand_assets/instructors/Ray Valdez.webp
+brand_assets/instruments/(3) OFFICIAL COMFORTABLY NUMB TABS by Pink Floyd @ Ultimate-Guitar.Com.pdf
+brand_assets/instruments/Bass.jpg
+brand_assets/instruments/Bass.webp
+brand_assets/instruments/Drums.jpg
+brand_assets/instruments/Drums.webp
+brand_assets/instruments/Guitar.jpg
+brand_assets/instruments/Guitar.webp
+brand_assets/instruments/Music Production.jpg
+brand_assets/instruments/Piano.jpg
+brand_assets/instruments/Piano.webp
+brand_assets/instruments/Ukulele.jpg
+brand_assets/instruments/Ukulele.webp
+brand_assets/instruments/Voice.jpg
+brand_assets/instruments/Voice.webp
+brand_assets/logo/.DS_Store
+brand_assets/logo/masters/source-icon-reversed.png
+brand_assets/logo/masters/source-icon-trim.png
+brand_assets/logo/masters/source-icon-white-bg.png
+brand_assets/logo/masters/source-primary-white-bg.png
+brand_assets/logo/masters/source-reversed-with-text.png
+brand_assets/logo/mm-favicon-32.png
+brand_assets/logo/mm-icon-512.png
+brand_assets/logo/mm-icon-reversed.png
+brand_assets/logo/mm-icon.png
+brand_assets/logo/mm-logo-primary.png
+brand_assets/masters/bass-lesson-closeup-source.jpg
+brand_assets/masters/drum-lesson-alt-source.jpg
+brand_assets/masters/drum-lesson-closeup-source.jpg
+brand_assets/masters/drum-lesson-overhead-source.jpg
+brand_assets/masters/guitar-lesson-closeup-source.jpg
+brand_assets/masters/piano-lesson-alt-source.jpg
+brand_assets/masters/piano-lesson-closeup-source.jpg
+brand_assets/masters/piano-lesson-overhead-alt-source.jpg
+brand_assets/masters/piano-lesson-overhead-source.jpg
+brand_assets/masters/ukulele-lesson-closeup-source.jpg
+brand_assets/masters/voice-lesson-closeup-source.jpg
+brand_assets/mtncitymusic-website.code-workspace
+brand_assets/piano-lesson-alt.jpg
+brand_assets/piano-lesson-alt.webp
+brand_assets/piano-lesson-overhead.webp
+brand_assets/reference-source.html
+brand_assets/website references/old website/Meet the Team.png
+brand_assets/website references/old website/Old Footer.png
+brand_assets/website references/old website/Old Hero Section.png
+brand_assets/website references/old website/Old Vector Images.png
+brand_assets/website references/old website/current website.png
+brand_assets/website references/reference site.png

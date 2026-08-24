@@ -295,6 +295,17 @@
     const container = document.getElementById('scheduling-widget');
     if (!container) return;
 
+    // A render replaces the entire subtree, so remember what the visitor was
+    // doing first. The instrument select is the first field on the lead form
+    // and changing it re-renders; without this, focus drops to <body> and a
+    // keyboard visitor has to Tab back in from the top of the page. Ported
+    // from the mtncitymusic copy, which had it first.
+    const active = document.activeElement;
+    const focusId = active && active.id && container.contains(active) ? active.id : null;
+    const hasSel = focusId && typeof active.selectionStart === 'number';
+    const selStart = hasSel ? active.selectionStart : null;
+    const selEnd = hasSel ? active.selectionEnd : null;
+
     let html = '';
 
     if (state.error) {
@@ -311,6 +322,18 @@
 
     container.innerHTML = html;
     bindEvents();
+
+    if (focusId) {
+      const restored = document.getElementById(focusId);
+      if (restored) {
+        restored.focus();
+        // setSelectionRange throws on input types that do not support it
+        // (email, number) in some browsers, so this is best-effort.
+        if (selStart !== null && typeof restored.setSelectionRange === 'function') {
+          try { restored.setSelectionRange(selStart, selEnd); } catch (e) {}
+        }
+      }
+    }
   }
 
   function renderStep1() {
@@ -348,14 +371,14 @@
 
         ${state.instrument === 'Other' ? `
           <div class="sw-field ${fieldErrorClass('instrumentOther')}">
-            <label class="sw-label">Which instrument?</label>
+            <label class="sw-label" for="sw-instrument-other">Which instrument?</label>
             <input type="text" id="sw-instrument-other" class="sw-input" placeholder="e.g., Violin, Saxophone, Drums" value="${state.instrumentOther}">
             ${fieldErrorHtml('instrumentOther')}
           </div>
         ` : ''}
 
         <div class="sw-field ${fieldErrorClass('city')}">
-          <label class="sw-label">Your City</label>
+          <label class="sw-label" for="sw-city">Your City</label>
           <select id="sw-city" class="sw-select">
             <option value="">Choose your city...</option>
             ${cityOptions}
@@ -364,7 +387,7 @@
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Lesson Length</label>
+          <label class="sw-label" for="sw-length">Lesson Length</label>
           <select id="sw-length" class="sw-select">
             ${lengthOptions}
           </select>
@@ -372,12 +395,12 @@
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Your Address <span class="sw-optional">(optional, for more accurate matching)</span></label>
+          <label class="sw-label" for="sw-address">Your Address <span class="sw-optional">(optional, for more accurate matching)</span></label>
           <input type="text" id="sw-address" class="sw-input" placeholder="123 Main St" value="${state.address}">
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Preferred Days <span class="sw-optional">(optional, leave blank for any day)</span></span>
+          <span class="sw-label" id="sw-days-label">Preferred Days <span class="sw-optional">(optional, leave blank for any day)</span></span>
           <div class="sw-pill-row" role="group" aria-labelledby="sw-days-label">
             ${DAYS_OF_WEEK.map(d => `
               <button type="button" class="sw-pill ${state.preferredDays.includes(d.v) ? 'sw-pill-on' : ''}" aria-pressed="${state.preferredDays.includes(d.v) ? 'true' : 'false'}" data-day="${d.v}">${d.label}</button>
@@ -425,7 +448,7 @@
     const instructors = getUniqueInstructors(allSlots);
     const instructorFilter = instructors.length > 1 ? `
       <div class="sw-field">
-        <label class="sw-label">Filter by instructor</label>
+        <label class="sw-label" for="sw-filter-instructor">Filter by instructor</label>
         <select id="sw-filter-instructor" class="sw-select">
           <option value="">All instructors</option>
           ${instructors.map(i => `<option value="${i.name}" ${state.filterInstructor === i.name ? 'selected' : ''}>${i.name}</option>`).join('')}
@@ -496,25 +519,25 @@
         ${renderLessonForField()}
 
         <div class="sw-field ${fieldErrorClass('name')}">
-          <label class="sw-label">Your Name</label>
+          <label class="sw-label" for="sw-name">Your Name</label>
           <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
           ${fieldErrorHtml('name')}
         </div>
 
         <div class="sw-field ${fieldErrorClass('email')}">
-          <label class="sw-label">Email</label>
+          <label class="sw-label" for="sw-email">Email</label>
           <input type="email" id="sw-email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
           ${fieldErrorHtml('email')}
         </div>
 
         <div class="sw-field ${fieldErrorClass('phone')}">
-          <label class="sw-label">Phone</label>
+          <label class="sw-label" for="sw-phone">Phone</label>
           <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
           ${fieldErrorHtml('phone')}
         </div>
 
         <div class="sw-field ${fieldErrorClass('address')}">
-          <label class="sw-label">Lesson Address</label>
+          <label class="sw-label" for="sw-address-final">Lesson Address</label>
           <input type="text" id="sw-address-final" class="sw-input" placeholder="Full address where lessons will take place" value="${state.address}">
           ${fieldErrorHtml('address')}
         </div>
@@ -615,22 +638,22 @@
         ${renderLessonForField()}
 
         <div class="sw-field">
-          <label class="sw-label">Your Name</label>
+          <label class="sw-label" for="sw-name">Your Name</label>
           <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Email</label>
+          <label class="sw-label" for="sw-email">Email</label>
           <input type="email" id="sw-email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Phone</label>
+          <label class="sw-label" for="sw-phone">Phone</label>
           <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
         </div>
 
         <div class="sw-field">
-          <label class="sw-label">Anything else we should know? <span class="sw-optional">(optional)</span></label>
+          <label class="sw-label" for="sw-notes">Anything else we should know? <span class="sw-optional">(optional)</span></label>
           <input type="text" id="sw-notes" class="sw-input" placeholder="e.g., student age, experience level, preferred days" value="${state.notes}">
         </div>
 
@@ -670,9 +693,30 @@
   }
 
   function renderLeadStep1() {
+    const instrumentOptions = INSTRUMENTS.map(i =>
+      `<option value="${i}" ${state.instrument === i ? 'selected' : ''}>${i}</option>`
+    ).join('');
+
     return `
       <div class="sw-step">
         ${leadHeader()}
+
+        <div class="sw-field ${fieldErrorClass('instrument')}">
+          <label class="sw-label" for="sw-instrument">Instrument of Interest</label>
+          <select id="sw-instrument" name="instrument" class="sw-select">
+            <option value="">Choose an instrument...</option>
+            ${instrumentOptions}
+          </select>
+          ${fieldErrorHtml('instrument')}
+        </div>
+
+        ${state.instrument === 'Other' ? `
+          <div class="sw-field ${fieldErrorClass('instrumentOther')}">
+            <label class="sw-label" for="sw-instrument-other">Which instrument?</label>
+            <input type="text" id="sw-instrument-other" name="instrument_other" class="sw-input" placeholder="e.g., Violin, Saxophone" value="${state.instrumentOther}">
+            ${fieldErrorHtml('instrumentOther')}
+          </div>
+        ` : ''}
 
         <div class="sw-field ${fieldErrorClass('name')}">
           <label class="sw-label" for="sw-name">Your Name</label>
@@ -699,30 +743,9 @@
   }
 
   function renderLeadStep2() {
-    const instrumentOptions = INSTRUMENTS.map(i =>
-      `<option value="${i}" ${state.instrument === i ? 'selected' : ''}>${i}</option>`
-    ).join('');
-
     return `
       <div class="sw-step">
         ${leadHeader()}
-
-        <div class="sw-field ${fieldErrorClass('instrument')}">
-          <label class="sw-label" for="sw-instrument">Instrument of Interest</label>
-          <select id="sw-instrument" name="instrument" class="sw-select">
-            <option value="">Choose an instrument...</option>
-            ${instrumentOptions}
-          </select>
-          ${fieldErrorHtml('instrument')}
-        </div>
-
-        ${state.instrument === 'Other' ? `
-          <div class="sw-field ${fieldErrorClass('instrumentOther')}">
-            <label class="sw-label" for="sw-instrument-other">Which instrument?</label>
-            <input type="text" id="sw-instrument-other" name="instrument_other" class="sw-input" placeholder="e.g., Violin, Saxophone" value="${state.instrumentOther}">
-            ${fieldErrorHtml('instrumentOther')}
-          </div>
-        ` : ''}
 
         ${renderLessonForField()}
 
@@ -968,6 +991,15 @@
   function validateLeadStep1() {
     clearAllErrors();
     let ok = true;
+    // Instrument moved to this screen, so the gate moves with it. Without this a
+    // visitor could reach screen 2 with no instrument and only find out at submit,
+    // on a screen where the field is no longer visible.
+    if (LEAD_ONLY) {
+      if (!state.instrument) { setFieldError('instrument', 'Please select an instrument.'); ok = false; }
+      if (state.instrument === 'Other' && !state.instrumentOther.trim()) {
+        setFieldError('instrumentOther', 'Please tell us which instrument.'); ok = false;
+      }
+    }
     if (!state.clientName.trim()) { setFieldError('name', 'Please enter your name.'); ok = false; }
     if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) {
       setFieldError('email', 'Please enter a valid email.'); ok = false;
@@ -1043,7 +1075,8 @@
     if (bad) {
       // An error on a screen-one field is invisible from screen two, so go back
       // to it rather than failing silently under the user.
-      if (LEAD_ONLY && (state.fieldErrors.name || state.fieldErrors.email || state.fieldErrors.phone)) {
+      if (LEAD_ONLY && (state.fieldErrors.name || state.fieldErrors.email || state.fieldErrors.phone
+          || state.fieldErrors.instrument || state.fieldErrors.instrumentOther)) {
         state.leadStep = 1;
       }
       render();
