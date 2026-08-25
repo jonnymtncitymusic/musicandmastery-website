@@ -251,15 +251,47 @@
 </footer>
 
 <script>
-document.addEventListener('click', function(e) {
-  var link = e.target.closest('a[href^="tel:"]');
-  if (link) {
+(function () {
+  // One caller is one contact attempt.
+  //
+  // This used to fire on EVERY tap. The Google Ads action it feeds
+  // (7552932935, 'Mountain City Music Co. (web) phone_call_click') counts
+  // MANY_PER_CLICK, and that field is IMMUTABLE through the Ads API because the
+  // action is GA4-imported and GA4 owns its counting. So the over-count could not
+  // be corrected downstream -- it had to be corrected here, at the only point we
+  // control. On 2026-08-23 this reported 3 conversions for 2 real Orange County
+  // callers, on a campaign whose entire measured result is inbound calls.
+  //
+  // Scope is the SESSION, not the page: tapping the number in the header and again
+  // in the footer is one person trying to call once, but a genuine return visit
+  // later is a new contact attempt and should count again.
+  var KEY = 'mcmc_phone_call_click_fired';
+  var firedThisPageview = false;
+
+  function alreadyFired() {
+    if (firedThisPageview) return true;
+    // Private mode and blocked storage throw. Degrade to per-pageview dedupe,
+    // which is still strictly better than firing on every tap, and never drop the
+    // first real signal.
+    try { return window.sessionStorage.getItem(KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function markFired() {
+    firedThisPageview = true;
+    try { window.sessionStorage.setItem(KEY, '1'); } catch (e) {}
+  }
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[href^="tel:"]');
+    if (!link) return;
+    if (alreadyFired()) return;
+    markFired();
     gtag('event', 'phone_call_click', {
       event_category: 'engagement',
       event_label: link.href
     });
-  }
-});
+  });
+})();
 </script>
 
 
