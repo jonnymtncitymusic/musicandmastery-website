@@ -361,7 +361,7 @@
         <p class="sw-subtext">Tell us what you're looking for and we'll match you with the best instructor.</p>
 
         <div class="sw-field ${fieldErrorClass('instrument')}">
-          <span class="sw-label" id="sw-days-label">Instrument</label>
+          <label class="sw-label" for="sw-instrument">Instrument</label>
           <select id="sw-instrument" class="sw-select">
             <option value="">Choose an instrument...</option>
             ${instrumentOptions}
@@ -543,7 +543,7 @@
         </div>
 
         <!-- Honeypot -->
-        <div style="position:absolute;left:-9999px;"><input type="text" id="sw-hp" tabindex="-1" autocomplete="off"></div>
+        <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" id="sw-hp" name="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 
         ${renderMcmcPayment()}
 
@@ -657,7 +657,7 @@
           <input type="text" id="sw-notes" class="sw-input" placeholder="e.g., student age, experience level, preferred days" value="${state.notes}">
         </div>
 
-        <div style="position:absolute;left:-9999px;"><input type="text" id="sw-hp" tabindex="-1" autocomplete="off"></div>
+        <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" id="sw-hp" name="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 
         <div class="sw-step2-actions">
           <button id="sw-back-1" class="sw-btn sw-btn-secondary">Back</button>
@@ -1084,7 +1084,17 @@
     }
 
     const hp = document.getElementById('sw-hp');
-    if (hp && hp.value) return;
+    if (hp && hp.value) {
+      // A bare `return` here meant the button did nothing at all: no error, no
+      // spinner, no request. A bot does not care, but a human whose password
+      // manager or accessibility tool filled the off-screen field just clicks
+      // and watches the page sit there, with no way to work out why. Bots are
+      // still blocked; humans now get a way out.
+      state.loading = false;
+      state.error = 'Something went wrong sending your details. Please call us at (760) 573-2120 and we will get you booked.';
+      render();
+      return;
+    }
 
     state.loading = true;
     state.error = '';
@@ -1156,7 +1166,17 @@
 
     // Honeypot check
     const hp = document.getElementById('sw-hp');
-    if (hp && hp.value) return;
+    if (hp && hp.value) {
+      // A bare `return` here meant the button did nothing at all: no error, no
+      // spinner, no request. A bot does not care, but a human whose password
+      // manager or accessibility tool filled the off-screen field just clicks
+      // and watches the page sit there, with no way to work out why. Bots are
+      // still blocked; humans now get a way out.
+      state.loading = false;
+      state.error = 'Something went wrong sending your details. Please call us at (760) 573-2120 and we will get you booked.';
+      render();
+      return;
+    }
 
     state.loading = true;
     state.error = '';
@@ -1188,7 +1208,16 @@
       }
 
       if (THANK_YOU_REDIRECT) {
-        window.location.href = THANK_YOU_REDIRECT;
+        // Without `type`, thank-you.html's gate returns before firing anything and
+        // the conversion for a completed booking is silently dropped. It also needs
+        // stashUserData() for the enhanced-conversion identifiers, exactly as the
+        // lead path does — gtag 'set' state does not survive a top-level navigation.
+        stashUserData();
+        window.location.href = buildRedirectUrl({
+          type: 'booking',
+          instrument: state.instrument,
+          city: state.city,
+        });
         return;
       }
 

@@ -36,12 +36,16 @@
     // is therefore the only flow that can reach this page, and it redirects
     // with type=lead.
     //
-    // The widget's other two handlers do NOT satisfy this gate. handleBooking
-    // redirects to the bare THANK_YOU_REDIRECT with no query string at all, and
-    // handleCallbackRequest sends type=callback. Both are dead code on this
-    // brand, but anyone porting this gate to a brand where they are reachable
-    // must widen the accepted types first, or those conversions silently
-    // stop being recorded.
+    // The widget's other two handlers used to fall straight through this gate:
+    // handleBooking redirected to the bare THANK_YOU_REDIRECT with no query
+    // string at all, and handleCallbackRequest sends type=callback. Both are
+    // dead code on THIS brand (LEAD_ONLY), but the same widget and the same
+    // page mirror to mtncitymusic.com where booking is the primary flow, and
+    // there a completed booking recorded no conversion whatsoever. handleBooking
+    // now sends type=booking and stashes its identifiers like the lead path
+    // does, and all three real submission types are accepted here. The check is
+    // an allowlist, not a truthiness test, so a bare ?type= or an invented value
+    // still refuses.
     //
     // A refresh reports 'reload' and Back reports 'back_forward', so both are
     // refused. Deliberately NOT gated on a token written by the widget: /js/ is
@@ -51,7 +55,9 @@
     var navType = ((performance.getEntriesByType &&
                     performance.getEntriesByType('navigation')[0]) || {}).type;
     var qs = new URLSearchParams(window.location.search);
-    if (navType === 'reload' || navType === 'back_forward' || qs.get('type') !== 'lead') {
+    var SUBMISSION_TYPES = ['lead', 'booking', 'callback'];
+    if (navType === 'reload' || navType === 'back_forward' ||
+        SUBMISSION_TYPES.indexOf(qs.get('type')) === -1) {
       return;
     }
 
