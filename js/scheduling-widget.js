@@ -18,6 +18,12 @@
   // (e.g. 'https://www.musicandmastery.com/thank-you.html' for Google Ads conversion).
   // If unset, shows the inline confirmation step.
   const THANK_YOU_REDIRECT = window.MCMC_THANK_YOU_REDIRECT || null;
+  // Names the region a MULTI-city landing page serves. The 24 single-city pages set
+  // MCMC_PREFILL_CITY and get their city that way; the paid Orange County page covers
+  // five cities so it cannot, and it was falling through to the words "your area" -- a
+  // visitor who searched "piano lessons irvine" was answered with "instructors in your
+  // area". Empty means say nothing rather than say something vague.
+  const AREA_LABEL = window.MCMC_AREA_LABEL || '';
 
   // Lead-only mode skips the availability search entirely and shows a single
   // contact form. Auto-on when brand source isn't MCMC (since other brands
@@ -125,7 +131,6 @@
   function freshState() {
     return {
       step: 1,
-      leadStep: 1,   // lead form is split in two; >5 fields on one screen suppresses completion
       mode: 'booking',  // 'booking' or 'lead' (no-match flow)
       instrument: '',
       instrumentOther: '',  // free-text when instrument === 'Other'
@@ -672,27 +677,27 @@
   // The lead form is split across two screens. Nine required fields on a single
   // screen measurably suppresses completion; the qualifying minimum comes first
   // and the matching detail second.
+  // ONE screen, three fields.
+  //
+  // This was two screens and eight required fields. On the paid Orange County
+  // landing page that produced 21 clicks and ZERO submissions in eight days, while
+  // the phone link beside it was tapped nine times. The form was not competing with
+  // the phone, it was losing to it.
+  //
+  // Name, email and phone are what it takes to reach somebody. Who the lesson is
+  // for, the student age, the city and how soon they want to start are all
+  // questions that get asked on the callback anyway, and gating a stranger's first
+  // contact on them bought nothing.
+  //
+  // Email stays required because the lead drip is email-based, so dropping it would
+  // leave a phone number and no follow-up path. Those same three fields are exactly
+  // what stashUserData() hands to Google for enhanced conversions, so a shorter form
+  // than this would quietly degrade Ads matching as well.
   function renderLeadOnlyForm() {
-    return state.leadStep === 2 ? renderLeadStep2() : renderLeadStep1();
-  }
-
-  function leadHeader() {
-    const cityName = state.city || 'your area';
-    const headline = state.city
-      ? `Music Lessons in ${cityName}: Reserve Your Spot`
-      : 'Reserve Your Spot for Music Lessons';
-    const subtext = `We're matching new students with instructors in ${cityName} and will reach out within 24 hours to confirm your fit.`;
-    return `
-        <h3 class="sw-heading">${headline}</h3>
-        <p class="sw-subtext">${subtext}</p>
-        <div class="sw-leadprogress" aria-hidden="true">
-          <span class="sw-leaddot ${state.leadStep === 1 ? 'on' : 'done'}"></span>
-          <span class="sw-leadbar ${state.leadStep === 2 ? 'on' : ''}"></span>
-          <span class="sw-leaddot ${state.leadStep === 2 ? 'on' : ''}"></span>
-        </div>`;
-  }
-
-  function renderLeadStep1() {
+    // Only ask the instrument when we do not already know it. Paid landing pages set
+    // MCMC_PREFILL_INSTRUMENT and a ?book= value overrides that; pages that set
+    // neither still have to ask, so this cannot become a blind default.
+    const needsInstrument = !state.instrument;
     const instrumentOptions = INSTRUMENTS.map(i =>
       `<option value="${i}" ${state.instrument === i ? 'selected' : ''}>${i}</option>`
     ).join('');
@@ -701,19 +706,21 @@
       <div class="sw-step">
         ${leadHeader()}
 
-        <div class="sw-field ${fieldErrorClass('instrument')}">
-          <label class="sw-label" for="sw-instrument">Instrument of Interest</label>
-          <select id="sw-instrument" name="instrument" class="sw-select">
-            <option value="">Choose an instrument...</option>
-            ${instrumentOptions}
-          </select>
-          ${fieldErrorHtml('instrument')}
-        </div>
+        ${needsInstrument ? `
+          <div class="sw-field ${fieldErrorClass('instrument')}">
+            <label class="sw-label" for="sw-instrument">Instrument of Interest</label>
+            <select id="sw-instrument" class="sw-select">
+              <option value="">Choose an instrument...</option>
+              ${instrumentOptions}
+            </select>
+            ${fieldErrorHtml('instrument')}
+          </div>
+        ` : ''}
 
         ${state.instrument === 'Other' ? `
           <div class="sw-field ${fieldErrorClass('instrumentOther')}">
             <label class="sw-label" for="sw-instrument-other">Which instrument?</label>
-            <input type="text" id="sw-instrument-other" name="instrument_other" class="sw-input" placeholder="e.g., Violin, Saxophone" value="${state.instrumentOther}">
+            <input type="text" id="sw-instrument-other" class="sw-input" placeholder="e.g., Violin, Saxophone" value="${state.instrumentOther}">
             ${fieldErrorHtml('instrumentOther')}
           </div>
         ` : ''}
@@ -736,53 +743,25 @@
           ${fieldErrorHtml('phone')}
         </div>
 
-        <button id="sw-lead-next" class="sw-btn sw-btn-primary">Continue</button>
-        <p class="sw-fineprint">Two short steps. Your info stays private.</p>
+        <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" id="sw-hp" name="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
+
+        ${renderMmDeposit()}
       </div>
     `;
   }
 
-  function renderLeadStep2() {
+  function leadHeader() {
+    // state.city when a single-city page set it, else the region label, else nothing.
+    // Never the phrase "your area".
+    const area = state.city || AREA_LABEL;
+    const headline = area
+      ? `Book Your Free First Lesson in ${area}`
+      : 'Book Your Free First Lesson';
+    const where = area ? ` in ${area}` : '';
+    const subtext = `Your first lesson is free, taught at your own piano${where}, with no obligation to continue. Tell us where to reach you and we will confirm your instructor within 24 hours.`;
     return `
-      <div class="sw-step">
-        ${leadHeader()}
-
-        ${renderLessonForField()}
-
-        <div class="sw-field ${fieldErrorClass('studentAge')}">
-          <label class="sw-label" for="sw-age">Student Age</label>
-          <input type="text" id="sw-age" name="student_age" class="sw-input" placeholder='e.g. "8" or "Adult"' value="${state.studentAge}">
-          ${fieldErrorHtml('studentAge')}
-        </div>
-
-        <div class="sw-field ${fieldErrorClass('city')}">
-          <label class="sw-label" for="sw-city-text">City</label>
-          <input type="text" id="sw-city-text" name="city" autocomplete="address-level2" class="sw-input" placeholder="Your city" value="${state.city}">
-          ${fieldErrorHtml('city')}
-        </div>
-
-        <div class="sw-field ${fieldErrorClass('startTiming')}">
-          <label class="sw-label" for="sw-timing">How soon would you like to start?</label>
-          <select id="sw-timing" name="start_timing" class="sw-select">
-            <option value="">Choose...</option>
-            <option value="asap" ${state.startTiming === 'asap' ? 'selected' : ''}>As soon as possible</option>
-            <option value="within_month" ${state.startTiming === 'within_month' ? 'selected' : ''}>Within the next month</option>
-            <option value="exploring" ${state.startTiming === 'exploring' ? 'selected' : ''}>Just exploring</option>
-          </select>
-          ${fieldErrorHtml('startTiming')}
-        </div>
-
-        <div class="sw-field">
-          <label class="sw-label" for="sw-notes">Anything else we should know? <span class="sw-optional">(optional)</span></label>
-          <textarea id="sw-notes" name="notes" class="sw-input" rows="3" placeholder="Goals, preferred days/times, experience level">${state.notes}</textarea>
-        </div>
-
-        <div style="position:absolute;left:-9999px;"><input type="text" id="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
-
-        ${renderMmDeposit()}
-        <button id="sw-lead-back" class="sw-btn sw-btn-ghost" ${state.loading ? 'disabled' : ''}>Back</button>
-      </div>
-    `;
+        <h3 class="sw-heading">${headline}</h3>
+        <p class="sw-subtext">${subtext}</p>`;
   }
 
   // No deposit and no payment at booking. The first lesson is free, so this is a
@@ -790,7 +769,7 @@
   function renderMmDeposit() {
     return `
       <button id="sw-submit-lead" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
-        ${state.loading ? '<span class="sw-spinner"></span> Sending...' : 'Reserve My Spot'}
+        ${state.loading ? '<span class="sw-spinner"></span> Sending...' : 'Book My Free First Lesson'}
       </button>
       <p class="sw-fineprint">We'll get back to you within 24 hours. Your info stays private.</p>
     `;
@@ -909,18 +888,6 @@
     const submitLeadBtn = document.getElementById('sw-submit-lead');
     if (submitLeadBtn) submitLeadBtn.addEventListener('click', handleLeadSubmit);
 
-    // Lead form is two screens; step one gates on the qualifying minimum.
-    const leadNextBtn = document.getElementById('sw-lead-next');
-    if (leadNextBtn) leadNextBtn.addEventListener('click', () => {
-      if (!validateLeadStep1()) { render(); return; }
-      state.leadStep = 2; state.error = ''; render();
-    });
-
-    const leadBackBtn = document.getElementById('sw-lead-back');
-    if (leadBackBtn) leadBackBtn.addEventListener('click', () => {
-      state.leadStep = 1; state.error = ''; render();
-    });
-
     // Callback link (MCMC step 3 alternative to paying)
     const callbackBtn = document.getElementById('sw-callback');
     if (callbackBtn) callbackBtn.addEventListener('click', handleCallbackRequest);
@@ -988,28 +955,6 @@
 
   // Name, email and phone are the qualifying minimum and live on screen one.
   // Returns true when screen one is clean.
-  function validateLeadStep1() {
-    clearAllErrors();
-    let ok = true;
-    // Instrument moved to this screen, so the gate moves with it. Without this a
-    // visitor could reach screen 2 with no instrument and only find out at submit,
-    // on a screen where the field is no longer visible.
-    if (LEAD_ONLY) {
-      if (!state.instrument) { setFieldError('instrument', 'Please select an instrument.'); ok = false; }
-      if (state.instrument === 'Other' && !state.instrumentOther.trim()) {
-        setFieldError('instrumentOther', 'Please tell us which instrument.'); ok = false;
-      }
-    }
-    if (!state.clientName.trim()) { setFieldError('name', 'Please enter your name.'); ok = false; }
-    if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) {
-      setFieldError('email', 'Please enter a valid email.'); ok = false;
-    }
-    if (LEAD_ONLY && !state.clientPhone.trim()) {
-      setFieldError('phone', 'Please enter your phone number.'); ok = false;
-    }
-    return ok;
-  }
-
   // Google requires E.164 for enhanced-conversion phone matching. These are US
   // numbers typed by hand, so anything that is not a plain 10-digit (or leading-1
   // 11-digit) number is dropped rather than guessed at.
@@ -1061,27 +1006,22 @@
     if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) {
       setFieldError('email', 'Please enter a valid email.'); bad = true;
     }
-    if (!state.lessonFor) { setFieldError('lessonFor', 'Please tell us who the lesson is for.'); bad = true; }
+    // Validate ONLY what the form still asks for. lessonFor, studentAge, city and
+    // startTiming used to be required here; they are no longer collected on a
+    // lead-only page, so requiring them would refuse every submission with an error
+    // pointing at a field the visitor cannot see. They are still SENT below whenever
+    // something upstream already put them in state.
+    if (!state.lessonFor && !LEAD_ONLY) {
+      setFieldError('lessonFor', 'Please tell us who the lesson is for.'); bad = true;
+    }
     if (LEAD_ONLY) {
       if (!state.clientPhone.trim()) { setFieldError('phone', 'Please enter your phone number.'); bad = true; }
       if (!state.instrument) { setFieldError('instrument', 'Please select an instrument.'); bad = true; }
       if (state.instrument === 'Other' && !state.instrumentOther.trim()) {
         setFieldError('instrumentOther', 'Please tell us which instrument.'); bad = true;
       }
-      if (!state.studentAge.trim()) { setFieldError('studentAge', 'Please enter the student age.'); bad = true; }
-      if (!state.city.trim()) { setFieldError('city', 'Please enter your city.'); bad = true; }
-      if (!state.startTiming) { setFieldError('startTiming', 'Please tell us how soon you want to start.'); bad = true; }
     }
-    if (bad) {
-      // An error on a screen-one field is invisible from screen two, so go back
-      // to it rather than failing silently under the user.
-      if (LEAD_ONLY && (state.fieldErrors.name || state.fieldErrors.email || state.fieldErrors.phone
-          || state.fieldErrors.instrument || state.fieldErrors.instrumentOther)) {
-        state.leadStep = 1;
-      }
-      render();
-      return;
-    }
+    if (bad) { render(); return; }
 
     const hp = document.getElementById('sw-hp');
     if (hp && hp.value) {
