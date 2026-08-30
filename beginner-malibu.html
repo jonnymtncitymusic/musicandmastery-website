@@ -73,6 +73,11 @@
     .btn:active { transform: scale(0.96) !important; }
     .btn-primary { background: #5f5bc8; color: #fff; animation: glow-pulse 2.5s ease-in-out infinite; }
     .btn-primary:hover { background: #4d4aab; animation: none; box-shadow: 0 6px 28px rgba(114,110,221,0.6); transform: translateY(-1px); }
+    /* .btn-secondary was referenced by the hero phone link and never defined anywhere,
+       so the primary phone CTA rendered as bare bold text with no background or border.
+       That is the CTA that actually converts on these pages. */
+    .btn-secondary { background: #fff; color: var(--black); border: 1.5px solid rgba(114,110,221,0.35); box-shadow: 0 4px 14px rgba(114,110,221,0.10); }
+    .btn-secondary:hover { border-color: var(--dark-purple); color: var(--dark-purple); }
     .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(79,74,184,0.32); }
     .btn-accent:hover { background: #b8350a; box-shadow: 0 6px 24px rgba(79,74,184,0.42); transform: translateY(-1px); }
     .btn-accent-lg { font-size: 18px; padding: 18px 44px; }
@@ -712,7 +717,7 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <script>window.MCMC_PREFILL_CITY = 'Malibu';</script>
-<script src="/js/scheduling-widget.js?v=2026082701"></script>
+<script src="/js/scheduling-widget.js?v=2026082702"></script>
 
 <script>
 (function(){

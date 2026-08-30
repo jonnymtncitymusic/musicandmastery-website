@@ -674,9 +674,6 @@
     `;
   }
 
-  // The lead form is split across two screens. Nine required fields on a single
-  // screen measurably suppresses completion; the qualifying minimum comes first
-  // and the matching detail second.
   // ONE screen, three fields.
   //
   // This was two screens and eight required fields. On the paid Orange County
@@ -694,10 +691,16 @@
   // what stashUserData() hands to Google for enhanced conversions, so a shorter form
   // than this would quietly degrade Ads matching as well.
   function renderLeadOnlyForm() {
-    // Only ask the instrument when we do not already know it. Paid landing pages set
+    // Only ask the instrument when the PAGE already knows it. Paid landing pages set
     // MCMC_PREFILL_INSTRUMENT and a ?book= value overrides that; pages that set
     // neither still have to ask, so this cannot become a blind default.
-    const needsInstrument = !state.instrument;
+    //
+    // Keyed off requestedInstrument() — the page URL and the page global — and NOT
+    // off state.instrument. The select's change handler writes state.instrument and
+    // then re-renders, so reading the mutable field here made the question delete
+    // itself the instant a visitor answered it: no confirmation of the choice, no way
+    // to change it, and a mis-picked "Other" was unrecoverable without a reload.
+    const needsInstrument = !requestedInstrument();
     const instrumentOptions = INSTRUMENTS.map(i =>
       `<option value="${i}" ${state.instrument === i ? 'selected' : ''}>${i}</option>`
     ).join('');
@@ -758,7 +761,12 @@
       ? `Book Your Free First Lesson in ${area}`
       : 'Book Your Free First Lesson';
     const where = area ? ` in ${area}` : '';
-    const subtext = `Your first lesson is free, taught at your own piano${where}, with no obligation to continue. Tell us where to reach you and we will confirm your instructor within 24 hours.`;
+    // "at your own piano" is only true on the piano pages. It was hardcoded here and
+    // so rendered on the guitar, bass, drums, voice and ukulele pages too. Every other
+    // instrument gets the phrasing that is true everywhere, including when the visitor
+    // has not told us the instrument yet: the lesson comes to them.
+    const place = state.instrument === 'Piano' ? 'at your own piano' : 'in your own home';
+    const subtext = `Your first lesson is free, taught ${place}${where}, with no obligation to continue. Tell us where to reach you and we will confirm your instructor within 24 hours.`;
     return `
         <h3 class="sw-heading">${headline}</h3>
         <p class="sw-subtext">${subtext}</p>`;
@@ -876,15 +884,6 @@
     const notesInput = document.getElementById('sw-notes');
     if (notesInput) notesInput.addEventListener('input', e => { state.notes = e.target.value; });
 
-    const ageInput = document.getElementById('sw-age');
-    if (ageInput) ageInput.addEventListener('input', e => { state.studentAge = e.target.value; clearFieldError('studentAge'); });
-
-    const cityTextInput = document.getElementById('sw-city-text');
-    if (cityTextInput) cityTextInput.addEventListener('input', e => { state.city = e.target.value; clearFieldError('city'); });
-
-    const timingSel = document.getElementById('sw-timing');
-    if (timingSel) timingSel.addEventListener('change', e => { state.startTiming = e.target.value; clearFieldError('startTiming'); });
-
     const submitLeadBtn = document.getElementById('sw-submit-lead');
     if (submitLeadBtn) submitLeadBtn.addEventListener('click', handleLeadSubmit);
 
@@ -953,8 +952,6 @@
     render();
   }
 
-  // Name, email and phone are the qualifying minimum and live on screen one.
-  // Returns true when screen one is clean.
   // Google requires E.164 for enhanced-conversion phone matching. These are US
   // numbers typed by hand, so anything that is not a plain 10-digit (or leading-1
   // 11-digit) number is dropped rather than guessed at.
@@ -1323,12 +1320,6 @@
         box-shadow: none;
       }
       .sw-btn-ghost:hover:not(:disabled) { background: #f4f3ff; }
-      /* Two-screen progress. Purely positional, so it is hidden from a11y. */
-      .sw-leadprogress { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 0 22px; }
-      .sw-leaddot { width: 9px; height: 9px; border-radius: 50%; background: rgba(114,110,221,0.22); transition: background 0.2s; }
-      .sw-leaddot.on, .sw-leaddot.done { background: #726edd; }
-      .sw-leadbar { width: 34px; height: 2px; border-radius: 2px; background: rgba(114,110,221,0.22); transition: background 0.2s; }
-      .sw-leadbar.on { background: #726edd; }
       textarea.sw-input { resize: vertical; min-height: 88px; font-family: 'Questrial', sans-serif; }
       .sw-fineprint { font-family: 'Questrial', sans-serif; font-size: 12px; color: #5f5f5f; text-align: center; margin: 14px 0 0; }
 
@@ -1654,7 +1645,7 @@
       if (bookParamPresent()) scrollToInlineForm();
     }
 
-    // Load cities on init (skip in lead-only mode — that flow uses a city text input)
+    // Load cities on init (skip in lead-only mode — that flow does not ask for a city)
     if (!LEAD_ONLY) {
       try {
         state.cities = await fetchCities();
