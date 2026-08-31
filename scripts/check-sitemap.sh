@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Compare *.html files against sitemap.xml entries. Emits drift to stderr.
 # Exit 0 = in sync, 1 = drift detected.
-# Excludes print-only assets (banner.html, flyer.html).
+# Excludes print-only assets (banner.html, flyer.html) and the noindexed thank-you page.
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SITEMAP="$ROOT/sitemap.xml"
-EXCLUDE_REGEX='^(banner|flyer)\.html$'
+EXCLUDE_REGEX='^(banner|flyer|thank-you)\.html$'
 
 cd "$ROOT"
 
