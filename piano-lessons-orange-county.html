@@ -22,6 +22,18 @@
   gtag('js', new Date());
   gtag('config', 'AW-11066542604');
   gtag('config', 'G-SPQ1FGTKTV');
+  // Dynamic number insertion. Swaps the displayed number and the tel: href for a
+  // Google forwarding number, but ONLY for visitors who arrived from a Google ad and
+  // only while Google has forwarding inventory. Organic visitors keep (760) 573-2120.
+  //
+  // Without this, a call placed from this page is worth exactly zero to Ads: every
+  // conversion this campaign has ever recorded is a TAP on the number, which carries
+  // no duration and no proof anyone spoke. Conversion action 7741120696
+  // ('Website call - M&M Orange County', WEBSITE_CALL, ONE_PER_CLICK) counts a call
+  // only past 60 seconds, so a misdial is not a lead.
+  gtag('config', 'AW-11066542604/NfzuCLjBoOscEIyU-Jwp', {
+    'phone_conversion_number': '(760) 573-2120'
+  });
 </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>In-Home Piano Lessons in Orange County | Music and Mastery</title>
