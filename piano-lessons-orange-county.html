@@ -809,9 +809,40 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
     try { window.sessionStorage.setItem(KEY, '1'); } catch (e) {}
   }
 
+  // The number this page ships with. Dynamic number insertion rewrites the tel:
+  // href in place when Google has a forwarding number for this visitor, so an href
+  // that no longer points here is proof DNI is live for them.
+  var PAGE_NUMBER = '7605732120';
+
+  function nationalDigits(value) {
+    var d = String(value || '').replace(/\D/g, '');
+    return (d.length === 11 && d.charAt(0) === '1') ? d.slice(1) : d;
+  }
+
+  // Whether Google is measuring this call itself.
+  //
+  // Both the tap action (7552932935, MANY_PER_CLICK) and the call action
+  // (7741120696, WEBSITE_CALL) sit in the same biddable PHONE_CALL_LEAD/WEBSITE
+  // goal, so a caller who taps and then talks would land in the conversions column
+  // twice for one phone call. That is the same defect as six taps reading as six
+  // leads, arriving through a different door.
+  //
+  // Deciding from the href rather than a build-time flag keeps this honest in the
+  // case that actually matters: Google only swaps the number when it has forwarding
+  // inventory for that visitor, so on any impression where it does not, DNI is
+  // silently absent and the tap is once again the only evidence a call was ever
+  // attempted. Suppressing on a flag would throw that evidence away. Suppressing on
+  // the swapped href suppresses exactly when, and only when, something better is
+  // recording the same event.
+  function callIsBeingMeasured(link) {
+    var dialled = nationalDigits(link.getAttribute('href'));
+    return dialled.length >= 10 && dialled !== PAGE_NUMBER;
+  }
+
   document.addEventListener('click', function (e) {
     var link = e.target.closest('a[href^="tel:"]');
     if (!link) return;
+    if (callIsBeingMeasured(link)) return;
     if (alreadyFired()) return;
     markFired();
     gtag('event', 'phone_call_click', {
