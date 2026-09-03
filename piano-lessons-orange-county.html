@@ -119,18 +119,10 @@
     .hero-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(40px, 6vw, 72px); line-height: 1.06; letter-spacing: -0.035em; color: var(--black); margin: 0 0 20px; }
     .hero-heading .accent-word { color: var(--dark-purple); }
     .hero-sub { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: clamp(20px, 2.5vw, 28px); color: var(--dark-purple); margin: 0 0 20px; letter-spacing: -0.01em; }
-    .hero-offer { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; padding: 15px 30px; border-radius: 12px; box-shadow: 0 8px 22px rgba(79,74,184,0.35); text-decoration: none; cursor: pointer; margin: 0 0 22px; transition: transform 0.15s, box-shadow 0.2s; }
-    .hero-offer:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(79,74,184,0.45); }
-    .hero-offer .g { color: #e6c684; }
-    .hero-offer .arw { font-weight: 700; }
-    /* .btn-secondary was referenced by the hero phone link and never defined anywhere,
-       so the primary phone CTA rendered as bare bold text with no background or border. */
-    .btn-secondary { background: #fff; color: var(--black); border: 1.5px solid rgba(114,110,221,0.35); box-shadow: 0 4px 14px rgba(114,110,221,0.10); }
-    .btn-secondary:hover { border-color: var(--dark-purple); color: var(--dark-purple); }
     /* .nav is position:sticky at 68px tall, so an un-offset #form put 41 of the
        headline's 50px behind it for every a[href="#form"] CTA, the sticky-nav
        button and ?book= deep links included. */
-    #form { scroll-margin-top: 80px; }
+    #form { scroll-margin-top: 116px; }
     .hero-form { max-width: 560px; margin: 0 auto 32px; text-align: left; }
     .hero-form .form-embed { background: #fff; }
     .form-noscript { padding: 28px 24px; text-align: center; font-size: 16px; line-height: 1.6; color: #3a3a4a; }
@@ -184,15 +176,6 @@
     .testimonials-stars { color: #c6954f; font-size: 28px; letter-spacing: 3px; line-height: 1; margin-bottom: 8px; }
     .testimonials-google { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 16px; color: #555; margin-bottom: 20px; }
     .testimonials-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(30px, 3.5vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0; }
-    .testimonials-track-wrapper { position: relative; overflow: hidden; }
-    .testimonials-track-wrapper::before,
-    .testimonials-track-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none; }
-    .testimonials-track-wrapper::before { left: 0; background: linear-gradient(to right, var(--light-purple), transparent); }
-    .testimonials-track-wrapper::after  { right: 0; background: linear-gradient(to left,  var(--light-purple), transparent); }
-    .testimonials-track { display: flex; gap: 20px; width: max-content; animation: scroll-left 70s linear infinite; animation-play-state: paused; padding: 8px 0 16px; }
-    .testimonials-track.playing { animation-play-state: running; }
-    .testimonials-track.playing:hover { animation-play-state: paused; }
-    @keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     .tcard { background: #fff; border-radius: 16px; padding: 28px; width: 340px; flex-shrink: 0; box-shadow: 0 4px 20px rgba(114,110,221,0.1); }
     .tcard-stars { color: #c6954f; font-size: 15px; letter-spacing: 2px; margin-bottom: 12px; }
     .tcard-quote { font-size: 13.5px; line-height: 1.7; color: #333; margin: 0 0 16px; font-style: italic; }
@@ -204,13 +187,6 @@
     .form-section h2 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(26px, 3vw, 40px); line-height: 1.15; letter-spacing: -0.025em; color: var(--black); margin: 0 0 48px; }
     .form-embed { border-radius: 16px; overflow: hidden; border: 1.5px solid rgba(114,110,221,0.15); box-shadow: 0 8px 40px rgba(114,110,221,0.1); }
 
-    /* PREFER A CALL */
-    .prefer-call { background: #f6f1e8; padding: 64px 32px; text-align: center; }
-    .prefer-call-inner { max-width: 560px; margin: 0 auto; }
-    .prefer-call h3 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 28px; margin: 0 0 12px; letter-spacing: -0.02em; }
-    .prefer-call p { font-size: 16px; line-height: 1.65; color: #555; margin: 0 0 28px; }
-    .prefer-call-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 18px; color: #4c48b0; text-decoration: none; border: 2px solid var(--dark-purple); border-radius: 9999px; padding: 14px 32px; transition: background 0.2s, color 0.2s; }
-    .prefer-call-btn:hover { background: var(--dark-purple); color: #fff; }
 
     /* FOOTER */
     footer { background: var(--black); padding: 56px 32px; text-align: center; }
@@ -282,7 +258,8 @@
       .testimonials-section { padding: 64px 0; }
       .testimonials-header { padding: 0 20px; margin-bottom: 40px; }
 
-      .form-section { padding: 64px 20px; }
+      .form-section { padding: 88px 20px; }
+      .form-trust { gap: 8px 0; flex-direction: column; align-items: flex-start; max-width: 300px; }
       .prefer-call { padding: 48px 20px; }
 
       footer { padding: 40px 20px; }
@@ -349,6 +326,181 @@
       }
     }
     @media (max-width: 359px) { .nav-inner .btn-primary { display: none; } }
+
+    /* ─────────────────────────────────────────────────────────────────────
+       HORMOZI REBUILD (2026-09-02)
+       Section order and screen positions follow acquisition.com/vegasthankyou-ws
+       as measured at 390x844. One action, repeated three times.
+       ───────────────────────────────────────────────────────────────────── */
+
+    /* STICKY TOP: offer + geo above the nav, both stick together */
+    .topbar { position: sticky; top: 0; z-index: 100; }
+    .topbar .nav { position: static; }
+    .promo-bar { background: var(--accent); color: #fff; text-align: center; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.01em; padding: 9px 20px; line-height: 1.35; }
+    .promo-bar .promo-dot { color: rgba(255,255,255,0.55); margin: 0 8px; }
+    .promo-bar .promo-free { color: #e6c684; font-weight: 800; }
+
+    /* HERO PHOTO */
+    .hero-photo { max-width: 620px; margin: 0 auto 32px; border-radius: 20px; overflow: hidden; box-shadow: 0 24px 60px rgba(114,110,221,0.24), 0 6px 18px rgba(0,0,0,0.10); }
+    .hero-photo img { display: block; width: 100%; height: auto; }
+    .hero-keyline { font-size: 15px; line-height: 1.65; color: #4a4a58; margin: 0 auto 32px; max-width: 540px; }
+
+    /* CTA BANDS. Identical label in all three places, all opening the same form. */
+    .cta-band { background: var(--cream-grad); padding: 72px 32px; text-align: center; }
+    .cta-band-inner { max-width: 640px; margin: 0 auto; }
+    .cta-band h2 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.14; letter-spacing: -0.025em; margin: 0 0 14px; }
+    .cta-band p { font-size: 16px; line-height: 1.65; color: #555; margin: 0 0 30px; }
+    .cta-sub { font-size: 13px; color: #6a6a78; margin: 16px 0 0; }
+    .cta-steps { list-style: none; padding: 0; margin: 0 auto 32px; max-width: 460px; text-align: left; display: flex; flex-direction: column; gap: 14px; }
+    .cta-steps li { display: flex; align-items: flex-start; gap: 14px; font-size: 15px; line-height: 1.6; color: #4a4a58; }
+    .cta-step-n { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--dark-purple); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+    .form-lede { font-size: 15px; line-height: 1.65; color: #555; max-width: 480px; margin: -28px auto 32px; }
+    .form-trust { list-style: none; padding: 0; margin: 28px auto 0; max-width: 560px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px; }
+    .form-trust li { position: relative; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; color: #55555f; padding-left: 20px; }
+    .form-trust li::before { content: '\2713'; position: absolute; left: 0; top: 0; color: var(--dark-purple); font-weight: 900; }
+    /* The overlay lifts the form only. Everything framing it stays on the page. */
+    body.booking-open .form-trust, body.booking-open .form-lede { visibility: hidden; }
+
+    /* SOCIAL PROOF at 1.1 screens: static cards, real names, highlighted lines */
+    .proof-section { background: #fff; padding: 80px 32px; border-bottom: 1px solid #f0eeff; }
+    .proof-inner { max-width: 1100px; margin: 0 auto; }
+    .proof-head { text-align: center; margin-bottom: 40px; }
+    .proof-head .proof-stars { color: var(--gold); font-size: 28px; letter-spacing: 3px; line-height: 1; margin-bottom: 8px; }
+    .proof-head h2 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.12; letter-spacing: -0.025em; margin: 0 0 14px; }
+    .proof-attribution { font-size: 14px; line-height: 1.6; color: #555; max-width: 640px; margin: 0 auto; }
+    .proof-attribution a { color: var(--accent); font-weight: 700; }
+    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; }
+    .proof-grid .tcard { width: auto; }
+    .tcard-quote mark { background: rgba(198,149,79,0.28); color: inherit; padding: 1px 2px; border-radius: 3px; font-style: inherit; }
+    .proof-stats-row { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 14px; color: #555; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+    /* THE THREE NUMBERED BLOCKS at 2.6 / 3.2 / 3.7 */
+    .pillars { background: #f6f1e8; padding: 80px 32px; }
+    .pillars-inner { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+    .pillar { display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: center; opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.34,1.2,0.64,1), transform 0.7s cubic-bezier(0.34,1.2,0.64,1); }
+    .pillar.animate-in { opacity: 1; transform: translateY(0); }
+    .pillar:nth-child(even) .pillar-photo { order: -1; }
+    .pillar-num { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--dark-purple); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 18px; margin-bottom: 16px; }
+    .pillar h3 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(22px, 2.6vw, 30px); line-height: 1.18; letter-spacing: -0.02em; margin: 0 0 14px; }
+    .pillar p { font-size: 16px; line-height: 1.7; color: #4a4a58; margin: 0 0 12px; }
+    .pillar p:last-child { margin-bottom: 0; }
+    .pillar-photo { border-radius: 18px; overflow: hidden; box-shadow: 0 18px 44px rgba(114,110,221,0.22), 0 4px 12px rgba(0,0,0,0.08); }
+    .pillar-photo img { display: block; width: 100%; height: auto; }
+
+    /* THE FORM at 5.1, single mount, promoted to an overlay by the CTAs */
+    .booking-shell { position: relative; max-width: 560px; margin: 0 auto; text-align: left; background: #fff; border-radius: 16px; }
+    .booking-close { display: none; position: absolute; top: 10px; right: 10px; z-index: 2; width: 36px; height: 36px; border-radius: 50%; border: none; background: rgba(13,13,13,0.06); color: var(--black); font-size: 20px; line-height: 1; cursor: pointer; align-items: center; justify-content: center; transition: background 0.2s; }
+    .booking-close:hover { background: rgba(13,13,13,0.14); }
+    .booking-scrim { position: fixed; inset: 0; background: rgba(13,13,13,0.58); z-index: 200; opacity: 0; visibility: hidden; transition: opacity 0.2s; }
+    body.booking-open { overflow: hidden; }
+    body.booking-open .booking-scrim { opacity: 1; visibility: visible; }
+    body.booking-open .booking-shell { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 201; width: min(560px, calc(100vw - 24px)); max-height: 92vh; overflow-y: auto; -webkit-overflow-scrolling: touch; box-shadow: 0 24px 80px rgba(0,0,0,0.34), 0 4px 16px rgba(0,0,0,0.14); }
+    body.booking-open .booking-close { display: flex; }
+    @media (prefers-reduced-motion: reduce) {
+      .booking-scrim { transition: none; }
+      .pillar { transition: none; opacity: 1; transform: none; }
+    }
+
+    /* QUALIFICATION at 8.0 */
+    .qualify { background: #fff; padding: 80px 32px; }
+    .qualify-inner { max-width: 960px; margin: 0 auto; }
+    .qualify h2 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.12; letter-spacing: -0.025em; text-align: center; margin: 0 0 12px; }
+    .qualify-lede { text-align: center; font-size: 16px; line-height: 1.65; color: #555; max-width: 620px; margin: 0 auto 44px; }
+    .qualify-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .qualify-col { border-radius: 18px; padding: 32px 28px; border: 1.5px solid rgba(114,110,221,0.18); }
+    .qualify-col.is-fit { background: rgba(114,110,221,0.05); }
+    .qualify-col.not-fit { background: #faf9f6; border-color: rgba(13,13,13,0.10); }
+    .qualify-col h3 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 19px; letter-spacing: -0.01em; margin: 0 0 20px; }
+    .qualify-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+    .qualify-col li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.6; color: #4a4a58; }
+    .qualify-mark { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; margin-top: 1px; }
+    .is-fit .qualify-mark { background: var(--dark-purple); color: #fff; }
+    .not-fit .qualify-mark { background: rgba(13,13,13,0.10); color: #55555f; }
+
+    /* PRICE JUSTIFICATION + DISQUALIFIER at 9.2 */
+    .price-justify { max-width: 760px; margin: 44px auto 0; background: rgba(255,255,255,0.72); border: 1.5px solid rgba(114,110,221,0.16); border-radius: 18px; padding: 30px 30px; }
+    .price-justify h3 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 18px; margin: 0 0 12px; letter-spacing: -0.01em; }
+    .price-justify p { font-size: 15px; line-height: 1.7; color: #4a4a58; margin: 0 0 14px; }
+    .price-justify p:last-child { margin-bottom: 0; }
+    .price-disqualify { margin-top: 22px; padding-top: 20px; border-top: 1px solid rgba(114,110,221,0.18); }
+    .price-disqualify strong { font-family: 'Work Sans', sans-serif; font-weight: 800; display: block; margin-bottom: 6px; }
+
+    /* LOCAL / LONG-FORM at 6.3, now carrying the video */
+    .local-vsl { max-width: 380px; margin: 0 auto 40px; }
+    .local-faq-item > summary { cursor: pointer; list-style: none; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 14px 0; }
+    .local-faq-item > summary::-webkit-details-marker { display: none; }
+    .local-faq-item > summary::after { content: '+'; font-weight: 700; font-size: 20px; line-height: 1; color: var(--dark-purple); flex-shrink: 0; }
+    .local-faq-item[open] > summary::after { content: '\2212'; }
+    .local-faq-item { border-bottom: 1px solid rgba(114,110,221,0.14); }
+    .local-faq-item .local-faq-a { padding-bottom: 16px; }
+    .local-faq-item > summary:focus-visible { outline: 2px solid var(--dark-purple); outline-offset: 2px; }
+    .local-vsl .vsl-wrapper { padding-bottom: 177.78%; }
+
+    @media (max-width: 900px) {
+      .proof-grid { grid-template-columns: 1fr; }
+      .pillar { grid-template-columns: 1fr; gap: 28px; }
+      .pillar:nth-child(even) .pillar-photo { order: 0; }
+      .qualify-grid { grid-template-columns: 1fr; }
+    }
+
+    /* MOBILE PRICE LADDER.
+       Three full cards stack to 2.4 phone screens, which alone blew the page past its
+       10-screen budget. This is the same ladder, not a different one: 60/45/30 in that
+       order, most-expensive-first, the 45 still centre so "Most Popular" lands on the
+       anchor, still quoted MONTHLY and still never per-lesson. Only the card LAYOUT
+       changes. "First lesson free" leaves the cards because the section header above
+       already states it, and the per-card button survives on the anchor card only. */
+    @media (max-width: 768px) {
+      .lp-price-card { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "len price" "note note" "cta cta"; align-items: center; gap: 2px 14px; padding: 20px 18px; }
+      .lp-price-length { grid-area: len; margin: 0; font-size: 18px; }
+      .lp-price-monthly { grid-area: price; margin: 0; font-size: 30px; text-align: right; }
+      .lp-price-monthly .mo { font-size: 14px; }
+      .lp-price-note { grid-area: note; margin: 8px 0 0; font-size: 12.5px; }
+      .lp-price-free, .lp-price-divider, .lp-price-label { display: none; }
+      .lp-price-cta { grid-area: cta; margin-top: 16px; }
+      .lp-price-card:not(.popular) .lp-price-cta { display: none; }
+      .lp-price-card.popular { margin-top: 8px; }
+      .lp-pricing { padding: 56px 20px; }
+      .lp-pricing-head { margin-bottom: 34px; }
+      .price-justify { margin-top: 30px; }
+    }
+
+    @media (max-width: 768px) {
+      .promo-bar { font-size: 11.5px; padding: 8px 14px; }
+      .promo-bar .promo-dot { margin: 0 5px; }
+      .hero-photo { margin-bottom: 26px; border-radius: 16px; }
+      .cta-band { padding: 76px 20px; }
+      .proof-section { padding: 56px 20px; }
+      .pillars { padding: 44px 20px; }
+      .qualify { padding: 48px 20px; }
+      .qualify-col { padding: 22px 20px; }
+      .qualify-lede { margin-bottom: 28px; }
+      .price-justify { padding: 22px 20px; }
+
+      /* The long-form block is the page's deepest read and was 2.9 screens on its own. */
+      .local-section { padding: 56px 20px; }
+      .local-vsl { max-width: 240px; margin-bottom: 28px; }
+      .local-body { font-size: 15px; line-height: 1.7; margin-bottom: 32px; }
+      .local-heading { margin-bottom: 20px; }
+      .local-faq { padding-top: 28px; }
+      .local-faq-title { margin-bottom: 20px; }
+      .local-faq-item { margin-bottom: 20px; }
+
+      .proof-head { margin-bottom: 28px; }
+      .proof-grid { gap: 14px; margin-bottom: 24px; }
+      .tcard { padding: 22px 20px; }
+      .tcard-quote { font-size: 13px; margin-bottom: 12px; }
+      .pillars-inner { gap: 28px; }
+      .pillar { gap: 20px; }
+      .pillar h3 { font-size: 20px; margin-bottom: 10px; }
+      .pillar p { font-size: 15px; line-height: 1.65; }
+      .pillar-num { width: 32px; height: 32px; font-size: 15px; margin-bottom: 12px; }
+      /* Crop the photo rather than shrink the block: a 16:9 still at full column width
+         cost 191px per pillar, and there are three of them. */
+      .pillar-photo img { aspect-ratio: 2.4 / 1; object-fit: cover; object-position: center 58%; }
+      .hero { padding: 52px 20px 44px; }
+    }
+
   </style>
     <script type="application/ld+json">
 {
@@ -390,7 +542,7 @@
       "name": "Do we need a piano or keyboard before the first lesson?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. A full-size keyboard works perfectly to start, so you don't need a grand piano. Your instructor will recommend the right option for your space and budget at the first lesson. Call (760) 573-2120 to get started."
+        "text": "No. A full-size keyboard works perfectly to start, so you don't need a grand piano. Your instructor will recommend the right option for your space and budget at the first lesson. Book your free first lesson to get started."
       }
     },
     {
@@ -441,48 +593,200 @@
 </script>
   <noscript>
     <style>
-      /* The objection bullets carry the page's three answers, so they must not
-         depend on the IntersectionObserver that normally fades them in. */
-      .lp-bullet-item { opacity: 1 !important; transform: none !important; }
+      /* The three numbered blocks carry the page's proof, so they must not depend
+         on the IntersectionObserver that normally fades them in. */
+      .pillar { opacity: 1 !important; transform: none !important; }
     </style>
   </noscript>
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-      <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family: 'Work Sans', sans-serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
-    </a>
-    <a href="#form" class="btn btn-primary"><span class="cta-full">Book Your Free Lesson</span><span class="cta-short">Book Free Lesson</span></a>
+<!-- STICKY TOP. Hormozi's page opens with a bar carrying the offer and the market
+     before anything else. Folded into the existing sticky nav as a second row so the
+     whole header costs ~102px instead of two separate sticky elements. -->
+<div class="topbar">
+  <div class="promo-bar">
+    <span class="promo-free">Your first lesson is free</span><span class="promo-dot">&#9679;</span>In-home piano lessons across Orange County
   </div>
-</nav>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+        <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family: 'Work Sans', sans-serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
+      </a>
+      <a href="#form" class="btn btn-primary js-book"><span class="cta-full">Book Your Free Lesson</span><span class="cta-short">Book Free Lesson</span></a>
+    </div>
+  </nav>
+</div>
 
 <main>
 
-<!-- HERO -->
+<!-- HERO.
+     H1 is a PAIN QUESTION, not the outcome. Jonny ruled twice on 2026-09-02 that
+     Hormozi's structure outranks his own copy rules ON THIS PAGE, which knowingly
+     overrides two of them: "pain is one light clause" and "pain is disclosed, never
+     asserted". A second-person pain question is exactly what the second rule forbids.
+     Recorded here so it reads as a decision, not a slip.
+
+     The outcome moved to the subhead, and the subhead carries the keyword the H1 used
+     to hold. Landing Page Experience is already BELOW_AVERAGE on nearly every keyword,
+     so "in-home piano lessons" and "Orange County" stay in the promo bar, the subhead,
+     the title and the meta description rather than leaving the page with the H1. -->
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-eyebrow blur-fade blur-fade-1">Orange County, CA</div>
     <h1 class="hero-heading blur-fade blur-fade-2">
-      In-Home Piano Lessons<br>in <span class="accent-word">Orange County</span>
+      Is there a piano in your home that <span class="accent-word">nobody plays</span>?
     </h1>
-    <p class="hero-sub blur-fade blur-fade-2">From the first notes to songs they are proud to play, taught right at your own piano.</p>
+    <p class="hero-sub blur-fade blur-fade-2">In-home piano lessons in Orange County. From the first notes to songs they are proud to play, taught right at your own piano.</p>
 
-    <div class="hero-cta-wrap blur-fade blur-fade-3">
-      <a href="tel:7605732120" class="btn btn-secondary">&#128222;&nbsp; (760) 573-2120</a>
+    <div class="hero-photo blur-fade blur-fade-3">
+      <picture>
+        <source srcset="brand_assets/piano-lesson-overhead.webp" type="image/webp" />
+        <img src="brand_assets/piano-lesson-overhead.jpg" width="1000" height="545" alt="An instructor and a young student at a piano in a family home in Orange County" />
+      </picture>
     </div>
 
-    <!-- The form lives HERE, not 6,700px down the page.
-         Between 2026-08-19 and 08-26 this page took 21 paid clicks and zero form
-         submissions, while the phone link directly above was tapped nine times. The
-         form was not losing to the phone on merit; it was nine screens below it. The
-         "Book Your Free First Lesson" button that used to sit here only started that
-         scroll, so it is gone: the thing it pointed at is now in its place.
-         The form anchor id moves with it so the shipped ?book=piano deep link and the
-         "Book Your First Lesson" sitelink still resolve. -->
-    <div class="hero-form blur-fade blur-fade-3" id="form">
+    <!-- CTA #1 of 3. All three carry the same label and open the same form. -->
+    <div class="hero-cta-wrap blur-fade blur-fade-4">
+      <a href="#form" class="btn btn-accent btn-accent-lg js-book">Book Your Free First Lesson</a>
+    </div>
+
+    <p class="hero-keyline blur-fade blur-fade-5">
+      Private, one-on-one lessons for kids and adults in Irvine, Newport Beach, Costa Mesa, Lake Forest and Tustin. DOJ and FBI background-checked instructors. Month to month, no contracts.
+    </p>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF at ~1.1 screens, immediately after the hero.
+     Moving this DOWN was recommended once and was wrong; Hormozi puts it here.
+     Cards are static now: a marquee that scrolls a quote out of view while someone is
+     reading it is not proof, and these four are the piano-specific ones.
+     Every quote is VERBATIM. The <mark> highlight is a visual treatment of the exact
+     text, never an edit. Attribution to Mountain City sits in the same block, which is
+     load-bearing on this brand: M&M has no reviews of its own. -->
+<section class="proof-section">
+  <div class="proof-inner">
+    <div class="proof-head">
+      <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <h2>What Orange County Parents Are Reading</h2>
+      <p class="proof-attribution">
+        Music and Mastery and Mountain City Music Co. are the same company. Mountain City Music Co. is our original name. These are verified <a href="https://share.google/vff7oOhVweOWzDic5" target="_blank" rel="noopener">Google reviews</a> from Mountain City Music piano families, quoted exactly as they were written.
+      </p>
+    </div>
+
+    <div class="proof-grid">
+      <div class="tcard">
+        <div class="tcard-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="tcard-quote">"Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher Frank is amazing, <mark>she is learning so quickly</mark> and he is constantly affirming her and being so positive, giving her that confidence she needs but also giving her areas to practice that help so much for the week to come."</p>
+        <div class="tcard-author">Yessenia N.</div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="tcard-quote">"Mountain City Music company is very convenient, <mark>they come to your house and work around your schedule</mark>. Our piano teacher Caitlynn is patient and kind with my daughter. My daughter's piano skills improve every week. Definitely would recommend to others looking for music lessons."</p>
+        <div class="tcard-author">Angelica K.</div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="tcard-quote">"Our piano instructor is so talented and great with our 10yr old. He&#39;s learned so much and <mark>looks forward to practicing and his lessons</mark>."</p>
+        <div class="tcard-author">Victoria H.</div>
+      </div>
+    </div>
+
+    <div class="proof-stats-row">
+      <span>Mountain City Music Co.</span>
+      <span class="proof-dot">&#9679;</span>
+      <span>200+ Students Taught</span>
+      <span class="proof-dot">&#9679;</span>
+      <span>5 Stars on Google</span>
+      <span class="proof-dot">&#9679;</span>
+      <span>Proudly Serving the Community Since 2022</span>
+    </div>
+  </div>
+</section>
+
+<!-- THE THREE NUMBERED BLOCKS at ~2.6 / 3.2 / 3.7, each with a real photo.
+     These are MECHANICS, which the copy playbook permits anywhere AFTER a dream. The
+     dream is in the subhead at 0.3, so they land legally here and not before. -->
+<section class="pillars">
+  <div class="pillars-inner">
+
+    <div class="pillar">
+      <div class="pillar-text">
+        <div class="pillar-num">1</div>
+        <h3>You know who is walking through your door before they get there</h3>
+        <p>Every instructor is LiveScan cleared through the Department of Justice and the FBI before they meet your family. Not a promise on a website, a background check on file. You meet them at the free first lesson, before anything is committed, and if they are not right for your child we re-match you at no charge.</p>
+      </div>
+      <div class="pillar-photo">
+        <picture>
+          <source srcset="brand_assets/piano-lesson-closeup.webp" type="image/webp" />
+          <img src="brand_assets/piano-lesson-closeup.jpg" width="1000" height="545" loading="lazy" alt="An instructor sitting at the piano beside a young student during a lesson at home" />
+        </picture>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-text">
+        <div class="pillar-num">2</div>
+        <h3>The lesson happens at your piano, not across town</h3>
+        <p>No commute after a full school day, no waiting room, no second trip home. Your instructor comes to you in Irvine, Newport Beach, Costa Mesa, Lake Forest or Tustin, and teaches on the instrument your child will actually practice on all week. A full-size keyboard works to start.</p>
+      </div>
+      <div class="pillar-photo">
+        <picture>
+          <source srcset="brand_assets/piano-lesson-overhead-alt.webp" type="image/webp" />
+          <img src="brand_assets/piano-lesson-overhead-alt.jpg" width="1000" height="545" loading="lazy" alt="An instructor and a child playing a piano in a family living room, seen from above" />
+        </picture>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-text">
+        <div class="pillar-num">3</div>
+        <h3>Your first lesson is free, and this is exactly what happens</h3>
+        <p>Tell us where to reach you. We confirm your instructor within 24 hours, then they come to your home and teach a full lesson at no charge. If you carry on it is a flat monthly rate, month to month, with a money-back guarantee.</p>
+      </div>
+      <div class="pillar-photo">
+        <picture>
+          <source srcset="brand_assets/piano-lesson-alt.webp" type="image/webp" />
+          <img src="brand_assets/piano-lesson-alt.jpg" width="1000" height="545" loading="lazy" alt="A child practicing at the family piano between lessons" />
+        </picture>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA #2 of 3 -->
+<section class="cta-band">
+  <div class="cta-band-inner">
+    <h2>Ready to hear them play?</h2>
+    <p>Pick a time that suits your family. The first lesson costs nothing and commits you to nothing.</p>
+    <ol class="cta-steps">
+      <li><span class="cta-step-n">1</span><span>Tell us your phone number, name and email. That is the whole form.</span></li>
+      <li><span class="cta-step-n">2</span><span>We confirm your instructor within 24 hours and agree a time with you.</span></li>
+      <li><span class="cta-step-n">3</span><span>They come to your home and teach a full lesson, free, with nothing owed after.</span></li>
+    </ol>
+    <a href="#form" class="btn btn-accent btn-accent-lg js-book">Book Your Free First Lesson</a>
+  </div>
+</section>
+
+<!-- THE FORM at ~5.1 screens.
+     ONE mount, and it stays in the flow here. The three CTAs promote THIS SAME node to
+     a fixed overlay by toggling a class on <body>, rather than starting a four-screen
+     scroll. That matters twice over: between 2026-08-19 and 08-26 this page took 21
+     paid clicks and zero form submissions while the form sat far down the page, and a
+     SECOND widget instance is not an option either, because two mounts mean duplicate
+     sw-name / sw-email ids and getElementById returning whichever came first.
+     The node never moves in the DOM, so the widget neither remounts nor re-renders.
+
+     id="form" stays on the SECTION, which never becomes fixed. The shipped ?book=piano
+     deep link and the "Book Your First Lesson" sitelink both resolve against it, and
+     the widget's own scrollToInlineForm() aims at it. -->
+<section class="form-section" id="form">
+  <div class="form-inner">
+    <h2>Book your free first piano lesson</h2>
+    <p class="form-lede">Three fields. We reply within 24 hours with an instructor and a time, and the first lesson is free whether or not you carry on.</p>
+    <div class="booking-shell">
+      <button type="button" class="booking-close" aria-label="Close booking form">&#10005;</button>
       <div class="form-embed">
         <div id="scheduling-widget"></div>
         <noscript>
@@ -493,181 +797,83 @@
         </noscript>
       </div>
     </div>
-
-    <p class="hero-body blur-fade blur-fade-4">
-      Private, one-on-one piano lessons for kids and adults, brought to your door in Irvine, Newport Beach, Costa Mesa, Lake Forest &amp; Tustin. DOJ &amp; FBI background-checked instructors.<br>
-      No commute. Money-back guarantee. Month-to-month, no contracts.
-    </p>
+    <ul class="form-trust">
+      <li>DOJ and FBI background-checked instructors</li>
+      <li>Month to month, no contracts</li>
+      <li>Money-back guarantee</li>
+    </ul>
   </div>
 </section>
+<div class="booking-scrim"></div>
 
-<!-- PROOF STRIP -->
-<div class="proof-strip">
-  <div class="proof-stars">★★★★★</div>
-  <div class="proof-label">
-    <a href="https://share.google/vff7oOhVweOWzDic5" target="_blank" rel="noopener">5 Stars on Google for Mountain City Music Co.</a>
-  </div>
-  <div class="proof-stats">
-    <span>Mountain City Music Co.</span>
-    <span class="proof-dot">●</span>
-    <span>200+ Students Taught</span>
-    <span class="proof-dot">●</span>
-    <span>5 Stars on Google</span>
-    <span class="proof-dot">●</span>
-    <span>Proudly Serving the Community Since 2022</span>
-  </div>
-</div>
-
-<!-- WHY FAMILIES -->
-<section class="why-section">
-  <div class="why-inner">
-    <div class="why-text-col">
-      <h2>What Parents Ask <span>Before Booking</span></h2>
-      <ul class="lp-bullet-list">
-        <li class="lp-bullet-item">
-          <div class="lp-check">?</div>
-          <div>
-            <strong>Will they stick with it?</strong>
-            <p>Lessons are built around the songs your child already loves, not just scales and drills. If the instructor is not the right fit, we re-match you at no charge.</p>
-          </div>
-        </li>
-        <li class="lp-bullet-item">
-          <div class="lp-check">?</div>
-          <div>
-            <strong>Who is coming into our home?</strong>
-            <p>Every instructor is LiveScan cleared through the Department of Justice and the FBI before they meet your family. Your first lesson is free, so you can meet them before anything is committed.</p>
-          </div>
-        </li>
-        <li class="lp-bullet-item">
-          <div class="lp-check">?</div>
-          <div>
-            <strong>What if we need to stop?</strong>
-            <p>Month to month, no contracts, and a money-back guarantee. You are never locked into a term.</p>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="why-photo-col">
-      <div class="lp-instructor-circle">
-        <picture>
-          <source srcset="brand_assets/piano-lesson-closeup.webp" type="image/webp" />
-          <img src="brand_assets/piano-lesson-closeup.jpg" width="1000" height="546" loading="lazy" style="object-position: center 62%;" alt="A piano lesson at home, instructor and student at the keyboard together" />
-        </picture>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT OUR LESSONS (VSL) -->
-<section class="vsl-section">
-  <div class="vsl-inner">
-    <h2>Why Most Kids Quit, and What We Do Instead</h2>
-    <div class="vsl-wrapper">
-      <button type="button" class="lite-youtube" data-video-id="oO-8-uReQSw" data-domain="youtube-nocookie.com" aria-label="Play: Why Most Kids Quit, and What We Do Instead" style="background-image:url(brand_assets/piano-lesson-overhead-alt.jpg);background-image:image-set(url(brand_assets/piano-lesson-overhead-alt.webp) type(&quot;image/webp&quot;),url(brand_assets/piano-lesson-overhead-alt.jpg) type(&quot;image/jpeg&quot;))"><span class="lite-youtube-play"></span></button>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials-section">
-  <div class="testimonials-header">
-    <div class="testimonials-stars">★★★★★</div>
-    <div class="testimonials-google">5 Stars on Google for Mountain City Music Co.</div>
-    <h2 class="testimonials-heading">What Families Say</h2>
-    <p class="testimonials-subline" style="font-family:'Work Sans',sans-serif;font-size:15px;line-height:1.6;color:#555;max-width:620px;margin:16px auto 0;">Music &amp; Mastery and Mountain City Music Co. are the same company. Mountain City Music Co. is our original name. These are verified Google reviews from Mountain City Music families in the High Desert and Inland Empire, quoted exactly as they were written.</p>
-  </div>
-  <div class="testimonials-track-wrapper">
-    <div class="testimonials-track">
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My family has been with Mountain City Music Company for one school year now and I have been so impressed with them."</p><div class="tcard-author">Melissa G.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Mountain City Music is a great company, if you are looking for music lessons. It is well organized and well operated. My son's guitar instructor teaches him the fundamentals of music as well and working on songs my son specifically wants to learn. My son really looks forward to his lesson. And it's very convenient that they come to your home."</p><div class="tcard-author">Emily K.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Mountain City Music has been great! My daughter has taken both guitar lessons and voice lessons with their instructors. They are knowledgeable and give helpful tips that have helped my daughter improve immensely. The instructors come to our home, which is so convenient. I love that they work with our charter school. I can't recommend them enough!"</p><div class="tcard-author">Sarah N.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My children are loving their vocal and guitar lessons. The instructors are very patient and knowledgeable. I would recommend Mountain City in a heartbeat!"</p><div class="tcard-author">Karla S.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Our piano instructor is so talented and great with our 10yr old. He&#39;s learned so much and looks forward to practicing and his lessons."</p><div class="tcard-author">Victoria H.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"We are loving our lessons through Mountain City Music! My 2 kids are learning Guitar and Piano and they love the lessons and are learning so much."</p><div class="tcard-author">Ashley H.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Mountain City Music is a wonderful place to receive music lessons, and we are so thankful for their dedication to help young people."</p><div class="tcard-author">Brittany S.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My son Matthew has had nothing but wonderful things to say about his private lessons. We look forward to continuing our time with mountain city music company!"</p><div class="tcard-author">Amber</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My family has enjoyed working with Mountain City Music. The staff is extremely courteous and professional."</p><div class="tcard-author">Jen C.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"This company is the best - my 10 year old son started his sessions at the beginning of October."</p><div class="tcard-author">Jackie S.</div></div>
-      <!-- Duplicate set for seamless loop -->
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My family has been with Mountain City Music Company for one school year now and I have been so impressed with them."</p><div class="tcard-author">Melissa G.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Mountain City Music is a great company, if you are looking for music lessons. It is well organized and well operated. My son's guitar instructor teaches him the fundamentals of music as well and working on songs my son specifically wants to learn. My son really looks forward to his lesson. And it's very convenient that they come to your home."</p><div class="tcard-author">Emily K.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Mountain City Music has been great! My daughter has taken both guitar lessons and voice lessons with their instructors. They are knowledgeable and give helpful tips that have helped my daughter improve immensely. The instructors come to our home, which is so convenient. I love that they work with our charter school. I can't recommend them enough!"</p><div class="tcard-author">Sarah N.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My children are loving their vocal and guitar lessons. The instructors are very patient and knowledgeable. I would recommend Mountain City in a heartbeat!"</p><div class="tcard-author">Karla S.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Our piano instructor is so talented and great with our 10yr old. He&#39;s learned so much and looks forward to practicing and his lessons."</p><div class="tcard-author">Victoria H.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"We are loving our lessons through Mountain City Music! My 2 kids are learning Guitar and Piano and they love the lessons and are learning so much."</p><div class="tcard-author">Ashley H.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"Mountain City Music is a wonderful place to receive music lessons, and we are so thankful for their dedication to help young people."</p><div class="tcard-author">Brittany S.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My son Matthew has had nothing but wonderful things to say about his private lessons. We look forward to continuing our time with mountain city music company!"</p><div class="tcard-author">Amber</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"My family has enjoyed working with Mountain City Music. The staff is extremely courteous and professional."</p><div class="tcard-author">Jen C.</div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-quote">"This company is the best - my 10 year old son started his sessions at the beginning of October."</p><div class="tcard-author">Jackie S.</div></div>
-    </div>
-  </div>
-</section>
-
-
-<!-- LOCAL CONTENT -->
+<!-- LONG FORM at ~6.3, now carrying the video.
+     The VSL used to sit on its own at roughly 2 screens, ahead of the proof and the
+     mechanics. Hormozi's long-form detail block is where someone who is still reading
+     has actually opted in, so the video moved here rather than being dropped. -->
 <section class="local-section">
   <div class="local-inner">
     <h2 class="local-heading">What In-Home Piano Lessons Look Like</h2>
-    <p class="local-body">Piano is where so many musicians begin, and for good reason: it makes music visible. Every note has a place, and a beginner can be playing a melody the whole family recognizes sooner than they expect. Music and Mastery brings private, one-on-one piano lessons to families across Orange County, from Irvine and Tustin to Newport Beach, Costa Mesa and Lake Forest. Instead of loading up after a full school day, your instructor comes to your home and teaches at your own piano or keyboard, in a setting where your child already feels comfortable. Every teacher is DOJ and FBI background-checked through LiveScan, so parents get the safety of a vetted professional and the convenience of keeping lessons on the family calendar. Whether your child is five and learning where middle C lives, a teen working toward the songs they love, or an adult returning to an instrument from years ago, every lesson is built around your goals and pace. Start with a free first lesson, month-to-month with a money-back guarantee, and watch how quickly a personalized, in-home approach turns practice into the best part of the week.</p>
+
+    <div class="local-vsl">
+      <div class="vsl-wrapper">
+        <button type="button" class="lite-youtube" data-video-id="oO-8-uReQSw" data-domain="youtube-nocookie.com" aria-label="Play: Why Most Kids Quit, and What We Do Instead" style="background-image:url(brand_assets/piano-lesson-overhead-alt.jpg);background-image:image-set(url(brand_assets/piano-lesson-overhead-alt.webp) type(&quot;image/webp&quot;),url(brand_assets/piano-lesson-overhead-alt.jpg) type(&quot;image/jpeg&quot;))"><span class="lite-youtube-play"></span></button>
+      </div>
+    </div>
+
+    <p class="local-body">Piano is where so many musicians begin, and for good reason: it makes music visible. Every note has a place, and a beginner can be playing a melody the whole family recognizes sooner than they expect. Music and Mastery brings private, one-on-one piano lessons to families across Orange County, from Irvine and Tustin to Newport Beach, Costa Mesa and Lake Forest. Instead of loading up after a full school day, your instructor comes to your home and teaches at your own piano or keyboard, in a setting where your child already feels comfortable. Every teacher is DOJ and FBI background-checked through LiveScan. Whether your child is five and learning where middle C lives, a teen working toward the songs they love, or an adult returning to an instrument from years ago, every lesson is built around your goals and pace. Start with a free first lesson, month-to-month with a money-back guarantee.</p>
     <div class="local-faq">
       <h3 class="local-faq-title">Frequently Asked Questions</h3>
-      <div class="local-faq-item">
-        <h4 class="local-faq-q">Do we need a piano or keyboard before the first lesson?</h4>
-        <p class="local-faq-a">No. A full-size keyboard works perfectly to start, so you don't need a grand piano. Your instructor will recommend the right option for your space and budget at the first lesson. Call (760) 573-2120 to get started.</p>
-      </div>
-      <div class="local-faq-item">
-        <h4 class="local-faq-q">How young can my child start piano lessons?</h4>
+      <details class="local-faq-item">
+        <summary class="local-faq-q">Do we need a piano or keyboard before the first lesson?</summary>
+        <p class="local-faq-a">No. A full-size keyboard works perfectly to start, so you don't need a grand piano. Your instructor will recommend the right option for your space and budget at the first lesson. <a href="#form" class="js-book">Book your free first lesson</a> to get started.</p>
+      </details>
+      <details class="local-faq-item">
+        <summary class="local-faq-q">How young can my child start piano lessons?</summary>
         <p class="local-faq-a">We teach piano to students as young as five, all the way through adult beginners. Lessons are fully one-on-one, so the pace and songs are matched to your child's age and goals.</p>
-      </div>
-      <div class="local-faq-item">
-        <h4 class="local-faq-q">Which Orange County cities do you cover for in-home piano lessons?</h4>
+      </details>
+      <details class="local-faq-item">
+        <summary class="local-faq-q">Which Orange County cities do you cover for in-home piano lessons?</summary>
         <p class="local-faq-a">Our instructors come to your home across Orange County, including Irvine, Newport Beach, Costa Mesa, Lake Forest, and Tustin. Every session is private and taught in your home. Your first piano lesson is free so you can try it risk-free.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- QUALIFICATION at ~8.0.
+     Hormozi qualifies hard right before the price. Everything named here is a REAL
+     condition of the service, never fabricated scarcity: the five cities are the five
+     we actually cover, weekly is genuinely the product, and five years old is the real
+     starting age. No "limited spots". -->
+<section class="qualify">
+  <div class="qualify-inner">
+    <h2>Who this is for, and who it is not for</h2>
+    <p class="qualify-lede">We would rather tell you now than at the door. Read both columns before you book.</p>
+    <div class="qualify-grid">
+      <div class="qualify-col is-fit">
+        <h3>This is for you if</h3>
+        <ul>
+          <li><span class="qualify-mark">&#10003;</span><span>You live in Irvine, Newport Beach, Costa Mesa, Lake Forest or Tustin.</span></li>
+          <li><span class="qualify-mark">&#10003;</span><span>You want a weekly lesson slot the family can keep, at the same time each week.</span></li>
+          <li><span class="qualify-mark">&#10003;</span><span>The student is five or older, whether a complete beginner or coming back to it after years away.</span></li>
+        </ul>
+      </div>
+      <div class="qualify-col not-fit">
+        <h3>This is not for you if</h3>
+        <ul>
+          <li><span class="qualify-mark">&#8211;</span><span>You want occasional or drop-in lessons. Weekly is how these are built, and it is the only way we run them.</span></li>
+          <li><span class="qualify-mark">&#8211;</span><span>You are outside the five Orange County cities above. We would be taking your booking knowing we cannot staff it.</span></li>
+          <li><span class="qualify-mark">&#8211;</span><span>You are looking for the cheapest option in the county. We are not it, and the next section says plainly what we charge.</span></li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
-<!-- TRUST BADGES -->
-<div class="trust-badges">
-  <div class="trust-badges-inner">
-    <div class="trust-badge">
-      <div class="trust-badge-icon icon-offer">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-      </div>
-      <div class="trust-badge-label label-accent">First Lesson Free</div>
-      <div class="trust-badge-sub">Try risk-free</div>
-    </div>
-    <div class="trust-badge">
-      <div class="trust-badge-icon icon-home">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      </div>
-      <div class="trust-badge-label">We Come to You</div>
-      <div class="trust-badge-sub">In-home lessons</div>
-    </div>
-    <div class="trust-badge">
-      <div class="trust-badge-icon icon-shield">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-      </div>
-      <div class="trust-badge-label">DOJ & FBI Cleared</div>
-      <div class="trust-badge-sub">Background-checked</div>
-    </div>
-    <div class="trust-badge">
-      <div class="trust-badge-icon icon-guarantee">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-      </div>
-      <div class="trust-badge-label">Money-Back Guarantee</div>
-      <div class="trust-badge-sub">100% satisfaction</div>
-    </div>
-    <div class="trust-badge">
-      <div class="trust-badge-icon icon-contract">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      </div>
-      <div class="trust-badge-label">Month-to-Month</div>
-      <div class="trust-badge-sub">No long-term contracts</div>
-    </div>
-  </div>
-</div>
 
-<!-- PRICING -->
+<!-- PRICE at ~9.2, at the BOTTOM, after the form, with justification and an explicit
+     disqualifier. Moving price above the fold was recommended once and was wrong;
+     Hormozi puts it last. Ladder is 60/$300, 45/$240, 30/$160, quoted MONTHLY,
+     most-expensive-first, with the 45 in the centre so "Most Popular" lands on the
+     anchor. Never a per-lesson unit price. -->
 <section class="lp-pricing">
   <div class="lp-pricing-inner">
     <div class="lp-pricing-head">
@@ -682,7 +888,7 @@
         <div class="lp-price-label">Then, monthly</div>
         <div class="lp-price-monthly">$300<span class="mo">/mo</span></div>
         <div class="lp-price-note">Four weekly lessons a month. The most room to work in a single sitting.</div>
-        <a href="#form" class="btn btn-primary lp-price-cta" style="width:100%;justify-content:center;">Book Your Free First Lesson</a>
+        <a href="#form" class="btn btn-primary lp-price-cta js-book" style="width:100%;justify-content:center;">Book Your Free First Lesson</a>
       </div>
       <div class="lp-price-card popular">
         <div class="lp-price-badge">Most Popular</div>
@@ -692,7 +898,7 @@
         <div class="lp-price-label">Then, monthly</div>
         <div class="lp-price-monthly">$240<span class="mo">/mo</span></div>
         <div class="lp-price-note">Four weekly lessons a month. The length most of our students settle on.</div>
-        <a href="#form" class="btn btn-accent lp-price-cta" style="width:100%;justify-content:center;">Book Your Free First Lesson</a>
+        <a href="#form" class="btn btn-accent lp-price-cta js-book" style="width:100%;justify-content:center;">Book Your Free First Lesson</a>
       </div>
       <div class="lp-price-card">
         <div class="lp-price-length">30-Minute</div>
@@ -701,33 +907,32 @@
         <div class="lp-price-label">Then, monthly</div>
         <div class="lp-price-monthly">$160<span class="mo">/mo</span></div>
         <div class="lp-price-note">Four weekly lessons a month. Suits our youngest students best.</div>
-        <a href="#form" class="btn btn-primary lp-price-cta" style="width:100%;justify-content:center;">Book Your Free First Lesson</a>
+        <a href="#form" class="btn btn-primary lp-price-cta js-book" style="width:100%;justify-content:center;">Book Your Free First Lesson</a>
+      </div>
+    </div>
+
+    <div class="price-justify">
+      <h3>Why it costs what it costs</h3>
+      <p>It buys a private instructor for the whole lesson with nobody else in the room, their drive to your address, a DOJ and FBI LiveScan clearance before they meet your family, and a free re-match if the first teacher is not right for your child. It is month to month with a money-back guarantee.</p>
+      <div class="price-disqualify">
+        <strong>And plainly: do not book if this is not the moment.</strong>
+        <p>If a weekly slot is not something the family calendar can hold right now, the free lesson will go well and then the schedule will win. Come back when the week has room in it, and we will still be here.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CLOSING CTA. The form itself now lives in the hero, so this sends people back
-     up to it rather than mounting a second widget. Two instances would mean duplicate
-     sw-name / sw-email ids and getElementById returning whichever came first. -->
-<section class="form-section">
-  <div class="form-inner">
-    <h2>Ready to hear them play?</h2>
-    <a href="#form" class="btn btn-accent btn-accent-lg">Book Your Free First Lesson</a>
+<!-- CTA #3 of 3. Replaces the old "Prefer a Call?" block: one action, repeated three
+     times, is the whole point of the structure. The footer keeps a tel: link for
+     anyone who genuinely wants to dial. -->
+<section class="cta-band">
+  <div class="cta-band-inner">
+    <h2>Start with the free lesson</h2>
+    <p>One instructor, at your piano, at a time that works. Nothing to pay and nothing to cancel.</p>
+    <a href="#form" class="btn btn-accent btn-accent-lg js-book">Book Your Free First Lesson</a>
+    <p class="cta-sub">We reply within 24 hours. Your details stay private.</p>
   </div>
 </section>
-
-<!-- PREFER A CALL -->
-<div class="prefer-call">
-  <div class="prefer-call-inner">
-    <h3>Prefer a Call?</h3>
-    <p>Leave your name and number and we'll get back to you within 24 hours.</p>
-    <a href="tel:7605732120" class="prefer-call-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11.5a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .84h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-      (760) 573-2120
-    </a>
-  </div>
-</div>
 
 <!-- FOOTER -->
 </main>
@@ -748,35 +953,83 @@
 </footer>
 
 <script>
-// Testimonials marquee, start only when visible
-const testimonialsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    const track = entry.target.querySelector('.testimonials-track');
-    if (track) track.classList.toggle('playing', entry.isIntersecting);
-  });
-}, { threshold: 0.1 });
-const testimonialsSection = document.querySelector('.testimonials-section');
-if (testimonialsSection) testimonialsObserver.observe(testimonialsSection);
+(function () {
+  // The three CTAs open the booking form as an OVERLAY.
+  //
+  // They do not scroll to it. This page already ran the other experiment: with the
+  // form four screens down and a button at the top that only started a scroll, it
+  // took 21 paid clicks and zero submissions between 2026-08-19 and 08-26.
+  //
+  // The overlay promotes the EXISTING .booking-shell node to position:fixed. It is
+  // never cloned and never moved in the DOM, so the widget does not remount, there is
+  // only ever one #scheduling-widget, and there is exactly one sw-name / sw-email in
+  // the document. A second mount would break getElementById for both.
+  var body = document.body;
+  var shell = document.querySelector('.booking-shell');
+  var scrim = document.querySelector('.booking-scrim');
+  var closeBtn = document.querySelector('.booking-close');
+  var lastFocused = null;
 
-// Why bullet list, fade in on scroll
-const whyObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.querySelectorAll('.lp-bullet-item').forEach(item => item.classList.add('animate-in'));
-      whyObserver.unobserve(entry.target);
+  if (!shell || !scrim || !closeBtn) return;
+
+  function openBooking(trigger) {
+    lastFocused = trigger || document.activeElement;
+    body.classList.add('booking-open');
+    // Focus the first real input so a phone keyboard opens on the field we most want.
+    var first = shell.querySelector('input, select, button:not(.booking-close)');
+    if (first) { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }
+  }
+
+  function closeBooking() {
+    body.classList.remove('booking-open');
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      try { lastFocused.focus({ preventScroll: true }); } catch (e) { lastFocused.focus(); }
     }
-  });
-}, { threshold: 0.2 });
-const whyList = document.querySelector('.lp-bullet-list');
-if (whyList) whyObserver.observe(whyList);
+    lastFocused = null;
+  }
 
-// Smooth scroll for CTA buttons
-document.querySelectorAll('a[href="#form"]').forEach(link => {
-  link.addEventListener('click', function(e) {
+  // Delegated, so a CTA rendered later still works.
+  document.addEventListener('click', function (e) {
+    var trigger = e.target.closest('.js-book');
+    if (!trigger) return;
     e.preventDefault();
-    document.getElementById('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    openBooking(trigger);
   });
-});
+
+  closeBtn.addEventListener('click', closeBooking);
+  scrim.addEventListener('click', closeBooking);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && body.classList.contains('booking-open')) closeBooking();
+  });
+
+  // A visitor arriving on ?book=piano asked to book, so bring them the form rather
+  // than a view of it. The widget separately scrolls #form into view; that section
+  // stays in the flow and never becomes fixed, so the two do not fight.
+  try {
+    if (new URLSearchParams(window.location.search).has('book')) {
+      window.addEventListener('load', function () { openBooking(null); });
+    }
+  } catch (e) {}
+})();
+
+// The three numbered blocks fade in as they arrive. Content, not decoration, so the
+// no-JS and reduced-motion paths both leave them fully visible.
+(function () {
+  var pillars = document.querySelectorAll('.pillar');
+  if (!('IntersectionObserver' in window)) {
+    pillars.forEach(function (el) { el.classList.add('animate-in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  pillars.forEach(function (el) { io.observe(el); });
+})();
 </script>
 <script>
 (function () {
@@ -860,12 +1113,16 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <!-- This page sells one instrument, so the form opens on it. A ?book= value in the URL still overrides this. -->
 <script>window.MCMC_PREFILL_INSTRUMENT = 'Piano';</script>
+<!-- Phone first, on THIS page only. LEAD_ONLY is on for every non-MCMC page, so an
+     ungated reorder in the widget would have changed the form on all 35 M&M pages to
+     serve one paid landing page. Delete this line to revert. -->
+<script>window.MCMC_PHONE_FIRST = true;</script>
 <!-- This page serves five OC cities, so it cannot set MCMC_PREFILL_CITY the way the
      24 single-city pages do. Without a region label the form headline fell through to
      the words "your area", which is what a visitor who searched "piano lessons irvine"
      was being answered with. -->
 <script>window.MCMC_AREA_LABEL = 'Orange County';</script>
-<script src="/js/scheduling-widget.js?v=2026082702"></script>
+<script src="/js/scheduling-widget.js?v=20260902"></script>
 
 <script>
 (function(){
@@ -886,21 +1143,5 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 })();
 </script>
 
-<script>
-(function(){
-  if (!('IntersectionObserver' in window)) return;
-  var observer = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      var tracks = entry.target.querySelectorAll('.chips-track, .testimonials-track');
-      tracks.forEach(function(t){
-        t.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
-      });
-    });
-  }, { rootMargin: '100px' });
-  document.querySelectorAll('.chips-section, .testimonials-section').forEach(function(s){
-    observer.observe(s);
-  });
-})();
-</script>
 </body>
 </html>

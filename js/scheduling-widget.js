@@ -30,6 +30,14 @@
   // don't have instructor availability data wired in).
   const LEAD_ONLY = window.MCMC_LEAD_ONLY || (BRAND_SOURCE !== 'mcmc');
 
+  // Phone-first field order, opt-in PER PAGE.
+  //
+  // LEAD_ONLY is on for every non-MCMC page, so reordering the fields
+  // unconditionally would silently change the form on all 35 M&M pages to serve
+  // one paid landing page. This flag keeps the blast radius at whichever page
+  // sets it, and reverts by deleting one line from that page.
+  const PHONE_FIRST = !!window.MCMC_PHONE_FIRST;
+
   const INSTRUMENTS = ['Guitar', 'Piano', 'Voice', 'Bass', 'Ukulele', 'Drums', 'Music Production', 'Other'];
 
   // ─── Deep links ────────────────────────────────────────────────────────────
@@ -674,6 +682,32 @@
     `;
   }
 
+  // The three contact fields, in the order this page asked for.
+  //
+  // Same markup and the same ids either way, so validation, stashUserData() and
+  // the enhanced-conversions payload are all order-independent and untouched.
+  function contactFields() {
+    const name = `
+        <div class="sw-field ${fieldErrorClass('name')}">
+          <label class="sw-label" for="sw-name">Your Name</label>
+          <input type="text" id="sw-name" name="name" autocomplete="name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
+          ${fieldErrorHtml('name')}
+        </div>`;
+    const email = `
+        <div class="sw-field ${fieldErrorClass('email')}">
+          <label class="sw-label" for="sw-email">Email</label>
+          <input type="email" id="sw-email" name="email" autocomplete="email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
+          ${fieldErrorHtml('email')}
+        </div>`;
+    const phone = `
+        <div class="sw-field ${fieldErrorClass('phone')}">
+          <label class="sw-label" for="sw-phone">Phone</label>
+          <input type="tel" id="sw-phone" name="phone" autocomplete="tel" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
+          ${fieldErrorHtml('phone')}
+        </div>`;
+    return PHONE_FIRST ? phone + name + email : name + email + phone;
+  }
+
   // ONE screen, three fields.
   //
   // This was two screens and eight required fields. On the paid Orange County
@@ -728,23 +762,7 @@
           </div>
         ` : ''}
 
-        <div class="sw-field ${fieldErrorClass('name')}">
-          <label class="sw-label" for="sw-name">Your Name</label>
-          <input type="text" id="sw-name" name="name" autocomplete="name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
-          ${fieldErrorHtml('name')}
-        </div>
-
-        <div class="sw-field ${fieldErrorClass('email')}">
-          <label class="sw-label" for="sw-email">Email</label>
-          <input type="email" id="sw-email" name="email" autocomplete="email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
-          ${fieldErrorHtml('email')}
-        </div>
-
-        <div class="sw-field ${fieldErrorClass('phone')}">
-          <label class="sw-label" for="sw-phone">Phone</label>
-          <input type="tel" id="sw-phone" name="phone" autocomplete="tel" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
-          ${fieldErrorHtml('phone')}
-        </div>
+        ${contactFields()}
 
         <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" id="sw-hp" name="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 

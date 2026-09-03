@@ -2,7 +2,7 @@
 
 ## Project Identity
 **Music and Mastery** is a DBA of the same parent business that operates Mountain City Music Co. (MCMC). This site targets **Orange County and Los Angeles**:
-- **OC branch (4 cities):** Irvine, Newport Beach, Costa Mesa, Tustin
+- **OC branch (5 cities):** Irvine, Newport Beach, Costa Mesa, Lake Forest, Tustin
 - **LA branch (7 cities):** Beverly Hills, West Hollywood, East Hollywood, Burbank, Pasadena, Pacific Palisades, Malibu
 
 Landing pages cover **all instruments** (guitar, piano, voice, bass, ukulele, drums, music production) — **not guitar-specific** like the MCMC `beginner-*.html` pages.
@@ -12,7 +12,7 @@ Landing pages cover **all instruments** (guitar, piano, voice, bass, ukulele, dr
 - Email: `jonny@mtncitymusic.com`
 - Google Ads tag: `AW-11066542604`
 - GA4 Measurement ID: `G-SPQ1FGTKTV`
-- JotForm ID: `260516786213155` (used on **all M&M pages** — index, instructors, and all 22 location pages) — reused across brands via a hidden `brand_source` URL param. M&M does not use the guitar-specific form `260520648689164` that MCMC location pages use, because M&M launches generic music lessons.
+- JotForm ID: `260516786213155` (used on **all M&M pages** — index, instructors, and all 24 location pages) — reused across brands via a hidden `brand_source` URL param. M&M does not use the guitar-specific form `260520648689164` that MCMC location pages use, because M&M launches generic music lessons.
 - Instagram: `@mountain_city_music`
 - TikTok: `@mountain_city_music`
 - Brand system (REBRANDED 2026-06-28): M&M logo = treble clef + gold shooting-star (files in `brand_assets/logo/`). Palette is PURPLE + GOLD + neutrals: `--dark-purple #726edd` (primary), `--accent #4f4ab8` (deep purple, buttons/links), `--light-purple #e4e3ff` (tints), `--gold #c6954f` (premium accent), `--cream #f6f1e8` / `--cream-deep #efe7d8` (warm section backgrounds), `--black #0d0d0d`, `--off-white #f9f8ff`. Red-orange (`#d63e0d`) is RETIRED, do not reintroduce it. Fonts: Playfair Display (display/headings) + Work Sans (body). Hero/warm sections use the cream-to-soft-lavender gradient `linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%)`. The canonical brand kit is `brand_assets/BRAND_KIT.md`.
@@ -30,12 +30,12 @@ These are business rules, not style preferences. They beat any design instinct.
 
 | Rule | What it means here |
 |---|---|
-| **Lead with the outcome, not the offer or the mechanics** | The first screenful names something the visitor wants. The 4 `*-lessons-orange-county.html` pages are the reference implementation: one concrete, instrument-specific dream line each. Background checks, no-commute and the free lesson are PROOF and come after. |
+| **Lead with the outcome, not the offer or the mechanics** | The first screenful names something the visitor wants. The 6 `*-lessons-orange-county.html` pages are the reference implementation: one concrete, instrument-specific dream line each. Background checks, no-commute and the free lesson are PROOF and come after. |
 | **No promised rate of progress, ever** | Banned: "progress happens fast", "you'll be amazed at what a few months can do", "we prove it every week", any number of weeks. Approved: "sooner than they expect". |
 | **The offer is ONE FREE FIRST LESSON** | Not a "trial", and never plural. "Book Your Trial Lessons" was a fossil of a retired 50%-off-3-lessons offer and survived on 53 buttons here. |
 | **Pricing is 60/$300, 45/$240, 30/$160, quoted MONTHLY, most-expensive-first** | Identical to Mountain City's ladder by decision (2026-08-11) while M&M establishes itself; the premium positioning is not cancelled, it is unfunded until the proof carries it. Never quote a per-lesson price. |
 | **Attribution is load-bearing on this brand** | M&M has no testimonial of its own. Every citation of a Mountain City review must say in the same block that the two are one company, and every stat bar leads with "Mountain City Music Co.". Do not strip that for tidiness. |
-| **This brand serves BOTH Orange County and Los Angeles** | 4 OC cities and 7 LA cities, 22 landing pages. Any page that names only OC is wrong. |
+| **This brand serves BOTH Orange County and Los Angeles** | 5 OC cities and 7 LA cities, 24 city landing pages. Any page that names only OC is wrong. |
 | **No invented specifics, no internal contradictions, no fabricated scarcity** | "Right now Jonny is the only instructor" is real capacity and fine. "Limited spots" is not. |
 | **No em dashes. No exclamation on a sales line.** | Run `bash scripts/install-hooks.sh` once per clone — the em-dash guard is a real script but the hook is untracked and was missing from this clone until 2026-08-16. |
 | **Review quotes are verbatim and never edited** | The 2026-07-30 restoration (487 changes, 27 files) put these right. Do not re-touch them. |
@@ -43,7 +43,7 @@ These are business rules, not style preferences. They beat any design instinct.
 **Surfaces a `*.html` edit misses:** `js/scheduling-widget.js` (~40 customer-facing strings, and
 changing it REQUIRES the `?v=` bump documented at the bottom of this file); the `FAQPage` and
 `Person` JSON-LD, which mirror the FAQ answers and the founder bio; `<title>` and
-`meta description` on all 34 pages; `alt` and `aria-label` text.
+`meta description` on all 38 pages; `alt` and `aria-label` text.
 
 **This site mirrors `mtncitymusic.com` on purpose.** The mirror is deliberate, but fixes do NOT
 propagate on their own. When you fix copy here, check the sibling repo in the same pass.
@@ -62,7 +62,7 @@ propagate on their own. When you fix copy here, check the sibling repo in the sa
 
 ## Project State
 - **Live production site** (when deployed via Vercel) — not a design exercise.
-- Files in project root: `index.html`, `instructors.html`, `faq.html`, 11 `beginner-*.html` city pages, 11 `in-home-*.html` city pages, plus `privacy-policy.html`, `terms-of-service.html`, `thank-you.html`, `banner.html`, `flyer.html`.
+- Files in project root: `index.html`, `instructors.html`, `faq.html`, 12 `beginner-*.html` city pages, 12 `in-home-*.html` city pages, 6 `*-lessons-orange-county.html` instrument pages, plus `privacy-policy.html`, `terms-of-service.html`, `thank-you.html`, `banner.html`, `flyer.html`.
 - **No build step.** All CSS is inline `<style>` blocks per page. No Tailwind, no PostCSS.
 - **Do NOT add Tailwind via CDN.** The MCMC site removed it for performance reasons. The inline `<style>` block starts with a "Baseline reset" that replaces the preflight subset the pages relied on — keep those rules.
 
