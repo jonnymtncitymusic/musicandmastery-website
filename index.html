@@ -1183,6 +1183,9 @@
 
 <script>window.MCMC_SCHEDULING_API = 'https://cron-runner-production-a510.up.railway.app';</script>
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
+<!-- Booking flow ON: every city and instrument this page offers has real,
+     day-scoped instructor availability behind it. -->
+<script>window.MCMC_LEAD_ONLY = false;</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <script>
   // MODAL + lazy widget load. The widget is 65KB and is only used inside this
@@ -1195,7 +1198,7 @@
     if (widgetLoadPromise) return widgetLoadPromise;
     var p = new Promise(function(resolve, reject) {
       var s = document.createElement('script');
-      s.src = '/js/scheduling-widget.js?v=20260902';
+      s.src = '/js/scheduling-widget.js?v=20260909';
       s.async = true;
       s.onload = resolve;
       s.onerror = function () {

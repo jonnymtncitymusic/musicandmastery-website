@@ -787,10 +787,13 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 <!-- Music & Mastery lead capture widget -->
 <script>window.MCMC_SCHEDULING_API = 'https://cron-runner-production-a510.up.railway.app';</script>
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
+<!-- Lead capture only: no bookable availability behind this page, so a slot
+     picker would search, find nothing, and dead-end the visitor. -->
+<script>window.MCMC_LEAD_ONLY = true;</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <!-- This page sells one instrument, so the form opens on it. A ?book= value in the URL still overrides this. -->
 <script>window.MCMC_PREFILL_INSTRUMENT = 'Voice';</script>
-<script src="/js/scheduling-widget.js?v=20260902"></script>
+<script src="/js/scheduling-widget.js?v=20260909"></script>
 
 <script>
 (function(){

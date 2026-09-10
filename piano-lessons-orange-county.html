@@ -1028,6 +1028,9 @@
 <!-- Music & Mastery lead capture widget -->
 <script>window.MCMC_SCHEDULING_API = 'https://cron-runner-production-a510.up.railway.app';</script>
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
+<!-- Booking flow ON: every city and instrument this page offers has real,
+     day-scoped instructor availability behind it. -->
+<script>window.MCMC_LEAD_ONLY = false;</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <!-- This page sells one instrument, so the form opens on it. A ?book= value in the URL still overrides this. -->
 <script>window.MCMC_PREFILL_INSTRUMENT = 'Piano';</script>
@@ -1040,7 +1043,7 @@
      the words "your area", which is what a visitor who searched "piano lessons irvine"
      was being answered with. -->
 <script>window.MCMC_AREA_LABEL = 'Orange County';</script>
-<script src="/js/scheduling-widget.js?v=20260902"></script>
+<script src="/js/scheduling-widget.js?v=20260909"></script>
 
 <script>
 (function(){

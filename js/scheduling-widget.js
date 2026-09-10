@@ -26,9 +26,21 @@
   const AREA_LABEL = window.MCMC_AREA_LABEL || '';
 
   // Lead-only mode skips the availability search entirely and shows a single
-  // contact form. Auto-on when brand source isn't MCMC (since other brands
-  // don't have instructor availability data wired in).
-  const LEAD_ONLY = window.MCMC_LEAD_ONLY || (BRAND_SOURCE !== 'mcmc');
+  // contact form.
+  //
+  // This was `window.MCMC_LEAD_ONLY || (BRAND_SOURCE !== 'mcmc')`, which made the flag
+  // opt-IN ONLY: `false || true` is true, so a page setting MCMC_LEAD_ONLY = false was a
+  // no-op and there was no way to express "this brand books". The auto-on default stays,
+  // because it is right for a page that has no availability behind it, but an explicit
+  // value now wins. `!== undefined` and not a truthiness check, precisely so that false
+  // means false.
+  //
+  // The justification for defaulting non-MCMC brands to lead-only was that they had no
+  // instructor availability wired in. Music & Mastery does as of 2026-09-08, day scoped
+  // and verified live, so the pages that have real coverage behind them opt out.
+  const LEAD_ONLY = window.MCMC_LEAD_ONLY !== undefined
+    ? !!window.MCMC_LEAD_ONLY
+    : (BRAND_SOURCE !== 'mcmc');
 
   // Phone-first field order, opt-in PER PAGE.
   //
@@ -198,8 +210,13 @@
   let state = freshState();
 
   // ─── API ───────────────────────────────────────────────────────────────────
+  // Brand scoped. Both brands share one scheduler, and unscoped this returned all 22
+  // cities: a Music & Mastery visitor was offered Hesperia, Victorville and Apple Valley,
+  // which are Mountain City's. The backend treats an absent brand as "every brand", so an
+  // older cached copy of this file keeps working.
   async function fetchCities() {
-    const res = await fetch(`${API_BASE}/api/scheduling/cities`);
+    const res = await fetch(
+      `${API_BASE}/api/scheduling/cities?brand=${encodeURIComponent(BRAND_SOURCE)}`);
     if (!res.ok) throw new Error('Could not load cities');
     const data = await res.json();
     return data.cities || [];
@@ -209,7 +226,9 @@
     const res = await fetch(`${API_BASE}/api/scheduling/availability`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(params),
+      // Scoped for the same reason as the city list. A city travels in a request body and
+      // a body is not a dropdown, so this is re-stated rather than assumed.
+      body: JSON.stringify({ ...params, brand: BRAND_SOURCE }),
     });
     if (!res.ok) throw new Error('Could not load availability');
     return res.json();
@@ -219,7 +238,9 @@
     const res = await fetch(`${API_BASE}/api/scheduling/book`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(params),
+      // brand_source rides along the way it already does on submitLead. Without it a
+      // Music & Mastery booking reached Jonny's inbox wearing no brand at all.
+      body: JSON.stringify({ ...params, brand_source: BRAND_SOURCE }),
     });
     if (res.status === 409) {
       const data = await res.json();
@@ -350,7 +371,15 @@
   }
 
   function renderStep1() {
-    const cityOptions = state.cities.map(c =>
+    // The form paints before /cities resolves, so on a pre-filled landing page state.city
+    // is set while the list is still empty. Carry it as its own option in that window:
+    // without it the dropdown reads "Choose your city..." while state says otherwise, and
+    // the visitor submits a city they never saw selected. The real list replaces this once
+    // it lands. Ported from the mtncitymusic copy, which fixed this in production while
+    // this file's step 1 had never executed for anyone.
+    const cityList = state.cities.length ? state.cities
+      : (state.city ? [state.city] : []);
+    const cityOptions = cityList.map(c =>
       `<option value="${c}" ${state.city === c ? 'selected' : ''}>${c}</option>`
     ).join('');
 
@@ -505,10 +534,16 @@
       slotsHtml += `</div></div>`;
     }
 
+    // The list is the instructor's REAL open capacity, so it is described as that rather
+    // than padded or apologised for. A short list is a true statement about a working
+    // teacher's week, not a defect to hide, and the lead time was cut to three days on
+    // 2026-09-09 so the honest version of this sentence has to carry the confirmation step
+    // with it: nothing here is on anyone's calendar until we have spoken to them.
     return `
       <div class="sw-step">
         <h3 class="sw-heading">Available Times</h3>
         <p class="sw-subtext">${state.instrument} lessons in ${state.city} (${state.lessonLength} min)</p>
+        <p class="sw-subtext sw-confirm-note">These are the times we currently have open. We hold the one you pick while we confirm it with your instructor, then email you within 24 hours.</p>
         ${instructorFilter}
         <div class="sw-slots-container">${slotsHtml}</div>
         <div class="sw-step2-actions">
@@ -576,6 +611,7 @@
         <div class="sw-pay-eyebrow">Free First Lesson</div>
         <div class="sw-pay-headline">Your first lesson is free</div>
         <div class="sw-pay-subtext">Nothing to pay today. This is a relaxed first lesson to meet your teacher, with no obligation to continue. If you keep going, it's $${MONTHLY_RATES[state.lessonLength]}/mo for your weekly ${state.lessonLength}-minute lesson, based on four lessons a month.</div>
+        <div class="sw-pay-subtext sw-confirm-note">We hold this time while we confirm it with ${state.selectedSlot ? state.selectedSlot.instructor_name : 'your instructor'}, then email you within 24 hours.</div>
         <button id="sw-submit" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
           ${state.loading ? '<span class="sw-spinner"></span> Booking...' : 'Book My Free Lesson'}
         </button>
@@ -608,10 +644,18 @@
       `;
     }
 
-    const headline = c.isCallback ? "We'll Call You Soon" : "Your Free Lesson Is Booked";
+    // "Your Free Lesson Is Booked" asserted a lesson that no instructor had agreed to yet.
+    // With a three-day lead time there is no longer a quiet week in which to make that
+    // true, and a family who reads "booked" and then takes a reschedule call was told
+    // something we did not know. The slot IS genuinely held, so that is the word.
+    //
+    // The trailing "We'll confirm the details by email shortly" is gone because the server
+    // `message` now carries the confirmation step itself, and saying it twice reads as a
+    // hedge rather than as clarity.
+    const headline = c.isCallback ? "We'll Call You Soon" : "Your Time Is Held";
     const text = c.isCallback
       ? "Thanks! We've got your slot reserved and will call within 24 hours to walk you through everything."
-      : `${c.message} Your first lesson is free, and there is nothing to pay today. We'll confirm the details by email shortly.`;
+      : `${c.message} Your first lesson is free and there is nothing to pay today.`;
 
     return `
       <div class="sw-step sw-step-confirm">
@@ -1211,6 +1255,9 @@
         callback_requested: true,
         honeypot: '',
       });
+      // The callback path is a conversion like any other, and it was the one path that
+      // never stashed the identifiers, so its enhanced-conversion match was always empty.
+      stashUserData();
       if (typeof gtag === 'function') {
         gtag('event', 'form_submission', { event_category: 'callback_request', event_label: state.instrument });
       }
@@ -1271,6 +1318,7 @@
         margin: 0 0 8px;
       }
       .sw-subtext { color: #666; font-size: 14px; margin: 0 0 24px; line-height: 1.5; }
+      .sw-confirm-note { font-size: 13px; color: #595959; margin-top: -16px; }
       .sw-subtext a { color: #726edd; }
       .sw-field { margin-bottom: 16px; }
       .sw-label {
@@ -1281,7 +1329,7 @@
         margin-bottom: 6px;
         color: #333;
       }
-      .sw-optional { font-weight: 400; color: #999; font-size: 12px; }
+      .sw-optional { font-weight: 400; color: #595959; font-size: 12px; }
       .sw-select, .sw-input {
         width: 100%;
         padding: 10px 14px;
@@ -1381,7 +1429,7 @@
         font-size: 11px;
         letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: #fc4e1a;
+        color: #d63e0d;
         margin-bottom: 6px;
       }
       .sw-pay-headline {
@@ -1614,19 +1662,24 @@
       }
     }
 
-    // Mode and the pre-fills come from page globals and the URL alone, so they
-    // are settled before any network call. requestedInstrument() only ever
-    // returns a member of INSTRUMENTS, so unlike city it needs no reconciling
-    // against a fetched list.
+    // Mode and the pre-fills come from page globals and the URL alone, so they are
+    // settled before any network call. requestedInstrument() only ever returns a member
+    // of INSTRUMENTS, so unlike city it needs no reconciling against a fetched list.
     state.instrument = requestedInstrument();
     if (LEAD_ONLY) {
       // In lead-only mode the multi-step booking flow doesn't apply.
       // Open straight to the lead form (step 5).
       state.step = 5;
       state.mode = 'lead_only';
-      if (typeof window.MCMC_PREFILL_CITY === 'string' && window.MCMC_PREFILL_CITY) {
-        state.city = window.MCMC_PREFILL_CITY;
-      }
+    }
+    // Applied for BOTH modes, and OUTSIDE the branch above on purpose. It used to sit
+    // inside the LEAD_ONLY block here, with the booking path setting the city only after
+    // /cities had resolved. That gated the pre-fill on a network round trip: the form
+    // painted with no city selected, and anyone who acted during that window was stopped
+    // by "Please select your city." on their own city's page. It is reconciled against the
+    // real list below, once there is a real list to reconcile against.
+    if (typeof window.MCMC_PREFILL_CITY === 'string' && window.MCMC_PREFILL_CITY) {
+      state.city = window.MCMC_PREFILL_CITY;
     }
 
     if (!inlineMode) {
@@ -1663,20 +1716,39 @@
       if (bookParamPresent()) scrollToInlineForm();
     }
 
-    // Load cities on init (skip in lead-only mode — that flow does not ask for a city)
+    // Load cities on init (skip in lead-only mode, that flow does not ask for a city)
     if (!LEAD_ONLY) {
+      let loaded = [];
       try {
-        state.cities = await fetchCities();
+        loaded = await fetchCities();
       } catch (e) {
         console.warn('Could not pre-load cities:', e);
       }
-      // Apply city pre-fill; in MCMC mode this must match the cities dropdown.
-      if (typeof window.MCMC_PREFILL_CITY === 'string' && window.MCMC_PREFILL_CITY
-          && state.cities.includes(window.MCMC_PREFILL_CITY)) {
-        state.city = window.MCMC_PREFILL_CITY;
+      // A failed fetch leaves the optimistic pre-fill alone. Re-rendering an identical
+      // form would only risk disturbing a visitor already typing.
+      if (!loaded.length) return;
+
+      state.cities = loaded;
+      // Reconcile: drop a pre-filled city the backend does not actually serve, rather than
+      // letting the form submit one that can never be matched.
+      if (state.city && !state.cities.includes(state.city)) state.city = '';
+
+      // MODAL MODE NEEDS THIS TOO, and that is the whole bug.
+      //
+      // On the five modal pages this script is lazy loaded on first intent, so init() does
+      // not run until the visitor has already clicked "Book a Free Lesson". It renders
+      // immediately, this fetch resolves after that render, and the re-render used to be
+      // gated `if (inlineMode)`. So the first open of the modal showed a city dropdown
+      // with ZERO options and no way to proceed, 100% of the time and not as a race:
+      // measured on 2026-09-09 it was still empty three seconds after the page settled,
+      // and only a second open populated it. The mtncitymusic copy has carried this branch
+      // for weeks; this one never got it, and step 1 had never run here to expose it.
+      if (inlineMode) {
+        render();
+      } else {
+        const overlay = document.getElementById('booking-overlay');
+        if (overlay && overlay.classList.contains('open')) render();
       }
-      // Re-render so the freshly loaded cities appear.
-      if (inlineMode) render();
     }
   }
 
