@@ -52,6 +52,16 @@
 
   const INSTRUMENTS = ['Guitar', 'Piano', 'Voice', 'Bass', 'Ukulele', 'Drums', 'Music Production', 'Other'];
 
+  // The city dropdown's escape hatch. The list is every city an instructor covers, and
+  // a family one town over used to hit a wall: no option fit, so they left. Picking this
+  // opens a text field for the real city and routes them through the LEAD path only.
+  // No instructor covers an unknown city, so an availability search would return nothing
+  // and a booking is impossible; the lead reaches Jonny with the typed city on it.
+  // The value is a sentinel that can never collide with a real city name, and every
+  // place that reconciles state.city against the fetched list must leave it alone.
+  const CITY_OTHER = '__other__';
+  const CITY_OTHER_LABEL = 'Other / my city is not listed';
+
   // ─── Deep links ────────────────────────────────────────────────────────────
   // /?book=piano preselects piano. Slugs are DERIVED from INSTRUMENTS, so the
   // accepted set cannot drift from the set the form actually offers.
@@ -155,6 +165,7 @@
       instrument: '',
       instrumentOther: '',  // free-text when instrument === 'Other'
       city: '',
+      cityOther: '',  // free-text when city === CITY_OTHER
       address: '',
       lessonLength: 45,   // the anchor tier, never the shortest
       preferredDays: [],     // array of day-of-week ints (0=Mon..6=Sun)
@@ -195,6 +206,11 @@
   }
   function fieldErrorClass(field) {
     return state.fieldErrors[field] ? 'sw-field-error' : '';
+  }
+  // The city as a human would say it. The sentinel must never reach a sentence, a
+  // request body, or an analytics label.
+  function cityLabel() {
+    return state.city === CITY_OTHER ? state.cityOther.trim() : state.city;
   }
 
   const DAYS_OF_WEEK = [
@@ -378,10 +394,12 @@
     // it lands. Ported from the mtncitymusic copy, which fixed this in production while
     // this file's step 1 had never executed for anyone.
     const cityList = state.cities.length ? state.cities
-      : (state.city ? [state.city] : []);
+      : (state.city && state.city !== CITY_OTHER ? [state.city] : []);
+    // "Other" is appended after the real list in both windows, so a visitor whose city
+    // is missing has somewhere to go even before the list lands.
     const cityOptions = cityList.map(c =>
       `<option value="${c}" ${state.city === c ? 'selected' : ''}>${c}</option>`
-    ).join('');
+    ).join('') + `<option value="${CITY_OTHER}" ${state.city === CITY_OTHER ? 'selected' : ''}>${CITY_OTHER_LABEL}</option>`;
 
     const instrumentOptions = INSTRUMENTS.map(i =>
       `<option value="${i}" ${state.instrument === i ? 'selected' : ''}>${i}</option>`
@@ -427,6 +445,14 @@
           </select>
           ${fieldErrorHtml('city')}
         </div>
+
+        ${state.city === CITY_OTHER ? `
+          <div class="sw-field ${fieldErrorClass('cityOther')}">
+            <label class="sw-label" for="sw-city-other">Which city?</label>
+            <input type="text" id="sw-city-other" class="sw-input" placeholder="e.g., Pasadena, Anaheim" value="${state.cityOther}">
+            ${fieldErrorHtml('cityOther')}
+          </div>
+        ` : ''}
 
         <div class="sw-field">
           <label class="sw-label" for="sw-length">Lesson Length</label>
@@ -542,7 +568,7 @@
     return `
       <div class="sw-step">
         <h3 class="sw-heading">Available Times</h3>
-        <p class="sw-subtext">${state.instrument} lessons in ${state.city} (${state.lessonLength} min)</p>
+        <p class="sw-subtext">${state.instrument} lessons in ${cityLabel()} (${state.lessonLength} min)</p>
         <p class="sw-subtext sw-confirm-note">These are the times we currently have open. We hold the one you pick while we confirm it with your instructor, then email you within 24 hours.</p>
         ${instructorFilter}
         <div class="sw-slots-container">${slotsHtml}</div>
@@ -635,7 +661,7 @@
           <p class="sw-confirm-text">${c.message}</p>
           <div class="sw-confirm-details">
             <div><strong>Instrument:</strong> ${instrumentLabel}</div>
-            <div><strong>City:</strong> ${state.city || 'Not given'}</div>
+            <div><strong>City:</strong> ${cityLabel() || 'Not given'}</div>
             <div><strong>Email:</strong> ${state.clientEmail}</div>
           </div>
           <p class="sw-subtext">Questions? Call us at <a href="tel:7605732120">(760) 573-2120</a>.</p>
@@ -685,7 +711,9 @@
       : `We'll Find You A ${instrumentLabel} Instructor`;
     const subtext = state.instrument === 'Other'
       ? `We don't have a ${instrumentLabel} instructor listed yet, but we may be able to bring one on for you. Leave your info and we'll reach out within 24 hours.`
-      : `We don't have an opening for ${instrumentLabel} in ${state.city} right now. Leave your info and we'll reach out within 24 hours as we expand.`;
+      : state.city === CITY_OTHER
+        ? `We don't have an instructor listed in ${cityLabel()} yet, but we may be able to reach you. Leave your info and we'll let you know within 24 hours.`
+        : `We don't have an opening for ${instrumentLabel} in ${cityLabel()} right now. Leave your info and we'll reach out within 24 hours as we expand.`;
 
     return `
       <div class="sw-step">
@@ -868,7 +896,20 @@
     });
 
     const citySel = document.getElementById('sw-city');
-    if (citySel) citySel.addEventListener('change', e => { state.city = e.target.value; clearFieldError('city'); });
+    if (citySel) citySel.addEventListener('change', e => {
+      const wasOther = state.city === CITY_OTHER;
+      state.city = e.target.value;
+      clearFieldError('city');
+      // Re-render only when the "Which city?" field has to appear or disappear; a
+      // re-render on every change would be safe but pointless.
+      if (wasOther !== (state.city === CITY_OTHER)) render();
+    });
+
+    const cityOtherInput = document.getElementById('sw-city-other');
+    if (cityOtherInput) cityOtherInput.addEventListener('input', e => {
+      state.cityOther = e.target.value;
+      clearFieldError('cityOther');
+    });
 
     const lengthSel = document.getElementById('sw-length');
     if (lengthSel) lengthSel.addEventListener('change', e => { state.lessonLength = parseInt(e.target.value); });
@@ -966,10 +1007,14 @@
       setFieldError('instrumentOther', 'Please tell us which instrument.'); bad = true;
     }
     if (!state.city) { setFieldError('city', 'Please select your city.'); bad = true; }
+    if (state.city === CITY_OTHER && !state.cityOther.trim()) {
+      setFieldError('cityOther', 'Please tell us your city.'); bad = true;
+    }
     if (bad) { render(); return; }
 
-    // "Other" instruments skip availability lookup — go straight to lead capture
-    if (state.instrument === 'Other') {
+    // "Other" instruments and unlisted cities skip availability lookup, going straight to
+    // lead capture. Neither can be matched to an instructor, so neither may book.
+    if (state.instrument === 'Other' || state.city === CITY_OTHER) {
       state.mode = 'lead';
       state.step = 5;
       state.error = '';
@@ -1106,11 +1151,14 @@
         phone: state.clientPhone.trim(),
         instrument: state.instrument,
         instrument_other: state.instrumentOther.trim() || undefined,
-        city: state.city.trim() || undefined,
+        city: cityLabel().trim() || undefined,
         student_age: state.studentAge.trim() || undefined,
         lesson_for: state.lessonFor || undefined,
         start_timing: state.startTiming || undefined,
-        notes: state.notes.trim() || undefined,
+        // An unlisted city is flagged in the notes so the lead email says WHY this is a
+        // lead and not a booking, without the backend needing to know the sentinel.
+        notes: [state.city === CITY_OTHER ? `City not on our list: ${cityLabel()}` : '', state.notes.trim()]
+          .filter(Boolean).join('. ') || undefined,
         brand_source: BRAND_SOURCE,
         honeypot: '',
       });
@@ -1129,7 +1177,7 @@
       if (typeof gtag === 'function') {
         gtag('event', 'form_submission', {
           event_category: 'lead',
-          event_label: `${state.instrument === 'Other' ? state.instrumentOther : state.instrument} - ${state.city}`,
+          event_label: `${state.instrument === 'Other' ? state.instrumentOther : state.instrument} - ${cityLabel()}`,
         });
       }
 
@@ -1139,7 +1187,7 @@
         window.location.href = buildRedirectUrl({
           type: 'lead',
           instrument: state.instrument === 'Other' ? state.instrumentOther : state.instrument,
-          city: state.city,
+          city: cityLabel(),
         });
         return;
       }
@@ -1731,7 +1779,9 @@
       state.cities = loaded;
       // Reconcile: drop a pre-filled city the backend does not actually serve, rather than
       // letting the form submit one that can never be matched.
-      if (state.city && !state.cities.includes(state.city)) state.city = '';
+      // CITY_OTHER is exempt: it is never in the list by definition, and a visitor who
+      // picked it during the fetch window would otherwise watch their choice vanish.
+      if (state.city && state.city !== CITY_OTHER && !state.cities.includes(state.city)) state.city = '';
 
       // MODAL MODE NEEDS THIS TOO, and that is the whole bug.
       //
