@@ -352,9 +352,7 @@
     .team-cta { text-align: center; }
 
     /* TEAM, single founder + coming soon card (M&M launch state) */
-    .team-grid-single { display: grid; grid-template-columns: 320px 1fr; gap: 48px; align-items: center; max-width: 960px; margin: 0 auto; }
-    .team-grid-single .team-card:nth-child(n) { grid-column: auto; }
-    .team-coming-soon { background: linear-gradient(135deg, #f1ece2 0%, #e7e1f7 100%); border-radius: 20px; padding: 48px 40px; text-align: left; box-shadow: 0 8px 32px rgba(114,110,221,0.14); }
+    .team-coming-soon { grid-column: span 6; background: linear-gradient(135deg, #f1ece2 0%, #e7e1f7 100%); border-radius: 20px; padding: 48px 40px; text-align: left; box-shadow: 0 8px 32px rgba(114,110,221,0.14); }
     .team-coming-soon-inner { max-width: 500px; }
     .team-coming-soon-icon { width: 60px; height: 60px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--dark-purple); box-shadow: 0 4px 14px rgba(114,110,221,0.15); }
     .team-coming-soon-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; margin: 0 0 14px; color: var(--black); }
@@ -495,8 +493,6 @@
     .team-section { padding: 64px 20px; }
     .team-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 24px; }
     .team-card:nth-child(n) { grid-column: auto; }
-    .team-grid-single { grid-template-columns: 1fr !important; gap: 32px; }
-    .team-grid-single .team-card { cursor: pointer; max-width: 280px; margin: 0 auto; }
     .team-coming-soon { padding: 32px 24px; }
 
     /* READY CTA */
@@ -1042,10 +1038,10 @@
   <div class="team-inner">
     <div class="section-header-center">
       <div class="section-tag">Our Team</div>
-      <h2 class="section-heading">Right Now, You Learn From the Founder</h2>
-      <p class="section-subheading">Every Music and Mastery lesson is currently taught by Jonny, who founded Mountain City Music Co. in 2022 and built the in-home teaching model this brand runs on. Book during the launch window and he is your teacher.</p>
+      <h2 class="section-heading">Meet Your Instructors</h2>
+      <p class="section-subheading">Your lessons are taught by instructors who live in the areas they serve. Every one is hired, background-checked and trained by Jonny, who founded Mountain City Music Co. in 2022 and built the in-home teaching model this brand runs on.</p>
     </div>
-    <div class="team-grid team-grid-single">
+    <div class="team-grid">
       <div class="team-card" onclick="openModal()" role="button" tabindex="0">
         <div class="team-photo">
           <picture>
@@ -1056,8 +1052,34 @@
         <div class="team-name">Jonny Dolan</div>
         <div class="team-title">Founder</div>
         <div class="team-instruments">Guitar · Piano · Voice · Bass · Ukulele · Production</div>
+      </div>
+
+      <div class="team-card" onclick="openModal()" role="button" tabindex="0">
+        <div class="team-photo">
+          <picture>
+            <source srcset="brand_assets/instructors/Arthur%20Chou.webp" type="image/webp" />
+            <img src="brand_assets/instructors/Arthur%20Chou.jpg" width="450" height="600" loading="lazy" onerror="this.src='https://placehold.co/400x400/e4e3ff/726edd?text=Arthur+Chou'" alt="Arthur Chou" />
+          </picture>
+        </div>
+        <div class="team-name">Arthur Chou</div>
+        <div class="team-title">Guitar Instructor</div>
+        <div class="team-instruments">Guitar &middot; Piano</div>
         <div class="team-service-area"><span class="team-service-tag">Orange County</span><span class="team-service-tag">Los Angeles</span></div>
       </div>
+
+      <div class="team-card" onclick="openModal()" role="button" tabindex="0">
+        <div class="team-photo">
+          <picture>
+            <source srcset="brand_assets/instructors/Giovanni%20Raimondo.webp" type="image/webp" />
+            <img src="brand_assets/instructors/Giovanni%20Raimondo.jpg" width="450" height="600" loading="lazy" onerror="this.src='https://placehold.co/400x400/e4e3ff/726edd?text=Giovanni+Raimondo'" alt="Giovanni Raimondo" />
+          </picture>
+        </div>
+        <div class="team-name">Giovanni Raimondo</div>
+        <div class="team-title">Piano Instructor</div>
+        <div class="team-instruments">Piano &middot; Drums &middot; Bass &middot; Guitar</div>
+        <div class="team-service-area"><span class="team-service-tag">Pasadena</span></div>
+      </div>
+
       <div class="team-coming-soon">
         <div class="team-coming-soon-inner">
           <div class="team-coming-soon-icon">
@@ -1069,7 +1091,7 @@
             </svg>
           </div>
           <h3 class="team-coming-soon-heading">More Teachers On the Way</h3>
-          <p class="team-coming-soon-body">We're hand-picking instructors across Orange County (Irvine, Newport Beach, Costa Mesa, Lake Forest, Tustin) and Los Angeles (Beverly Hills, West Hollywood, East Hollywood, Burbank, Glendale, Pasadena, Pacific Palisades, Malibu). Every one goes through the same DOJ and FBI background check and audition process Jonny built for Mountain City. Book a free lesson and we'll match you with the right teacher for your instrument and goals. If the match isn't working after that first lesson, we'll re-match you at no charge.</p>
+          <p class="team-coming-soon-body">We're hand-picking more instructors across Orange County (Costa Mesa, Lake Forest) and Los Angeles (Burbank, Beverly Hills, West Hollywood, Pacific Palisades, Malibu). Every one goes through the same DOJ and FBI background check and audition process Jonny built for Mountain City. Book a free lesson and we'll match you with the right teacher for your instrument and goals. If the match isn't working after that first lesson, we'll re-match you at no charge.</p>
           <a href="#" class="btn btn-outline-purple" onclick="openModal(); return false;">Book a Free Lesson →</a>
         </div>
       </div>

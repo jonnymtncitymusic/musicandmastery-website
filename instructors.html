@@ -72,12 +72,7 @@
     /* INSTRUCTOR GRID */
     .instructors-wrap { max-width: 1100px; margin: 0 auto; padding: 80px 32px 96px; }
     .instructors-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 40px; }
-    .instructor-card:nth-child(-n+3) { grid-column: span 2; }
-    .instructor-card:nth-child(4) { grid-column: 2 / span 2; }
-    .instructor-card:nth-child(5) { grid-column: 4 / span 2; }
-    .instructor-card:nth-child(6) { grid-column: 2 / span 2; }
-    .instructor-card:nth-child(7) { grid-column: 4 / span 2; }
-    .instructor-card { cursor: pointer; display: flex; flex-direction: column; }
+    .instructor-card { grid-column: span 2; cursor: pointer; display: flex; flex-direction: column; }
     .instructor-photo { width: 100%; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; background: var(--light-purple); margin-bottom: 20px; }
     .instructor-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
     .instructor-name { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: -0.02em; margin: 0 0 6px; }
@@ -88,9 +83,7 @@
     .instructor-bio { font-size: 15px; line-height: 1.75; color: #555; }
 
     /* INSTRUCTOR GRID, launch state (founder + coming soon) */
-    .instructors-grid-launch { grid-template-columns: 360px 1fr !important; gap: 56px; align-items: center; }
-    .instructors-grid-launch .instructor-card:nth-child(n) { grid-column: auto; }
-    .instructor-coming-soon { background: linear-gradient(135deg, #f1ece2 0%, #e7e1f7 100%); border-radius: 24px; padding: 56px 48px; box-shadow: 0 12px 40px rgba(114,110,221,0.16); }
+    .instructor-coming-soon { grid-column: span 6; background: linear-gradient(135deg, #f1ece2 0%, #e7e1f7 100%); border-radius: 24px; padding: 56px 48px; box-shadow: 0 12px 40px rgba(114,110,221,0.16); }
     .coming-soon-icon { width: 72px; height: 72px; border-radius: 18px; background: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 22px; color: var(--dark-purple); box-shadow: 0 4px 14px rgba(114,110,221,0.18); }
     .coming-soon-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -0.025em; margin: 0 0 18px; color: var(--black); }
     .coming-soon-body { font-size: 16px; line-height: 1.7; color: #3a3a4a; margin: 0 0 28px; }
@@ -181,8 +174,6 @@
     .instructors-wrap { padding: 48px 20px 64px; }
     .instructors-grid { grid-template-columns: 1fr !important; gap: 40px; }
     .instructor-card:nth-child(n) { grid-column: auto; }
-    .instructors-grid-launch { grid-template-columns: 1fr !important; gap: 40px; }
-    .instructors-grid-launch .instructor-card { cursor: pointer; max-width: 300px; margin: 0 auto; }
     .instructor-coming-soon { padding: 40px 28px; }
       .trust-badges { padding: 0 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .trust-badges-inner { grid-template-columns: repeat(5, minmax(140px, 1fr)); min-width: 700px; }
@@ -318,7 +309,7 @@
 </div>
 
 <div class="instructors-wrap">
-  <div class="instructors-grid instructors-grid-launch">
+  <div class="instructors-grid">
 
     <div class="instructor-card" onclick="openModal()" role="button" tabindex="0">
       <div class="instructor-photo">
@@ -338,11 +329,49 @@
       </div>
       <div class="instructor-service-area">
         <span class="service-tag">Founder</span>
-        <span class="service-tag">OC</span>
       </div>
-      <p class="instructor-bio">Music and Mastery is Mountain City Music Co. under a newer name. I founded Mountain City in 2022 and built its in-home, background-checked instruction model there; Music and Mastery brings that same model to Los Angeles and Orange County. For now, lessons here are taught by me, driving out from the Inland Empire while I build the local instructor roster.</p>
+      <p class="instructor-bio">Music and Mastery is Mountain City Music Co. under a newer name. I founded Mountain City in 2022 and built its in-home, background-checked instruction model there; Music and Mastery brings that same model to Los Angeles and Orange County. The lessons here are taught by instructors who live in the areas they serve, hired, background-checked and trained by me.</p>
       <p class="instructor-bio">Some background. I've spent 11 years teaching music both as a full-time public-school classroom teacher and as a private instructor. Collectively I've taught thousands of K-12 and adult students. I hold a Bachelor of Arts in Choral Music Education and a California teaching credential. Outside the classroom I've performed as a studio guitarist in Los Angeles and as a professional choir singer. I specialize in rock guitar but teach across all styles: folk, pop, jazz, classical, whatever a student wants to play.</p>
-      <p class="instructor-bio">If you book during this launch window, you're learning from the founder. As Music and Mastery's OC instructor roster grows over the coming months, every new hire will go through the same DOJ and FBI background check and audition process I built for MCMC over the last three years.</p>
+      <p class="instructor-bio">Every instructor we bring on goes through the same DOJ and FBI background check and audition process I built for MCMC over the last three years. I match every student myself, and if the fit is not right after the first lesson we re-match you at no charge.</p>
+    </div>
+
+    <div class="instructor-card" onclick="openModal()" role="button" tabindex="0">
+      <div class="instructor-photo">
+        <picture>
+          <source srcset="brand_assets/instructors/Arthur%20Chou.webp" type="image/webp" />
+          <img src="brand_assets/instructors/Arthur%20Chou.jpg" width="450" height="600" loading="lazy" onerror="this.src='https://placehold.co/400x400/e4e3ff/726edd?text=Arthur+Chou'" alt="Arthur Chou" />
+        </picture>
+      </div>
+      <h2 class="instructor-name">Arthur Chou</h2>
+      <div class="instructor-instruments">
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Guitar</span>
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Piano</span>
+      </div>
+      <div class="instructor-service-area">
+        <span class="service-tag">Orange County</span>
+        <span class="service-tag">Los Angeles</span>
+      </div>
+      <p class="instructor-bio">Arthur is a guitarist, performer, and educator with more than five years of teaching and live performance behind him. He graduated with High Honors from Musicians Institute, earning an Associate of Arts in Guitar Performance, and plays pop, rock, funk, R&amp;B, blues, and fusion. He tailors each lesson to the student's own goals, building fundamentals, creativity, and confidence together. Music has always been a big part of his life, and teaching is how he shares the creativity and connection it brings.</p>
+    </div>
+
+    <div class="instructor-card" onclick="openModal()" role="button" tabindex="0">
+      <div class="instructor-photo">
+        <picture>
+          <source srcset="brand_assets/instructors/Giovanni%20Raimondo.webp" type="image/webp" />
+          <img src="brand_assets/instructors/Giovanni%20Raimondo.jpg" width="450" height="600" loading="lazy" onerror="this.src='https://placehold.co/400x400/e4e3ff/726edd?text=Giovanni+Raimondo'" alt="Giovanni Raimondo" />
+        </picture>
+      </div>
+      <h2 class="instructor-name">Giovanni Raimondo</h2>
+      <div class="instructor-instruments">
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Piano</span>
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Drums</span>
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Bass</span>
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Guitar</span>
+      </div>
+      <div class="instructor-service-area">
+        <span class="service-tag">Pasadena</span>
+      </div>
+      <p class="instructor-bio">Giovanni holds a bachelor's degree in Music from Cal Poly Pomona and has played piano since he was six years old, studying mostly jazz and pop. He teaches songwriting alongside playing, and builds the skills a student needs to improvise on their own. He sees music as one of the greatest forms of personal expression, and that is how he teaches it.</p>
     </div>
 
     <div class="instructor-coming-soon">
@@ -355,7 +384,7 @@
         </svg>
       </div>
       <h2 class="coming-soon-heading">More Instructors Coming Soon</h2>
-      <p class="coming-soon-body">Music and Mastery is actively recruiting instructors for <strong>Orange County</strong> (Irvine, Newport Beach, Costa Mesa, Lake Forest, Tustin) and <strong>Los Angeles</strong> (Beverly Hills, West Hollywood, East Hollywood, Burbank, Pasadena, Pacific Palisades, Malibu). Every instructor we bring on is DOJ and FBI background-checked via LiveScan. Book a free lesson and we'll match you with the right teacher as we onboard them.</p>
+      <p class="coming-soon-body">Music and Mastery is actively recruiting instructors for <strong>Orange County</strong> (Costa Mesa, Lake Forest) and <strong>Los Angeles</strong> (Burbank, Beverly Hills, West Hollywood, Pacific Palisades, Malibu). Every instructor we bring on is DOJ and FBI background-checked via LiveScan. Tell us where you are and we'll reach out as soon as we have someone on your street.</p>
       <div class="coming-soon-cta">
         <a href="#" class="btn btn-accent" onclick="openModal(); return false;">Book a Free Lesson →</a>
       </div>
