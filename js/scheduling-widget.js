@@ -62,6 +62,116 @@
   const CITY_OTHER = '__other__';
   const CITY_OTHER_LABEL = 'Other / my city is not listed';
 
+  // ─── Funnel instrumentation ────────────────────────────────────────────────
+  // Until now this widget fired three events and all three were terminal: a lead, a
+  // booking, a callback. Nothing was emitted when somebody opened the form, chose a
+  // city, or looked at a grid of real times and walked away. So the question that
+  // actually decides where to spend effort, "do visitors who are offered a real
+  // appointment follow through more often than visitors who only get a contact form",
+  // had no data behind it on either brand. These events supply it, and they are
+  // deliberately identical on Music & Mastery and Mountain City so that the two
+  // funnels can be compared line for line instead of by anecdote.
+  //
+  // Everything below is best effort and must stay that way. gtag can be absent,
+  // blocked by an extension, or throw from inside Google's own code, and none of that
+  // may ever stop somebody booking a lesson. track() swallows all of it.
+  const STEP_NAMES = {
+    1: 'select',     // instrument, city, preferences
+    2: 'slots',      // the grid of real appointment times
+    3: 'details',    // name, email, phone
+    4: 'confirmed',  // booked, or callback requested
+    5: 'lead_form',  // contact form: no match, unlisted city, or a lead-only page
+  };
+
+  // Object.create(null) for `reported`, not {}: a step named "constructor" would
+  // otherwise come back truthy from the prototype and silently never be counted.
+  const funnel = {
+    engaged: false,
+    reported: Object.create(null),
+    lastStep: '',
+    terminal: false,  // a booking, lead or callback landed; there is nothing to abandon
+    ended: false,     // widget_abandon already sent, and it sends at most once
+  };
+
+  function track(eventName, params) {
+    try {
+      if (typeof gtag !== 'function') return;
+      gtag('event', eventName, Object.assign({ brand: BRAND_SOURCE }, params));
+    } catch (e) {
+      // Analytics never gets to break the booking path.
+    }
+  }
+
+  function resetFunnel() {
+    funnel.engaged = false;
+    funnel.reported = Object.create(null);
+    funnel.lastStep = '';
+    funnel.terminal = false;
+    funnel.ended = false;
+  }
+
+  // An inline widget has no "open": it is simply part of the page, so counting a
+  // render would only re-count the pageview. The comparable moment on both kinds of
+  // page is the first real touch, which is why the modal and the inline trigger share
+  // one event and are told apart by `trigger` instead.
+  function trackOpen(trigger) {
+    if (funnel.engaged) return;
+    funnel.engaged = true;
+    track('widget_open', {
+      trigger: trigger,
+      lead_only: LEAD_ONLY ? 1 : 0,
+      page: (location.pathname.split('/').pop() || 'index.html'),
+    });
+    trackStep(state.step);
+  }
+
+  function trackStep(step) {
+    const name = STEP_NAMES[step];
+    if (!name) return;
+    funnel.lastStep = name;
+    if (funnel.reported[name]) return;
+    funnel.reported[name] = true;
+    track('widget_step', {
+      step: name,
+      step_number: step,
+      instrument: state.instrument || '',
+      city: funnelCity(),
+    });
+  }
+
+  // The one event that says whether we had anything to offer. 'empty' is a visitor who
+  // told us their city and their instrument and got a wall, which is a coverage problem
+  // wearing a conversion problem's clothes. 'skipped' never had a lookup to do.
+  function trackSlots(outcome, count) {
+    track('widget_slots', {
+      outcome: outcome,
+      slot_count: count,
+      instrument: state.instrument || '',
+      city: funnelCity(),
+    });
+  }
+
+  function trackTerminal() {
+    funnel.terminal = true;
+  }
+
+  function trackAbandon(reason) {
+    if (!funnel.engaged || funnel.terminal || funnel.ended) return;
+    funnel.ended = true;
+    track('widget_abandon', {
+      reason: reason,
+      last_step: funnel.lastStep || STEP_NAMES[state.step] || '',
+      instrument: state.instrument || '',
+      city: funnelCity(),
+    });
+  }
+
+  // cityLabel() unwraps the CITY_OTHER sentinel, so an analytics label carries the
+  // city the visitor actually typed and never the literal '__other__'.
+  function funnelCity() {
+    return cityLabel() || '';
+  }
+
   // ─── Deep links ────────────────────────────────────────────────────────────
   // /?book=piano preselects piano. Slugs are DERIVED from INSTRUMENTS, so the
   // accepted set cannot drift from the set the form actually offers.
@@ -344,6 +454,11 @@
   function render() {
     const container = document.getElementById('scheduling-widget');
     if (!container) return;
+
+    // Every step assignment in this file is followed by a render(), so this is the
+    // only place that has to notice a step change. trackStep() dedupes, so pacing
+    // back and forth through the form counts each step once.
+    if (funnel.engaged) trackStep(state.step);
 
     // A render replaces the entire subtree, so remember what the visitor was
     // doing first. The instrument select is the first field on the lead form
@@ -1015,6 +1130,7 @@
     // "Other" instruments and unlisted cities skip availability lookup, going straight to
     // lead capture. Neither can be matched to an instructor, so neither may book.
     if (state.instrument === 'Other' || state.city === CITY_OTHER) {
+      trackSlots('skipped', 0);
       state.mode = 'lead';
       state.step = 5;
       state.error = '';
@@ -1039,6 +1155,8 @@
         preferred_times: preferred_times.length ? preferred_times : undefined,
       });
       const hasSlots = result?.recommended || (result?.alternatives?.length > 0);
+      const slotCount = (result?.recommended ? 1 : 0) + (result?.alternatives?.length || 0);
+      trackSlots(hasSlots ? 'shown' : 'empty', slotCount);
       if (!hasSlots) {
         // No instructor available — capture as lead instead of dead-end
         state.mode = 'lead';
@@ -1174,6 +1292,7 @@
 
       // Fire conversion event regardless of redirect path so it counts even if
       // the redirect itself fails for some reason.
+      trackTerminal();
       if (typeof gtag === 'function') {
         gtag('event', 'form_submission', {
           event_category: 'lead',
@@ -1247,6 +1366,7 @@
       });
 
       // Fire GA4 conversion event before any redirect
+      trackTerminal();
       if (typeof gtag === 'function') {
         gtag('event', 'form_submission', {
           event_category: 'booking',
@@ -1306,6 +1426,7 @@
       // The callback path is a conversion like any other, and it was the one path that
       // never stashed the identifiers, so its enhanced-conversion match was always empty.
       stashUserData();
+      trackTerminal();
       if (typeof gtag === 'function') {
         gtag('event', 'form_submission', { event_category: 'callback_request', event_label: state.instrument });
       }
@@ -1739,8 +1860,24 @@
       window.openModal = function() {
         origOpenModal();
         resetState();
+        resetFunnel();
+        trackOpen('modal');
         render();
       };
+
+      // The X, the overlay click and Escape all land in closeModalDirect(), so a
+      // close with no booking, lead or callback behind it is exactly the
+      // abandonment this funnel exists to count. Wrapped the same way as
+      // openModal so the page keeps owning the DOM work. The Done button also
+      // calls it, but a confirmed booking has already set funnel.terminal, and
+      // trackAbandon() refuses to fire after that.
+      const origCloseModalDirect = window.closeModalDirect;
+      if (typeof origCloseModalDirect === 'function') {
+        window.closeModalDirect = function() {
+          trackAbandon('close');
+          return origCloseModalDirect.apply(this, arguments);
+        };
+      }
 
       // Handle the lazy-load race: if the modal is already open when the widget
       // finishes loading (the visitor clicked before the script arrived), the
@@ -1750,6 +1887,8 @@
       const overlay = document.getElementById('booking-overlay');
       if (overlay && overlay.classList.contains('open')) {
         resetState();
+        resetFunnel();
+        trackOpen('modal');
         render();
       }
     }
@@ -1760,11 +1899,23 @@
       // blank with nothing but a console warning. Nothing the lead form needs
       // comes from the network, so it paints first and enriches after.
       render();
+      // An inline widget is never opened, it is simply there, so the first real
+      // touch is the moment that compares to a modal open. The listener sits on the
+      // container, which render() refills but never replaces, so it survives every
+      // re-render; trackOpen() dedupes, so three listeners still count once.
+      const inlineContainer = document.getElementById('scheduling-widget');
+      if (inlineContainer) {
+        ['click', 'change', 'input'].forEach(function (evt) {
+          inlineContainer.addEventListener(evt, function () { trackOpen('interaction'); });
+        });
+      }
       // These pages have no modal, so a booking link means the form itself.
       if (bookParamPresent()) scrollToInlineForm();
     }
 
     // Load cities on init (skip in lead-only mode, that flow does not ask for a city)
+    window.addEventListener('pagehide', function () { trackAbandon('pagehide'); });
+
     if (!LEAD_ONLY) {
       let loaded = [];
       try {
