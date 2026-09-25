@@ -716,12 +716,14 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 <!-- Music & Mastery lead capture widget -->
 <script>window.MCMC_SCHEDULING_API = 'https://cron-runner-production-a510.up.railway.app';</script>
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
-<!-- Lead capture only: no bookable availability behind this page, so a slot
-     picker would search, find nothing, and dead-end the visitor. -->
+<!-- Bookable: Arthur Chou covers Pasadena Tuesday, Wednesday and Thursday, and
+     Giovanni Raimondo covers it on Friday. This comment said the opposite from
+     2026-09-20, when the page was flipped to booking and the line above it was
+     left behind. -->
 <script>window.MCMC_LEAD_ONLY = false;</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <script>window.MCMC_PREFILL_CITY = 'Pasadena';</script>
-<script src="/js/scheduling-widget.js?v=20260924"></script>
+<script src="/js/scheduling-widget.js?v=20260925"></script>
 
 <script>
 (function(){

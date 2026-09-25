@@ -151,6 +151,19 @@
     });
   }
 
+  // An error is not a decision. Without this, a failing backend and a visitor
+  // who lost interest are the same shape in the data, and the first one is the
+  // one worth waking up for.
+  function trackError(stage, message) {
+    track('widget_error', {
+      stage: stage,
+      message: String(message || '').slice(0, 120),
+      step: funnel.lastStep || '',
+      instrument: state.instrument || '',
+      city: funnelCity(),
+    });
+  }
+
   function trackTerminal() {
     funnel.terminal = true;
   }
@@ -1170,6 +1183,8 @@
         state.step = 2;
       }
     } catch (e) {
+      trackSlots('error', 0);
+      trackError('availability', e && e.message);
       state.error = 'Could not load availability. Please try again or call us at (760) 573-2120.';
     }
 
@@ -1314,6 +1329,7 @@
       state.confirmation = { ...result, isLead: true };
       state.step = 4;
     } catch (e) {
+      trackError('lead', e && e.message);
       state.error = e.message || 'Submission failed. Please try again.';
     }
 
@@ -1391,6 +1407,7 @@
       state.confirmation = result;
       state.step = 4;
     } catch (e) {
+      trackError('booking', e && e.message);
       state.error = e.message || 'Booking failed. Please try again.';
     }
 
@@ -1443,6 +1460,7 @@
       }
       state.confirmation = { ...result, isCallback: true }; state.step = 4;
     } catch (e) {
+      trackError('callback', e && e.message);
       state.error = e.message || 'Could not submit callback request.';
     }
     state.loading = false; render();
@@ -1915,6 +1933,21 @@
 
     // Load cities on init (skip in lead-only mode, that flow does not ask for a city)
     window.addEventListener('pagehide', function () { trackAbandon('pagehide'); });
+    // pagehide is not enough on mobile. iOS routinely never fires it when the
+    // visitor switches apps or locks the phone, and mobile is most of this
+    // traffic, so on its own it biases the one metric the funnel exists for
+    // against the majority of visitors.
+    //
+    // The cost is the opposite error: somebody who glances at another tab and
+    // comes back is counted once as 'hidden' and, because trackAbandon() only
+    // fires once, stays counted even if they go on to book. That is the right
+    // way round. An over-count carries its own reason and is visible in the
+    // data, because a session with a widget_abandon AND a form_submission is
+    // plainly not an abandonment; an under-count is invisible. Read 'close' and
+    // 'pagehide' as certain, 'hidden' as soft.
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') trackAbandon('hidden');
+    });
 
     if (!LEAD_ONLY) {
       let loaded = [];

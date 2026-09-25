@@ -716,12 +716,15 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 <!-- Music & Mastery lead capture widget -->
 <script>window.MCMC_SCHEDULING_API = 'https://cron-runner-production-a510.up.railway.app';</script>
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
-<!-- Lead capture only: no bookable availability behind this page, so a slot
-     picker would search, find nothing, and dead-end the visitor. -->
+<!-- Bookable: Arthur Chou covers this area Tuesday, Wednesday and Thursday.
+     Depends on East Hollywood and West Hollywood being declared cities in
+     mcmc-cron-runner instructor_config.json (41cbd38). Until that is deployed the
+     widget drops the pre-fill and offers a dropdown of cities that are not this
+     one, which is worse than the contact form this page used to show. -->
 <script>window.MCMC_LEAD_ONLY = false;</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <script>window.MCMC_PREFILL_CITY = 'East Hollywood';</script>
-<script src="/js/scheduling-widget.js?v=20260924"></script>
+<script src="/js/scheduling-widget.js?v=20260925"></script>
 
 <script>
 (function(){
