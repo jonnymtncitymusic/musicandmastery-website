@@ -14,6 +14,13 @@ node "$root/scripts/check-em-dashes.mjs" || {
   echo "Commit blocked. Fix the copy above, or bypass deliberately with: git commit --no-verify"
   exit 1
 }
+# Added 2026-09-27. This script existed for weeks and nothing ever ran it, so sitemap drift
+# was detected only by whoever happened to run it by hand, which was nobody.
+bash "$root/scripts/check-sitemap.sh" || {
+  echo ""
+  echo "Commit blocked on sitemap drift. Fix it, or bypass deliberately with: git commit --no-verify"
+  exit 1
+}
 HOOK
 chmod +x "$hook"
 echo "installed: $hook"

@@ -52,6 +52,9 @@
 
     /* NAV */
     nav { background: #fff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(114,110,221,0.15); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .nav-logo img { height: 56px; width: auto; }
+    .nav-brand { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: clamp(20px, 4.5vw, 26px); color: var(--black); line-height: 1; letter-spacing: 0.01em; }
     .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 80px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
     .nav-logo img { height: 64px; width: auto; mix-blend-mode: multiply; display: block; }
     .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
@@ -174,13 +177,13 @@
        pushed the layout viewport out to 468px, so the whole page rendered zoomed out.
        index.html already solves this by shrinking its logo and dropping its Reviews
        link; this page never got the same treatment.
-       The selectors are `> span >` deliberately: a plain `img` also matches the
-       ampersand glyph inside the wordmark, which is sized in `em` so that it tracks the
-       font, and forcing it to 40px would blow the logotype apart. !important is needed
-       because both sizes are inline styles on the elements themselves. */
+       The brand lockup uses the same .nav-logo / .nav-brand classes index.html has, so
+       these are ordinary rules rather than !important fighting inline styles. The
+       ampersand glyph keeps its inline `height: 0.78em` so it tracks the wordmark's
+       font-size, and an inline value still wins over .nav-logo img. */
     .nav-inner { padding: 0 20px; gap: 12px; }
-    .nav-inner > a > span > img { height: 40px !important; }
-    .nav-inner > a > span > span { font-size: 19px !important; }
+    .nav-logo img { height: 40px; }
+    .nav-brand { font-size: 19px; }
     .nav-links { display: none; }
     .instructors-wrap { padding: 48px 20px 64px; }
     .instructors-grid { grid-template-columns: 1fr !important; gap: 40px; }
@@ -264,8 +267,9 @@
 
 <nav>
   <div class="nav-inner">
-    <a href="index.html">
-      <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family: 'Work Sans', sans-serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
+    <a href="index.html" class="nav-logo">
+      <img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112"/>
+      <span class="nav-brand">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span>
     </a>
     <ul class="nav-links">
       <li><a href="instructors.html" class="active">Instructors</a></li>

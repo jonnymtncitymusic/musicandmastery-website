@@ -60,7 +60,32 @@
   <link rel="apple-touch-icon" href="brand_assets/logo/mm-apple-touch-180.png" />
   <link rel="preload" as="image" href="brand_assets/Home_Page_Image.webp" type="image/webp" fetchpriority="high" media="(min-width: 769px)" />
   <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/worksans-latin.woff2" crossorigin>
-  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    document.documentElement.classList.add('js');
+
+    // Image fallback, guarded so it can run at most once per image.
+    //
+    // The handlers used to be a bare `this.src = <placeholder>` in the attribute. Inside a
+    // <picture>, assigning src makes the browser re-run source selection, pick the same
+    // <source> that just failed, fail again and call the handler again. Measured on the
+    // lesson cards after they moved into <picture>: about 21,000 fires per second, with
+    // the placeholder never rendering and currentSrc never settling. The same shape bites
+    // a plain <img> too if the placeholder host is itself unreachable.
+    //
+    // So: mark the image, drop the handler, strip the <source> elements that would
+    // otherwise keep winning, and only then set src.
+    function imgFallback(img, url) {
+      if (img.getAttribute('data-fell-back')) return;
+      img.setAttribute('data-fell-back', '1');
+      img.onerror = null;
+      var pic = img.parentNode;
+      if (pic && pic.tagName === 'PICTURE') {
+        var sources = pic.getElementsByTagName('source');
+        while (sources.length) { pic.removeChild(sources[0]); }
+      }
+      img.src = url;
+    }
+  </script>
     <style>
 
     /* Self-hosted Google Fonts (latin subset) */
@@ -723,42 +748,84 @@
     </div>
     <div class="lessons-grid">
       <div class="lesson-card">
-        <img class="lesson-card-img" src="brand_assets/guitar-lesson-closeup.jpg" width="1000" height="558" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Guitar'" alt="A guitar lesson at home, instructor and student playing together" />
+        <picture>
+          <source type="image/webp"
+                  srcset="brand_assets/guitar-lesson-closeup-500.webp 500w, brand_assets/guitar-lesson-closeup.webp 1000w"
+                  sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" />
+          <img class="lesson-card-img" src="brand_assets/guitar-lesson-closeup.jpg"
+               srcset="brand_assets/guitar-lesson-closeup-500.jpg 500w, brand_assets/guitar-lesson-closeup.jpg 1000w"
+               sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" width="1000" height="558" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x300/e4e3ff/726edd?text=Guitar')" alt="A guitar lesson at home, instructor and student playing together" />
+        </picture>
         <div class="lesson-card-body">
           <h3>Guitar</h3>
           <p>Electric, acoustic, and classical, beginner to advanced.</p>
         </div>
       </div>
       <div class="lesson-card">
-        <img class="lesson-card-img" src="brand_assets/piano-lesson-overhead.jpg" width="1000" height="546" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Piano'" alt="A piano lesson at home, instructor and student at the keyboard together" />
+        <picture>
+          <source type="image/webp"
+                  srcset="brand_assets/piano-lesson-overhead-500.webp 500w, brand_assets/piano-lesson-overhead.webp 1000w"
+                  sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" />
+          <img class="lesson-card-img" src="brand_assets/piano-lesson-overhead.jpg"
+               srcset="brand_assets/piano-lesson-overhead-500.jpg 500w, brand_assets/piano-lesson-overhead.jpg 1000w"
+               sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" width="1000" height="546" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x300/e4e3ff/726edd?text=Piano')" alt="A piano lesson at home, instructor and student at the keyboard together" />
+        </picture>
         <div class="lesson-card-body">
           <h3>Piano</h3>
           <p>Classical, contemporary, and everything in between.</p>
         </div>
       </div>
       <div class="lesson-card">
-        <img class="lesson-card-img" src="brand_assets/voice-lesson-closeup.jpg" width="1000" height="558" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Voice'" alt="A voice lesson at home, student singing while the instructor accompanies at the piano" />
+        <picture>
+          <source type="image/webp"
+                  srcset="brand_assets/voice-lesson-closeup-500.webp 500w, brand_assets/voice-lesson-closeup.webp 1000w"
+                  sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" />
+          <img class="lesson-card-img" src="brand_assets/voice-lesson-closeup.jpg"
+               srcset="brand_assets/voice-lesson-closeup-500.jpg 500w, brand_assets/voice-lesson-closeup.jpg 1000w"
+               sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" width="1000" height="558" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x300/e4e3ff/726edd?text=Voice')" alt="A voice lesson at home, student singing while the instructor accompanies at the piano" />
+        </picture>
         <div class="lesson-card-body">
           <h3>Voice</h3>
           <p>Technique, breath control, and performance, any genre.</p>
         </div>
       </div>
       <div class="lesson-card">
-        <img class="lesson-card-img" src="brand_assets/bass-lesson-closeup.jpg" width="1000" height="558" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Bass'" alt="A bass lesson at home, instructor and student playing together" />
+        <picture>
+          <source type="image/webp"
+                  srcset="brand_assets/bass-lesson-closeup-500.webp 500w, brand_assets/bass-lesson-closeup.webp 1000w"
+                  sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" />
+          <img class="lesson-card-img" src="brand_assets/bass-lesson-closeup.jpg"
+               srcset="brand_assets/bass-lesson-closeup-500.jpg 500w, brand_assets/bass-lesson-closeup.jpg 1000w"
+               sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" width="1000" height="558" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x300/e4e3ff/726edd?text=Bass')" alt="A bass lesson at home, instructor and student playing together" />
+        </picture>
         <div class="lesson-card-body">
           <h3>Bass</h3>
           <p>Electric bass for all styles, rock, jazz, R&amp;B, and more.</p>
         </div>
       </div>
       <div class="lesson-card">
-        <img class="lesson-card-img" src="brand_assets/drum-lesson-overhead.jpg" width="1000" height="546" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Drums'" alt="A drum lesson at home, instructor and student at the kit together" />
+        <picture>
+          <source type="image/webp"
+                  srcset="brand_assets/drum-lesson-overhead-500.webp 500w, brand_assets/drum-lesson-overhead.webp 1000w"
+                  sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" />
+          <img class="lesson-card-img" src="brand_assets/drum-lesson-overhead.jpg"
+               srcset="brand_assets/drum-lesson-overhead-500.jpg 500w, brand_assets/drum-lesson-overhead.jpg 1000w"
+               sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" width="1000" height="546" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x300/e4e3ff/726edd?text=Drums')" alt="A drum lesson at home, instructor and student at the kit together" />
+        </picture>
         <div class="lesson-card-body">
           <h3>Drums</h3>
           <p>Rhythm, coordination, and groove for all skill levels.</p>
         </div>
       </div>
       <div class="lesson-card">
-        <img class="lesson-card-img" src="brand_assets/ukulele-lesson-closeup.jpg" width="1000" height="558" loading="lazy" onerror="this.src='https://placehold.co/400x300/e4e3ff/726edd?text=Ukulele'" alt="A ukulele lesson at home, instructor and student playing together" />
+        <picture>
+          <source type="image/webp"
+                  srcset="brand_assets/ukulele-lesson-closeup-500.webp 500w, brand_assets/ukulele-lesson-closeup.webp 1000w"
+                  sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" />
+          <img class="lesson-card-img" src="brand_assets/ukulele-lesson-closeup.jpg"
+               srcset="brand_assets/ukulele-lesson-closeup-500.jpg 500w, brand_assets/ukulele-lesson-closeup.jpg 1000w"
+               sizes="(max-width: 768px) 45vw, (max-width: 1100px) 31vw, 340px" width="1000" height="558" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x300/e4e3ff/726edd?text=Ukulele')" alt="A ukulele lesson at home, instructor and student playing together" />
+        </picture>
         <div class="lesson-card-body">
           <h3>Ukulele</h3>
           <p>A great first instrument, fun, accessible, and musical.</p>
@@ -1052,7 +1119,7 @@
         <div class="team-photo">
           <picture>
             <source srcset="brand_assets/instructors/Jonny%20Dolan.webp" type="image/webp" />
-            <img src="brand_assets/instructors/Jonny%20Dolan.jpg" width="349" height="600" loading="lazy" onerror="this.src='https://placehold.co/400x400/e4e3ff/726edd?text=Jonny+Dolan'" alt="Jonny Dolan" />
+            <img src="brand_assets/instructors/Jonny%20Dolan.jpg" width="349" height="600" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x400/e4e3ff/726edd?text=Jonny+Dolan')" alt="Jonny Dolan" />
           </picture>
         </div>
         <div class="team-name">Jonny Dolan</div>
@@ -1064,7 +1131,7 @@
         <div class="team-photo">
           <picture>
             <source srcset="brand_assets/instructors/Arthur%20Chou.webp" type="image/webp" />
-            <img src="brand_assets/instructors/Arthur%20Chou.jpg" width="900" height="1125" loading="lazy" onerror="this.src='https://placehold.co/400x400/e4e3ff/726edd?text=Arthur+Chou'" alt="Arthur Chou" />
+            <img src="brand_assets/instructors/Arthur%20Chou.jpg" width="900" height="1125" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x400/e4e3ff/726edd?text=Arthur+Chou')" alt="Arthur Chou" />
           </picture>
         </div>
         <div class="team-name">Arthur Chou</div>
@@ -1077,7 +1144,7 @@
         <div class="team-photo">
           <picture>
             <source srcset="brand_assets/instructors/Giovanni%20Raimondo.webp" type="image/webp" />
-            <img src="brand_assets/instructors/Giovanni%20Raimondo.jpg" width="586" height="733" loading="lazy" onerror="this.src='https://placehold.co/400x400/e4e3ff/726edd?text=Giovanni+Raimondo'" alt="Giovanni Raimondo" />
+            <img src="brand_assets/instructors/Giovanni%20Raimondo.jpg" width="586" height="733" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x400/e4e3ff/726edd?text=Giovanni+Raimondo')" alt="Giovanni Raimondo" />
           </picture>
         </div>
         <div class="team-name">Giovanni Raimondo</div>
@@ -1453,6 +1520,25 @@
 </script>
 
 <script>
+// `html.js` proves scripting is ON. It does not prove this API exists.
+//
+// The hidden state of every scroll-reveal section is now gated on that class, so if the
+// first constructor below throws, .pricing-card, .step, .why-card, .lesson-card and
+// .team-card stay at opacity 0 permanently: no prices, no lessons, no steps, no team,
+// and no error a visitor can see. That is the exact blank-page failure the .js gate was
+// added to prevent, reintroduced one line lower down. The throw also landed BEFORE the
+// chips and testimonials observers at the end of this block, so those died with it.
+//
+// The reveal is decoration. The content is not. Without the API everything is simply
+// shown. The lazy-image observer further down this file already had this guard.
+// `typeof ... === 'function'`, not `'IntersectionObserver' in window`. The `in` form is
+// true whenever the property merely EXISTS, including when a polyfill, an extension or a
+// stub has left it defined but not constructible, and `new undefined()` throws exactly the
+// same way a missing API would. Caught by testing the guard rather than trusting it.
+if (typeof window.IntersectionObserver !== 'function') {
+  document.querySelectorAll('.pricing-card, .step, .why-card, .lesson-card, .team-card')
+    .forEach(function (el) { el.classList.add('animate-in'); });
+} else {
 const pricingObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -1528,6 +1614,7 @@ const testimonialsObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 const testimonialsSection = document.querySelector('.testimonials-section');
 if (testimonialsSection) testimonialsObserver.observe(testimonialsSection);
+}
 </script>
 <script>
 (function () {
@@ -1578,7 +1665,7 @@ if (testimonialsSection) testimonialsObserver.observe(testimonialsSection);
 
 <script>
 (function(){
-  if (!('IntersectionObserver' in window)) return;
+  if (typeof window.IntersectionObserver !== 'function') return;  // see the note above: `in` is true for a defined-but-unconstructible stub
   var observer = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       var tracks = entry.target.querySelectorAll('.chips-track, .testimonials-track');
