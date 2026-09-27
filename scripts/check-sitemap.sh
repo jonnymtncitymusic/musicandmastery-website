@@ -1,17 +1,29 @@
 #!/usr/bin/env bash
 # Compare *.html files against sitemap.xml entries. Emits drift to stderr.
 # Exit 0 = in sync, 1 = drift detected.
-# Excludes print-only assets (banner.html, flyer.html) and the noindexed thank-you page.
+#
+# Two kinds of page are legitimately absent from the sitemap:
+#   * print-only assets (banner.html, flyer.html), which are not web pages at all;
+#   * any page that declares `noindex`, because asking Google not to index a page and
+#     then listing it in the sitemap are contradictory instructions.
+#
+# The noindex set is READ FROM THE PAGES rather than hardcoded. thank-you.html used to be
+# named here by hand, and when drums-lessons-orange-county.html was retired on 2026-09-27
+# this check started reporting drift on every run: a permanent false alarm is how a
+# checker gets ignored, and then a real one goes unnoticed. Retiring a page is now one
+# edit (add the meta tag) and this follows on its own.
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SITEMAP="$ROOT/sitemap.xml"
-EXCLUDE_REGEX='^(banner|flyer|thank-you)\.html$'
+EXCLUDE_REGEX='^(banner|flyer)\.html$'
 
 cd "$ROOT"
 
-disk_pages=$(ls *.html | grep -Ev "$EXCLUDE_REGEX" | sort)
+disk_pages=$(ls *.html | grep -Ev "$EXCLUDE_REGEX" | while read -r f; do
+  grep -qiE '<meta[^>]+name="robots"[^>]*noindex' "$f" || echo "$f"
+done | sort)
 sitemap_pages=$(grep -oE '<loc>[^<]+</loc>' "$SITEMAP" \
   | sed -E 's#<loc>https://[^/]+/##; s#</loc>##; s#^$#index.html#' \
   | sort)
