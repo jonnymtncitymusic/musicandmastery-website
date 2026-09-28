@@ -117,8 +117,17 @@ async function newPage(browser, base, route,
 /** The scheduling API, stubbed. CORS headers are not optional: the widget calls a
  *  different origin, so a stub without them is blocked by the browser and the widget
  *  shows its network error instead of a slot grid. POST + JSON preflights, too. */
+// Every scheduling request the widget makes, so a case can assert WHAT it asked for and
+// not just what it showed. mtncitymusic's widget asked /cities with no brand until
+// 2026-09-28, and its dropdown offered Music & Mastery's cities; the stub answered the
+// same either way, so nothing here could see it.
+const apiCalls = [];
+
 function stubApi(req, availability, stripRedirect = false, availabilityStatus = 200) {
   const url = req.url();
+  if (url.includes('/api/scheduling/') && req.method() !== 'OPTIONS') {
+    apiCalls.push({ url, body: req.postData() || '' });
+  }
   const cors = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': '*',
@@ -198,6 +207,16 @@ async function findSlots(page) {
 
       const slots = evt(ev, 'widget_slots');
       check('1 widget_slots fired once', slots.length === 1, `got ${slots.length}`);
+
+      const citiesCall = apiCalls.find(c => c.url.includes('/cities'));
+      check('1 the city list is asked for this brand only',
+        !!citiesCall && new URL(citiesCall.url).searchParams.get('brand') === brand,
+        citiesCall ? citiesCall.url : 'no /cities request');
+      const availCall = apiCalls.find(c => c.url.includes('/availability'));
+      let availBrand;
+      try { availBrand = JSON.parse(availCall?.body || '{}').brand; } catch (e) { availBrand = undefined; }
+      check('1 the availability search is scoped to this brand', availBrand === brand,
+        availCall ? availCall.body : 'no /availability request');
       check('1 widget_slots outcome is shown', slots[0]?.[1]?.outcome === 'shown', JSON.stringify(slots[0]));
       check('1 widget_slots counted all 3 slots', slots[0]?.[1]?.slot_count === 3, JSON.stringify(slots[0]));
       check('1 widget_slots names the instrument', slots[0]?.[1]?.instrument === 'Guitar', JSON.stringify(slots[0]));
