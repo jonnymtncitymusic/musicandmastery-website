@@ -787,12 +787,13 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 <!-- Music & Mastery lead capture widget -->
 <script>window.MCMC_SCHEDULING_API = 'https://cron-runner-production-a510.up.railway.app';</script>
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
-<!-- Bookable in Irvine only: Armando Salazar is the sole Orange County
-     instructor for this instrument, Wednesdays 8am to 12pm. Every other bookable
-     city returns nothing and falls through to the lead form, which widget_slots
-     reports as outcome 'empty'. Jonny's call, 2026-09-24, over the
-     recommendation to leave it as a form. -->
-<script>window.MCMC_LEAD_ONLY = false;</script>
+<!-- Lead form, not booking. Jonny 2026-09-27: voice is not bookable on Music &
+     Mastery. It was bookable in Irvine only (Armando Salazar, Wednesday mornings)
+     while the page sold it across the county. Voice also came off Armando's
+     bookable instruments in the scheduler's instructor_config.json, so a voice
+     request from any M&M page finds no instructor and lands on the lead form too.
+     Hiring an OC voice teacher reverses both: flip this to false and add Voice back. -->
+<script>window.MCMC_LEAD_ONLY = true;</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <!-- This page sells one instrument, so the form opens on it. A ?book= value in the URL still overrides this. -->
 <script>window.MCMC_PREFILL_INSTRUMENT = 'Voice';</script>
