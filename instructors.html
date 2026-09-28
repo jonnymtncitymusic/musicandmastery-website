@@ -183,8 +183,20 @@
        font-size, and an inline value still wins over .nav-logo img. */
     .nav-inner { padding: 0 20px; gap: 12px; }
     .nav-logo img { height: 40px; }
-    .nav-brand { font-size: 19px; }
+    .nav-logo { gap: 8px; }
+    .nav-brand { font-size: 17px; }
     .nav-links { display: none; }
+    /* The Book pill needs nowrap AND flex-shrink:0 AND smaller type at phone widths, all
+       three. Without them it wrapped "Book a Free Lesson" onto three lines and stood taller
+       than the nav bar; with nowrap alone it ran off the right edge instead. The label
+       stays whole: at 374px and under, the wordmark gives up the room, not the CTA. */
+    .nav-inner > .btn-primary { white-space: nowrap; flex-shrink: 0; font-size: 13px; padding: 10px 16px; }
+    @media (max-width: 374px) {
+      .nav-inner { padding: 0 14px; gap: 8px; }
+      .nav-logo img { height: 34px; }
+      .nav-brand { font-size: 14px; }
+      .nav-inner > .btn-primary { font-size: 12px; padding: 9px 11px; }
+    }
     .instructors-wrap { padding: 48px 20px 64px; }
     .instructors-grid { grid-template-columns: 1fr !important; gap: 40px; }
     .instructor-card:nth-child(n) { grid-column: auto; }

@@ -235,8 +235,18 @@
          instructors.html; only the secondary links go. */
       .nav-inner { padding: 0 20px; gap: 12px; }
       .nav-logo img { height: 40px; }
-      .nav-brand { font-size: 19px; }
+      .nav-logo { gap: 8px; }
+      .nav-brand { font-size: 17px; }
       .nav-links { gap: 14px; }
+      /* nav-prefixed on purpose: the base .nav-links .nav-cta rule comes later in this
+         sheet and would win a specificity tie. */
+      nav .nav-links .nav-cta { font-size: 13px; padding: 10px 16px; }
+      @media (max-width: 374px) {
+        .nav-inner { padding: 0 14px; gap: 8px; }
+        .nav-logo img { height: 34px; }
+        .nav-brand { font-size: 14px; }
+        nav .nav-links .nav-cta { font-size: 12px; padding: 9px 11px; }
+      }
       .nav-links li:not(:first-child) { display: none; }
       .faq-wrap { padding: 40px 20px 56px; }
       .page-hero { padding: 48px 20px 56px; }

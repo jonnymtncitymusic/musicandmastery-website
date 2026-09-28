@@ -462,8 +462,21 @@
   @media (max-width: 768px) {
     /* NAV */
     .nav-inner { padding: 0 20px; gap: 12px; }
+    .nav-logo { gap: 8px; }
     .nav-logo img { height: 40px; }
+    .nav-brand { font-size: 17px; }
     .nav-review-link { display: none; }
+    /* The Book pill needs nowrap AND flex-shrink:0 AND smaller type at phone widths, all
+       three. Without them it wrapped "Book a Free Lesson" onto three lines and stood taller
+       than the nav bar; with nowrap alone it ran off the right edge instead. The label
+       stays whole: at 374px and under, the wordmark gives up the room, not the CTA. */
+    .nav .btn-primary { white-space: nowrap; flex-shrink: 0; font-size: 13px; padding: 10px 16px; }
+    @media (max-width: 374px) {
+      .nav-inner { padding: 0 14px; gap: 8px; }
+      .nav-logo img { height: 34px; }
+      .nav-brand { font-size: 14px; }
+      .nav .btn-primary { font-size: 12px; padding: 9px 11px; }
+    }
 
     /* HERO */
     .hero { padding: 64px 20px 0; }
@@ -524,7 +537,10 @@
     .team-section { padding: 64px 20px; }
     .team-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 24px; }
     .team-card:nth-child(n) { grid-column: auto; }
-    .team-coming-soon { padding: 32px 24px; }
+    /* grid-column, not just padding: the desktop `span 6` inside this two-column grid
+       made the grid invent four implicit tracks and pushed the page out to 366px wide at
+       360px. Same bug instructors.html had on .instructor-coming-soon. */
+    .team-coming-soon { grid-column: 1 / -1; padding: 32px 24px; }
 
     /* READY CTA */
     .adults-section { padding: 64px 20px; }
@@ -1164,7 +1180,7 @@
             </svg>
           </div>
           <h3 class="team-coming-soon-heading">More Teachers On the Way</h3>
-          <p class="team-coming-soon-body">We're hand-picking more instructors across Orange County (Costa Mesa, Lake Forest) and Los Angeles (Burbank, Beverly Hills, West Hollywood, Pacific Palisades, Malibu). Every one goes through the same DOJ and FBI background check and audition process Jonny built for Mountain City. Book a free lesson and we'll match you with the right teacher for your instrument and goals. If the match isn't working after that first lesson, we'll re-match you at no charge.</p>
+          <p class="team-coming-soon-body">We're hand-picking more instructors across Orange County (Costa Mesa, Lake Forest) and Los Angeles (Burbank, Beverly Hills, Pacific Palisades, Malibu). Every one goes through the same DOJ and FBI background check and audition process Jonny built for Mountain City. Book a free lesson and we'll match you with the right teacher for your instrument and goals. If the match isn't working after that first lesson, we'll re-match you at no charge.</p>
           <a href="#" class="btn btn-outline-purple" onclick="openModal(); return false;">Book a Free Lesson →</a>
         </div>
       </div>

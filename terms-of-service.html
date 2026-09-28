@@ -86,6 +86,25 @@
     }
     .nav-cta:hover { background: #5f5bc8; transform: translateY(-1px); }
     .nav-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    @media (max-width: 768px) {
+      /* This page had no phone layout for its nav: 40px side padding, the Reviews link and
+         a wrapping Book pill left the pill three lines tall at 390px. Same treatment as
+         index.html. `a > span > img` is the treble-clef icon only (the ampersand sits one
+         span deeper), and !important is needed because both sizes are inline styles. */
+      nav { padding: 0 20px; gap: 12px; }
+      .nav-review-link { display: none; }
+      .nav-logo a > span { gap: 8px !important; }
+      .nav-logo a > span > img { height: 40px !important; }
+      .nav-logo { flex-shrink: 0; }
+      .nav-logo a > span > span { font-size: 17px !important; white-space: nowrap; }
+      .nav-cta { white-space: nowrap; flex-shrink: 0; font-size: 13px; padding: 10px 16px; }
+    }
+    @media (max-width: 374px) {
+      nav { padding: 0 14px; gap: 8px; }
+      .nav-logo a > span > img { height: 34px !important; }
+      .nav-logo a > span > span { font-size: 14px !important; }
+      .nav-cta { font-size: 12px; padding: 9px 11px; }
+    }
 
     /* CONTENT */
     .legal-wrap {
