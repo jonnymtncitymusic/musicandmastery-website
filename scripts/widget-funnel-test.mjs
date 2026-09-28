@@ -389,6 +389,83 @@ async function findSlots(page) {
       await page.close();
     });
 
+    // ── 10. SMS opt-in (brands whose config sets smsConsent) ────────────────
+    // The A2P 10DLC rules: optional, UNCHECKED by default, its own box, and the wording
+    // names the business, STOP and HELP, and links privacy + terms. A ticked box has to
+    // reach the server with the wording; an unticked one must never claim consent.
+    if (CONFIG.smsConsent) {
+      const leadBody = () => {
+        const call = [...apiCalls].reverse().find(c => c.url.includes('/lead'));
+        try { return JSON.parse(call?.body || '{}'); } catch (e) { return {}; }
+      };
+      const fillLead = async page => {
+        await findSlots(page);
+        await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
+        await page.type('#sw-name', 'Test Parent');
+        await page.type('#sw-email', 'test@example.com');
+        await page.type('#sw-phone', '7605551234');
+        const lessonFor = await page.$('[data-lessonfor="child"]');
+        if (lessonFor) await lessonFor.click();
+      };
+
+      await isolate('10', async () => {
+        const page = await newPage(browser, base, inlinePage,
+          { availability: AVAIL_EMPTY, stripRedirect: true });
+        await fillLead(page);
+        const box = await page.$eval('#sw-sms-consent', el => ({
+          checked: el.checked, required: el.required,
+          text: el.closest('label').textContent.replace(/\s+/g, ' '),
+          links: [...el.closest('label').querySelectorAll('a')].map(a => a.getAttribute('href')),
+        })).catch(() => null);
+        check('10 the lead form shows the SMS opt-in box', !!box);
+        check('10 it starts unchecked', box && box.checked === false, JSON.stringify(box));
+        check('10 it is not required', box && box.required === false, JSON.stringify(box));
+        const t = (box && box.text) || '';
+        check('10 the wording names the business, STOP, HELP and rates',
+          /Mountain City Music Co\./.test(t) && /STOP/.test(t) && /HELP/.test(t) &&
+          /rates may apply/i.test(t) && /frequency varies/i.test(t), t);
+        check('10 it links the privacy policy and the terms',
+          box && box.links.some(h => /privacy-policy/.test(h)) &&
+          box.links.some(h => /terms-of-service/.test(h)), JSON.stringify(box && box.links));
+
+        await page.click('#sw-submit-lead');
+        await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
+          { timeout: 8000 });
+        const body = leadBody();
+        check('10 an unticked box sends no consent', body.sms_consent === false && !body.sms_consent_text,
+          JSON.stringify(body));
+        await page.close();
+      });
+
+      await isolate('10b', async () => {
+        const page = await newPage(browser, base, inlinePage,
+          { availability: AVAIL_EMPTY, stripRedirect: true });
+        await fillLead(page);
+        await page.click('#sw-sms-consent');
+        await page.click('#sw-submit-lead');
+        await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
+          { timeout: 8000 });
+        const body = leadBody();
+        check('10 a ticked box sends consent with the wording it showed',
+          body.sms_consent === true && /STOP/.test(body.sms_consent_text || '') &&
+          /in-home-/.test(body.sms_consent_page || ''), JSON.stringify(body));
+        await page.close();
+      });
+
+      await isolate('10c', async () => {
+        const page = await newPage(browser, base, inlinePage);
+        await findSlots(page);
+        await page.waitForSelector('.sw-slot', { timeout: 5000 });
+        await page.click('.sw-slot');
+        const next = await page.$('#sw-next-3');
+        if (next) await next.click();
+        const onBooking = await page.waitForSelector('#sw-sms-consent', { timeout: 5000 })
+          .then(() => true, () => false);
+        check('10 the booking form shows the SMS opt-in box too', onBooking);
+        await page.close();
+      });
+    }
+
   } catch (e) {
     check('the harness itself ran to completion', false, String((e && e.message) || e));
   } finally {
