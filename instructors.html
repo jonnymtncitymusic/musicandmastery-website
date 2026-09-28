@@ -76,6 +76,11 @@
     .instructors-wrap { max-width: 1100px; margin: 0 auto; padding: 80px 32px 96px; }
     .instructors-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 40px; }
     .instructor-card { grid-column: span 2; cursor: pointer; display: flex; flex-direction: column; }
+    /* A card left alone on the last row (the coming-soon block follows it) sits centred.
+       Desktop only: the mobile reset is a weaker selector and would lose to this. */
+    @media (min-width: 769px) {
+      .instructor-card:nth-child(3n+1):nth-last-child(2) { grid-column: 3 / span 2; }
+    }
     .instructor-photo { width: 100%; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; background: var(--light-purple); margin-bottom: 20px; }
     .instructor-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
     .instructor-name { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: -0.02em; margin: 0 0 6px; }
@@ -405,6 +410,27 @@
         <span class="service-tag">Pasadena</span>
       </div>
       <p class="instructor-bio">Giovanni holds a bachelor's degree in Music from Cal Poly Pomona and has played piano since he was six years old, studying mostly jazz and pop. He teaches songwriting alongside playing, and builds the skills a student needs to improvise on their own. He sees music as one of the greatest forms of personal expression, and that is how he teaches it.</p>
+    </div>
+
+    <div class="instructor-card" onclick="openModal()" role="button" tabindex="0">
+      <div class="instructor-photo">
+        <picture>
+          <source srcset="brand_assets/instructors/Armando%20Salazar.webp" type="image/webp" />
+          <img src="brand_assets/instructors/Armando%20Salazar.jpg" width="900" height="1125" loading="lazy" onerror="this.src='https://placehold.co/400x400/e4e3ff/726edd?text=Armando+Salazar'" alt="Armando Salazar" />
+        </picture>
+      </div>
+      <h2 class="instructor-name">Armando Salazar</h2>
+      <div class="instructor-instruments">
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Guitar</span>
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Piano</span>
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Voice</span>
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Bass</span>
+        <span class="instrument-tag" onclick="openModal()" role="button" tabindex="0">Ukulele</span>
+      </div>
+      <div class="instructor-service-area">
+        <span class="service-tag">Irvine</span>
+      </div>
+      <p class="instructor-bio">Armando holds a Bachelor's in Music Education from CSUSB and has been teaching for six years, working with students from age 3 through adult, beginner to advanced. Armando started on electric guitar at 16, learning popular music from the '70s through the early 2000s, then went on to sing with the CSUSB Opera Theater and community ensembles including The Pass Choral, and to perform alongside Folklorico groups, at the National Orange Show grand opening, and with the Palomar College advanced choir. Every student learns a little differently, so Armando brings patience, empathy, and real joy for the work to finding the path that fits each one.</p>
     </div>
 
     <div class="instructor-coming-soon">
