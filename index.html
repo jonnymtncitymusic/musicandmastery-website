@@ -356,11 +356,13 @@
     .team-section { background: #ffffff; padding: 96px 32px; }
     .team-inner { max-width: 1200px; margin: 0 auto; }
     .team-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 32px; margin-bottom: 48px; }
-    .team-card:nth-child(-n+3) { grid-column: span 2; }
-    .team-card:nth-child(4) { grid-column: 2 / span 2; }
-    .team-card:nth-child(5) { grid-column: 4 / span 2; }
-    .team-card:nth-child(6) { grid-column: 2 / span 2; }
-    .team-card:nth-child(7) { grid-column: 4 / span 2; }
+    /* Rows of three at any count. The old rules pinned cards 4-7 to a shape written for seven,
+       so a fourth card sat off-centre. A card alone on the last row (the coming-soon block
+       follows it) sits centred. Desktop only: the mobile reset is a weaker selector. */
+    .team-card { grid-column: span 2; }
+    @media (min-width: 769px) {
+      .team-card:nth-child(3n+1):nth-last-child(2) { grid-column: 3 / span 2; }
+    }
     .team-card { cursor: pointer; text-align: center; transition: opacity 0.4s cubic-bezier(0.34,1.2,0.64,1), transform 0.4s cubic-bezier(0.34,1.2,0.64,1); }
     .js .team-card { opacity: 0; transform: translateY(40px); }
     .team-card.animate-in { opacity: 1; transform: translateY(0); }
@@ -1167,6 +1169,19 @@
         <div class="team-title">Piano Instructor</div>
         <div class="team-instruments">Piano &middot; Drums &middot; Bass &middot; Guitar</div>
         <div class="team-service-area"><span class="team-service-tag">Pasadena</span></div>
+      </div>
+
+      <div class="team-card" onclick="openModal()" role="button" tabindex="0">
+        <div class="team-photo">
+          <picture>
+            <source srcset="brand_assets/instructors/Armando%20Salazar.webp" type="image/webp" />
+            <img src="brand_assets/instructors/Armando%20Salazar.jpg" width="900" height="1125" loading="lazy" onerror="imgFallback(this,'https://placehold.co/400x400/e4e3ff/726edd?text=Armando+Salazar')" alt="Armando Salazar" />
+          </picture>
+        </div>
+        <div class="team-name">Armando Salazar</div>
+        <div class="team-title">Guitar Instructor</div>
+        <div class="team-instruments">Guitar &middot; Piano &middot; Voice &middot; Bass &middot; Ukulele</div>
+        <div class="team-service-area"><span class="team-service-tag">Irvine</span></div>
       </div>
 
       <div class="team-coming-soon">
