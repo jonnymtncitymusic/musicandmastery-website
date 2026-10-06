@@ -21,6 +21,13 @@ bash "$root/scripts/check-sitemap.sh" || {
   echo "Commit blocked on sitemap drift. Fix it, or bypass deliberately with: git commit --no-verify"
   exit 1
 }
+# Added 2026-10-05. A file can be in git and still never reach the live site: .vercelignore
+# kept the piano hero image off the CDN for a month while the ad landing pages used it.
+node "$root/scripts/check-vercelignore.mjs" || {
+  echo ""
+  echo "Commit blocked: a referenced file is excluded from deploy. Fix .vercelignore, or bypass deliberately with: git commit --no-verify"
+  exit 1
+}
 HOOK
 chmod +x "$hook"
 echo "installed: $hook"
