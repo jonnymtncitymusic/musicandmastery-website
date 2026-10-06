@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node scripts/check-em-dashes.mjs && bash scripts/check-sitemap.sh && node scripts/widget-funnel-test.mjs"
+    "test": "node scripts/check-em-dashes.mjs && node scripts/check-dni.mjs && bash scripts/check-sitemap.sh && node scripts/widget-funnel-test.mjs"
   },
   "keywords": [],
   "author": "",

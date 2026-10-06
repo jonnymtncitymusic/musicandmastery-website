@@ -22,6 +22,16 @@
   gtag('js', new Date());
   gtag('config', 'AW-11066542604');
   gtag('config', 'G-SPQ1FGTKTV');
+  // Dynamic number insertion, same wiring as piano-lessons-orange-county.html.
+  // The OC - Guitar ad group lands here and runs under a kill gate that counts a
+  // form submit or a call past 60 seconds as a genuine lead, never a tap. Without
+  // this block a guitar caller could only ever register as a tap, so the gate
+  // could trip on a guitar arm that was in fact producing calls.
+  // Conversion action 7741120696 ('Website call - M&M Orange County',
+  // WEBSITE_CALL, ONE_PER_CLICK, 60s floor) is campaign-wide for Orange County.
+  gtag('config', 'AW-11066542604/NfzuCLjBoOscEIyU-Jwp', {
+    'phone_conversion_number': '(760) 573-2120'
+  });
 </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>In-Home Guitar Lessons in Orange County | Music and Mastery</title>
@@ -814,9 +824,26 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
     try { window.sessionStorage.setItem(KEY, '1'); } catch (e) {}
   }
 
+  // The number this page ships with. When Google swaps the tel: href for a
+  // forwarding number, the call itself is being measured (7741120696), and the tap
+  // yields so one caller is not counted twice in the PHONE_CALL_LEAD goal. When no
+  // swap happened, the tap is the only evidence and still fires.
+  var PAGE_NUMBER = '7605732120';
+
+  function nationalDigits(value) {
+    var d = String(value || '').replace(/\D/g, '');
+    return (d.length === 11 && d.charAt(0) === '1') ? d.slice(1) : d;
+  }
+
+  function callIsBeingMeasured(link) {
+    var dialled = nationalDigits(link.getAttribute('href'));
+    return dialled.length >= 10 && dialled !== PAGE_NUMBER;
+  }
+
   document.addEventListener('click', function (e) {
     var link = e.target.closest('a[href^="tel:"]');
     if (!link) return;
+    if (callIsBeingMeasured(link)) return;
     if (alreadyFired()) return;
     markFired();
     gtag('event', 'phone_call_click', {
