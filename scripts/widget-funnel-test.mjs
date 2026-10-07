@@ -192,8 +192,11 @@ async function findSlots(page) {
     // ── 1. Slots exist: the full happy funnel ───────────────────────────────
     await isolate('1', async () => {
       const page = await newPage(browser, base, inlinePage);
-      check('1 no event before the visitor touches anything', (await events(page)).length === 0,
-        JSON.stringify(await events(page)));
+      // The hero video reports its own muted autoplay (vsl_autoplay) without a touch, by
+      // design since 2026-10-06. This check is about the booking widget's funnel events.
+      const untouched = (await events(page)).filter(e => !/^vsl_/.test(e[0]));
+      check('1 no widget event before the visitor touches anything', untouched.length === 0,
+        JSON.stringify(untouched));
 
       await findSlots(page);
       await page.waitForSelector('.sw-slot', { timeout: 5000 });

@@ -129,9 +129,6 @@
 
     /* WHY FAMILIES */
 
-    /* VSL */
-    .vsl-wrapper { position: relative; width: 100%; padding-bottom: 177.78%; border-radius: 20px; overflow: hidden; background: #1a1a2e; box-shadow: 0 24px 80px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.1); }
-    .vsl-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
     /* TESTIMONIALS */
     .tcard { background: #fff; border-radius: 16px; padding: 28px; width: 340px; flex-shrink: 0; box-shadow: 0 4px 20px rgba(114,110,221,0.1); }
@@ -263,21 +260,6 @@
     /* HERO PHOTO */
     .hero-photo { max-width: 620px; margin: 0 auto 32px; border-radius: 20px; overflow: hidden; box-shadow: 0 24px 60px rgba(114,110,221,0.24), 0 6px 18px rgba(0,0,0,0.10); }
     .hero-photo img { display: block; width: 100%; height: auto; }
-    /* Hero VSL, Hormozi's way (acquisition.com/workshop, checked 2026-10-06): the video begins
-       muted on its own under the headline, with a "Your video is playing / Tap to unmute" card,
-       and the CTA sits right below it. The box is the video's own 9:16 shape from the first
-       paint, so nothing jumps when it starts. */
-    .hero-vsl { position: relative; max-width: none; width: min(100%, 340px, calc(56vh * 9 / 16)); aspect-ratio: 9 / 16; margin-left: auto; margin-right: auto; background: #1a1a2e; }
-    .hero-vsl-frame, .hero-vsl-frame iframe, .hero-vsl-btn { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .hero-vsl-frame iframe { border: 0; }
-    .hero-vsl-btn { z-index: 2; padding: 0; border: 0; background: none; cursor: pointer; display: none; align-items: center; justify-content: center; }
-    .hero-vsl.is-live .hero-vsl-btn { display: flex; }
-    .hero-vsl.is-engaged .hero-vsl-btn { display: none; }
-    .hero-vsl-btn:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: -3px; }
-    .hero-vsl-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 20px; max-width: 78%; border-radius: 16px; background: rgba(114,110,221,0.92); border: 2px solid rgba(255,255,255,0.85); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; line-height: 1.25; text-align: center; box-shadow: 0 12px 34px rgba(20,18,40,0.35); transition: transform 0.15s; }
-    .hero-vsl-btn:hover .hero-vsl-card { transform: scale(1.04); }
-    .hero-vsl-icon { width: 34px; height: 34px; }
-    .hero-vsl-sub { font-weight: 600; font-size: 14px; opacity: 0.92; }
     .hero-keyline { font-size: 15px; line-height: 1.65; color: #4a4a58; margin: 0 auto 32px; max-width: 540px; }
 
     /* CTA BANDS. Identical label in all three places, all opening the same form. */
@@ -433,6 +415,20 @@
       .hero { padding: 52px 20px 44px; }
     }
 
+    /* Hero video (Jonny 2026-10-06, Hormozi's way; behaviour lives in js/hero-vsl.js). The box is
+       the video's own 9:16 shape from the first paint, so nothing jumps when it starts. */
+    .hero-vsl { position: relative; width: min(100%, 340px, calc(56vh * 9 / 16)); max-width: none; aspect-ratio: 9 / 16; margin: 0 auto 32px; border-radius: 20px; overflow: hidden; background: #1a1a2e; box-shadow: 0 24px 60px rgba(114,110,221,0.24), 0 6px 18px rgba(0,0,0,0.10); }
+    .hero-vsl-frame, .hero-vsl-frame iframe, .hero-vsl-btn { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-vsl-frame iframe { border: 0; }
+    .hero-vsl-btn { z-index: 2; padding: 0; border: 0; background: none; cursor: pointer; display: none; align-items: center; justify-content: center; }
+    .hero-vsl.is-live .hero-vsl-btn { display: flex; }
+    .hero-vsl.is-engaged .hero-vsl-btn { display: none; }
+    .hero-vsl-btn:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: -3px; }
+    .hero-vsl-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 20px; max-width: 78%; border-radius: 16px; background: rgba(114,110,221,0.92); border: 2px solid rgba(255,255,255,0.85); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; line-height: 1.25; text-align: center; box-shadow: 0 12px 34px rgba(20,18,40,0.35); transition: transform 0.15s; }
+    .hero-vsl-btn:hover .hero-vsl-card { transform: scale(1.04); }
+    .hero-vsl-btn:active .hero-vsl-card { transform: scale(0.98); }
+    .hero-vsl-icon { width: 34px; height: 34px; }
+    .hero-vsl-sub { font-weight: 600; font-size: 14px; opacity: 0.92; }
   </style>
     <script type="application/ld+json">
 {
@@ -572,14 +568,20 @@
     </h1>
     <p class="hero-sub blur-fade blur-fade-2">In-home piano lessons in Orange County. From the first notes to songs they are proud to play, taught right at your own piano.</p>
 
-    <!-- The video sits IN the hero slot (Hormozi's case-study page: headline, a plain video of
-         how it works, one next step) and, like his live VSL page, begins by itself MUTED with a
-         "Your video is playing / Tap to unmute" card over it. Jonny 2026-10-06: no photo or
-         thumbnail in front of it, just begin the video. -->
-    <div class="hero-photo hero-vsl blur-fade blur-fade-3">
+    <!-- HERO VIDEO: "The Mechanism" begins muted by itself with a tap-to-unmute card, the way
+         Hormozi's live VSL page does (Jonny 2026-10-06). No thumbnail in front of it. -->
+    <div class="hero-vsl blur-fade blur-fade-3">
       <div class="hero-vsl-frame">
-        <iframe src="https://www.youtube-nocookie.com/embed/bNdyZWVwQSI?autoplay=1&amp;mute=1&amp;rel=0&amp;playsinline=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;enablejsapi=1" title="How our in-home piano lessons work" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe src="https://www.youtube-nocookie.com/embed/bNdyZWVwQSI?autoplay=1&amp;mute=1&amp;rel=0&amp;playsinline=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;enablejsapi=1" title="How Music and Mastery lessons work" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
+      <button type="button" class="hero-vsl-btn" aria-label="Turn on the sound and play the video from the start">
+        <span class="hero-vsl-card">
+          <svg class="hero-vsl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a8 8 0 0 1 0 11"/></svg>
+          <span>Your video is playing</span>
+          <span class="hero-vsl-sub">Tap to unmute</span>
+        </span>
+      </button>
+    </div>
       <button type="button" class="hero-vsl-btn" aria-label="Turn on the sound and play the video from the start">
         <span class="hero-vsl-card">
           <svg class="hero-vsl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a8 8 0 0 1 0 11"/></svg>
@@ -1062,59 +1064,7 @@
 <script>window.MCMC_AREA_LABEL = 'Orange County';</script>
 <script src="/js/scheduling-widget.js?v=20261006"></script>
 
-<script>
-(function(){
-  // Hero video, Hormozi's way: the iframe is in the HTML with autoplay=1&mute=1, so the video
-  // begins at once, muted. When it is actually playing, a "Your video is playing / Tap to
-  // unmute" card appears over it; a tap on the card restarts it from the top with sound
-  // (measured 2026-10-06 in Chrome, phone and desktop: one tap, playing, unmuted). A tap inside
-  // the YouTube player itself does NOT unmute, which is why the card exists.
-  //
-  // If muted autoplay is blocked (data saver, iPhone Low Power Mode) the card never shows and
-  // YouTube's own play button is what the visitor sees, which plays with sound on one tap.
-  //
-  // YouTube's caption box is switched off on every state report (Jonny 2026-10-06); the
-  // embed's cc_load_policy=0 alone does not keep it off. The words in the video are part of
-  // the video file, not YouTube captions.
-  //
-  // GA4: vsl_autoplay = the muted video started; vsl_play = the visitor tapped for sound.
-  var box = document.querySelector('.hero-vsl');
-  if (box) (function(){
-    var iframe = box.querySelector('iframe');
-    var btn = box.querySelector('.hero-vsl-btn');
-    var state = null, captionsOff = false;
-    function track(name){
-      try { if (typeof gtag === 'function') gtag('event', name, { video: 'the_mechanism', page: 'piano-lessons-orange-county' }); } catch (e) {}
-    }
-    function send(func, args){
-      try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: args || [] }), '*'); } catch (e) {}
-    }
-    window.addEventListener('message', function(e){
-      if (e.source !== iframe.contentWindow) return;
-      try {
-        var d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        if (!d || !d.info || typeof d.info.playerState !== 'number') return;
-        state = d.info.playerState;
-        if (state === 1 && !captionsOff) { captionsOff = true; send('unloadModule', ['captions']); send('unloadModule', ['cc']); }
-        if (state === 1 && !box.classList.contains('is-live')) { box.classList.add('is-live'); track('vsl_autoplay'); }
-      } catch (x) {}
-    });
-    // The player only reports its state once it has been told someone is listening.
-    var ask = setInterval(function(){
-      try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'hero-vsl' }), '*'); } catch (x) {}
-    }, 400);
-    setTimeout(function(){ clearInterval(ask); }, 60000);
 
-    btn.addEventListener('click', function(){
-      box.classList.add('is-engaged');
-      track('vsl_play');
-      send('seekTo', [0, true]); send('unMute'); send('setVolume', [100]); send('playVideo');
-      captionsOff = false;
-    });
-  })();
-
-})();
-</script>
-
+<script src="/js/hero-vsl.js?v=20261006" defer></script>
 </body>
 </html>

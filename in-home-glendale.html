@@ -149,15 +149,6 @@
     .lp-instructor-circle { width: 380px; height: 380px; border-radius: 50%; overflow: hidden; box-shadow: 0 24px 60px rgba(114,110,221,0.28), 0 8px 20px rgba(0,0,0,0.1); flex-shrink: 0; }
     .lp-instructor-circle img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; }
 
-    /* VSL */
-    .vsl-section { background: #ffffff; padding: 96px 32px; text-align: center; }
-    .vsl-inner { max-width: 420px; margin: 0 auto; }
-    .vsl-section h2 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(28px, 3.5vw, 44px); line-height: 1.1; letter-spacing: -0.03em; color: var(--black); margin: 0 0 48px; }
-    .vsl-wrapper { position: relative; width: 100%; padding-bottom: 177.78%; border-radius: 20px; overflow: hidden; background: #1a1a2e; box-shadow: 0 24px 80px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.1); }
-    .vsl-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-    .vsl-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); font-family: 'Work Sans', sans-serif; gap: 12px; }
-    .vsl-placeholder svg { opacity: 0.4; }
-    .vsl-placeholder span { font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; }
 
     /* TESTIMONIALS */
     .testimonials-section { background: var(--cream-grad); padding: 96px 0; overflow: hidden; }
@@ -234,7 +225,6 @@
       .why-photo-col { order: -1; }
       .lp-instructor-circle { width: 260px; height: 260px; }
 
-      .vsl-section { padding: 64px 20px; }
 
       .testimonials-section { padding: 64px 0; }
       .testimonials-header { padding: 0 20px; margin-bottom: 40px; }
@@ -288,12 +278,6 @@
     .local-faq-q { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 16px; color: var(--black); margin: 0 0 8px; }
     .local-faq-a { font-size: 15px; line-height: 1.7; color: #555; margin: 0; }
   
-    /* Lite YouTube embed */
-    .lite-youtube { position: absolute; inset: 0; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background-color: #1a1a2e; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
-    .lite-youtube::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.35) 100%); }
-    .lite-youtube-play { position: relative; width: 68px; height: 48px; background: #f00; border-radius: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.15s; }
-    .lite-youtube:hover .lite-youtube-play { background: #4f4ab8; transform: scale(1.06); }
-    .lite-youtube-play::after { content: ''; border-left: 18px solid #fff; border-top: 11px solid transparent; border-bottom: 11px solid transparent; margin-left: 4px; }
 
     /* Respect users' OS-level reduced-motion preference */
     @media (prefers-reduced-motion: reduce) {
@@ -315,6 +299,20 @@
       .nav-logo > span > span { font-size: 18px !important; }
     }
     @media (max-width: 374px) { .nav-logo > span > span { font-size: 17px !important; } }
+    /* Hero video (Jonny 2026-10-06, Hormozi's way; behaviour lives in js/hero-vsl.js). The box is
+       the video's own 9:16 shape from the first paint, so nothing jumps when it starts. */
+    .hero-vsl { position: relative; width: min(100%, 340px, calc(56vh * 9 / 16)); max-width: none; aspect-ratio: 9 / 16; margin: 0 auto 32px; border-radius: 20px; overflow: hidden; background: #1a1a2e; box-shadow: 0 24px 60px rgba(114,110,221,0.24), 0 6px 18px rgba(0,0,0,0.10); }
+    .hero-vsl-frame, .hero-vsl-frame iframe, .hero-vsl-btn { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-vsl-frame iframe { border: 0; }
+    .hero-vsl-btn { z-index: 2; padding: 0; border: 0; background: none; cursor: pointer; display: none; align-items: center; justify-content: center; }
+    .hero-vsl.is-live .hero-vsl-btn { display: flex; }
+    .hero-vsl.is-engaged .hero-vsl-btn { display: none; }
+    .hero-vsl-btn:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: -3px; }
+    .hero-vsl-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 20px; max-width: 78%; border-radius: 16px; background: rgba(114,110,221,0.92); border: 2px solid rgba(255,255,255,0.85); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; line-height: 1.25; text-align: center; box-shadow: 0 12px 34px rgba(20,18,40,0.35); transition: transform 0.15s; }
+    .hero-vsl-btn:hover .hero-vsl-card { transform: scale(1.04); }
+    .hero-vsl-btn:active .hero-vsl-card { transform: scale(0.98); }
+    .hero-vsl-icon { width: 34px; height: 34px; }
+    .hero-vsl-sub { font-weight: 600; font-size: 14px; opacity: 0.92; }
   </style>
     <script type="application/ld+json">
 {
@@ -423,6 +421,21 @@
       In-Home Music Lessons<br>in <span class="accent-word">Glendale</span>
     </h1>
     <p class="hero-sub blur-fade blur-fade-2">The music they actually want to play, taught one-on-one in your living room.</p>
+
+    <!-- HERO VIDEO: "The Mechanism" begins muted by itself with a tap-to-unmute card, the way
+         Hormozi's live VSL page does (Jonny 2026-10-06). No thumbnail in front of it. -->
+    <div class="hero-vsl blur-fade blur-fade-3">
+      <div class="hero-vsl-frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/bNdyZWVwQSI?autoplay=1&amp;mute=1&amp;rel=0&amp;playsinline=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;enablejsapi=1" title="How Music and Mastery lessons work" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <button type="button" class="hero-vsl-btn" aria-label="Turn on the sound and play the video from the start">
+        <span class="hero-vsl-card">
+          <svg class="hero-vsl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a8 8 0 0 1 0 11"/></svg>
+          <span>Your video is playing</span>
+          <span class="hero-vsl-sub">Tap to unmute</span>
+        </span>
+      </button>
+    </div>
     <a href="#form" class="hero-offer blur-fade blur-fade-3" aria-label="Claim your free first lesson"><span class="g">Free</span> First Lesson <span class="arw">&#8594;</span></a>
     <p class="hero-body blur-fade blur-fade-4">
       Private, in-home music lessons for families across Rossmoyne, Adams Hill, Verdugo Woodlands, and all of Glendale. DOJ &amp; FBI background-checked instructors. Your first lesson is free.<br>
@@ -495,16 +508,6 @@
           <img src="brand_assets/instructor-circle-768.jpg" width="768" height="768" loading="lazy" alt="Music instructor" />
         </picture>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT OUR LESSONS (VSL) -->
-<section class="vsl-section">
-  <div class="vsl-inner">
-    <h2>About our Lessons</h2>
-    <div class="vsl-wrapper">
-      <button type="button" class="lite-youtube" data-video-id="oO-8-uReQSw" data-domain="youtube-nocookie.com" aria-label="Play: About Our Lessons" style="background-image:url(https://i.ytimg.com/vi/oO-8-uReQSw/hqdefault.jpg)"><span class="lite-youtube-play"></span></button>
     </div>
   </div>
 </section>
@@ -735,50 +738,6 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 
 <script>
 (function(){
-  // Tap-to-play video. The tap asks YouTube to start with sound, which Chrome often refuses
-  // inside an embed even right after a click; YouTube then shows an endless spinner with no
-  // play button (measured 2026-10-06). So the player reports its state, and if it is neither
-  // playing nor loading by 2.5s (6s while still loading) it is reloaded without autoplay,
-  // which shows YouTube's own play button. Worst case is a clear second tap.
-  document.querySelectorAll('.lite-youtube').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var vid = btn.dataset.videoId;
-      var domain = btn.dataset.domain || 'youtube.com';
-      if(!vid) return;
-      var base = 'https://www.' + domain + '/embed/' + vid + '?rel=0&playsinline=1&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
-      var iframe = document.createElement('iframe');
-      iframe.src = base + '&autoplay=1';
-      iframe.title = btn.getAttribute('aria-label') || 'YouTube video';
-      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-      iframe.allowFullscreen = true;
-      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
-      btn.replaceWith(iframe);
-      var state = null;
-      window.addEventListener('message', function(e){
-        if (e.source !== iframe.contentWindow) return;
-        try {
-          var d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-          if (d && d.info && typeof d.info.playerState === 'number') state = d.info.playerState;
-        } catch (x) {}
-      });
-      var ask = setInterval(function(){
-        try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'lite-youtube' }), '*'); } catch (x) {}
-      }, 400);
-      var waited = 2500;
-      function check(){
-        if (state === 1 || state === 2) { clearInterval(ask); return; }
-        if (state === 3 && waited < 6000) { waited += 1000; setTimeout(check, 1000); return; }
-        clearInterval(ask);
-        iframe.src = base;
-      }
-      setTimeout(check, waited);
-    });
-  });
-})();
-</script>
-
-<script>
-(function(){
   if (!('IntersectionObserver' in window)) return;
   var observer = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
@@ -793,5 +752,6 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
   });
 })();
 </script>
+<script src="/js/hero-vsl.js?v=20261006" defer></script>
 </body>
 </html>
