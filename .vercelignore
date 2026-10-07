@@ -1,4 +1,6 @@
 scripts/
+# Review source data. js/reviews.js carries the quotes the pages use.
+data/
 
 # Source masters and unused exports. Kept in the repo, not shipped to the CDN.
 # Nothing here is referenced by any page; generated and gated by a reference

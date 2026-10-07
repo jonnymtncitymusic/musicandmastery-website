@@ -1,0 +1,106 @@
+/* Shared styles for the Hormozi teardown edits on every landing page (Jonny 2026-10-06):
+   the first-screen rating line, the review wall, the who-it-is-for block and the P.S.
+   Everything else on these pages is still inline per page; these four are the same on all 34,
+   so they live once here. Colours come from each page's :root tokens. */
+
+/* 1. Rating line under the hero button. It sits on the first phone screen with the button. */
+.hero-rating { display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 4px 8px; max-width: 340px; margin: 0 auto; font-family: 'Work Sans', sans-serif; font-size: 14px; line-height: 1.45; color: #4a4a58; text-decoration: none; }
+.hero-rating-stars { color: var(--gold); letter-spacing: 2px; font-size: 15px; }
+.hero-rating strong { color: var(--black); font-weight: 800; }
+.hero-rating span.hero-rating-src { text-decoration: underline; text-decoration-color: rgba(114,110,221,0.45); text-underline-offset: 3px; }
+.hero-rating:hover span.hero-rating-src { text-decoration-color: var(--dark-purple); }
+.hero-rating:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: 4px; border-radius: 6px; }
+
+/* 2. Review wall. Masonry columns so each review keeps its own length, like a pinned wall
+   of slips rather than a grid of identical tiles. */
+.rv-section { background: var(--cream-grad, #f6f1e8); padding: 96px 32px; }
+.rv-inner { max-width: 1120px; margin: 0 auto; }
+.rv-head { text-align: center; max-width: 680px; margin: 0 auto 36px; }
+.rv-head-stars { color: var(--gold); font-size: 28px; letter-spacing: 3px; line-height: 1; margin-bottom: 10px; }
+.rv-score { font-family: 'Work Sans', sans-serif; font-size: 16px; font-weight: 600; color: #4a4a58; margin: 0 0 16px; }
+.rv-score strong { color: var(--black); font-weight: 900; }
+.rv-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(30px, 3.5vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0 0 16px; }
+.rv-caveat { font-family: 'Work Sans', sans-serif; font-size: 15px; line-height: 1.65; color: #555; margin: 0; }
+.rv-caveat a { color: var(--accent); }
+
+.rv-filters { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin: 0 0 12px; }
+.rv-filters-label { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px; color: var(--black); margin-right: 4px; }
+.rv-chip { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent); background: #fff; border: 1.5px solid rgba(114,110,221,0.35); border-radius: 9999px; padding: 9px 16px; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s; }
+.rv-chip-n { font-weight: 600; opacity: 0.7; }
+.rv-chip:hover { border-color: var(--dark-purple); transform: translateY(-1px); }
+.rv-chip:active { transform: translateY(0); }
+.rv-chip:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: 2px; }
+.rv-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.rv-status { text-align: center; font-family: 'Work Sans', sans-serif; font-size: 14px; color: #666; margin: 0 0 28px; }
+
+.rv-grid { column-count: 3; column-gap: 20px; }
+.rv-card { break-inside: avoid; margin: 0 0 20px; background: #fff; border-radius: 14px; padding: 24px 24px 20px; box-shadow: 0 1px 2px rgba(13,13,13,0.05), 0 8px 24px rgba(114,110,221,0.10); border-top: 3px solid rgba(198,149,79,0.55); }
+.rv-card-stars { color: var(--gold); font-size: 15px; letter-spacing: 2px; margin-bottom: 10px; }
+.rv-quote { margin: 0; font-family: 'Work Sans', sans-serif; font-size: 16px; line-height: 1.6; color: #2c2c36; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 9; overflow: hidden; }
+.rv-quote p { margin: 0 0 10px; white-space: pre-line; }
+.rv-quote p:last-child { margin-bottom: 0; }
+.rv-card.is-open .rv-quote { display: block; -webkit-line-clamp: unset; overflow: visible; }
+.rv-more { margin-top: 8px; padding: 4px 0; background: none; border: 0; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.rv-more:hover { color: var(--dark-purple); }
+.rv-more:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: 2px; border-radius: 4px; }
+.rv-cap { display: flex; flex-direction: column; gap: 2px; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(13,13,13,0.07); font-family: 'Work Sans', sans-serif; }
+.rv-name { font-weight: 800; font-size: 15px; color: var(--black); }
+.rv-src { font-size: 13px; color: #6a6a78; }
+
+@media (max-width: 1000px) { .rv-grid { column-count: 2; } }
+@media (max-width: 640px) {
+  .rv-section { padding: 64px 16px; }
+  .rv-grid { column-count: 1; }
+  .rv-filters { justify-content: flex-start; }
+  .rv-filters-label { width: 100%; }
+  .rv-status { text-align: left; }
+  .rv-head { text-align: left; }
+}
+
+/* 4. Who this is for, and who it is not for. Same rules as the OC piano block it copies. */
+.qualify { background: #fff; padding: 80px 32px; }
+.qualify-inner { max-width: 960px; margin: 0 auto; }
+.qualify h2 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.12; letter-spacing: -0.025em; text-align: center; margin: 0 0 12px; }
+.qualify-lede { text-align: center; font-size: 16px; line-height: 1.65; color: #555; max-width: 620px; margin: 0 auto 44px; }
+.qualify-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.qualify-col { border-radius: 18px; padding: 32px 28px; border: 1.5px solid rgba(114,110,221,0.18); }
+.qualify-col.is-fit { background: rgba(114,110,221,0.05); }
+.qualify-col.not-fit { background: #faf9f6; border-color: rgba(13,13,13,0.10); }
+.qualify-col h3 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 19px; letter-spacing: -0.01em; margin: 0 0 20px; }
+.qualify-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.qualify-col li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.6; color: #4a4a58; }
+.qualify-mark { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; margin-top: 1px; }
+.is-fit .qualify-mark { background: var(--dark-purple); color: #fff; }
+.not-fit .qualify-mark { background: rgba(13,13,13,0.10); color: #55555f; }
+@media (max-width: 900px) {
+  .qualify { padding: 48px 20px; }
+  .qualify-grid { grid-template-columns: 1fr; }
+  .qualify-col { padding: 22px 20px; }
+  .qualify-lede { margin-bottom: 28px; }
+}
+
+/* 3. The P.S. Hormozi: the headline and the P.S. are the two most-read lines on a page.
+   Set like the end of a letter: left-aligned, one readable measure, the offer restated. */
+.ps-section { background: var(--cream-deep, #efe7d8); padding: 64px 32px; }
+.ps-inner { max-width: 640px; margin: 0 auto; }
+.ps-mark { display: block; font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 32px; line-height: 1; letter-spacing: -0.02em; color: var(--accent); margin: 0 0 12px; }
+.ps-text { font-family: 'Work Sans', sans-serif; font-size: 18px; line-height: 1.7; color: #2c2c36; margin: 0 0 16px; }
+.ps-text strong { color: var(--black); }
+.ps-inner .btn { margin-top: 12px; }
+@media (max-width: 640px) {
+  .ps-section { padding: 48px 20px; }
+  .ps-text { font-size: 17px; }
+}
+
+/* 1b. Desktop hero. With the button above the video, a single centred column pushes the 9:16
+   video below a 900px screen. From 1100px wide the video takes a right-hand column, so the
+   headline, the button, the rating line and the playing video all share the first screen. */
+@media (min-width: 1100px) {
+  .hero .hero-inner { max-width: 1160px; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 64px; align-items: start; text-align: left; }
+  .hero .hero-inner > * { grid-column: 1; }
+  .hero .hero-inner > .hero-vsl { grid-column: 2; grid-row: 1 / span 8; align-self: center; margin: 0; width: min(340px, calc(72vh * 9 / 16)); }
+  .hero .hero-eyebrow { justify-self: start; }
+  .hero .hero-cta-wrap { align-items: flex-start; }
+  .hero .hero-rating { justify-content: flex-start; flex-wrap: nowrap; max-width: none; margin: 0; }
+  .hero .hero-keyline { margin-left: 0; margin-right: 0; text-align: left; }
+}

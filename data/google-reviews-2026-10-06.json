@@ -1,0 +1,399 @@
+{
+ "_source": "Every Google review of Mountain City Music Company, read from the Business Profile owner view on 2026-10-06 with every 'View full review' expanded. Byte-checked against the page (SHA-256 of the whole set matched). 65 reviews, all 5 stars, Google average 5.0.",
+ "_names": "First name plus last initial, the way the site prints them. The full-name copy is outside the repo at ~/.config/mcmc-shared/google-reviews-2026-10-06-full.json because this repo is public.",
+ "_use": "js/reviews.js quotes from this file. scripts/check-reviews.mjs proves every quote there is this text exactly, or a leading run of whole sentences of it.",
+ "count": 65,
+ "average": 5.0,
+ "reviews": [
+  {
+   "name": "Kimberly M.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "6 days ago",
+   "text": "My daughter has been having a great time working with Mountain City Music Company. She is new to piano lessons and is so excited each week to work with her teacher. It has been a very positive experience. I am also grateful that this is a company still willing to travel to people's homes. It is easy to work piano lessons into our schedule this way."
+  },
+  {
+   "name": "Laurissa W.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "1 week ago",
+   "text": "I highly recommend Mountain City Music! My kids were at the point where they wanted to quit guitar, and since switching, the difference has been amazing. They actually want to practice, play songs together, and genuinely enjoy guitar again. Bryce has been an incredible instructor and, in such a short time, has really gotten to know each of them and how to help them improve individually. The convenience of having lessons right in our home is a huge plus, and the professionalism and communication from the company have been wonderful. We couldn’t be happier with our experience!"
+  },
+  {
+   "name": "Heather C.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "3 weeks ago",
+   "text": "3 weeks in and Jonny has totally unlocked my 6 yr old's love of music. He's gone from total beginner at piano to learning a couple songs and begging to practice every day. Jonny makes it super fun and rewarding for the kids so even little guys look forward to their lessons. Wish I could give more than 5 stars!"
+  },
+  {
+   "name": "Shakira S.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "3 weeks ago",
+   "text": "My daughter has been thriving in only 3 short sessions! She has already learned one song and moving on to the next! Teacher Johnny has been very gentle and very at her pace. I love to see her confidence get bigger and bigger after each session!"
+  },
+  {
+   "name": "Jessica S.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "3 weeks ago",
+   "text": "This is our first year using Mountain City Music Company. My two boys are receiving piano lessons from Raymond. We're only three lessons in and they both have learned so much! From the very first lesson they were taught the basics and were able to play a simple song. So far up to this point we are satisfied and thankful :)"
+  },
+  {
+   "name": "Brooklynn G.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "5 weeks ago",
+   "text": "Johnny has been amazing. Our daughter has already shown much improvement & enjoys the class."
+  },
+  {
+   "name": "Ashly B.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "7 weeks ago",
+   "text": "Jonny is awesome! My teenager wanted to take piano lessons, but wanted a more private setting. Mountain City Music provides us with exactly that! During the first session Jonny evaluated my son, and he was extremely kind. I thought my son was horrible, but to hear Jonny say he was doing a great job, was so encouraging! We're excited to see all the skills he learns over the next year!"
+  },
+  {
+   "name": "Ricardo P.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "8 weeks ago",
+   "text": "Have had a great experience so far with vocal lessons. Mr Dolan is a great guy and very clear when explaining. Very structured and profesional. Im excited to keep learning from him!"
+  },
+  {
+   "name": "Sammy R.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "10 weeks ago",
+   "text": "Ive been taking these classes for a few weeks and I can say I have gotten so much better at guitar. The classes aren't boring, they're really simple, and they definitely help me improve in my guitar skills. The classes are pretty flexible with your schedule which is great for someone like me who's constantly busy. Definitely 5 star worthy!"
+  },
+  {
+   "name": "Jay",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "10 weeks ago",
+   "text": "Johnny is great and is a great instructor! Definitely would recommend!"
+  },
+  {
+   "name": "Grisiel R.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "11 weeks ago",
+   "text": "Our experience with Johnny and his company has been extraordinary he is a great teacher I would highly recommend him to anyone with small kids he does so great he is so patient and so kind and just an amazing person overall my son has learned so much from knowing nothing at all he can now carry a tune and play few notes from various songs. Like every thing takes time but in such a short time I've seen so much progress."
+  },
+  {
+   "name": "Jennifer S.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "11 weeks ago",
+   "text": "Mountain City Music is the perfect fit for our busy family. With so many activities already filling our schedules, it’s one less drive to worry about. It helps me so much! Having piano lessons in our home has been such a welcome convenience and gives me a much-needed break from constantly shuttling my kids around town.\n\nJonny is an excellent teacher—he communicates well with parents, builds a great rapport with my kids, and makes learning enjoyable. I especially appreciate how he tailors each lesson to fit my children’s individual music interests and learning styles. His personalized approach keeps them engaged and excited to learn. I highly recommend Mountain City Music to any family looking for quality, convenient music lessons."
+  },
+  {
+   "name": "Suo J.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "14 weeks ago",
+   "text": "Mountain city music has underestimated the quality of the right music and I promise you this experience can't be stopped if not the when or else who? I get it. The go to shop for sales assessment.\nPeace and love"
+  },
+  {
+   "name": "Tershama H.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "19 weeks ago",
+   "text": "My experience with Mountain City Music has been amazing. First, I love that they come to your home — it saves time and gas money. As a homeschooling mom, having lessons at home is such a huge help and makes scheduling so much easier.\n\nMost importantly, my little one absolutely loves her teacher. Frank is AWESOME ! He teaches in a way that she understands, always arrives on time, and makes great use of every lesson. Even when she gets distracted or starts moving around, he knows exactly how to keep her focused and engaged.\n\nShe’s only four years old, homeschooled, and is already learning how to read music! The prices are affordable, and the convenience of in-home lessons makes it even better. Highly recommend!\n\nThank you Mountain City Music Company for having a program that comes to you and accepting payments from her school to pay for the lessons also."
+  },
+  {
+   "name": "Ana C.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "21 weeks ago",
+   "text": "I am so grateful to have found Mountain City Music. My kid's instructor, Marcello, has been patient with my kids as they learn their instrument of choice. His professionalism and patience is more than I could ask for."
+  },
+  {
+   "name": "Sarah R.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "21 weeks ago",
+   "text": ""
+  },
+  {
+   "name": "Ashley H.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "25 weeks ago",
+   "text": "We are loving our lessons through Mountain City Music! My 2 kids are learning Guitar and Piano and they love the lessons and are learning so much."
+  },
+  {
+   "name": "Annia V.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "27 weeks ago",
+   "text": "Working with Mountain City Music Company has been an absolutely wonderful experience! We’ve had the pleasure of working with Frank, and Caitlynn. Both of them are punctual, professional, and genuinely respectful. What stands out the most is their love and patience with my kids. They make every lesson encouraging, and engaging. It’s clear they truly care about their students’ growth and confidence in music. We couldn’t recommend them more!"
+  },
+  {
+   "name": "RaQuel F.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "32 weeks ago",
+   "text": "I absolutely love the work this company does! My instructor is incredibly helpful when it comes to explaining the technical side of voice, he is always open to hearing my ideas (and explaining why I shouldn’t pursue certain songs if they aren’t helping me towards my goal) they are very open and transparent when it comes to my faults with never being harsh or discouraging me! Great company!"
+  },
+  {
+   "name": "Michael T.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "32 weeks ago",
+   "text": "I’m so very pleased with Mountain City Music Co. My granddaughter is very excited about her guitar lessons! Bryce showed her ways to make exploring the guitar fun. She’s been practicing!!"
+  },
+  {
+   "name": "Cristal C.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "33 weeks ago",
+   "text": "Bryce, my son’s guitar instructor, is professional and at the same time is able to connect with my 13 year old boy who is a beginner at playing an electric guitar. I love how Bryce ensures that any song that is being taught is something my son is interested in. My son has been receiving lessons for about 4 months. I am very satisfied with the lessons. The instructor comes to our home on a weekly basis for one hour. My son is also practicing on his own time and I can hear improvement each time. I am also very grateful with the instructor because he accommodates when we are unable to meet at the schedule time, we are always able to reschedule and make up for that class. I also greatly appreciate the instructor’s advice and input regarding guitar material because I asked the parent do not know anything about guitar."
+  },
+  {
+   "name": "Emily K.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "34 weeks ago",
+   "text": "Mountain City Music is a great company, if you are looking for music lessons. It is well organized and well operated. My son’s guitar instructor teaches him the fundamentals of music as well and working on songs my son specifically wants to learn. My son really looks forward to his lesson. And it’s very convenient that they come to your home."
+  },
+  {
+   "name": "Sarah N.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "35 weeks ago",
+   "text": "Mountain City Music has been great! My daughter has taken both guitar lessons and voice lessons with their instructors. They are knowledgeable and give helpful tips that have helped my daughter improve immensely. The instructors come to our home, which is so convenient. I love that they work with our charter school. I can’t recommend them enough!"
+  },
+  {
+   "name": "Joanna B.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "49 weeks ago",
+   "text": "We love how comfortable and personal the voice lessons are. Ally is amazing with children and very communicative about lessons and plans."
+  },
+  {
+   "name": "Melissa G.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jun 20, 2025",
+   "text": "My family has been with Mountain City Music Company for one school year now and I have been so impressed with them. My son takes guitar lessons with Connor and my daughter takes piano lessons with Frank. I love that the instructors come to our home for lessons. Both Connor and Frank have been great instructors. They are encouraging and know how to engage my children in their lessons. Both of my kids have had private lessons before we joined Mountain City, but never have they grown so fast in their knowledge, skill, and passion for music as they have since joining this school. The founder of the company, Jonny Dolan, has also been terrific to work with. His business is an asset to our community. It is evident that he is a talented professional and really cares about his students. I highly recommend Mountain City Music Company. They are the best!"
+  },
+  {
+   "name": "Yessenia",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jun 3, 2025",
+   "text": "Love this company and how much my daughter has progressed! She is 5 but started when she was 4. Her piano teacher Frank is amazing she is learning so quickly and he is constantly affirming her and being so positive giving her that confidence she needs but also giving her areas to practice that helps so much for the week to come. Enjoying seeing my daughter’s growth at this company!"
+  },
+  {
+   "name": "Angelica K.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "May 24, 2025",
+   "text": "Mountain City Music company is very convenient, they come to your house and work around your schedule. Our piano teacher - Caitlynn, is patient and kind with my daughter. My daughter’s piano skills improve every week. Definitely would recommend to others looking for music lessons."
+  },
+  {
+   "name": "Grill N.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jan 23, 2025",
+   "text": "My son is doing amazing with his guitar lessons due to this company! I would decorate definitely recommend this company. Their instructors are amazing 🤩"
+  },
+  {
+   "name": "Linda J.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jan 20, 2025",
+   "text": ""
+  },
+  {
+   "name": "Brooke P.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jan 19, 2025",
+   "text": "Caitlynn has been amazing! It is so comfortable and convenient to have someone come to house. My daughter enjoys each lesson. It has made a huge difference in her confidence and ability to use her voice.\n👍👍👍👍👍"
+  },
+  {
+   "name": "Julie M.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jan 18, 2025",
+   "text": "My kiddos have been getting lessons through Mountain City Music Co for a few months now and they love it! Ethan has been great with them and I’m pleased with their progress so far."
+  },
+  {
+   "name": "Jane A.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jan 18, 2025",
+   "text": "The owner, Johnny, is easy to reach and was very helpful from the start. Johnny answered all my questions, which was especially helpful since we're new to the high desert area. My daughter has been taking singing classes, and her instructor, Caitlynn, is incredibly patient. Caitlynn is always on time and has a lovely voice. We recently added piano lessons in, and she’s been great with my daughter. The progress my daughter has made since starting these lessons is remarkable, and she always looks forward to her classes. I love how these classes are at home, making it so convenient for us! The overall experience with Mountain City Music Company has been wonderful, and I highly recommend them to anyone looking for quality music instruction!"
+  },
+  {
+   "name": "Sheila J.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Nov 30, 2024",
+   "text": "The kids absolutely love their teacher and they look forward to their class every week."
+  },
+  {
+   "name": "Jackie S.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Nov 11, 2024",
+   "text": "This company is the best - my 10 year old son started his sessions at the beginning of October. He has retained so much knowledge and enthusiasm for his guitar lessons with Bryce. Something he looks forward to every week. Thank you Johnny and Bryce"
+  },
+  {
+   "name": "Gabi T.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Sep 2, 2024",
+   "text": "I am extremely impressed with how excellent these private music lessons are. I literally recommend them to everyone I know and anyone I just met looking for an amazing vocal or piano teacher. My kids (6y/o and 10y/o,) are a bit over active at times, but Johnny has done such an exceptional job keeping them on task and intrigued to keep going. I love the fact that he gives them a variety of options with the songs they would like to learn and the way to read music notes."
+  },
+  {
+   "name": "Andrew W.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Sep 2, 2024",
+   "text": "Love this company, the owner Jonny is super easy to work with and he answered all my questions and got me an my brother setup with Davey, who's been amazing and has completely tailored the lessons to our needs as independent musicians. Has been nothing but a great experience definitely go with them."
+  },
+  {
+   "name": "Bradley H.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Sep 2, 2024",
+   "text": "Jonny is really cool and as an independent artist Davey is great at teaching me how to use my vocals and at helping me improve upon my own original songs"
+  },
+  {
+   "name": "Julissa B.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jul 11, 2024",
+   "text": "We absolutely love Johnny from mountain city music. He is such a great instructor who is very patient with my little one. She has learned so much in such a short time! He is very focused on lessons and improvements and we love that. Thank you Johnny!! 🥳"
+  },
+  {
+   "name": "Samantha A.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jun 26, 2024",
+   "text": "My son looks forward to and enjoys his weekly guitar lessons. His instructor Bryce is always on time and conducts himself in a very professional manner. As a teacher, he communicates clearly and is very patient. Our experience with Mountain City Music has been nothing but positive, and would recommend them highly."
+  },
+  {
+   "name": "Gracy",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Apr 10, 2024",
+   "text": "The owner John, put me om ease and I will be taking Vocal lessons! He understands my vocal needs!"
+  },
+  {
+   "name": "Victoria H.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Apr 2, 2024",
+   "text": "Our piano instructor is so talented and great with our 10yr old. He's learned so much and looks forward to practicing and his lessons."
+  },
+  {
+   "name": "Bianca",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Apr 1, 2024",
+   "text": "My son has been loving guitar lessons, I recommend this company. Very flexible and they come to you. Great service!"
+  },
+  {
+   "name": "Josue R.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jan 24, 2024",
+   "text": "Talented teachers and they are very patient"
+  },
+  {
+   "name": "Amber",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jan 6, 2024",
+   "text": "My son Matthew has had nothing but wonderful things to say about his private lessons. We look forward to continuing our time with mountain city music company!"
+  },
+  {
+   "name": "Angela H.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Dec 29, 2023",
+   "text": "Javien was my grandson Matthew's guitar instructor. He absolutely loved his lesson with Javien\nI highly recommend Mountain City Music\nCompany"
+  },
+  {
+   "name": "Maressah C.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Dec 3, 2023",
+   "text": "Best experience I've had with guitar lessons. I have an awesome teacher and I've been learning a lot. Coming from a beginner guitar player, I highly recommend coming to Mountain City Music Company if you're trying to learn!"
+  },
+  {
+   "name": "Raquel U.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Dec 3, 2023",
+   "text": "My princess is taking recorder lessons with mountain cutting music. Davie is a great instructor. Another great thing about this place is that they come to you!!!!"
+  },
+  {
+   "name": "Tyra T.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Nov 21, 2023",
+   "text": "My 10yr old son started guitar lessons with Bryce and it has been absolutely amazing! He is learning so quickly and Bryce’s teaching style is really helping my son learn faster. He looks forward to his lessons every week. Bryce has amazing communication with us and is extremely patient and accommodating.\n\nThe company overall is extremely professional and always offering great deals for their customers! I am so pleased to have found such an amazing company in the High Desert. Thank you for fostering my son’s musical heart!!!"
+  },
+  {
+   "name": "Brittany S.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Nov 15, 2023",
+   "text": "Mountain City Music is a wonderful place to receive music lessons, and we are so thankful for their dedication to help young people."
+  },
+  {
+   "name": "Vanessa G.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Nov 13, 2023",
+   "text": "It has been an absolute joy finding such a spectacular music/singing lesson program for my daughter. Her instructor is just amazing and so kind. Every person I have dealt with in this company has been nothing but patient, helpful and so professional. Such a great opportunity for anyone who is looking to expand in their musical journey."
+  },
+  {
+   "name": "Karla S.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Oct 21, 2023",
+   "text": "My children are loving their vocal and guitar lessons. The instructors are very patient and knowledgeable. I would recommend Mountain City in a heartbeat!"
+  },
+  {
+   "name": "Alli P.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Oct 20, 2023",
+   "text": "Mountain City Music Co. is such a wonderful business! The prices are affordable and well worth the money. All of their instructors are some of the most kind and encouraging people I have ever met and they are so incredibly knowledgeable and passionate regarding music. If I could give a 100 star rating I could, but since I can’t, they get a solid 5!"
+  },
+  {
+   "name": "Donna F.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Oct 10, 2023",
+   "text": "We are very happy with mountain City Music Company. The communication with the school as well as the instructor has been good. They have been supportive with our needs. My daughters instructor has been very informative as well as encouraging so she's been looking forward to each lesson."
+  },
+  {
+   "name": "Javien M.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Aug 10, 2023",
+   "text": "Lots of great information and support! :)"
+  },
+  {
+   "name": "Eva M.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jun 17, 2023",
+   "text": "I came across this company through my child's charter school website and have been using them for a few months now. Our instructor Jonny is awesome! We use him for piano lessons but he teaches many other things. He is very friendly and flexible with our schedule. After a few lessons, he can begin to understand how one learns and has figured out the best way for my child to understand what he is teaching. He is a super cool guy which my daughter enjoys learning from. The best part is that he comes to you which is nice for people with busy schedules. I would definitely recommend!"
+  },
+  {
+   "name": "Susan W.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Jun 13, 2023",
+   "text": "Stellar!!! My daughter has improved considerably by working with Mr. Dolan. He is patient and wonderfully knowledgeable. THEE best vocal/music teacher.\nThank you, thank you for all you do!!"
+  },
+  {
+   "name": "Laia L.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Apr 15, 2023",
+   "text": "My granddaughter’s guitar teacher is excellent. She is learning beginning guitar and has never had guitar lessons before. The teacher is very knowledgeable, an excellent musician who is wisely tailoring the lessons to include the type of music she likes. As a result she is motivated to learn and practice. The teacher is very patient and approachable. He is always on time and a pleasure to have in our home for the lesson. I strongly recommend mountain city music company for lessons. We could not be happier with the lessons, or the close communication between the guitar instructor, the student, and our family. We decided to schedule the 45 minute lessons so she has time to focus on the instructions but not too long so she gets tired. It was a good decision. Strongly recommend this vendor!!"
+  },
+  {
+   "name": "Rachel M.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Apr 8, 2023",
+   "text": "I contacted Mountain City Music Co. for voice lessons for my high-school son who got a part in a school musical and had no previous vocal training. We booked Jonny for several lessons and I am so happy we did!\nIn a short time, Jonny’s instruction addressed and yielded improvements in posture, breathing, technique for high notes, and general vocal health. My son is feeling and sounding more confident with the vocal techniques he has learned.\nI highly recommend Mountain City Music Co. for lessons. The website is easy to use and book through. Jonny is a knowledgeable, friendly, and exceptional music instructor, and will travel to you. If you or your student have ever thought about private voice lessons, I think you’ll find Mountain City Music Co. to be an excellent instructional resource!"
+  },
+  {
+   "name": "Owen L.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Apr 3, 2023",
+   "text": "My daughter is only 4 years old but I’ve been looking for lessons in our area for a while, I was so excited when saw a flyer for Mountain City Music at her elementary school. I gave them a call and he fit us into his schedule right away! The first lesson she was so shy and didn’t want to sing for him, the next week he adjusted his technique (started giving her m&m’s as a reward ) and now she’s really opened up to him, she’s learning new songs and most importantly having a lot of fun while doing it. I couldn’t be happier with Jonny!"
+  },
+  {
+   "name": "Breanna Q.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Apr 3, 2023",
+   "text": "Jonny has excellent teaching skills, his friendly personality and positive attitude really makes our family comfortable. I appreciated how he took the time to get to know her as a person and tailor the lesson to my specific goals and music interests. Our 14 year old looks forward to her guitar lesson all week long!"
+  },
+  {
+   "name": "Jen C.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Mar 31, 2023",
+   "text": "My family has enjoyed working with Mountain City Music. The staff is extremely courteous and professional."
+  },
+  {
+   "name": "Angie G.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Mar 28, 2023",
+   "text": "We just love Mountain City Music Company! Johnny is an awesome teacher! He has really shown and taught my children in a way that they understand and is helpful to them. We love the flexibility and availability that he has offered us and the fact that it is personal. I would highly recommend Mountain City Music Company to anyone for their music needs. I have a son who is learning guitar and a daughter who is learning piano this year but we are looking forward to adding voice lessons as well. You can't go wrong with choosing Johnny and his company!"
+  },
+  {
+   "name": "Diana M.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Mar 16, 2023",
+   "text": "My son was assessed first then lessons were adjusted to his needs, that's something that I loved. Mr.Dolan has worked with our schedules and it has made it so easier for our family. My son has enjoyed his guitar lessons.\nI truly recommend it!"
+  },
+  {
+   "name": "Tammy F.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Mar 5, 2023",
+   "text": "My child has been receiving voice lessons from Jonny Dolan for several months now, and in that time we've seen huge improvements in range, musicianship, and breath control. The patience and encouragement he shows students is incredible. I would definitely recommend this company for anyone looking to improve their abilities!"
+  },
+  {
+   "name": "Michelle B.",
+   "stars": 5,
+   "date_as_shown_2026_10_06": "Feb 14, 2023",
+   "text": "My son has started taking guitar lessons from Mountain City Music Company. The instructor, Johnny, is amazing. My son has already picked up so much from the 2 lessons he has had. I highly recommend this place. Easy to schedule, easy to work with, friendly and encouraging."
+  }
+ ]
+}

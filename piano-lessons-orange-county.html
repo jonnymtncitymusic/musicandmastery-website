@@ -527,6 +527,7 @@
       .pillar { opacity: 1 !important; transform: none !important; }
     </style>
   </noscript>
+<link rel="stylesheet" href="/css/lp-proof.css?v=396c646a52">
 </head>
 <body>
 
@@ -568,6 +569,11 @@
     </h1>
     <p class="hero-sub blur-fade blur-fade-2">In-home piano lessons in Orange County. From the first notes to songs they are proud to play, taught right at your own piano.</p>
 
+    <div class="hero-cta-wrap blur-fade blur-fade-2">
+      <a href="#form" class="btn btn-accent btn-accent-lg js-book">Book Your Free First Lesson</a>
+      <a class="hero-rating" href="#reviews"><span class="hero-rating-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span><strong>5.0</strong> from <span class="hero-rating-src">65 Google reviews</span> of Mountain City Music Co., our original name</span></a>
+    </div>
+
     <!-- HERO VIDEO: "The Mechanism" begins muted by itself with a tap-to-unmute card, the way
          Hormozi's live VSL page does (Jonny 2026-10-06). No thumbnail in front of it. -->
     <div class="hero-vsl blur-fade blur-fade-3">
@@ -582,19 +588,8 @@
         </span>
       </button>
     </div>
-      <button type="button" class="hero-vsl-btn" aria-label="Turn on the sound and play the video from the start">
-        <span class="hero-vsl-card">
-          <svg class="hero-vsl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a8 8 0 0 1 0 11"/></svg>
-          <span>Your video is playing</span>
-          <span class="hero-vsl-sub">Tap to unmute</span>
-        </span>
-      </button>
-    </div>
 
     <!-- CTA #1 of 3. All three carry the same label and open the same form. -->
-    <div class="hero-cta-wrap blur-fade blur-fade-4">
-      <a href="#form" class="btn btn-accent btn-accent-lg js-book">Book Your Free First Lesson</a>
-    </div>
 
     <p class="hero-keyline blur-fade blur-fade-5">
       Private, one-on-one lessons for kids and adults in Irvine, Newport Beach, Costa Mesa, Lake Forest and Tustin. DOJ and FBI background-checked instructors. Month to month, no contracts.
@@ -862,6 +857,21 @@
 <!-- CTA #3 of 3. Replaces the old "Prefer a Call?" block: one action, repeated three
      times, is the whole point of the structure. The footer keeps a tel: link for
      anyone who genuinely wants to dial. -->
+<!-- REVIEW WALL (Hormozi teardown edit #2, Jonny 2026-10-06). Cards come from /js/reviews.js;
+     the same-company caveat stays in this header and on every card. -->
+<section class="rv-section" id="reviews">
+  <div class="rv-inner">
+    <div class="rv-head">
+      <div class="rv-head-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="rv-score"><strong>5.0</strong> from 65 Google reviews</p>
+      <h2 class="rv-heading">What families say</h2>
+      <p class="rv-caveat">Music and Mastery and Mountain City Music Co. are the same company. Mountain City Music Co. is our original name. These are <a href="https://share.google/vff7oOhVweOWzDic5" target="_blank" rel="noopener">Google reviews</a> from Mountain City Music families in the High Desert and Inland Empire, quoted exactly as they were written.</p>
+    </div>
+    <div class="rv-wall" data-review-wall data-instrument="piano"></div>
+    <noscript><p class="rv-caveat" style="text-align:center;margin-top:24px;"><a href="https://share.google/vff7oOhVweOWzDic5" target="_blank" rel="noopener">Read all 65 reviews on Google</a></p></noscript>
+  </div>
+</section>
+
 <section class="cta-band">
   <div class="cta-band-inner">
     <h2>Start with the free lesson</h2>
@@ -873,6 +883,17 @@
 
 <!-- FOOTER -->
 </main>
+
+<!-- P.S. (Hormozi teardown edit #3, Jonny 2026-10-06): the headline and the P.S. are the two
+     most-read lines on a page, so the offer and who it is not for are restated here. -->
+<section class="ps-section">
+  <div class="ps-inner">
+    <span class="ps-mark">P.S.</span>
+    <p class="ps-text">The short version: <strong>your first lesson is free</strong>, taught in your home by a DOJ and FBI background-checked instructor, and you owe nothing after it. If you stay, it is month to month with no contract.</p>
+    <p class="ps-text">It is not for you if you want drop-in lessons now and then. We teach one set time each week, and that is the only way we run it.</p>
+    <a href="#form" class="btn btn-accent btn-accent-lg js-book">Book Your Free First Lesson</a>
+  </div>
+</section>
 
 <footer>
   <div class="footer-simple">
@@ -1066,5 +1087,6 @@
 
 
 <script src="/js/hero-vsl.js?v=20261006" defer></script>
+<script src="/js/reviews.js?v=7544fee7e6" defer></script>
 </body>
 </html>
