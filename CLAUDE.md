@@ -5,7 +5,7 @@
 - **OC branch (5 cities):** Irvine, Newport Beach, Costa Mesa, Lake Forest, Tustin
 - **LA branch (7 cities):** Beverly Hills, West Hollywood, East Hollywood, Burbank, Pasadena, Pacific Palisades, Malibu
 
-Landing pages cover **all instruments** (guitar, piano, voice, bass, ukulele, drums, music production) — **not guitar-specific** like the MCMC `beginner-*.html` pages.
+Landing pages cover **all the instruments we book** (guitar, piano, bass, ukulele, drums, music production) and are **not guitar-specific** like the MCMC `beginner-*.html` pages. **Voice is NOT booked on this brand since 2026-09-27**, so "voice" and "choir" are out of the page copy (2026-10-07). `voice-lessons-orange-county.html` is still live pending Jonny's call.
 
 ## Shared With MCMC (do NOT change)
 - Phone: `(760) 573-2120` / `+17605732120`
@@ -63,7 +63,7 @@ propagate on their own. When you fix copy here, check the sibling repo in the sa
 ## Project State
 - **Live production site** (when deployed via Vercel) — not a design exercise.
 - Files in project root: `index.html`, `instructors.html`, `faq.html`, 12 `beginner-*.html` city pages, 12 `in-home-*.html` city pages, 6 `*-lessons-orange-county.html` instrument pages, plus `privacy-policy.html`, `terms-of-service.html`, `thank-you.html`, `banner.html`, `flyer.html`.
-- **No build step.** All CSS is inline `<style>` blocks per page. No Tailwind, no PostCSS.
+- **No build step.** Page CSS is inline `<style>` blocks, with one shared exception: `css/lp-proof.css` (rating line, review wall, who-it-is-for, P.S., 16px reading text) is linked from all 34 landing pages. It and `js/reviews.js`, `js/hero-vsl.js`, `js/headline-test.js` are loaded at `?v=<hash>`: after changing any of them run `python3 scripts/build-reviews.py`, or `npm test` fails on the stale token. No Tailwind, no PostCSS.
 - **Do NOT add Tailwind via CDN.** The MCMC site removed it for performance reasons. The inline `<style>` block starts with a "Baseline reset" that replaces the preflight subset the pages relied on — keep those rules.
 
 ## External Resources — What's Hosted Where

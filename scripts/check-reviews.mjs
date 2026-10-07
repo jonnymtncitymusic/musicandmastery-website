@@ -24,6 +24,7 @@ const hash = f => crypto.createHash('sha256').update(fs.readFileSync(path.join(R
 const fails = [];
 const fail = m => fails.push(m);
 
+// The newest snapshot by name. scripts/build-reviews.py picks it the same way, so both read one file.
 const dataFile = fs.readdirSync(path.join(ROOT, 'data')).filter(f => /^google-reviews-.*\.json$/.test(f)).sort().pop();
 const data = JSON.parse(read(`data/${dataFile}`));
 const byName = new Map(data.reviews.map(r => [r.name, r.text]));
@@ -42,11 +43,15 @@ for (const r of rows) {
   if (src == null) { fail(`${r.n}: not in ${dataFile}`); continue; }
   if (!r.q) { fail(`${r.n}: empty quote`); continue; }
   if (/\.\.\.|…/.test(r.q) && !src.includes(r.q)) fail(`${r.n}: ellipsis`);
+  // A mistyped tag passes silently otherwise: the wall's filter chips just drop the review.
+  if (!['young', 'teen', 'adult', ''].includes(r.a)) fail(`${r.n}: unknown age tag ${r.a}`);
+  const inst = r.i ? r.i.split(' ') : [];
+  for (const i of inst) if (!['guitar', 'piano', 'voice'].includes(i)) fail(`${r.n}: unknown instrument tag "${i}"`);
+  if (new Set(inst).size !== inst.length) fail(`${r.n}: instrument tag repeated in "${r.i}"`);
   if (r.q === src) continue;
   const rest = src.slice(r.q.length);
   if (!src.startsWith(r.q)) fail(`${r.n}: quote is not the review's own words from its first word`);
   else if (!/[.!?]$/.test(r.q) || /\b(Co|Mr|Mrs|Ms|Dr)\.$/.test(r.q) || !/^\s/.test(rest)) fail(`${r.n}: excerpt does not end at a sentence end`);
-  if (!['young', 'teen', 'adult', ''].includes(r.a)) fail(`${r.n}: unknown age tag ${r.a}`);
 }
 
 // 2 + 3. pages
@@ -83,17 +88,24 @@ for (const f of LANDING) {
 //    challenger never mixes its numbers with the last one.
 const PAID = ['piano-lessons-orange-county.html', 'piano-lessons-los-angeles.html',
   'guitar-lessons-los-angeles.html', 'guitar-lessons-orange-county.html'];
+//    The picker is pasted into each page (it must run before paint), so every copy must be the
+//    same bytes: a fix made on one page only would split how the arms are drawn.
 const testIds = new Set();
+const pickers = new Map();
 for (const f of PAID) {
   const t = read(f);
-  const h1 = t.match(/<h1[^>]*data-hl-test="([a-z0-9-]+-\d{4}-\d{2}-\d{2})"[^>]*data-hl-b="([^"]+)"[^>]*>[\s\S]*?<\/h1>\s*(?:<!--[\s\S]*?-->\s*)?<script>/);
+  const h1 = t.match(/<h1[^>]*data-hl-test="([a-z0-9-]+-\d{4}-\d{2}-\d{2})"[^>]*data-hl-b="([^"]+)"[^>]*>[\s\S]*?<\/h1>\s*(?:<!--[\s\S]*?-->\s*)?<script>([\s\S]*?)<\/script>/);
   if (!h1) { fail(`${f}: headline test missing, or the inline picker is not right after the <h1>`); continue; }
   if (testIds.has(h1[1])) fail(`${f}: test id ${h1[1]} is used on two pages`);
   testIds.add(h1[1]);
+  if (!pickers.has(h1[3])) pickers.set(h1[3], []);
+  pickers.get(h1[3]).push(f);
   if (/\u2014|&mdash;/.test(h1[2])) fail(`${f}: challenger headline has an em dash`);
   if (!t.includes('/js/headline-test.js?v=')) fail(`${f}: does not load js/headline-test.js`);
 }
+if (pickers.size > 1) fail(`the inline headline picker differs between pages: ${[...pickers.values()].map(fs => fs.join(' + ')).join(' vs ')}`);
 if (!read('thank-you.html').includes('/js/headline-test.js?v=')) fail('thank-you.html: does not load js/headline-test.js, so no booking is ever credited to a headline');
+if (!read('thank-you.html').includes('window.MM_SUBMISSION = ')) fail('thank-you.html: its conversion gate no longer sets window.MM_SUBMISSION, so js/headline-test.js credits no booking');
 
 // 5. FAQ structured data mirrors the visible FAQ, question and answer, on every landing page.
 //    website-copy.md: a visible fix that leaves the FAQPage JSON-LD behind has bitten twice, and

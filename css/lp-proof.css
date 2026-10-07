@@ -108,8 +108,10 @@
 /* 6. Reading text at 16px (Hormozi teardown edit #6, Jonny 2026-10-07). Three of his four pages
    set body copy at 16px; ours ran 13.5-15px. Labels, chips, eyebrows, stars and the footer stay
    small on purpose: this is only text someone reads as sentences. Same specificity as each
-   page's inline rule and loaded after it, so it wins at every width. */
+   page's inline rule and loaded after it, so it wins at every width, which also means it would
+   SHRINK any of these set larger inline. None is (checked 2026-10-07); .adults-body is left out
+   because the OC guitar page sets it at 18px on desktop. */
 .local-body, .local-faq-a, .lp-bullet-item p, .pillar p, .price-justify p, .form-lede,
-.cta-steps li, .hero-keyline, .qualify-col li, .rv-caveat, .proof-attribution, .tcard-quote,
-.adults-body { font-size: 16px; }
+.cta-steps li, .hero-keyline, .qualify-col li, .rv-caveat, .proof-attribution,
+.tcard-quote { font-size: 16px; }
 .tcard-quote { line-height: 1.65; }

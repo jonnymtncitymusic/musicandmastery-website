@@ -16,9 +16,10 @@
  * keeps the counts and emails Jonny every Monday (mcmc-cron-runner api/headline_test.py,
  * scripts/headline-test/headline_report.py):
  *   view      once per browser session per test
- *   book_tap  a tap on any "Book" button (href="#form")
- *   call_tap  a tap on the phone number
- *   convert   on thank-you.html, if this browser saw a test page in the last 7 days
+ *   book_tap  a tap on any "Book" button (href="#form"), once per browser session per test
+ *   call_tap  a tap on the phone number, once per browser session per test
+ *   convert   on thank-you.html after a real submission (its own gate), if this browser saw
+ *             a test page in the last 7 days
  * Each beacon carries a random browser id, never anything about the person. A copy goes to GA4
  * as hl_<event> for anyone who wants it there too.
  *
@@ -75,19 +76,32 @@
       set(session(), seenKey, '1');
       send(test, variant, 'view', h1.textContent);
     }
-    var tapped = {};
+    var tapped = {};   // backs up sessionStorage when it is blocked
     document.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a');
       if (!a) return;
       var href = a.getAttribute('href') || '';
       var event = href === '#form' ? 'book_tap' : href.indexOf('tel:') === 0 ? 'call_tap' : null;
-      if (!event || tapped[event]) return;
+      if (!event) return;
+      var tapKey = 'mm_hl_' + event + '_' + test;
+      if (tapped[event] || get(session(), tapKey)) return;
       tapped[event] = true;
+      set(session(), tapKey, '1');
       send(test, variant, event);
     }, true);
   }
 
+  // thank-you.html's own gate decides what a real submission is (an allowed ?type=, not a
+  // reload or a Back) and sets window.MM_SUBMISSION on its window 'load'. This listener is
+  // added later than the gate's, so it runs after it.
   function onThankYou() {
+    if (document.readyState === 'complete') convertIfSubmitted();
+    else window.addEventListener('load', convertIfSubmitted);
+  }
+
+  function convertIfSubmitted() {
+    var type = window.MM_SUBMISSION;
+    if (!type) return;
     var last;
     try { last = JSON.parse(get(local(), LAST) || 'null'); } catch (e) { last = null; }
     if (!last || !last.test || (last.variant !== 'a' && last.variant !== 'b')) return;
@@ -95,7 +109,6 @@
     var doneKey = 'mm_hl_conv_' + last.test;
     if (get(local(), doneKey)) return;   // one conversion per browser per test
     set(local(), doneKey, '1');
-    var type = (/[?&]type=([a-z_]+)/.exec(location.search) || [])[1] || 'booking';
     send(last.test, last.variant, 'convert', type);
   }
 

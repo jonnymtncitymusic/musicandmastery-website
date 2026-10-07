@@ -11,7 +11,8 @@ judgment in here, and scripts/check-reviews.mjs re-proves every quote independen
 import json, re, pathlib, hashlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-DATA = ROOT / 'data' / 'google-reviews-2026-10-06.json'
+# The newest snapshot by name, the same file scripts/check-reviews.mjs checks against.
+DATA = sorted((ROOT / 'data').glob('google-reviews-*.json'))[-1]
 JS = ROOT / 'js' / 'reviews.js'
 
 # name: (age, instruments). Age only when the review itself says it: 'young' = the review

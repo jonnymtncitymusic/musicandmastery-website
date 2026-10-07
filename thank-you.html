@@ -63,6 +63,9 @@
         SUBMISSION_TYPES.indexOf(qs.get('type')) === -1) {
       return;
     }
+    // The headline split test (/js/headline-test.js) counts a conversion only
+    // when this gate passed, so the rule lives here once.
+    window.MM_SUBMISSION = qs.get('type');
 
     // Enhanced conversions. The identifiers were collected by the lead form on
     // the previous page and handed over through sessionStorage, because gtag
@@ -638,6 +641,6 @@
 </script>
 
 <!-- Credits a booking to the headline this browser saw (headline test, Hormozi edit #7). -->
-<script src="/js/headline-test.js?v=70ab709d6a" defer></script>
+<script src="/js/headline-test.js?v=1bce6c514e" defer></script>
 </body>
 </html>

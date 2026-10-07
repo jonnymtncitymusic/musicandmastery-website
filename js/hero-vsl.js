@@ -49,7 +49,7 @@
     try {
       var d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
       if (!d) return;
-      if (lastState === null) { lastState = -2; captionsOff(); }
+      if (lastState === null) { lastState = -2; stopAsking(); captionsOff(); }
       if (!d.info || typeof d.info.playerState !== 'number') return;
       var state = d.info.playerState;
       if (state !== lastState) {
@@ -61,11 +61,22 @@
     } catch (x) {}
   });
 
-  // The player only reports its state once it has been told someone is listening.
-  var ask = setInterval(function () {
-    try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'hero-vsl' }), '*'); } catch (x) {}
-  }, 400);
-  setTimeout(function () { clearInterval(ask); }, 60000);
+  // The player only reports its state once it has been told someone is listening. The iframe is
+  // loading="lazy", so the player can arrive long after this script runs (a slow phone, or a
+  // visitor who scrolls late): ask again for a minute after every iframe load, and stop at the
+  // player's first reply.
+  var ask = null, giveUp = null;
+  function stopAsking() { clearInterval(ask); clearTimeout(giveUp); ask = giveUp = null; }
+  function startAsking() {
+    if (lastState !== null) return;
+    stopAsking();
+    ask = setInterval(function () {
+      try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'hero-vsl' }), '*'); } catch (x) {}
+    }, 400);
+    giveUp = setTimeout(stopAsking, 60000);
+  }
+  iframe.addEventListener('load', startAsking);
+  startAsking();
 
   btn.addEventListener('click', function () {
     box.classList.add('is-engaged');
