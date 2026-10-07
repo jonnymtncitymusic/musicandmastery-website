@@ -285,6 +285,7 @@
     return {
       step: 1,
       mode: 'booking',  // 'booking' or 'lead' (no-match flow)
+      noTimesFit: false,  // saw real times, none suited; sent to the lead form to find one
       instrument: '',
       instrumentOther: '',  // free-text when instrument === 'Other'
       city: '',
@@ -704,6 +705,7 @@
           <button id="sw-back-1" class="sw-btn sw-btn-secondary">Back</button>
           <button id="sw-next-3" class="sw-btn sw-btn-primary" ${!state.selectedSlot ? 'disabled' : ''}>Continue</button>
         </div>
+        <button id="sw-none-fit" class="sw-text-link">None of these times work for me &rarr;</button>
       </div>
     `;
   }
@@ -834,10 +836,18 @@
 
     const instrumentLabel = state.instrument === 'Other' && state.instrumentOther
       ? state.instrumentOther : state.instrument;
-    const headline = state.instrument === 'Other'
+    // A visitor who saw real times and turned them all down is not a coverage gap, so
+    // they must not be told "we don't have an opening right now". The landing pages
+    // promise "if none of them work, leave your details and we'll find one with you",
+    // and this is the form that keeps that promise.
+    const headline = state.noTimesFit
+      ? `Tell Us What Times Suit You`
+      : state.instrument === 'Other'
       ? `Tell Us About Your ${instrumentLabel} Lessons`
       : `We'll Find You A ${instrumentLabel} Instructor`;
-    const subtext = state.instrument === 'Other'
+    const subtext = state.noTimesFit
+      ? `Leave your details and the days and times that work for you, and we'll reach out within 24 hours to find a time together.`
+      : state.instrument === 'Other'
       ? `We don't have a ${instrumentLabel} instructor listed yet, but we may be able to bring one on for you. Leave your info and we'll reach out within 24 hours.`
       : state.city === CITY_OTHER
         ? `We don't have an instructor listed in ${cityLabel()} yet, but we may be able to reach you. Leave your info and we'll let you know within 24 hours.`
@@ -866,8 +876,8 @@
         </div>
 
         <div class="sw-field">
-          <label class="sw-label" for="sw-notes">Anything else we should know? <span class="sw-optional">(optional)</span></label>
-          <input type="text" id="sw-notes" class="sw-input" placeholder="e.g., student age, experience level, preferred days" value="${state.notes}">
+          <label class="sw-label" for="sw-notes">${state.noTimesFit ? 'Which days and times work for you?' : 'Anything else we should know?'} <span class="sw-optional">(optional)</span></label>
+          <input type="text" id="sw-notes" class="sw-input" placeholder="${state.noTimesFit ? 'e.g., evenings after 5, or weekends' : 'e.g., student age, experience level, preferred days'}" value="${state.notes}">
         </div>
 
         <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" id="sw-hp" name="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
@@ -1090,7 +1100,23 @@
 
     // Back buttons
     const back1 = document.getElementById('sw-back-1');
-    if (back1) back1.addEventListener('click', () => { state.step = 1; state.error = ''; render(); });
+    if (back1) back1.addEventListener('click', () => {
+      // From the "none of these times work" form, Back returns to the same times.
+      if (state.noTimesFit) { state.noTimesFit = false; state.mode = 'booking'; state.step = 2; }
+      else state.step = 1;
+      state.error = '';
+      render();
+    });
+
+    const noneFitBtn = document.getElementById('sw-none-fit');
+    if (noneFitBtn) noneFitBtn.addEventListener('click', () => {
+      track('widget_no_time_fits', { city: funnelCity(), instrument: state.instrument || '' });
+      state.noTimesFit = true;
+      state.mode = 'lead';
+      state.step = 5;
+      state.error = '';
+      render();
+    });
 
     const back2 = document.getElementById('sw-back-2');
     if (back2) back2.addEventListener('click', () => { state.step = 2; state.error = ''; render(); });
@@ -1129,6 +1155,7 @@
 
   async function handleFindSlots() {
     clearAllErrors();
+    state.noTimesFit = false;
     let bad = false;
     if (!state.instrument) { setFieldError('instrument', 'Please select an instrument.'); bad = true; }
     if (state.instrument === 'Other' && !state.instrumentOther.trim()) {
@@ -1290,7 +1317,8 @@
         start_timing: state.startTiming || undefined,
         // An unlisted city is flagged in the notes so the lead email says WHY this is a
         // lead and not a booking, without the backend needing to know the sentinel.
-        notes: [state.city === CITY_OTHER ? `City not on our list: ${cityLabel()}` : '', state.notes.trim()]
+        notes: [state.city === CITY_OTHER ? `City not on our list: ${cityLabel()}` : '',
+          state.noTimesFit ? 'Saw our open times and none suited them' : '', state.notes.trim()]
           .filter(Boolean).join('. ') || undefined,
         brand_source: BRAND_SOURCE,
         honeypot: '',

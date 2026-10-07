@@ -225,12 +225,6 @@
     .local-faq-q { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 16px; color: var(--black); margin: 0 0 8px; }
     .local-faq-a { font-size: 15px; line-height: 1.7; color: #555; margin: 0; }
   
-    /* Lite YouTube embed */
-    .lite-youtube { position: absolute; inset: 0; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background-color: #1a1a2e; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
-    .lite-youtube::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.35) 100%); }
-    .lite-youtube-play { position: relative; width: 68px; height: 48px; background: #f00; border-radius: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.15s; }
-    .lite-youtube:hover .lite-youtube-play { background: #4f4ab8; transform: scale(1.06); }
-    .lite-youtube-play::after { content: ''; border-left: 18px solid #fff; border-top: 11px solid transparent; border-bottom: 11px solid transparent; margin-left: 4px; }
 
     /* Respect users' OS-level reduced-motion preference */
     @media (prefers-reduced-motion: reduce) {
@@ -243,6 +237,15 @@
       }
     }
     @media (max-width: 359px) { .nav-inner .btn-primary { display: none; } }
+    /* Added 2026-10-06. The bar needs about 430px (padding, logo, gap, button), so on every
+       phone narrower than that the button was squeezed and read "ook Free Lesso". Measured
+       with the live fonts to fit from 360px up; below 360 the button is hidden above. */
+    @media (max-width: 430px) {
+      .nav-inner { padding: 0 14px; gap: 10px; }
+      .nav-inner .btn-primary { padding: 9px 12px; font-size: 12px; flex-shrink: 0; }
+      .nav-logo > span > span { font-size: 18px !important; }
+    }
+    @media (max-width: 374px) { .nav-logo > span > span { font-size: 17px !important; } }
 
     /* ─────────────────────────────────────────────────────────────────────
        HORMOZI REBUILD (2026-09-02)
@@ -260,6 +263,21 @@
     /* HERO PHOTO */
     .hero-photo { max-width: 620px; margin: 0 auto 32px; border-radius: 20px; overflow: hidden; box-shadow: 0 24px 60px rgba(114,110,221,0.24), 0 6px 18px rgba(0,0,0,0.10); }
     .hero-photo img { display: block; width: 100%; height: auto; }
+    /* Hero VSL, Hormozi's way (acquisition.com/workshop, checked 2026-10-06): the video begins
+       muted on its own under the headline, with a "Your video is playing / Tap to unmute" card,
+       and the CTA sits right below it. The box is the video's own 9:16 shape from the first
+       paint, so nothing jumps when it starts. */
+    .hero-vsl { position: relative; max-width: none; width: min(100%, 340px, calc(56vh * 9 / 16)); aspect-ratio: 9 / 16; margin-left: auto; margin-right: auto; background: #1a1a2e; }
+    .hero-vsl-frame, .hero-vsl-frame iframe, .hero-vsl-btn { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-vsl-frame iframe { border: 0; }
+    .hero-vsl-btn { z-index: 2; padding: 0; border: 0; background: none; cursor: pointer; display: none; align-items: center; justify-content: center; }
+    .hero-vsl.is-live .hero-vsl-btn { display: flex; }
+    .hero-vsl.is-engaged .hero-vsl-btn { display: none; }
+    .hero-vsl-btn:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: -3px; }
+    .hero-vsl-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 20px; max-width: 78%; border-radius: 16px; background: rgba(114,110,221,0.92); border: 2px solid rgba(255,255,255,0.85); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; line-height: 1.25; text-align: center; box-shadow: 0 12px 34px rgba(20,18,40,0.35); transition: transform 0.15s; }
+    .hero-vsl-btn:hover .hero-vsl-card { transform: scale(1.04); }
+    .hero-vsl-icon { width: 34px; height: 34px; }
+    .hero-vsl-sub { font-weight: 600; font-size: 14px; opacity: 0.92; }
     .hero-keyline { font-size: 15px; line-height: 1.65; color: #4a4a58; margin: 0 auto 32px; max-width: 540px; }
 
     /* CTA BANDS. Identical label in all three places, all opening the same form. */
@@ -343,7 +361,6 @@
     .price-disqualify strong { font-family: 'Work Sans', sans-serif; font-weight: 800; display: block; margin-bottom: 6px; }
 
     /* LOCAL / LONG-FORM at 6.3, now carrying the video */
-    .local-vsl { max-width: 380px; margin: 0 auto 40px; }
     .local-faq-item > summary { cursor: pointer; list-style: none; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 14px 0; }
     .local-faq-item > summary::-webkit-details-marker { display: none; }
     .local-faq-item > summary::after { content: '+'; font-weight: 700; font-size: 20px; line-height: 1; color: var(--dark-purple); flex-shrink: 0; }
@@ -351,7 +368,6 @@
     .local-faq-item { border-bottom: 1px solid rgba(114,110,221,0.14); }
     .local-faq-item .local-faq-a { padding-bottom: 16px; }
     .local-faq-item > summary:focus-visible { outline: 2px solid var(--dark-purple); outline-offset: 2px; }
-    .local-vsl .vsl-wrapper { padding-bottom: 177.78%; }
 
     @media (max-width: 900px) {
       .proof-grid { grid-template-columns: 1fr; }
@@ -396,7 +412,6 @@
 
       /* The long-form block is the page's deepest read and was 2.9 screens on its own. */
       .local-section { padding: 56px 20px; }
-      .local-vsl { max-width: 240px; margin-bottom: 28px; }
       .local-body { font-size: 15px; line-height: 1.7; margin-bottom: 32px; }
       .local-heading { margin-bottom: 20px; }
       .local-faq { padding-top: 28px; }
@@ -557,11 +572,21 @@
     </h1>
     <p class="hero-sub blur-fade blur-fade-2">In-home piano lessons in Orange County. From the first notes to songs they are proud to play, taught right at your own piano.</p>
 
-    <div class="hero-photo blur-fade blur-fade-3">
-      <picture>
-        <source srcset="brand_assets/piano-lesson-overhead.webp" type="image/webp" />
-        <img src="brand_assets/piano-lesson-overhead.jpg" width="1000" height="545" alt="An instructor and a young student at a piano in a family home in Orange County" />
-      </picture>
+    <!-- The video sits IN the hero slot (Hormozi's case-study page: headline, a plain video of
+         how it works, one next step) and, like his live VSL page, begins by itself MUTED with a
+         "Your video is playing / Tap to unmute" card over it. Jonny 2026-10-06: no photo or
+         thumbnail in front of it, just begin the video. -->
+    <div class="hero-photo hero-vsl blur-fade blur-fade-3">
+      <div class="hero-vsl-frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/bNdyZWVwQSI?autoplay=1&amp;mute=1&amp;rel=0&amp;playsinline=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;enablejsapi=1" title="How our in-home piano lessons work" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <button type="button" class="hero-vsl-btn" aria-label="Turn on the sound and play the video from the start">
+        <span class="hero-vsl-card">
+          <svg class="hero-vsl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a8 8 0 0 1 0 11"/></svg>
+          <span>Your video is playing</span>
+          <span class="hero-vsl-sub">Tap to unmute</span>
+        </span>
+      </button>
     </div>
 
     <!-- CTA #1 of 3. All three carry the same label and open the same form. -->
@@ -660,7 +685,7 @@
       <div class="pillar-text">
         <div class="pillar-num">3</div>
         <h3>Your first lesson is free, and this is exactly what happens</h3>
-        <p>Tell us where to reach you. We confirm your instructor within 24 hours, then they come to your home and teach a full lesson at no charge. If you carry on it is a flat monthly rate, month to month, with a money-back guarantee.</p>
+        <p>Pick a time that suits you. We confirm it with your instructor within 24 hours, then they come to your home and teach a full lesson at no charge. If you carry on it is a flat monthly rate, month to month, with a money-back guarantee.</p>
       </div>
       <div class="pillar-photo">
         <picture>
@@ -679,9 +704,9 @@
     <h2>Ready to hear them play?</h2>
     <p>Pick a time that suits your family. The first lesson costs nothing and commits you to nothing.</p>
     <ol class="cta-steps">
-      <li><span class="cta-step-n">1</span><span>Tell us your phone number, name and email. That is the whole form.</span></li>
-      <li><span class="cta-step-n">2</span><span>We confirm your instructor within 24 hours and agree a time with you.</span></li>
-      <li><span class="cta-step-n">3</span><span>They come to your home and teach a full lesson, free, with nothing owed after.</span></li>
+      <li><span class="cta-step-n">1</span><span>Pick your city and a time that suits your week.</span></li>
+      <li><span class="cta-step-n">2</span><span>Leave your name, email and phone, and we hold that time for you.</span></li>
+      <li><span class="cta-step-n">3</span><span>We confirm within 24 hours, then your teacher comes to your home and teaches a full lesson, free, with nothing owed after.</span></li>
     </ol>
     <a href="#form" class="btn btn-accent btn-accent-lg js-book">Book Your Free First Lesson</a>
   </div>
@@ -702,7 +727,7 @@
 <section class="form-section" id="form">
   <div class="form-inner">
     <h2>Book your free first piano lesson</h2>
-    <p class="form-lede">Three fields. We reply within 24 hours with an instructor and a time, and the first lesson is free whether or not you carry on.</p>
+    <p class="form-lede">Choose a time below. If none of them work, leave your details and we'll find one with you. The first lesson is free whether or not you carry on.</p>
     <div class="booking-shell">
       <button type="button" class="booking-close" aria-label="Close booking form">&#10005;</button>
       <div class="form-embed">
@@ -724,19 +749,11 @@
 </section>
 <div class="booking-scrim"></div>
 
-<!-- LONG FORM at ~6.3, now carrying the video.
-     The VSL used to sit on its own at roughly 2 screens, ahead of the proof and the
-     mechanics. Hormozi's long-form detail block is where someone who is still reading
-     has actually opted in, so the video moved here rather than being dropped. -->
+<!-- LONG FORM at ~6.3. It carried the older "Why Most Kids Quit" video until 2026-10-06,
+     when "The Mechanism" went into the hero; one video per page, so that one came out. -->
 <section class="local-section">
   <div class="local-inner">
     <h2 class="local-heading">What In-Home Piano Lessons Look Like</h2>
-
-    <div class="local-vsl">
-      <div class="vsl-wrapper">
-        <button type="button" class="lite-youtube" data-video-id="oO-8-uReQSw" data-domain="youtube-nocookie.com" aria-label="Play: Why Most Kids Quit, and What We Do Instead" style="background-image:url(brand_assets/piano-lesson-overhead-alt.jpg);background-image:image-set(url(brand_assets/piano-lesson-overhead-alt.webp) type(&quot;image/webp&quot;),url(brand_assets/piano-lesson-overhead-alt.jpg) type(&quot;image/jpeg&quot;))"><span class="lite-youtube-play"></span></button>
-      </div>
-    </div>
 
     <p class="local-body">Piano is where so many musicians begin, and for good reason: it makes music visible. Every note has a place, and a beginner can be playing a melody the whole family recognizes sooner than they expect. Music and Mastery brings private, one-on-one piano lessons to families across Orange County, from Irvine and Tustin to Newport Beach, Costa Mesa and Lake Forest. Instead of loading up after a full school day, your instructor comes to your home and teaches at your own piano or keyboard, in a setting where your child already feels comfortable. Every teacher is DOJ and FBI background-checked through LiveScan. Whether your child is five and learning where middle C lives, a teen working toward the songs they love, or an adult returning to an instrument from years ago, every lesson is built around your goals and pace. Start with a free first lesson, month-to-month with a money-back guarantee.</p>
     <div class="local-faq">
@@ -1043,24 +1060,59 @@
      the words "your area", which is what a visitor who searched "piano lessons irvine"
      was being answered with. -->
 <script>window.MCMC_AREA_LABEL = 'Orange County';</script>
-<script src="/js/scheduling-widget.js?v=20260925"></script>
+<script src="/js/scheduling-widget.js?v=20261006"></script>
 
 <script>
 (function(){
-  document.querySelectorAll('.lite-youtube').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var vid = btn.dataset.videoId;
-      var domain = btn.dataset.domain || 'youtube.com';
-      if(!vid) return;
-      var iframe = document.createElement('iframe');
-      iframe.src = 'https://www.' + domain + '/embed/' + vid + '?autoplay=1&rel=0';
-      iframe.title = btn.getAttribute('aria-label') || 'YouTube video';
-      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-      iframe.allowFullscreen = true;
-      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
-      btn.replaceWith(iframe);
+  // Hero video, Hormozi's way: the iframe is in the HTML with autoplay=1&mute=1, so the video
+  // begins at once, muted. When it is actually playing, a "Your video is playing / Tap to
+  // unmute" card appears over it; a tap on the card restarts it from the top with sound
+  // (measured 2026-10-06 in Chrome, phone and desktop: one tap, playing, unmuted). A tap inside
+  // the YouTube player itself does NOT unmute, which is why the card exists.
+  //
+  // If muted autoplay is blocked (data saver, iPhone Low Power Mode) the card never shows and
+  // YouTube's own play button is what the visitor sees, which plays with sound on one tap.
+  //
+  // YouTube's caption box is switched off on every state report (Jonny 2026-10-06); the
+  // embed's cc_load_policy=0 alone does not keep it off. The words in the video are part of
+  // the video file, not YouTube captions.
+  //
+  // GA4: vsl_autoplay = the muted video started; vsl_play = the visitor tapped for sound.
+  var box = document.querySelector('.hero-vsl');
+  if (box) (function(){
+    var iframe = box.querySelector('iframe');
+    var btn = box.querySelector('.hero-vsl-btn');
+    var state = null, captionsOff = false;
+    function track(name){
+      try { if (typeof gtag === 'function') gtag('event', name, { video: 'the_mechanism', page: 'piano-lessons-orange-county' }); } catch (e) {}
+    }
+    function send(func, args){
+      try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: args || [] }), '*'); } catch (e) {}
+    }
+    window.addEventListener('message', function(e){
+      if (e.source !== iframe.contentWindow) return;
+      try {
+        var d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        if (!d || !d.info || typeof d.info.playerState !== 'number') return;
+        state = d.info.playerState;
+        if (state === 1 && !captionsOff) { captionsOff = true; send('unloadModule', ['captions']); send('unloadModule', ['cc']); }
+        if (state === 1 && !box.classList.contains('is-live')) { box.classList.add('is-live'); track('vsl_autoplay'); }
+      } catch (x) {}
     });
-  });
+    // The player only reports its state once it has been told someone is listening.
+    var ask = setInterval(function(){
+      try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'hero-vsl' }), '*'); } catch (x) {}
+    }, 400);
+    setTimeout(function(){ clearInterval(ask); }, 60000);
+
+    btn.addEventListener('click', function(){
+      box.classList.add('is-engaged');
+      track('vsl_play');
+      send('seekTo', [0, true]); send('unMute'); send('setVolume', [100]); send('playVideo');
+      captionsOff = false;
+    });
+  })();
+
 })();
 </script>
 

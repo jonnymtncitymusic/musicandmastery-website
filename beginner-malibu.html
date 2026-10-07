@@ -305,6 +305,15 @@
       }
     }
     @media (max-width: 359px) { .nav-inner .btn-primary { display: none; } }
+    /* Added 2026-10-06. The bar needs about 430px (padding, logo, gap, button), so on every
+       phone narrower than that the button was squeezed and read "ook Free Lesso". Measured
+       with the live fonts to fit from 360px up; below 360 the button is hidden above. */
+    @media (max-width: 430px) {
+      .nav-inner { padding: 0 14px; gap: 10px; }
+      .nav-inner .btn-primary { padding: 9px 12px; font-size: 12px; flex-shrink: 0; }
+      .nav-logo > span > span { font-size: 18px !important; }
+    }
+    @media (max-width: 374px) { .nav-logo > span > span { font-size: 17px !important; } }
   </style>
     <script type="application/ld+json">
 {
@@ -721,22 +730,47 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 <script>window.MCMC_LEAD_ONLY = true;</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <script>window.MCMC_PREFILL_CITY = 'Malibu';</script>
-<script src="/js/scheduling-widget.js?v=20260925"></script>
+<script src="/js/scheduling-widget.js?v=20261006"></script>
 
 <script>
 (function(){
+  // Tap-to-play video. The tap asks YouTube to start with sound, which Chrome often refuses
+  // inside an embed even right after a click; YouTube then shows an endless spinner with no
+  // play button (measured 2026-10-06). So the player reports its state, and if it is neither
+  // playing nor loading by 2.5s (6s while still loading) it is reloaded without autoplay,
+  // which shows YouTube's own play button. Worst case is a clear second tap.
   document.querySelectorAll('.lite-youtube').forEach(function(btn){
     btn.addEventListener('click', function(){
       var vid = btn.dataset.videoId;
       var domain = btn.dataset.domain || 'youtube.com';
       if(!vid) return;
+      var base = 'https://www.' + domain + '/embed/' + vid + '?rel=0&playsinline=1&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
       var iframe = document.createElement('iframe');
-      iframe.src = 'https://www.' + domain + '/embed/' + vid + '?autoplay=1&rel=0';
+      iframe.src = base + '&autoplay=1';
       iframe.title = btn.getAttribute('aria-label') || 'YouTube video';
       iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
       iframe.allowFullscreen = true;
       iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
       btn.replaceWith(iframe);
+      var state = null;
+      window.addEventListener('message', function(e){
+        if (e.source !== iframe.contentWindow) return;
+        try {
+          var d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          if (d && d.info && typeof d.info.playerState === 'number') state = d.info.playerState;
+        } catch (x) {}
+      });
+      var ask = setInterval(function(){
+        try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'lite-youtube' }), '*'); } catch (x) {}
+      }, 400);
+      var waited = 2500;
+      function check(){
+        if (state === 1 || state === 2) { clearInterval(ask); return; }
+        if (state === 3 && waited < 6000) { waited += 1000; setTimeout(check, 1000); return; }
+        clearInterval(ask);
+        iframe.src = base;
+      }
+      setTimeout(check, waited);
     });
   });
 })();

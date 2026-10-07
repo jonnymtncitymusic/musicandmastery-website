@@ -466,6 +466,48 @@ async function findSlots(page) {
       });
     }
 
+    // ── 11. Saw real times, none suited: a lead, not a coverage gap ─────────
+    // The ad landing pages promise "if none of them work, leave your details and we'll
+    // find one with you". Before 2026-10-06 the slot grid only offered Back, so a
+    // visitor who disliked every time had no way to leave their details from it.
+    await isolate('11', async () => {
+      const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
+      // The text link sits below the grid, where the page's sticky bar covers it in an
+      // 800x600 test window unless it is centred first. A visitor scrolls; the test must too.
+      const tap = async sel => {
+        await page.$eval(sel, el => el.scrollIntoView({ block: 'center' }));
+        await page.click(sel);
+      };
+      await findSlots(page);
+      await page.waitForSelector('#sw-none-fit', { timeout: 5000 });
+      await tap('#sw-none-fit');
+      await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
+      const heading = await page.$eval('.sw-heading', el => el.textContent);
+      const sub = await page.$eval('.sw-subtext', el => el.textContent);
+      check('11 the lead form asks what times suit them', /What Times Suit You/.test(heading), heading);
+      check('11 it never says we have no opening', !/don't have an opening/.test(sub), sub);
+      check('11 widget_no_time_fits fired', evt(await events(page), 'widget_no_time_fits').length === 1);
+
+      await tap('#sw-back-1');
+      const backOnGrid = await page.waitForSelector('.sw-slot', { timeout: 5000 }).then(() => true, () => false);
+      check('11 Back returns to the same times', backOnGrid);
+
+      await tap('#sw-none-fit');
+      await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
+      await page.type('#sw-name', 'Test Parent');
+      await page.type('#sw-email', 'test@example.com');
+      await page.type('#sw-phone', '7605551234');
+      const lessonFor = await page.$('[data-lessonfor="child"]');
+      if (lessonFor) await tap('[data-lessonfor="child"]');
+      await tap('#sw-submit-lead');
+      await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'), { timeout: 8000 });
+      const call = [...apiCalls].reverse().find(c => c.url.includes('/lead'));
+      let body = {};
+      try { body = JSON.parse(call?.body || '{}'); } catch (e) { body = {}; }
+      check('11 the lead tells Jonny why it is a lead', /none suited/.test(body.notes || ''), JSON.stringify(body));
+      await page.close();
+    });
+
   } catch (e) {
     check('the harness itself ran to completion', false, String((e && e.message) || e));
   } finally {
