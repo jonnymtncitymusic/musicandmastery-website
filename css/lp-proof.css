@@ -104,3 +104,12 @@
   .hero .hero-rating { justify-content: flex-start; flex-wrap: nowrap; max-width: none; margin: 0; }
   .hero .hero-keyline { margin-left: 0; margin-right: 0; text-align: left; }
 }
+
+/* 6. Reading text at 16px (Hormozi teardown edit #6, Jonny 2026-10-07). Three of his four pages
+   set body copy at 16px; ours ran 13.5-15px. Labels, chips, eyebrows, stars and the footer stay
+   small on purpose: this is only text someone reads as sentences. Same specificity as each
+   page's inline rule and loaded after it, so it wins at every width. */
+.local-body, .local-faq-a, .lp-bullet-item p, .pillar p, .price-justify p, .form-lede,
+.cta-steps li, .hero-keyline, .qualify-col li, .rv-caveat, .proof-attribution, .tcard-quote,
+.adults-body { font-size: 16px; }
+.tcard-quote { line-height: 1.65; }

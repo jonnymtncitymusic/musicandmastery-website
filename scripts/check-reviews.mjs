@@ -53,7 +53,7 @@ for (const r of rows) {
 const LANDING = fs.readdirSync(ROOT).filter(f => /^(beginner-|in-home-).*\.html$|-lessons-(orange-county|los-angeles)\.html$/.test(f));
 if (LANDING.length !== 34) fail(`expected 34 landing pages, found ${LANDING.length}`);
 const CAVEAT = 'Music and Mastery and Mountain City Music Co. are the same company. Mountain City Music Co. is our original name.';
-const tokens = { 'js/reviews.js': hash('js/reviews.js'), 'css/lp-proof.css': hash('css/lp-proof.css'), 'js/hero-vsl.js': hash('js/hero-vsl.js') };
+const tokens = { 'js/reviews.js': hash('js/reviews.js'), 'css/lp-proof.css': hash('css/lp-proof.css'), 'js/hero-vsl.js': hash('js/hero-vsl.js'), 'js/headline-test.js': hash('js/headline-test.js') };
 for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html'))) {
   const t = read(f);
   for (const [asset, v] of Object.entries(tokens)) {
@@ -78,6 +78,44 @@ for (const f of LANDING) {
   for (const m of t.matchAll(/<strong>(\d\.\d)<\/strong> from/g)) if (+m[1] !== data.average) fail(`${f}: says ${m[1]}, data says ${data.average}`);
   if ((t.match(/class="hero-vsl-btn"/g) || []).length !== 1) fail(`${f}: hero video must have exactly one unmute button`);
 }
+// 4. Headline test (Hormozi edit #7): the paid pages each run one, picked before paint, and the
+//    thank-you page credits conversions to it. A test id ends in its start date so a new
+//    challenger never mixes its numbers with the last one.
+const PAID = ['piano-lessons-orange-county.html', 'piano-lessons-los-angeles.html',
+  'guitar-lessons-los-angeles.html', 'guitar-lessons-orange-county.html'];
+const testIds = new Set();
+for (const f of PAID) {
+  const t = read(f);
+  const h1 = t.match(/<h1[^>]*data-hl-test="([a-z0-9-]+-\d{4}-\d{2}-\d{2})"[^>]*data-hl-b="([^"]+)"[^>]*>[\s\S]*?<\/h1>\s*(?:<!--[\s\S]*?-->\s*)?<script>/);
+  if (!h1) { fail(`${f}: headline test missing, or the inline picker is not right after the <h1>`); continue; }
+  if (testIds.has(h1[1])) fail(`${f}: test id ${h1[1]} is used on two pages`);
+  testIds.add(h1[1]);
+  if (/\u2014|&mdash;/.test(h1[2])) fail(`${f}: challenger headline has an em dash`);
+  if (!t.includes('/js/headline-test.js?v=')) fail(`${f}: does not load js/headline-test.js`);
+}
+if (!read('thank-you.html').includes('/js/headline-test.js?v=')) fail('thank-you.html: does not load js/headline-test.js, so no booking is ever credited to a headline');
+
+// 5. FAQ structured data mirrors the visible FAQ, question and answer, on every landing page.
+//    website-copy.md: a visible fix that leaves the FAQPage JSON-LD behind has bitten twice, and
+//    the 2026-10-07 grade-4 rewrite changed every FAQ answer on these pages.
+const ENT = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
+const plain = s => s.replace(/<[^>]+>/g, '')
+  .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+  .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(+d))
+  .replace(/&([a-z]+);/gi, (m, n) => ENT[n.toLowerCase()] ?? m)
+  .replace(/\s+/g, ' ').trim();
+for (const f of LANDING) {
+  const t = read(f);
+  let pairs = [...t.matchAll(/<h4 class="local-faq-q">([\s\S]*?)<\/h4>\s*<p class="local-faq-a">([\s\S]*?)<\/p>/g)];
+  if (!pairs.length) pairs = [...t.matchAll(/<summary[^>]*>([\s\S]*?)<\/summary>\s*<p[^>]*>([\s\S]*?)<\/p>/g)];
+  const ld = [...t.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+    .map(m => JSON.parse(m[1])).find(d => d['@type'] === 'FAQPage');
+  if (!ld) { if (pairs.length) fail(`${f}: visible FAQ but no FAQPage JSON-LD`); continue; }
+  const want = pairs.map(m => [plain(m[1]), plain(m[2])]);
+  const got = ld.mainEntity.map(e => [e.name, e.acceptedAnswer.text]);
+  if (JSON.stringify(want) !== JSON.stringify(got)) fail(`${f}: FAQPage JSON-LD does not match the visible FAQ (search results would show different words)`);
+}
+
 // The card label is the per-card caveat.
 if (!js.includes("'Google review of Mountain City Music Co.'")) fail('js/reviews.js: cards lost the "Google review of Mountain City Music Co." label');
 

@@ -65,7 +65,7 @@ print(f'{len(rows)} reviews written; js/reviews.js v={hashlib.sha256(JS.read_byt
 
 # Point every page at the new file versions (hero-vsl.js too: same cache, same trap). /js/ is immutable for a year, so a stale ?v=
 # means returning visitors keep the old reviews. npm test (check-reviews.mjs) fails on drift.
-for asset in ('js/reviews.js', 'css/lp-proof.css', 'js/hero-vsl.js'):
+for asset in ('js/reviews.js', 'css/lp-proof.css', 'js/hero-vsl.js', 'js/headline-test.js'):
     v = hashlib.sha256((ROOT / asset).read_bytes()).hexdigest()[:10]
     pat = re.compile(r'(/' + re.escape(asset) + r'\?v=)[0-9a-f]+')
     for page in ROOT.glob('*.html'):
