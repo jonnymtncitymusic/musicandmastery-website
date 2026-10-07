@@ -5,7 +5,7 @@
  *  1. Every quote in js/reviews.js is a Google review from data/google-reviews-*.json, word for
  *     word: the whole text, or its leading whole sentences (cut at . ! ? before a space, never
  *     at "Co." or "Mr."). No splice, no ellipsis, at most 50, each reviewer once.
- *  2. Every page loads js/reviews.js and css/lp-proof.css at ?v=<their current hash>. /js/ is
+ *  2. Every page loads js/reviews.js, js/hero-vsl.js and css/lp-proof.css at ?v=<current hash>. /js/ is
  *     served immutable for a year, so a stale token strands returning visitors on old reviews.
  *  3. Every landing page has the four edits: button + rating line ABOVE the hero video, the
  *     wall with the same-company caveat, who-it-is-for, and the P.S. The review count and the
@@ -53,7 +53,7 @@ for (const r of rows) {
 const LANDING = fs.readdirSync(ROOT).filter(f => /^(beginner-|in-home-).*\.html$|-lessons-(orange-county|los-angeles)\.html$/.test(f));
 if (LANDING.length !== 34) fail(`expected 34 landing pages, found ${LANDING.length}`);
 const CAVEAT = 'Music and Mastery and Mountain City Music Co. are the same company. Mountain City Music Co. is our original name.';
-const tokens = { 'js/reviews.js': hash('js/reviews.js'), 'css/lp-proof.css': hash('css/lp-proof.css') };
+const tokens = { 'js/reviews.js': hash('js/reviews.js'), 'css/lp-proof.css': hash('css/lp-proof.css'), 'js/hero-vsl.js': hash('js/hero-vsl.js') };
 for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html'))) {
   const t = read(f);
   for (const [asset, v] of Object.entries(tokens)) {

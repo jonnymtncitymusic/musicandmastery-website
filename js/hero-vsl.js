@@ -14,8 +14,11 @@
  * If muted autoplay is blocked (data saver, iPhone Low Power Mode) the card never shows and
  * YouTube's own play button is what the visitor sees, which plays with sound on one tap.
  *
- * YouTube's caption box is switched off once playing (Jonny 2026-10-06); the embed's
- * cc_load_policy=0 alone does not keep it off. The words in the video are part of the file.
+ * YouTube's caption box stays off (Jonny 2026-10-06, again 2026-10-07). cc_load_policy=0 does not
+ * beat a viewer whose YouTube account has captions switched on, and switching them off only once
+ * the video was PLAYING left "What" on screen at 0:00 while it buffered (seen 2026-10-07). So they
+ * are switched off the moment the player first reports in, and again on every play or buffer.
+ * The words in the video are part of the file.
  *
  * GA4: vsl_autoplay = the muted video started; vsl_play = the visitor tapped for sound.
  */
@@ -26,7 +29,7 @@
   var btn = box.querySelector('.hero-vsl-btn');
   if (!iframe || !btn) return;
   var page = (location.pathname.split('/').pop() || 'index').replace(/\.html$/, '');
-  var captionsOff = false;
+  var lastState = null;
 
   function track(name) {
     try { if (typeof gtag === 'function') gtag('event', name, { video: 'the_mechanism', page: page }); } catch (e) {}
@@ -35,14 +38,26 @@
     try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: args || [] }), '*'); } catch (e) {}
   }
 
+  function captionsOff() {
+    send('unloadModule', ['captions']);
+    send('unloadModule', ['cc']);
+    send('setOption', ['captions', 'track', {}]);
+  }
+
   window.addEventListener('message', function (e) {
     if (e.source !== iframe.contentWindow) return;
     try {
       var d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-      if (!d || !d.info || typeof d.info.playerState !== 'number') return;
-      if (d.info.playerState !== 1) return;
-      if (!captionsOff) { captionsOff = true; send('unloadModule', ['captions']); send('unloadModule', ['cc']); }
-      if (!box.classList.contains('is-live')) { box.classList.add('is-live'); track('vsl_autoplay'); }
+      if (!d) return;
+      if (lastState === null) { lastState = -2; captionsOff(); }
+      if (!d.info || typeof d.info.playerState !== 'number') return;
+      var state = d.info.playerState;
+      if (state !== lastState) {
+        lastState = state;
+        // 1 = playing, 3 = buffering: the moments YouTube re-applies the viewer's caption setting.
+        if (state === 1 || state === 3) captionsOff();
+      }
+      if (state === 1 && !box.classList.contains('is-live')) { box.classList.add('is-live'); track('vsl_autoplay'); }
     } catch (x) {}
   });
 
@@ -56,6 +71,6 @@
     box.classList.add('is-engaged');
     track('vsl_play');
     send('seekTo', [0, true]); send('unMute'); send('setVolume', [100]); send('playVideo');
-    captionsOff = false;
+    captionsOff();
   });
 })();
