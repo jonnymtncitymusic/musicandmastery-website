@@ -115,3 +115,22 @@
 .cta-steps li, .hero-keyline, .qualify-col li, .rv-caveat, .proof-attribution,
 .tcard-quote { font-size: 16px; }
 .tcard-quote { line-height: 1.65; }
+
+/* 7. The headline is the page's main content, so it must be visible from the first frame
+   (website speed, 2026-10-10). Every hero line used to fade in from opacity 0, and Chrome
+   does not count invisible text as painted: Google's speed test settled on the small nav logo
+   instead, after the YouTube player had started downloading, and scored the page at 12 s.
+   The headline keeps its entrance (a short rise, and the blur-to-focus on desktop) but never
+   starts invisible. Everything else in the hero still fades in as before. */
+@keyframes hero-rise {
+  from { transform: translateY(8px); }
+  to   { transform: translateY(0); }
+}
+@keyframes hero-rise-focus {
+  from { transform: translateY(8px); filter: blur(6px); }
+  to   { transform: translateY(0); filter: blur(0); }
+}
+.hero .hero-heading.blur-fade { animation-name: hero-rise; }
+@media (min-width: 769px) {
+  .hero .hero-heading.blur-fade { animation-name: hero-rise-focus; }
+}

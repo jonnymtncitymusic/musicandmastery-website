@@ -4,7 +4,8 @@
  * acquisition.com/workshop (checked 2026-10-06) starts its sales video MUTED by itself under
  * the headline, with a "Your Video Is Playing / Click To Unmute" overlay and the CTA right
  * below. Jonny's rule is to do what Hormozi does, so the pages carry the YouTube iframe in the
- * HTML with autoplay=1&mute=1 and no thumbnail in front of it (his call, 2026-10-06).
+ * HTML with autoplay=1&mute=1 and no thumbnail in front of it (his call, 2026-10-06). Its
+ * address sits in data-src and this file sets it once the page has painted (see loadPlayer).
  *
  * When the video is actually playing, a "Your video is playing / Tap to unmute" card appears
  * over it. A tap on the card restarts it from the top with sound (measured in Chrome, phone
@@ -77,6 +78,17 @@
   }
   iframe.addEventListener('load', startAsking);
   startAsking();
+
+  // The player starts loading once the page itself has painted (website speed, 2026-10-10).
+  // Its ~900 KB of YouTube script used to download alongside the headline and the fonts, which
+  // is most of why Google scored these pages at 12 s on a phone. The page carries the address
+  // in data-src; the box shows its dark background until the player arrives, as it always did.
+  function loadPlayer() {
+    var src = iframe.getAttribute('data-src');
+    if (src && !iframe.getAttribute('src')) iframe.setAttribute('src', src);
+  }
+  if (document.readyState === 'complete') loadPlayer();
+  else window.addEventListener('load', loadPlayer);
 
   btn.addEventListener('click', function () {
     box.classList.add('is-engaged');
