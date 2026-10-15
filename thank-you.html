@@ -497,7 +497,7 @@
     <div class="ty-what-next">
       <h2>What happens next</h2>
       <ol class="ty-steps">
-        <li><span>Jonny will give you a quick call to confirm a few details. If he's with a student, his AI assistant may call first to collect them, and Jonny follows up himself.</span></li>
+        <li><span id="ty-step-call">Jonny will give you a quick call to confirm a few details.</span></li>
         <li><span>We review your submission and match you with the right instructor for your goals and schedule.</span></li>
         <li><span>You'll hear from us within 24 hours to confirm your first lesson time and answer any questions.</span></li>
         <li><span>Your instructor comes to you, no commute, no hassle. Your first lesson is free.</span></li>
@@ -568,6 +568,10 @@
     sub.innerHTML = "Your slot is held. We'll call within 24 hours to walk through everything. Your first lesson is free, so there is nothing to pay.";
   } else if (type === 'lead') {
     eyebrow.textContent = 'Info Received';
+    // Only the lead form carries the AI-call disclosure, and only its leads can get the AI's call
+    // (claude-n8n-bridge lead_ring.js), so only this branch says so. A booking never hears it.
+    document.getElementById('ty-step-call').textContent =
+      "Jonny will give you a quick call to confirm a few details. If he's with a student, his AI assistant may call first to collect them, and Jonny follows up himself.";
     // city arrives from the query string. This sentence is assembled from DOM
     // nodes so the value can only ever become text. The innerHTML concatenation
     // that used to live here let ?city=<img src=x onerror=...> run script on our
