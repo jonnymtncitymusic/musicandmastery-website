@@ -511,6 +511,155 @@ async function findSlots(page) {
       await page.close();
     });
 
+    // ── 12. AI-call consent: shown and sent on the LEAD path only ──────────
+    // Every lead-form send button has the disclosure directly above it, with no
+    // checkbox, and the lead body carries the wording the visitor saw, but only
+    // against a phone number. The booking and the "have an instructor call you
+    // first" callback both post to /book and must neither show it nor send it.
+    {
+      const lastBody = part => {
+        const call = [...apiCalls].reverse().find(c => c.url.includes(part));
+        try { return JSON.parse(call?.body || '{}'); } catch (e) { return {}; }
+      };
+      const AI_TEXT = "By sending this form, you agree that Jonny or his AI assistant may call the " +
+        "number above about lessons. Agreeing isn't required to take lessons; you can call us at " +
+        "(760) 573-2120 instead.";
+      // The disclosure must sit directly above the button: the element just before the
+      // button, or just before the Back/Submit row that holds it.
+      const disclosureAboveButton = page => page.evaluate(() => {
+        const btn = document.getElementById('sw-submit-lead');
+        if (!btn) return null;
+        const row = btn.parentElement.classList.contains('sw-step2-actions') ? btn.parentElement : btn;
+        const p = row.previousElementSibling;
+        if (!p || !p.classList.contains('sw-ai-consent')) return { found: false };
+        const cs = getComputedStyle(p);
+        return { found: true, text: p.textContent.replace(/\s+/g, ' ').trim(),
+          tel: p.querySelector('a[href^="tel:"]')?.getAttribute('href') || '',
+          fontSize: parseFloat(cs.fontSize), color: cs.color,
+          above: p.getBoundingClientRect().bottom <= btn.getBoundingClientRect().top };
+      });
+      const checkDisclosure = (tag, d) => {
+        check(`${tag} the disclosure sits directly above the send button`, d && d.found && d.above,
+          JSON.stringify(d));
+        check(`${tag} it is the exact wording`, d && d.text === AI_TEXT, d && d.text);
+        check(`${tag} the office number is a tap-to-call link`, d && /^tel:\+?1?7605732120$/.test(d.tel),
+          d && d.tel);
+        check(`${tag} it is readable (>= 12px, dark text)`, d && d.fontSize >= 12 &&
+          d.color === 'rgb(51, 51, 51)', JSON.stringify(d));
+      };
+      const sentConsent = (tag, body) => {
+        check(`${tag} the lead sends ai_call_consent with the wording and page`,
+          body.ai_call_consent === true && body.ai_call_consent_text === AI_TEXT &&
+          /^http:\/\/localhost:\d+\/[^?#]*\.html$/.test(body.ai_call_consent_page || ''),
+          JSON.stringify(body));
+      };
+      const submitLeadAndWait = async page => {
+        const before = apiCalls.filter(c => c.url.includes('/lead')).length;
+        await page.$eval('#sw-submit-lead', el => el.scrollIntoView({ block: 'center' }));
+        await page.click('#sw-submit-lead');
+        await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
+          { timeout: 8000 });
+        return apiCalls.filter(c => c.url.includes('/lead')).length > before;
+      };
+
+      // 12a. The fallback lead form on a booking page (no times in the city).
+      await isolate('12a', async () => {
+        const page = await newPage(browser, base, inlinePage,
+          { availability: AVAIL_EMPTY, stripRedirect: true });
+        await findSlots(page);
+        await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
+        checkDisclosure('12a', await disclosureAboveButton(page));
+        await page.type('#sw-name', 'Test Parent');
+        await page.type('#sw-email', 'test@example.com');
+        await page.type('#sw-phone', '7605551234');
+        const lessonFor = await page.$('[data-lessonfor="child"]');
+        if (lessonFor) await lessonFor.click();
+        check('12a the lead was sent', await submitLeadAndWait(page));
+        sentConsent('12a', lastBody('/lead'));
+        await page.close();
+      });
+
+      // 12b. No phone number: nothing to agree to calls on.
+      await isolate('12b', async () => {
+        const page = await newPage(browser, base, inlinePage,
+          { availability: AVAIL_EMPTY, stripRedirect: true });
+        await findSlots(page);
+        await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
+        await page.type('#sw-name', 'Test Parent');
+        await page.type('#sw-email', 'test@example.com');
+        const lessonFor = await page.$('[data-lessonfor="child"]');
+        if (lessonFor) await lessonFor.click();
+        check('12b a lead with no phone was sent', await submitLeadAndWait(page));
+        const body = lastBody('/lead');
+        check('12b a lead with no phone sends ai_call_consent false and no wording',
+          body.ai_call_consent === false && !('ai_call_consent_text' in body) &&
+          !('ai_call_consent_page' in body), JSON.stringify(body));
+        await page.close();
+      });
+
+      // 12c. A lead-only page: the single contact form.
+      await isolate('12c', async () => {
+        const page = await newPage(browser, base, CONFIG.leadOnlyPage, { stripRedirect: true });
+        await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
+        checkDisclosure('12c', await disclosureAboveButton(page));
+        await page.type('#sw-name', 'Test Parent');
+        await page.type('#sw-email', 'test@example.com');
+        await page.type('#sw-phone', '7605551234');
+        if (await page.$('#sw-instrument')) {
+          await page.select('#sw-instrument', 'Guitar');
+          await page.waitForSelector('#sw-submit-lead');
+        }
+        const lessonFor = await page.$('[data-lessonfor="child"]');
+        if (lessonFor) await lessonFor.click();
+        if (await page.$('#sw-age')) await page.type('#sw-age', '8');
+        if (await page.$('#sw-city-text')) {
+          const v = await page.$eval('#sw-city-text', el => el.value);
+          if (!v) await page.type('#sw-city-text', city);
+        }
+        if (await page.$('#sw-timing')) await page.select('#sw-timing', 'asap');
+        check('12c the lead was sent', await submitLeadAndWait(page));
+        sentConsent('12c', lastBody('/lead'));
+        await page.close();
+      });
+
+      // 12d + 12e. The booking and the callback: no disclosure, no fields.
+      const toBookingForm = async page => {
+        await findSlots(page);
+        await page.waitForSelector('.sw-slot', { timeout: 5000 });
+        await page.click('.sw-slot');
+        const next = await page.$('#sw-next-3');
+        if (next) await next.click();
+        await page.waitForSelector('#sw-submit', { timeout: 5000 });
+        await page.type('#sw-name', 'Test Parent');
+        await page.type('#sw-email', 'test@example.com');
+        await page.type('#sw-phone', '7605551234');
+        await page.type('#sw-address-final', '1 Test St');
+        const lessonFor = await page.$('[data-lessonfor="child"]');
+        if (lessonFor) await lessonFor.click();
+      };
+      for (const [tag, btn, what] of [['12d', '#sw-submit', 'booking'], ['12e', '#sw-callback', 'callback']]) {
+        await isolate(tag, async () => {
+          const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
+          await toBookingForm(page);
+          check(`${tag} the ${what} form shows no AI-call disclosure`, !(await page.$('.sw-ai-consent')));
+          const before = apiCalls.filter(c => c.url.includes('/book')).length;
+          await page.$eval(btn, el => el.scrollIntoView({ block: 'center' }));
+          await page.click(btn);
+          await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
+            { timeout: 8000 });
+          check(`${tag} the ${what} posted to /book`,
+            apiCalls.filter(c => c.url.includes('/book')).length > before);
+          const body = lastBody('/book');
+          check(`${tag} the ${what} body carries no ai_call_consent field`,
+            !Object.keys(body).some(k => k.startsWith('ai_call_consent')), JSON.stringify(body));
+          if (what === 'callback') {
+            check('12e it really was the callback', body.callback_requested === true, JSON.stringify(body));
+          }
+          await page.close();
+        });
+      }
+    }
+
   } catch (e) {
     check('the harness itself ran to completion', false, String((e && e.message) || e));
   } finally {

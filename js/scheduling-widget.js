@@ -62,6 +62,17 @@
   const CITY_OTHER = '__other__';
   const CITY_OTHER_LABEL = 'Other / my city is not listed';
 
+  // AI call consent, on the LEAD form only (2026-10-15). Shown directly above every
+  // lead-form send button, with no checkbox: sending the form is the agreement, and the
+  // wording says agreeing is not required and gives the number to call instead. The exact
+  // wording travels with the submission as ai_call_consent_text, so the record shows what
+  // the visitor saw even after this copy changes. The booking and callback paths
+  // (/api/scheduling/book) neither show it nor send it.
+  const AI_CALL_CONSENT_TEXT =
+    'By sending this form, you agree that Jonny or his AI assistant may call the number ' +
+    'above about lessons. Agreeing isn\'t required to take lessons; you can call us at ' +
+    '(760) 573-2120 instead.';
+
   // ─── Funnel instrumentation ────────────────────────────────────────────────
   // Until now this widget fired three events and all three were terminal: a lead, a
   // booking, a callback. Nothing was emitted when somebody opened the form, chose a
@@ -882,6 +893,7 @@
 
         <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" id="sw-hp" name="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 
+        ${renderAiCallConsent()}
         <div class="sw-step2-actions">
           <button id="sw-back-1" class="sw-btn sw-btn-secondary">Back</button>
           <button id="sw-submit-lead" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
@@ -890,6 +902,27 @@
         </div>
       </div>
     `;
+  }
+
+
+  // The disclosure above a lead-form send button. The office number is a tap-to-call
+  // link, because "call us instead" is the alternative the wording offers.
+  function renderAiCallConsent() {
+    const html = AI_CALL_CONSENT_TEXT.replace('(760) 573-2120',
+      '<a href="tel:+17605732120">(760) 573-2120</a>');
+    return `<p class="sw-fineprint sw-ai-consent">${html}</p>`;
+  }
+
+  // What a LEAD submission carries about the AI call. Like the SMS consent, it is only
+  // recorded against a phone number: agreeing to calls with no number is agreeing to
+  // nothing. Never spread into a /book body.
+  function aiCallConsentFields() {
+    if (!state.clientPhone.trim()) return { ai_call_consent: false };
+    return {
+      ai_call_consent: true,
+      ai_call_consent_text: AI_CALL_CONSENT_TEXT,
+      ai_call_consent_page: window.location.origin + window.location.pathname,
+    };
   }
 
   // The three contact fields, in the order this page asked for.
@@ -1004,6 +1037,7 @@
   // plain submission. The deposit path was removed with the paid trial.
   function renderMmDeposit() {
     return `
+      ${renderAiCallConsent()}
       <button id="sw-submit-lead" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
         ${state.loading ? '<span class="sw-spinner"></span> Sending...' : 'Book My Free First Lesson'}
       </button>
@@ -1321,6 +1355,7 @@
           state.noTimesFit ? 'Saw our open times and none suited them' : '', state.notes.trim()]
           .filter(Boolean).join('. ') || undefined,
         brand_source: BRAND_SOURCE,
+        ...aiCallConsentFields(),
         honeypot: '',
       });
 
@@ -1603,6 +1638,9 @@
       .sw-btn-ghost:hover:not(:disabled) { background: #f4f3ff; }
       textarea.sw-input { resize: vertical; min-height: 88px; font-family: 'Questrial', sans-serif; }
       .sw-fineprint { font-family: 'Questrial', sans-serif; font-size: 12px; color: #5f5f5f; text-align: center; margin: 14px 0 0; }
+      .sw-ai-consent { font-size: 13px; color: #333; line-height: 1.5; text-align: left; margin: 4px 0 14px; }
+      .sw-ai-consent a { color: #4f4ab8; text-decoration: underline; white-space: nowrap; }
+      .sw-ai-consent + .sw-step2-actions { margin-top: 0; }
 
       /* Trial banner (top of step 1) */
       .sw-trial-banner {
