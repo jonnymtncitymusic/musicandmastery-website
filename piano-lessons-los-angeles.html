@@ -5,15 +5,15 @@
     <link rel="canonical" href="https://www.musicandmastery.com/piano-lessons-los-angeles.html">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="In-Home Piano Lessons in Los Angeles | Music and Mastery">
-    <meta name="twitter:description" content="Private, in-home piano lessons for kids and adults across Burbank & Glendale. DOJ & FBI background-checked instructors. Your first lesson is free.">
+    <meta name="twitter:description" content="Private, in-home piano lessons for kids and adults across Burbank, Glendale, Pasadena, Hollywood, East Hollywood & West Hollywood. DOJ & FBI background-checked instructors. Your first lesson is free.">
     <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
     <meta property="og:title" content="In-Home Piano Lessons in Los Angeles | Music and Mastery">
-    <meta property="og:description" content="Private, in-home piano lessons for kids and adults across Burbank & Glendale. DOJ & FBI background-checked instructors. Your first lesson is free.">
+    <meta property="og:description" content="Private, in-home piano lessons for kids and adults across Burbank, Glendale, Pasadena, Hollywood, East Hollywood & West Hollywood. DOJ & FBI background-checked instructors. Your first lesson is free.">
     <meta property="og:url" content="https://www.musicandmastery.com/piano-lessons-los-angeles.html">
     <meta property="og:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Music and Mastery">
-    <meta name="description" content="Private in-home piano lessons for kids and adults in Burbank and Glendale. Your first lesson is free. Every teacher is DOJ/FBI background-checked.">
+    <meta name="description" content="Private in-home piano lessons for kids, teens and adults in Burbank, Glendale, Pasadena and Hollywood. Your first lesson is free. Every teacher is DOJ/FBI background-checked.">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11066542604"></script>
 <script>
@@ -436,6 +436,32 @@
     .hero-vsl-btn:active .hero-vsl-card { transform: scale(0.98); }
     .hero-vsl-icon { width: 34px; height: 34px; }
     .hero-vsl-sub { font-weight: 600; font-size: 14px; opacity: 0.92; }
+
+    /* MEET THE TEACHER (2026-10-19). A buyer review found no teacher named on any landing
+       page. Every fact here is copied from Arthur's bio on instructors.html; nothing is added.
+       The block names him without promising he is the only teacher, because the scheduler
+       can also offer another instructor in a few cities on some days. */
+    .teacher { background: var(--off-white); padding: 80px 32px; border-bottom: 1px solid #f0eeff; }
+    .teacher-inner { max-width: 880px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; grid-template-areas: "photo head" "photo body"; column-gap: 48px; row-gap: 16px; }
+    .teacher-photo { grid-area: photo; align-self: center; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 5; box-shadow: 0 18px 44px rgba(114,110,221,0.22), 0 4px 12px rgba(0,0,0,0.08); }
+    .teacher-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+    .teacher-head { grid-area: head; align-self: end; }
+    .teacher-body { grid-area: body; align-self: start; }
+    .teacher h2 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.1; letter-spacing: -0.025em; margin: 0 0 6px; }
+    .teacher-role { font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 16px; color: var(--dark-purple); margin: 0; }
+    .teacher-lede { font-size: 16px; line-height: 1.65; color: #3a3a4a; margin: 0 0 18px; }
+    .teacher-facts { list-style: none; padding: 0; margin: 0 0 18px; display: flex; flex-direction: column; gap: 10px; }
+    .teacher-facts li { position: relative; padding-left: 26px; font-size: 15px; line-height: 1.6; color: #4a4a58; }
+    .teacher-facts li::before { content: '\2713'; position: absolute; left: 0; top: 0; color: var(--dark-purple); font-weight: 900; }
+    .teacher-note { font-size: 15px; line-height: 1.6; color: #4a4a58; margin: 0; }
+    @media (max-width: 768px) {
+      .teacher { padding: 48px 20px; }
+      .teacher-inner { grid-template-columns: 96px 1fr; grid-template-areas: "photo head" "body body"; column-gap: 18px; row-gap: 20px; }
+      .teacher-photo { border-radius: 14px; }
+      .teacher-head { align-self: center; }
+      .teacher h2 { font-size: 26px; }
+      .teacher-role { font-size: 15px; }
+    }
   </style>
     <script type="application/ld+json">
 {
@@ -494,7 +520,7 @@
           "name": "Which Los Angeles cities do you cover for in-home piano lessons?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Your instructor comes to your home in Burbank and Glendale. Every session is private and taught in your home. Your first piano lesson is free so you can try it risk-free."
+            "text": "We come to homes in Burbank, Glendale, Pasadena, Hollywood, East Hollywood and West Hollywood. Each lesson is private and in your home. Your first piano lesson is free, so you can try it with no risk."
           }
         }
       ]
@@ -514,7 +540,11 @@
   },
   "areaServed": [
     { "@type": "City", "name": "Burbank" },
-    { "@type": "City", "name": "Glendale" }
+    { "@type": "City", "name": "Glendale" },
+    { "@type": "City", "name": "Pasadena" },
+    { "@type": "City", "name": "Hollywood" },
+    { "@type": "City", "name": "East Hollywood" },
+    { "@type": "City", "name": "West Hollywood" }
   ],
   "url": "https://www.musicandmastery.com/piano-lessons-los-angeles.html",
   "offers": {
@@ -598,7 +628,7 @@
     <!-- CTA #1 of 3. All three carry the same label and open the same form. -->
 
     <p class="hero-keyline blur-fade blur-fade-5">
-      Private, one-on-one lessons for kids and adults in Burbank and Glendale. DOJ and FBI background-checked instructors. Month to month, no contracts.
+      Private, one-on-one lessons for kids, teens and adults in Burbank, Glendale, Pasadena, Hollywood, East Hollywood and West Hollywood. DOJ and FBI background-checked instructors. Month to month, no contracts.
     </p>
   </div>
 </section>
@@ -650,6 +680,31 @@
   </div>
 </section>
 
+<!-- MEET THE TEACHER (2026-10-19). Facts only from instructors.html. Cities are the ones the
+     live scheduler offers (/api/scheduling/cities?brand=musicandmastery, checked 2026-10-19). -->
+<section class="teacher">
+  <div class="teacher-inner">
+    <div class="teacher-photo">
+      <picture>
+        <source srcset="brand_assets/instructors/Arthur%20Chou.webp" type="image/webp" />
+        <img src="brand_assets/instructors/Arthur%20Chou.jpg" width="900" height="1125" loading="lazy" alt="Arthur Chou playing an electric guitar" />
+      </picture>
+    </div>
+    <div class="teacher-head">
+      <h2>Meet Arthur Chou</h2>
+      <p class="teacher-role">Piano and guitar teacher</p>
+    </div>
+    <div class="teacher-body">
+      <p class="teacher-lede">Arthur comes to homes in Burbank, Glendale, Pasadena, Hollywood, East Hollywood and West Hollywood.</p>
+      <ul class="teacher-facts">
+          <li>More than five years of teaching and playing live.</li>
+          <li>Graduated with High Honors from Musicians Institute, where his degree is in guitar performance.</li>
+          <li>Plans each lesson around the student&#39;s own goals.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- THE THREE NUMBERED BLOCKS at ~2.6 / 3.2 / 3.7, each with a real photo.
      These are MECHANICS, which the copy playbook permits anywhere AFTER a dream. The
      dream is in the subhead at 0.3, so they land legally here and not before. -->
@@ -674,7 +729,7 @@
       <div class="pillar-text">
         <div class="pillar-num">2</div>
         <h3>The lesson happens at your piano, not across town</h3>
-        <p>No drive after school, no waiting room, no second trip home. Your teacher comes to you in Burbank or Glendale. They teach on the same keys your child will practice on all week. A full-size keyboard works to start.</p>
+        <p>No drive after school, no waiting room, no second trip home. Your teacher comes to you in Burbank, Glendale, Pasadena, Hollywood, East Hollywood or West Hollywood. They teach on the same keys your child will practice on all week. A full-size keyboard works to start.</p>
       </div>
       <div class="pillar-photo">
         <picture>
@@ -759,7 +814,7 @@
     <h2 class="local-heading">What In-Home Piano Lessons Look Like</h2>
 
 
-    <p class="local-body">Lots of players start on piano. You can see the music. Each note has its own place. A new player can play a tune the whole family knows sooner than they expect. We bring private piano lessons to homes in Burbank and Glendale. Your teacher comes to you and teaches at your own piano or keyboard. Every teacher is DOJ and FBI background-checked through LiveScan. Kids as young as five, teens and adults are all welcome. Each lesson fits your goals and pace. Start with a free first lesson. It is month to month, with a money-back guarantee.</p>
+    <p class="local-body">Lots of players start on piano. You can see the music. Each note has its own place. A new player can play a tune the whole family knows sooner than they expect. We bring private piano lessons to homes in Burbank, Glendale, Pasadena, Hollywood, East Hollywood and West Hollywood. Your teacher comes to you and teaches at your own piano or keyboard. Every teacher is DOJ and FBI background-checked through LiveScan. Kids as young as five, teens and adults are all welcome. Each lesson fits your goals and pace. Start with a free first lesson. It is month to month, with a money-back guarantee.</p>
     <div class="local-faq">
       <h3 class="local-faq-title">Frequently Asked Questions</h3>
       <details class="local-faq-item">
@@ -772,7 +827,7 @@
       </details>
       <details class="local-faq-item">
         <summary class="local-faq-q">Which Los Angeles cities do you cover for in-home piano lessons?</summary>
-        <p class="local-faq-a">Your instructor comes to your home in Burbank and Glendale. Every session is private and taught in your home. Your first piano lesson is free so you can try it risk-free.</p>
+        <p class="local-faq-a">We come to homes in Burbank, Glendale, Pasadena, Hollywood, East Hollywood and West Hollywood. Each lesson is private and in your home. Your first piano lesson is free, so you can try it with no risk.</p>
       </details>
     </div>
   </div>
@@ -780,8 +835,8 @@
 
 <!-- QUALIFICATION at ~8.0.
      Hormozi qualifies hard right before the price. Everything named here is a REAL
-     condition of the service, never fabricated scarcity: Burbank and Glendale are the
-     two LA cities we actually cover, weekly is genuinely the product, and five years
+     condition of the service, never fabricated scarcity: the six LA cities are the six
+     the live scheduler offers (/api/scheduling/cities, checked 2026-10-19), weekly is genuinely the product, and five years
      old is the real starting age. No "limited spots". -->
 <section class="qualify">
   <div class="qualify-inner">
@@ -791,7 +846,7 @@
       <div class="qualify-col is-fit">
         <h3>This is for you if</h3>
         <ul>
-          <li><span class="qualify-mark">&#10003;</span><span>You live in Burbank or Glendale.</span></li>
+          <li><span class="qualify-mark">&#10003;</span><span>You live in Burbank, Glendale, Pasadena, Hollywood, East Hollywood or West Hollywood.</span></li>
           <li><span class="qualify-mark">&#10003;</span><span>You want a weekly lesson slot the family can keep, at the same time each week.</span></li>
           <li><span class="qualify-mark">&#10003;</span><span>The student is five or older, whether a complete beginner or coming back to it after years away.</span></li>
         </ul>
@@ -800,7 +855,7 @@
         <h3>This is not for you if</h3>
         <ul>
           <li><span class="qualify-mark">&#8211;</span><span>You want occasional or drop-in lessons. Weekly is how these are built, and it is the only way we run them.</span></li>
-          <li><span class="qualify-mark">&#8211;</span><span>You are outside Burbank and Glendale. We would be taking your booking knowing we cannot staff it.</span></li>
+          <li><span class="qualify-mark">&#8211;</span><span>You are outside the six Los Angeles cities above. We would be taking your booking knowing we cannot staff it.</span></li>
           <li><span class="qualify-mark">&#8211;</span><span>You are looking for the cheapest option in Los Angeles. We are not it, and the next section says plainly what we charge.</span></li>
         </ul>
       </div>
@@ -904,7 +959,7 @@
 
 <footer>
   <div class="footer-simple">
-    <p class="footer-cities">Music and Mastery &nbsp;•&nbsp; Proudly Serving Los Angeles: Burbank &amp; Glendale</p>
+    <p class="footer-cities">Music and Mastery &nbsp;•&nbsp; Proudly Serving Los Angeles: Burbank, Glendale, Pasadena, Hollywood, East Hollywood &amp; West Hollywood</p>
     <p class="footer-contact">
       <a href="mailto:jonny@mtncitymusic.com">jonny@mtncitymusic.com</a>
       &nbsp;•&nbsp;
@@ -1086,7 +1141,7 @@
 <!-- MCMC_PHONE_FIRST is deliberately NOT set here. It went live on the OC piano page
      on 2026-09-02 and has not yet earned a result, so LA launches on the same form the
      other pages use and stays comparable to them. -->
-<!-- This page serves two LA cities, so it cannot set MCMC_PREFILL_CITY the way the
+<!-- This page serves six LA cities, so it cannot set MCMC_PREFILL_CITY the way the
      single-city pages do. Without a region label the form headline falls through to
      the words "your area", which is what a visitor who searched "piano lessons
      burbank" would be answered with. -->
