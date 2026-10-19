@@ -83,12 +83,36 @@
   // Its ~900 KB of YouTube script used to download alongside the headline and the fonts, which
   // is most of why Google scored these pages at 12 s on a phone. The page carries the address
   // in data-src; the box shows its dark background until the player arrives, as it always did.
+  //
+  // "Once the page has painted" has to mean the paint, not the load event (2026-10-19). On the
+  // live site Chrome often gets its first chance to draw AFTER load. Pointing the iframe at
+  // YouTube then starts a cross-site frame swap, and Chrome holds the whole page's first frame
+  // until YouTube's frame is ready: a trace showed the page blank until 2.4 s, painting 11 ms
+  // after the player did, while load had fired at 0.4 s. Lighthouse scored it 58 on such runs
+  // and 98 when the page happened to paint first. So wait for the page's own first contentful
+  // paint, then one more frame. Browsers without paint timing wait for load plus 1.5 s.
   function loadPlayer() {
     var src = iframe.getAttribute('data-src');
     if (src && !iframe.getAttribute('src')) iframe.setAttribute('src', src);
   }
-  if (document.readyState === 'complete') loadPlayer();
-  else window.addEventListener('load', loadPlayer);
+  function afterNextFrame() {
+    requestAnimationFrame(function () { setTimeout(loadPlayer, 0); });
+  }
+  function whenPainted() {
+    try {
+      if (performance.getEntriesByName('first-contentful-paint').length) { afterNextFrame(); return; }
+      if (window.PerformanceObserver && (PerformanceObserver.supportedEntryTypes || []).indexOf('paint') !== -1) {
+        var po = new PerformanceObserver(function (list) {
+          if (list.getEntriesByName('first-contentful-paint').length) { po.disconnect(); afterNextFrame(); }
+        });
+        po.observe({ type: 'paint', buffered: true });
+        return;
+      }
+    } catch (e) {}
+    setTimeout(loadPlayer, 1500);
+  }
+  if (document.readyState === 'complete') whenPainted();
+  else window.addEventListener('load', whenPainted);
 
   btn.addEventListener('click', function () {
     box.classList.add('is-engaged');
