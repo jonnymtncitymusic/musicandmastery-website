@@ -14,14 +14,33 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Music and Mastery">
     <meta name="description" content="In-home music lessons in Pacific Palisades. Private guitar, piano, voice & more brought to your door. Your first lesson is free. DOJ/FBI background-checked.">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11066542604"></script>
+<!-- Google tag (gtag.js), loaded after the page's first paint. Why and how this keeps every hit:
+     see the note on piano-lessons-orange-county.html (speed, 2026-10-19). -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'AW-11066542604');
   gtag('config', 'G-SPQ1FGTKTV');
+  (function () {
+    var url = 'https://www.googletagmanager.com/gtag/js?id=AW-11066542604';
+    function load() {
+      if (load.done) return; load.done = true;
+      var s = document.createElement('script'); s.async = true; s.src = url;
+      document.head.appendChild(s);
+    }
+    function soon() { requestAnimationFrame(function () { setTimeout(load, 0); }); }
+    try {
+      if (window.PerformanceObserver && (PerformanceObserver.supportedEntryTypes || []).indexOf('paint') !== -1) {
+        new PerformanceObserver(function (list) {
+          if (list.getEntriesByName('first-contentful-paint').length) soon();
+        }).observe({ type: 'paint', buffered: true });
+        setTimeout(load, 3000);   // a tab opened in the background never paints; load anyway
+      } else {
+        window.addEventListener('load', load);
+      }
+    } catch (e) { load(); }
+  })();
 </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>In-Home Music Lessons Near Me in Pacific Palisades | Music and Mastery</title>
