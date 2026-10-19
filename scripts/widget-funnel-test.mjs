@@ -148,8 +148,11 @@ function stubApi(req, availability, stripRedirect = false, availabilityStatus = 
   if (stripRedirect && req.isNavigationRequest() && !url.includes('/api/')) {
     const file = path.join(ROOT, decodeURIComponent(new URL(url).pathname));
     if (file.startsWith(ROOT) && fs.existsSync(file)) {
+      // stripRedirect 'local' keeps the redirect but points it at this server's own
+      // thank-you.html, so a case can follow the visitor there and read what it recorded.
+      const target = stripRedirect === 'local' ? '/thank-you.html' : '';
       const html = fs.readFileSync(file, 'utf8')
-        .replace(/window\.MCMC_THANK_YOU_REDIRECT\s*=\s*'[^']*'/, "window.MCMC_THANK_YOU_REDIRECT = ''");
+        .replace(/window\.MCMC_THANK_YOU_REDIRECT\s*=\s*'[^']*'/, `window.MCMC_THANK_YOU_REDIRECT = '${target}'`);
       return req.respond({ status: 200, contentType: 'text/html', body: html });
     }
   }
@@ -277,8 +280,8 @@ async function findSlots(page) {
         { availability: AVAIL_EMPTY, stripRedirect: true });
       await findSlots(page);
       await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
-      await page.type('#sw-name', 'Test Parent');
-      await page.type('#sw-email', 'test@example.com');
+      await page.type('#sw-name', 'Pat Rivera');
+      await page.type('#sw-email', 'pat@example.com');
       await page.type('#sw-phone', '7605551234');
       // A booking page's lead form still asks who the lesson is for, and refuses the
       // submission without it. Only a lead-ONLY page drops the question.
@@ -404,8 +407,8 @@ async function findSlots(page) {
       const fillLead = async page => {
         await findSlots(page);
         await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
-        await page.type('#sw-name', 'Test Parent');
-        await page.type('#sw-email', 'test@example.com');
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
         await page.type('#sw-phone', '7605551234');
         const lessonFor = await page.$('[data-lessonfor="child"]');
         if (lessonFor) await lessonFor.click();
@@ -497,8 +500,8 @@ async function findSlots(page) {
 
       await tap('#sw-none-fit');
       await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
-      await page.type('#sw-name', 'Test Parent');
-      await page.type('#sw-email', 'test@example.com');
+      await page.type('#sw-name', 'Pat Rivera');
+      await page.type('#sw-email', 'pat@example.com');
       await page.type('#sw-phone', '7605551234');
       const lessonFor = await page.$('[data-lessonfor="child"]');
       if (lessonFor) await tap('[data-lessonfor="child"]');
@@ -569,8 +572,8 @@ async function findSlots(page) {
         await findSlots(page);
         await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
         checkDisclosure('12a', await disclosureAboveButton(page));
-        await page.type('#sw-name', 'Test Parent');
-        await page.type('#sw-email', 'test@example.com');
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
         await page.type('#sw-phone', '7605551234');
         const lessonFor = await page.$('[data-lessonfor="child"]');
         if (lessonFor) await lessonFor.click();
@@ -585,8 +588,8 @@ async function findSlots(page) {
           { availability: AVAIL_EMPTY, stripRedirect: true });
         await findSlots(page);
         await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
-        await page.type('#sw-name', 'Test Parent');
-        await page.type('#sw-email', 'test@example.com');
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
         const lessonFor = await page.$('[data-lessonfor="child"]');
         if (lessonFor) await lessonFor.click();
         check('12b a lead with no phone was sent', await submitLeadAndWait(page));
@@ -602,8 +605,8 @@ async function findSlots(page) {
         const page = await newPage(browser, base, CONFIG.leadOnlyPage, { stripRedirect: true });
         await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
         checkDisclosure('12c', await disclosureAboveButton(page));
-        await page.type('#sw-name', 'Test Parent');
-        await page.type('#sw-email', 'test@example.com');
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
         await page.type('#sw-phone', '7605551234');
         if (await page.$('#sw-instrument')) {
           await page.select('#sw-instrument', 'Guitar');
@@ -630,8 +633,8 @@ async function findSlots(page) {
         const next = await page.$('#sw-next-3');
         if (next) await next.click();
         await page.waitForSelector('#sw-submit', { timeout: 5000 });
-        await page.type('#sw-name', 'Test Parent');
-        await page.type('#sw-email', 'test@example.com');
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
         await page.type('#sw-phone', '7605551234');
         await page.type('#sw-address-final', '1 Test St');
         const lessonFor = await page.$('[data-lessonfor="child"]');
@@ -659,6 +662,47 @@ async function findSlots(page) {
         });
       }
     }
+
+    // ── 13. A test submission never counts as a family (Jonny 2026-10-19) ──
+    // The 10-13 "Test" booking was counted as a headline-test win. A ZZTEST or "Test"
+    // name, or a test@ email, still reaches the server but fires no form_submission,
+    // and thank-you.html records no Ads conversion. A real name, same path, still does.
+    const submitLeadAs = async (name, email) => {
+      const page = await newPage(browser, base, inlinePage,
+        { availability: AVAIL_EMPTY, stripRedirect: 'local' });
+      await findSlots(page);
+      await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
+      await page.type('#sw-name', name);
+      await page.type('#sw-email', email);
+      await page.type('#sw-phone', '7605551234');
+      const lessonFor = await page.$('[data-lessonfor="child"]');
+      if (lessonFor) await lessonFor.click();
+      const before = apiCalls.length;
+      const nav = page.waitForNavigation({ waitUntil: 'load', timeout: 10000 });
+      await page.click('#sw-submit-lead');
+      await nav;
+      const reachedServer = apiCalls.slice(before).some(c => c.url.includes('/lead'));
+      const thanks = await page.evaluate(() => ({
+        url: location.href,
+        submission: window.MM_SUBMISSION || null,
+        conversion: window.__events.some(e => e[0] === 'conversion'),
+      }));
+      await page.close();
+      return { reachedServer, ...thanks };
+    };
+    await isolate('13', async () => {
+      for (const [name, email] of [['ZZTEST Mia', 'jonny+t@example.com'], ['Test', 'parent@example.com'],
+                                   ['Sam Lee', 'test@gmail.com']]) {
+        const r = await submitLeadAs(name, email);
+        check(`13 "${name}" / ${email} still reaches the server`, r.reachedServer);
+        check(`13 "${name}" / ${email} lands on thank-you marked test=1`, /[?&]test=1\b/.test(r.url), r.url);
+        check(`13 "${name}" / ${email} records no conversion`, !r.conversion && !r.submission, JSON.stringify(r));
+      }
+      const real = await submitLeadAs('Testa Morgan', 'pat@example.com');
+      check('13 a real "Testa" is not a test', !/[?&]test=1\b/.test(real.url), real.url);
+      check('13 a real submission still records the conversion', real.conversion && real.submission === 'lead',
+        JSON.stringify(real));
+    });
 
   } catch (e) {
     check('the harness itself ran to completion', false, String((e && e.message) || e));

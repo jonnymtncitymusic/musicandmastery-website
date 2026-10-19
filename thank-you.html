@@ -63,6 +63,12 @@
         SUBMISSION_TYPES.indexOf(qs.get('type')) === -1) {
       return;
     }
+    // A test submission (the widget's isTestSubmission: ZZTEST or "Test" names, test@
+    // emails) still shows this page but records nothing, here or in the headline test.
+    if (qs.get('test') === '1') {
+      try { window.sessionStorage.removeItem('mm_ec_user_data'); } catch (e) {}
+      return;
+    }
     // The headline split test (/js/headline-test.js) counts a conversion only
     // when this gate passed, so the rule lives here once.
     window.MM_SUBMISSION = qs.get('type');

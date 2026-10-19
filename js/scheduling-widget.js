@@ -404,11 +404,25 @@
     return res.json();
   }
 
+  // A rehearsal or a hand-made test ("ZZTEST Mia", "Test" / test@gmail.com) still goes to
+  // the server, where the ZZTEST convention already keeps it out of the real lists. It must
+  // not reach Google Ads, GA4's lead events or the headline split test as a family, and on
+  // 2026-10-13 one did: a "Test" booking was counted as a headline-test win (Jonny 2026-10-19).
+  // Only the first word of the name is read, so a real "Testa" or "Testerman" still counts.
+  function isTestSubmission() {
+    const first = (state.clientName || '').trim().split(/\s+/)[0].toLowerCase();
+    const email = (state.clientEmail || '').trim().toLowerCase();
+    return first.startsWith('zztest') || first === 'test' || email.startsWith('test@');
+  }
+
   function buildRedirectUrl(params) {
     const url = new URL(THANK_YOU_REDIRECT, window.location.origin);
     Object.entries(params).forEach(([k, v]) => {
       if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, String(v));
     });
+    // thank-you.html records no conversion when it sees test=1. Marking the test, rather
+    // than tokening the real ones, means a visitor on a stale cached widget is still counted.
+    if (isTestSubmission()) url.searchParams.set('test', '1');
     return url.toString();
   }
 
@@ -1371,7 +1385,7 @@
       // Fire conversion event regardless of redirect path so it counts even if
       // the redirect itself fails for some reason.
       trackTerminal();
-      if (typeof gtag === 'function') {
+      if (typeof gtag === 'function' && !isTestSubmission()) {
         gtag('event', 'form_submission', {
           event_category: 'lead',
           event_label: `${state.instrument === 'Other' ? state.instrumentOther : state.instrument} - ${cityLabel()}`,
@@ -1446,7 +1460,7 @@
 
       // Fire GA4 conversion event before any redirect
       trackTerminal();
-      if (typeof gtag === 'function') {
+      if (typeof gtag === 'function' && !isTestSubmission()) {
         gtag('event', 'form_submission', {
           event_category: 'booking',
           event_label: `${state.instrument} - ${state.selectedSlot.instructor_name}`,
@@ -1507,7 +1521,7 @@
       // never stashed the identifiers, so its enhanced-conversion match was always empty.
       stashUserData();
       trackTerminal();
-      if (typeof gtag === 'function') {
+      if (typeof gtag === 'function' && !isTestSubmission()) {
         gtag('event', 'form_submission', { event_category: 'callback_request', event_label: state.instrument });
       }
       if (THANK_YOU_REDIRECT) {
