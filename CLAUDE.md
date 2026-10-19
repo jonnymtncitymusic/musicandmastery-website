@@ -2,7 +2,7 @@
 
 ## Project Identity
 **Music and Mastery** is a DBA of the same parent business that operates Mountain City Music Co. (MCMC). This site targets **Orange County and Los Angeles**:
-- **OC branch (5 cities):** Irvine, Newport Beach, Costa Mesa, Lake Forest, Tustin
+- **OC branch (3 bookable cities):** Irvine, Newport Beach, Tustin. Costa Mesa and Lake Forest have no instructor (Jonny 2026-10-19): out of the ad geo and every "we come to" list; their own city pages stay as call-first lead pages and keep their footer links.
 - **LA branch (7 cities):** Beverly Hills, West Hollywood, East Hollywood, Burbank, Pasadena, Pacific Palisades, Malibu
 
 Landing pages cover **all the instruments we book** (guitar, piano, bass, ukulele, drums, music production) and are **not guitar-specific** like the MCMC `beginner-*.html` pages. **Voice is NOT booked on this brand since 2026-09-27**, so "voice" and "choir" are out of the page copy (2026-10-07). `voice-lessons-orange-county.html` STAYS as a lead-capture page (Jonny 2026-10-07: he watches whether anyone tries to book voice); it gets the same edits as the other landing pages, and the review wall keeps its Voice chip.
