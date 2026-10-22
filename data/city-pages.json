@@ -1,0 +1,41 @@
+{
+  "_about": "City landing pages, GENERATED from their region page by scripts/build-city-pages.mjs. Edit the region page or this file, then run `npm run build:city`; `npm test` fails if a generated page drifts. Neighborhood names were sourced 2026-10-22 (city pages, Wikipedia, local guides): facts, not copy, so never invent one.",
+  "regions": {
+    "oc": {
+      "label": "Orange County",
+      "cities": ["Irvine", "Newport Beach", "Tustin"]
+    },
+    "la": {
+      "label": "Los Angeles",
+      "cities": ["Burbank", "Glendale", "Pasadena", "Hollywood", "East Hollywood", "West Hollywood"]
+    }
+  },
+  "cities": {
+    "Irvine": {"slug": "irvine", "region": "oc", "neighborhoods": ["Woodbridge", "Northwood", "Turtle Rock", "University Park"]},
+    "Newport Beach": {"slug": "newport-beach", "region": "oc", "neighborhoods": ["Corona del Mar", "Eastbluff", "Newport Heights", "Westcliff"]},
+    "Tustin": {"slug": "tustin", "region": "oc", "neighborhoods": ["Old Town", "Tustin Ranch", "Tustin Legacy", "Tustin Meadows"]},
+    "Glendale": {"slug": "glendale", "region": "la", "neighborhoods": ["Montrose", "Verdugo Woodlands", "Rossmoyne", "Chevy Chase"]},
+    "Pasadena": {"slug": "pasadena", "region": "la", "neighborhoods": ["Bungalow Heaven", "Linda Vista", "Hastings Ranch", "Madison Heights"]},
+    "Burbank": {"slug": "burbank", "region": "la", "neighborhoods": ["Magnolia Park", "the Rancho", "the Media District", "the Burbank Hills"]}
+  },
+  "sources": {
+    "piano-lessons-orange-county.html": {"region": "oc", "instrument": "piano"},
+    "guitar-lessons-orange-county.html": {"region": "oc", "instrument": "guitar"},
+    "piano-lessons-los-angeles.html": {"region": "la", "instrument": "piano"},
+    "guitar-lessons-los-angeles.html": {"region": "la", "instrument": "guitar"}
+  },
+  "pages": [
+    {"city": "Irvine", "instrument": "piano"},
+    {"city": "Newport Beach", "instrument": "piano"},
+    {"city": "Tustin", "instrument": "piano"},
+    {"city": "Irvine", "instrument": "guitar"},
+    {"city": "Newport Beach", "instrument": "guitar"},
+    {"city": "Tustin", "instrument": "guitar"},
+    {"city": "Glendale", "instrument": "piano"},
+    {"city": "Pasadena", "instrument": "piano"},
+    {"city": "Burbank", "instrument": "piano"},
+    {"city": "Glendale", "instrument": "guitar"},
+    {"city": "Pasadena", "instrument": "guitar"},
+    {"city": "Burbank", "instrument": "guitar"}
+  ]
+}

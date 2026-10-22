@@ -31,6 +31,15 @@ export const AD_LANDING_PAGES = {
   'guitar-lessons-los-angeles.html': LA,
 };
 
+// City pages (2026-10-22) are generated from data/city-pages.json and take ad clicks through
+// keyword-level final URLs, so each one is read from that file rather than listed here: a city
+// added there is checked here with no second edit to forget.
+const CITY_DATA = JSON.parse(readFileSync(join(root, 'data', 'city-pages.json'), 'utf8'));
+for (const page of CITY_DATA.pages) {
+  const city = CITY_DATA.cities[page.city];
+  AD_LANDING_PAGES[`${page.instrument}-lessons-${city.slug}.html`] = city.region === 'oc' ? OC : LA;
+}
+
 const PAGE_NUMBER = '7605732120';
 
 function nationalDigits(v) {

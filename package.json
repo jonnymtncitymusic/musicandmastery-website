@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node scripts/check-em-dashes.mjs && node scripts/check-dni.mjs && bash scripts/check-sitemap.sh && node scripts/check-vercelignore.mjs && node scripts/check-reviews.mjs && node scripts/widget-funnel-test.mjs"
+    "test": "node scripts/build-city-pages.mjs --check && node scripts/check-keyword-map.mjs && node scripts/check-em-dashes.mjs && node scripts/check-dni.mjs && bash scripts/check-sitemap.sh && node scripts/check-vercelignore.mjs && node scripts/check-reviews.mjs && node scripts/widget-funnel-test.mjs",
+    "build:city": "node scripts/build-city-pages.mjs"
   },
   "keywords": [],
   "author": "",

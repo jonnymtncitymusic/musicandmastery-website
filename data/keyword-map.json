@@ -1,0 +1,299 @@
+{
+ "_about": "Every keyword Google Ads pays for -> the page its clicks land on -> the words that page must contain (Quality Score: landing-page relevance). Read by scripts/check-keyword-map.mjs here, by website-advisor (live pages) and by the weekly ads report (QS next to page pass/fail). A live keyword missing from this file is flagged by the ads report. Built 2026-10-22 from the 29 enabled M&M keywords.",
+ "keywords": [
+  {
+   "keyword": "piano lessons near me",
+   "match": "phrase",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-orange-county.html",
+   "must_contain": [
+    "piano lessons",
+    "near you"
+   ]
+  },
+  {
+   "keyword": "piano teacher near me",
+   "match": "phrase",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-orange-county.html",
+   "must_contain": [
+    "piano teacher",
+    "near you"
+   ]
+  },
+  {
+   "keyword": "piano lessons near me",
+   "match": "exact",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-orange-county.html",
+   "must_contain": [
+    "piano lessons",
+    "near you"
+   ]
+  },
+  {
+   "keyword": "in home piano lessons",
+   "match": "exact",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-orange-county.html",
+   "must_contain": [
+    "piano lessons",
+    "in-home"
+   ]
+  },
+  {
+   "keyword": "in home piano teacher",
+   "match": "exact",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-orange-county.html",
+   "must_contain": [
+    "piano teacher",
+    "in-home"
+   ]
+  },
+  {
+   "keyword": "in home piano teacher",
+   "match": "phrase",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-orange-county.html",
+   "must_contain": [
+    "piano teacher",
+    "in-home"
+   ]
+  },
+  {
+   "keyword": "piano lessons newport beach",
+   "match": "exact",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-newport-beach.html",
+   "must_contain": [
+    "piano lessons",
+    "Newport Beach"
+   ]
+  },
+  {
+   "keyword": "piano lessons irvine",
+   "match": "exact",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-irvine.html",
+   "must_contain": [
+    "piano lessons",
+    "Irvine"
+   ]
+  },
+  {
+   "keyword": "private piano lessons orange county",
+   "match": "exact",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-orange-county.html",
+   "must_contain": [
+    "piano lessons",
+    "private",
+    "Orange County"
+   ]
+  },
+  {
+   "keyword": "piano lessons tustin",
+   "match": "exact",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-tustin.html",
+   "must_contain": [
+    "piano lessons",
+    "Tustin"
+   ]
+  },
+  {
+   "keyword": "beginner piano lessons irvine",
+   "match": "exact",
+   "ad_group": "OC - Piano",
+   "page": "piano-lessons-irvine.html",
+   "must_contain": [
+    "piano lessons",
+    "Irvine",
+    "beginner"
+   ]
+  },
+  {
+   "keyword": "guitar lessons near me",
+   "match": "exact",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-orange-county.html",
+   "must_contain": [
+    "guitar lessons",
+    "near you"
+   ]
+  },
+  {
+   "keyword": "guitar teacher near me",
+   "match": "exact",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-orange-county.html",
+   "must_contain": [
+    "guitar teacher",
+    "near you"
+   ]
+  },
+  {
+   "keyword": "guitar lessons irvine",
+   "match": "exact",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-irvine.html",
+   "must_contain": [
+    "guitar lessons",
+    "Irvine"
+   ]
+  },
+  {
+   "keyword": "in home guitar lessons",
+   "match": "exact",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-orange-county.html",
+   "must_contain": [
+    "guitar lessons",
+    "in-home"
+   ]
+  },
+  {
+   "keyword": "in home guitar teacher",
+   "match": "exact",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-orange-county.html",
+   "must_contain": [
+    "guitar teacher",
+    "in-home"
+   ]
+  },
+  {
+   "keyword": "guitar lessons newport beach",
+   "match": "exact",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-newport-beach.html",
+   "must_contain": [
+    "guitar lessons",
+    "Newport Beach"
+   ]
+  },
+  {
+   "keyword": "beginner guitar lessons irvine",
+   "match": "exact",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-irvine.html",
+   "must_contain": [
+    "guitar lessons",
+    "Irvine",
+    "beginner"
+   ]
+  },
+  {
+   "keyword": "private guitar lessons orange county",
+   "match": "exact",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-orange-county.html",
+   "must_contain": [
+    "guitar lessons",
+    "private",
+    "Orange County"
+   ]
+  },
+  {
+   "keyword": "guitar lessons tustin",
+   "match": "exact",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-tustin.html",
+   "must_contain": [
+    "guitar lessons",
+    "Tustin"
+   ]
+  },
+  {
+   "keyword": "piano lessons for kids",
+   "match": "phrase",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-los-angeles.html",
+   "must_contain": [
+    "piano lessons",
+    "kids"
+   ]
+  },
+  {
+   "keyword": "piano lessons near me",
+   "match": "phrase",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-los-angeles.html",
+   "must_contain": [
+    "piano lessons",
+    "near you"
+   ]
+  },
+  {
+   "keyword": "in home piano lessons",
+   "match": "phrase",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-los-angeles.html",
+   "must_contain": [
+    "piano lessons",
+    "in-home"
+   ]
+  },
+  {
+   "keyword": "piano lessons pasadena",
+   "match": "exact",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-pasadena.html",
+   "must_contain": [
+    "piano lessons",
+    "Pasadena"
+   ]
+  },
+  {
+   "keyword": "piano lessons burbank",
+   "match": "exact",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-burbank.html",
+   "must_contain": [
+    "piano lessons",
+    "Burbank"
+   ]
+  },
+  {
+   "keyword": "piano lessons glendale",
+   "match": "exact",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-glendale.html",
+   "must_contain": [
+    "piano lessons",
+    "Glendale"
+   ]
+  },
+  {
+   "keyword": "piano teacher glendale",
+   "match": "exact",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-glendale.html",
+   "must_contain": [
+    "piano teacher",
+    "Glendale"
+   ]
+  },
+  {
+   "keyword": "piano teacher pasadena",
+   "match": "exact",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-pasadena.html",
+   "must_contain": [
+    "piano teacher",
+    "Pasadena"
+   ]
+  },
+  {
+   "keyword": "piano teacher burbank",
+   "match": "exact",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-burbank.html",
+   "must_contain": [
+    "piano teacher",
+    "Burbank"
+   ]
+  }
+ ]
+}
