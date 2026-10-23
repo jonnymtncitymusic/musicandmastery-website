@@ -294,6 +294,26 @@
     "piano teacher",
     "Burbank"
    ]
+  },
+  {
+   "keyword": "guitar lessons near me",
+   "match": "phrase",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-orange-county.html",
+   "must_contain": [
+    "guitar lessons",
+    "near you"
+   ]
+  },
+  {
+   "keyword": "guitar teacher near me",
+   "match": "phrase",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-orange-county.html",
+   "must_contain": [
+    "guitar teacher",
+    "near you"
+   ]
   }
  ]
 }

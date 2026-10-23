@@ -3,7 +3,7 @@
 ## Project Identity
 **Music and Mastery** is a DBA of the same parent business that operates Mountain City Music Co. (MCMC). This site targets **Orange County and Los Angeles**:
 - **OC branch (3 bookable cities):** Irvine, Newport Beach, Tustin. Costa Mesa and Lake Forest have no instructor (Jonny 2026-10-19): out of the ad geo and every "we come to" list; their own city pages stay as call-first lead pages and keep their footer links.
-- **LA branch (7 cities):** Beverly Hills, West Hollywood, East Hollywood, Burbank, Pasadena, Pacific Palisades, Malibu
+- **LA branch (6 bookable cities, `instructor_config.json` `_regions.los_angeles`):** Burbank, Glendale, Pasadena, Hollywood, East Hollywood, West Hollywood. Beverly Hills, Pacific Palisades and Malibu keep their call-first lead pages (no instructor), like Costa Mesa and Lake Forest in OC.
 
 Landing pages cover **all the instruments we book** (guitar, piano, bass, ukulele, drums, music production) and are **not guitar-specific** like the MCMC `beginner-*.html` pages. **Voice is NOT booked on this brand since 2026-09-27**, so "voice" and "choir" are out of the page copy (2026-10-07). `voice-lessons-orange-county.html` STAYS as a lead-capture page (Jonny 2026-10-07: he watches whether anyone tries to book voice); it gets the same edits as the other landing pages, and the review wall keeps its Voice chip.
 
@@ -35,7 +35,7 @@ These are business rules, not style preferences. They beat any design instinct.
 | **The offer is ONE FREE FIRST LESSON** | Not a "trial", and never plural. "Book Your Trial Lessons" was a fossil of a retired 50%-off-3-lessons offer and survived on 53 buttons here. |
 | **Pricing is 60/$300, 45/$240, 30/$160, quoted MONTHLY, most-expensive-first** | Identical to Mountain City's ladder by decision (2026-08-11) while M&M establishes itself; the premium positioning is not cancelled, it is unfunded until the proof carries it. Never quote a per-lesson price. |
 | **Attribution is load-bearing on this brand** | M&M has no testimonial of its own. Every citation of a Mountain City review must say in the same block that the two are one company, and every stat bar leads with "Mountain City Music Co.". Do not strip that for tidiness. |
-| **This brand serves BOTH Orange County and Los Angeles** | 5 OC cities and 7 LA cities, 24 city landing pages. Any page that names only OC is wrong. |
+| **This brand serves BOTH Orange County and Los Angeles** | 3 bookable OC cities and 6 bookable LA cities, plus call-first lead pages for 5 more; 24 lead city pages (in-home-/beginner-) and 12 generated instrument city pages. Any page that names only OC is wrong. |
 | **No invented specifics, no internal contradictions, no fabricated scarcity** | "Right now Jonny is the only instructor" is real capacity and fine. "Limited spots" is not. |
 | **No em dashes. No exclamation on a sales line.** | Run `bash scripts/install-hooks.sh` once per clone — the em-dash guard is a real script but the hook is untracked and was missing from this clone until 2026-08-16. |
 | **Review quotes are verbatim and never edited** | The 2026-07-30 restoration (487 changes, 27 files) put these right. Do not re-touch them. |

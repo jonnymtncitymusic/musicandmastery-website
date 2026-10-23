@@ -3,8 +3,11 @@
 //
 // Quality Score scores the landing page's relevance to the keyword. On 2026-10-22 the OC piano page
 // was BELOW_AVERAGE for "piano lessons near me" and never once said "near you"; nothing checked it.
-// This reads each page's VISIBLE text (no scripts, styles, comments or tags) and fails when a word a
-// keyword needs is missing, or when a keyword lands on a page that does not exist.
+// This reads each page's VISIBLE body text (no <head>, no <footer>, no scripts, styles, comments or
+// tags) and fails when a word a keyword needs is missing, or when a keyword lands on a page that does
+// not exist. The footer lists every city on every page and the <title> is not on-page copy, so
+// counting either let "piano lessons tustin" pass on the Pasadena page (code review 2026-10-23).
+// website-advisor's wa_keywords.visible_text is a line-for-line port: change both or neither.
 //
 //   node scripts/check-keyword-map.mjs          check the files in this repo
 //   node scripts/check-keyword-map.mjs --json   the same, as JSON (for the weekly reports)
@@ -19,6 +22,8 @@ export function visibleText(html) {
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<head[\s>][\s\S]*?<\/head>/gi, ' ')
+    .replace(/<footer[\s>][\s\S]*?<\/footer>/gi, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&#39;|&rsquo;/g, "'")
     .replace(/\s+/g, ' ')
@@ -42,6 +47,7 @@ function main() {
   const results = map.keywords.map((e) => checkEntry(e, read(e.page)));
   if (process.argv.includes('--json')) {
     console.log(JSON.stringify(results, null, 1));
+    if (results.some((r) => !r.ok)) process.exitCode = 1;
     return;
   }
   const bad = results.filter((r) => !r.ok);
@@ -52,4 +58,5 @@ function main() {
   console.log(`keyword map: ${results.length} paid keywords, every landing page says what its keyword asks for`);
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+const invoked = (() => { try { return fs.realpathSync(process.argv[1]); } catch { return null; } })();
+if (invoked && invoked === fs.realpathSync(fileURLToPath(import.meta.url))) main();

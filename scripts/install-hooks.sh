@@ -28,6 +28,19 @@ node "$root/scripts/check-vercelignore.mjs" || {
   echo "Commit blocked: a referenced file is excluded from deploy. Fix .vercelignore, or bypass deliberately with: git commit --no-verify"
   exit 1
 }
+# Added 2026-10-23. There is no CI and Vercel deploys on push, so these only protect the live
+# site if they run before the commit: a region-page edit without npm run build:city, or a paid
+# keyword whose page stopped saying its words, would otherwise ship.
+node "$root/scripts/build-city-pages.mjs" --check || {
+  echo ""
+  echo "Commit blocked: city pages are out of date. Run: npm run build:city (or bypass deliberately with: git commit --no-verify)"
+  exit 1
+}
+node "$root/scripts/check-keyword-map.mjs" || {
+  echo ""
+  echo "Commit blocked: a paid keyword's landing page no longer says its words (data/keyword-map.json). Fix the copy, or bypass deliberately with: git commit --no-verify"
+  exit 1
+}
 HOOK
 chmod +x "$hook"
 echo "installed: $hook"
