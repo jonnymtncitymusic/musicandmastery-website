@@ -314,6 +314,42 @@
     "guitar teacher",
     "near you"
    ]
+  },
+  {
+   "keyword": "guitar lessons",
+   "match": "phrase",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-orange-county.html",
+   "must_contain": [
+    "guitar lessons"
+   ]
+  },
+  {
+   "keyword": "guitar teacher",
+   "match": "phrase",
+   "ad_group": "OC - Guitar Test 2026-10-20",
+   "page": "guitar-lessons-orange-county.html",
+   "must_contain": [
+    "guitar teacher"
+   ]
+  },
+  {
+   "keyword": "piano lessons",
+   "match": "phrase",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-los-angeles.html",
+   "must_contain": [
+    "piano lessons"
+   ]
+  },
+  {
+   "keyword": "piano teacher",
+   "match": "phrase",
+   "ad_group": "LA - Piano Test 2026-10-20",
+   "page": "piano-lessons-los-angeles.html",
+   "must_contain": [
+    "piano teacher"
+   ]
   }
  ]
 }
