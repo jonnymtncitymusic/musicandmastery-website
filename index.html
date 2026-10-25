@@ -306,7 +306,9 @@
     .chips-track-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none; }
     .chips-track-wrapper::before { left: 0; background: linear-gradient(to right, #fff, transparent); }
     .chips-track-wrapper::after { right: 0; background: linear-gradient(to left, #fff, transparent); }
-    .chips-track { display: flex; gap: 12px; width: max-content; }
+    /* padding-right equals the gap: the loop slides exactly half the track, so the track has to
+       end with one trailing gap or every restart jumps by half a gap (6px). */
+    .chips-track { display: flex; gap: 12px; padding-right: 12px; width: max-content; }
     .chips-track.left  { animation: scroll-left 45s linear infinite; animation-play-state: paused; }
     .chips-track.right { animation: scroll-right 45s linear infinite; animation-play-state: paused; }
     .chips-track.playing { animation-play-state: running; }
