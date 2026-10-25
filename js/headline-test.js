@@ -51,9 +51,14 @@
   // same file, and on 2026-10-07 a local npm test run wrote rows into the live table before
   // this guard existed. A harness that wants to see the beacons sets window.MM_HL_FORCE_SEND.
   var LIVE = /(^|\.)musicandmastery\.com$/.test(location.hostname);
+  // Automated browsers never report either (2026-10-24). Lighthouse, Google's PageSpeed test
+  // (the website advisor runs it every week) and Puppeteer all set navigator.webdriver, and
+  // each run looked like a new visitor: 33 Lighthouse runs on 2026-10-24 were counted as views.
+  var AUTOMATED = false;
+  try { AUTOMATED = navigator.webdriver === true; } catch (e) {}
 
   function send(test, variant, event, detail) {
-    if (!LIVE && !window.MM_HL_FORCE_SEND) return;
+    if ((!LIVE || AUTOMATED) && !window.MM_HL_FORCE_SEND) return;
     var body = JSON.stringify({ test: test, variant: variant, event: event, cid: browserId(),
       page: page(), detail: (detail || '').replace(/\s+/g, ' ').trim().slice(0, 200) });
     var sent = false;

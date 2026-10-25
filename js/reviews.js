@@ -203,9 +203,27 @@
     render();
   }
 
+  // Each wall is built when it comes within two screens of the viewport, not during page load
+  // (website speed, 2026-10-24). The wall sits near the bottom of every page, but its 50 cards
+  // were built and laid out before the first paint: a 196 ms task on Google's desktop speed
+  // test, and in a phone test building it later cut the page's own main-thread work by a sixth
+  // and its first paint by half a second. Two screens ahead is before anyone can scroll to it,
+  // and a jump to #reviews builds it at once. Browsers without IntersectionObserver build it
+  // straight away, as before.
   function start() {
     var walls = document.querySelectorAll('[data-review-wall]');
-    for (var i = 0; i < walls.length; i++) mount(walls[i]);
+    if (!('IntersectionObserver' in window)) {
+      for (var i = 0; i < walls.length; i++) mount(walls[i]);
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        mount(e.target);
+      });
+    }, { rootMargin: '200% 0px' });
+    for (var j = 0; j < walls.length; j++) io.observe(walls[j]);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
