@@ -2,8 +2,11 @@
 # Compare *.html files against sitemap.xml entries. Emits drift to stderr.
 # Exit 0 = in sync, 1 = drift detected.
 #
-# Two kinds of page are legitimately absent from the sitemap:
+# Three kinds of file are legitimately absent from the sitemap:
 #   * print-only assets (banner.html, flyer.html), which are not web pages at all;
+#   * Google's Search Console verification file (google<hex>.html, 2026-10-24), a one-line
+#     token Google re-fetches to keep the site verified. It must stay byte-for-byte as Google
+#     issued it, so it cannot carry a noindex tag;
 #   * any page that declares `noindex`, because asking Google not to index a page and
 #     then listing it in the sitemap are contradictory instructions.
 #
@@ -21,7 +24,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SITEMAP="$ROOT/sitemap.xml"
-EXCLUDE_REGEX='^(banner|flyer)\.html$'
+EXCLUDE_REGEX='^(banner|flyer|google[0-9a-f]+)\.html$'
 
 cd "$ROOT"
 
