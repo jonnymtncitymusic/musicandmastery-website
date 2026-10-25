@@ -351,7 +351,9 @@
     .testimonials-track-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none; }
     .testimonials-track-wrapper::before { left: 0; background: linear-gradient(to right, var(--light-purple), transparent); }
     .testimonials-track-wrapper::after  { right: 0; background: linear-gradient(to left,  var(--light-purple), transparent); }
-    .testimonials-track { display: flex; gap: 20px; width: max-content; animation: scroll-left 70s linear infinite; animation-play-state: paused; padding: 8px 0 16px; }
+    /* padding-right equals the gap: the loop slides exactly half the track, so the track has to
+       end with one trailing gap or every restart jumps by half a gap (10px). */
+    .testimonials-track { display: flex; gap: 20px; width: max-content; animation: scroll-left 70s linear infinite; animation-play-state: paused; padding: 8px 20px 16px 0; }
     .testimonials-track.playing { animation-play-state: running; }
     .testimonials-track.playing:hover { animation-play-state: paused; }
     .tcard { background: #fff; border-radius: 16px; padding: 28px; width: 340px; flex-shrink: 0; box-shadow: 0 4px 20px rgba(114,110,221,0.1); }
