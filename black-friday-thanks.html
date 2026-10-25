@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <!-- Thanks page for black-friday.html (Black Friday $20 first month, Nov 1 to Dec 18, 2026).
+         A copy of thank-you.html: same head tags and the same conversion gate, unchanged. The
+         visible message is the offer's own. Remove after Dec 18 with black-friday.html. -->
+    <link rel="canonical" href="https://www.musicandmastery.com/black-friday-thanks.html">
+    <meta name="robots" content="noindex,follow">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Thank You for Reaching Out | Music and Mastery">
+    <meta name="twitter:description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $20 invoice.">
+    <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
+    <meta property="og:title" content="Thank You for Reaching Out | Music and Mastery">
+    <meta property="og:description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $20 invoice.">
+    <meta property="og:url" content="https://www.musicandmastery.com/black-friday-thanks.html">
+    <meta property="og:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Music and Mastery">
+    <meta name="description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $20 invoice.">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11066542604"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-11066542604');
+  gtag('config', 'G-SPQ1FGTKTV');
+  window.addEventListener('load', function() {
+    // Only an actual submission may record a conversion. This page used to fire
+    // on EVERY load, so a refresh, a Back, or a shared link each counted again,
+    // inflating the number the cost-per-lead is measured against. Worse, on any
+    // such visit no user_data is present, and gtag falls back to AUTOMATIC
+    // enhanced conversions, which scrapes this page and finds the only address
+    // on it: our own. Every one of those conversions was reporting the
+    // advertiser's email as the customer's.
+    //
+    // This brand is NO LONGER lead-only everywhere. LEAD_ONLY used to be
+    // unconditionally true whenever MCMC_BRAND_SOURCE was not 'mcmc' and no page
+    // could override it, so the lead form was the only flow that could reach
+    // this page. Since 2026-09-09 each page states its own mode
+    // (window.MCMC_LEAD_ONLY) and the pages with real availability behind them
+    // book, so type=booking and type=callback now arrive here for real.
+    //
+    // The widget's other two handlers used to fall straight through this gate:
+    // handleBooking redirected to the bare THANK_YOU_REDIRECT with no query
+    // string at all, and handleCallbackRequest sends type=callback. Both are
+    // dead code on this brand, which they are not any more, but the same widget
+    // and the same page mirror to mtncitymusic.com where booking is primary, and
+    // there a completed booking recorded no conversion whatsoever. handleBooking
+    // now sends type=booking and stashes its identifiers like the lead path
+    // does, and all three real submission types are accepted here. The check is
+    // an allowlist, not a truthiness test, so a bare ?type= or an invented value
+    // still refuses.
+    //
+    // A refresh reports 'reload' and Back reports 'back_forward', so both are
+    // refused. Deliberately NOT gated on a token written by the widget: /js/ is
+    // served immutable, so a visitor on a stale widget would write no token and
+    // lose a real conversion. Over-counting is a measurement problem;
+    // under-counting is a lost lead.
+    var navType = ((performance.getEntriesByType &&
+                    performance.getEntriesByType('navigation')[0]) || {}).type;
+    var qs = new URLSearchParams(window.location.search);
+    var SUBMISSION_TYPES = ['lead', 'booking', 'callback'];
+    if (navType === 'reload' || navType === 'back_forward' ||
+        SUBMISSION_TYPES.indexOf(qs.get('type')) === -1) {
+      return;
+    }
+    // A test submission (the widget's isTestSubmission: ZZTEST or "Test" names, test@
+    // emails) still shows this page but records nothing, here or in the headline test.
+    if (qs.get('test') === '1') {
+      try { window.sessionStorage.removeItem('mm_ec_user_data'); } catch (e) {}
+      return;
+    }
+    // The headline split test (/js/headline-test.js) counts a conversion only
+    // when this gate passed, so the rule lives here once.
+    window.MM_SUBMISSION = qs.get('type');
+
+    // Enhanced conversions. The identifiers were collected by the lead form on
+    // the previous page and handed over through sessionStorage, because gtag
+    // 'set' state does not survive a top-level navigation. This MUST run before
+    // the conversion event below, and the key is deleted immediately so a
+    // refresh cannot attribute one visitor's details to a second conversion.
+    // Key name is defined in js/scheduling-widget.js as USER_DATA_KEY.
+    try {
+      var stashed = window.sessionStorage.getItem('mm_ec_user_data');
+      if (stashed) {
+        window.sessionStorage.removeItem('mm_ec_user_data');
+        gtag('set', 'user_data', JSON.parse(stashed));
+      }
+    } catch (e) {
+      // Unparseable or storage blocked. Fire the conversion unenhanced.
+    }
+    gtag('event', 'conversion', {'send_to': 'AW-11066542604/i_42CLiPzKccEIyU-Jwp'});
+    // GA4 lead event, recorded by GA4, then imported into Google Ads as a
+    // conversion action. Bypasses the broken direct gtag→Ads pipeline for
+    // action 7599228856 which has been silently dropping fires since 2026-04-30.
+    var params = new URLSearchParams(window.location.search);
+    var leadPayload = {
+      'currency': 'USD',
+      'value': 100,
+      'brand_source': 'Music and Mastery',
+      'lesson_type': params.get('type') || '',
+      'instrument': params.get('instrument') || '',
+      'city': params.get('city') || ''
+    };
+    // Standard GA4 recommended event (long-term clean name).
+    gtag('event', 'generate_lead', leadPayload);
+    // Existing pre-registered key event in GA4 with corresponding Google Ads
+    // import action 7552928555 already wired. Faster path to measurement than
+    // pre-registering generate_lead from scratch.
+    gtag('event', 'Form_Submission_via_Google_Ads', leadPayload);
+  });
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You for Reaching Out | Music and Mastery</title>
+  <link rel="icon" href="brand_assets/logo/mm-favicon-64.png" type="image/png" />
+  <link rel="apple-touch-icon" href="brand_assets/logo/mm-apple-touch-180.png" />
+  <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/worksans-latin.woff2" crossorigin>
+  <style>
+
+    /* Self-hosted Google Fonts (latin subset) */
+
+
+    @font-face {
+      font-family: "Work Sans";
+      font-style: normal; font-weight: 100 900; font-display: swap;
+      src: url(/brand_assets/fonts/worksans-latin.woff2) format("woff2");
+    }
+    :root {
+      --light-purple: #e4e3ff;
+      --dark-purple: #726edd;
+      --accent: #4f4ab8;
+      --gold: #c6954f;
+      --cream: #f6f1e8;
+      --cream-grad: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
+      --cream-deep: #efe7d8;
+      --black: #0d0d0d;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Work Sans', sans-serif; color: var(--black); background: #fff; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    h1,h2,h3 { font-family: 'Work Sans', sans-serif; }
+
+    /* NAV */
+    .nav { background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 22px rgba(116,130,151,0.15); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 56px; width: auto; }
+
+    /* HERO GRADIENT */
+    @keyframes hero-fade-a {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+    @keyframes hero-fade-b {
+      0%, 100% { opacity: 0; }
+      50%       { opacity: 1; }
+    }
+
+    /* MAIN */
+    .ty-section {
+      flex: 1;
+      background: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 32px;
+      text-align: center;
+    }
+    .ty-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
+      animation: hero-fade-a 12s ease-in-out;
+      z-index: 0;
+    }
+    .ty-section::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(125deg, #f1ece2 0%, #e9e3f3 50%, #dcd6f0 100%);
+      animation: hero-fade-b 12s ease-in-out;
+      z-index: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ty-section::before, .ty-section::after { animation: none; }
+    }
+    .ty-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* CHECK ICON */
+    .ty-check {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--dark-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 36px;
+      box-shadow: 0 12px 40px rgba(114,110,221,0.35);
+      animation: pop-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes pop-in {
+      from { opacity: 0; transform: scale(0.6); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .ty-check svg { width: 44px; height: 44px; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+    .ty-eyebrow {
+      display: inline-block;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(198,149,79,0.12);
+      border: 1px solid rgba(198,149,79,0.30);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      margin-bottom: 24px;
+      animation: fade-up 0.6s 0.15s ease-out both;
+    }
+    .ty-heading {
+      font-weight: 900;
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 1.06;
+      letter-spacing: -0.035em;
+      color: var(--black);
+      margin: 0 0 20px;
+      animation: fade-up 0.6s 0.25s ease-out both;
+    }
+    .ty-heading .accent { color: var(--dark-purple); }
+    .ty-sub {
+      font-size: 20px;
+      line-height: 1.65;
+      color: #3a3a4a;
+      margin: 0 auto 48px;
+      max-width: 480px;
+      animation: fade-up 0.6s 0.35s ease-out both;
+    }
+    .ty-what-next {
+      background: rgba(255,255,255,0.6);
+      border: 1.5px solid rgba(114,110,221,0.18);
+      border-radius: 20px;
+      padding: 36px 40px;
+      margin-bottom: 40px;
+      text-align: left;
+      animation: fade-up 0.6s 0.45s ease-out both;
+      backdrop-filter: blur(8px);
+    }
+    .ty-what-next h2 {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--dark-purple);
+      margin: 0 0 20px;
+    }
+    .ty-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; counter-reset: step; }
+    .ty-steps li { display: flex; align-items: flex-start; gap: 14px; font-size: 16px; line-height: 1.55; color: #333; counter-increment: step; }
+    .ty-steps li::before {
+      content: counter(step);
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--dark-purple); color: #fff;
+      font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+    }
+    .ty-booking-card {
+      background: linear-gradient(135deg, #f9f8ff 0%, #ede9ff 100%);
+      border: 1.5px solid rgba(114,110,221,0.25);
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      text-align: left;
+      animation: fade-up 0.6s 0.4s ease-out both;
+      box-shadow: 0 4px 16px rgba(114,110,221,0.12);
+    }
+    .ty-booking-card h2 {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dark-purple);
+      margin: 0 0 16px;
+    }
+    .ty-booking-details {
+      margin: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 18px;
+    }
+    .ty-booking-details dt {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      align-self: center;
+    }
+    .ty-booking-details dd {
+      margin: 0;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 16px;
+      color: var(--black);
+    }
+    .ty-booking-details .ty-paid {
+      color: #1a8a3e;
+      font-weight: 700;
+    }
+
+    .ty-actions {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      animation: fade-up 0.6s 0.55s ease-out both;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px;
+      border-radius: 9999px; padding: 14px 32px; text-decoration: none;
+      cursor: pointer; border: none;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+    }
+    .btn:active { transform: scale(0.96); }
+    .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .btn-primary { background: #5f5bc8; color: #fff; box-shadow: 0 4px 20px rgba(114,110,221,0.45); }
+    .btn-primary:hover { background: #4d4aab; transform: translateY(-1px); box-shadow: 0 6px 28px rgba(114,110,221,0.6); }
+    .btn-secondary { background: #fff; color: var(--black); border: 2px solid var(--black); }
+    .btn-secondary:hover { background: var(--black); color: #fff; transform: translateY(-1px); }
+
+    /* FOOTER */
+    footer { background: var(--black); padding: 40px 32px; text-align: center; }
+    .footer-simple { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .footer-simple p { margin: 0; }
+    .footer-lessons, .footer-areas, .footer-sibling { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.6); }
+    .footer-areas a { white-space: nowrap; }
+    .footer-contact a, .footer-link { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .footer-contact a:hover, .footer-link:hover { color: #fff; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.55); }
+
+    @media (max-width: 768px) {
+      .nav-inner { padding: 0 20px; }
+      .nav-logo img { height: 40px; }
+      .ty-section { padding: 72px 20px; }
+      .ty-what-next { padding: 28px 24px; }
+      .ty-actions { flex-direction: column; align-items: center; }
+      .ty-actions .btn { width: 100%; max-width: 320px; }
+      .ty-section::before { animation: none; opacity: 1; }
+      .ty-section::after  { animation: none; opacity: 0; }
+      footer { padding: 32px 20px; }
+    }
+  </style>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicSchool",
+  "name": "Music and Mastery",
+  "url": "https://www.musicandmastery.com",
+  "telephone": "+17605732120",
+  "description": "Private, in-home music lessons across Orange County and Los Angeles. Guitar, piano, voice, drums, bass, ukulele, and more.",
+  "areaServed": [
+    {"@type": "City", "name": "Irvine"},
+    {"@type": "City", "name": "Newport Beach"},
+    {"@type": "City", "name": "Tustin"},
+    {"@type": "City", "name": "Beverly Hills"},
+    {"@type": "City", "name": "Hollywood"},
+    {"@type": "City", "name": "West Hollywood"},
+    {"@type": "City", "name": "East Hollywood"},
+    {"@type": "City", "name": "Burbank"},
+    {"@type": "City", "name": "Glendale"},
+    {"@type": "City", "name": "Pasadena"},
+    {"@type": "City", "name": "Pacific Palisades"},
+    {"@type": "City", "name": "Malibu"}
+  ],
+  "priceRange": "$$",
+  "image": "https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw",
+  "sameAs": [
+    "https://www.instagram.com/mountain_city_music/",
+    "https://www.tiktok.com/@mountain_city_music"
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family: 'Work Sans', sans-serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
+    </a>
+  </div>
+</nav>
+
+<main>
+
+<!-- THANK YOU -->
+<section class="ty-section">
+  <div class="ty-inner">
+
+    <div class="ty-check">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+
+    <div class="ty-eyebrow">Form Received</div>
+
+    <h1 class="ty-heading">You're all set,<br><span class="accent">we'll be in touch.</span></h1>
+
+    <p class="ty-sub">Thank you. We&#39;ll reach out within 24 hours to match a teacher and a weekly time, then send your $20 invoice.</p>
+
+    <div class="ty-actions">
+      <a href="index.html" class="btn btn-primary">Back to Home</a>
+      <a href="tel:7605732120" class="btn btn-secondary">&#128222;&nbsp; (760) 573-2120</a>
+      <a href="https://www.instagram.com/mountain_city_music/" target="_blank" rel="noopener" class="btn btn-secondary"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;flex-shrink:0"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>Follow us on Instagram</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+</main>
+
+<footer>
+  <div class="footer-simple">
+    <p class="footer-contact">
+      <a href="mailto:jonny@mtncitymusic.com">jonny@mtncitymusic.com</a>
+      &nbsp;•&nbsp;
+      <a href="tel:7605732120">(760) 573-2120</a>
+    </p>
+    <p class="footer-lessons">Lessons: <a href="piano-lessons-orange-county.html" class="footer-link">Piano</a> &middot; <a href="guitar-lessons-orange-county.html" class="footer-link">Guitar</a> &middot; <a href="voice-lessons-orange-county.html" class="footer-link">Voice</a> &middot; <a href="bass-lessons-orange-county.html" class="footer-link">Bass</a> &middot; <a href="ukulele-lessons-orange-county.html" class="footer-link">Ukulele</a></p>
+    <p class="footer-areas">Piano lessons: <a href="piano-lessons-orange-county.html" class="footer-link">Orange County</a> &middot; <a href="piano-lessons-irvine.html" class="footer-link">Irvine</a> &middot; <a href="piano-lessons-newport-beach.html" class="footer-link">Newport Beach</a> &middot; <a href="piano-lessons-tustin.html" class="footer-link">Tustin</a> &middot; <a href="piano-lessons-los-angeles.html" class="footer-link">Los Angeles</a> &middot; <a href="piano-lessons-glendale.html" class="footer-link">Glendale</a> &middot; <a href="piano-lessons-pasadena.html" class="footer-link">Pasadena</a> &middot; <a href="piano-lessons-burbank.html" class="footer-link">Burbank</a><br />Guitar lessons: <a href="guitar-lessons-orange-county.html" class="footer-link">Orange County</a> &middot; <a href="guitar-lessons-irvine.html" class="footer-link">Irvine</a> &middot; <a href="guitar-lessons-newport-beach.html" class="footer-link">Newport Beach</a> &middot; <a href="guitar-lessons-tustin.html" class="footer-link">Tustin</a> &middot; <a href="guitar-lessons-los-angeles.html" class="footer-link">Los Angeles</a> &middot; <a href="guitar-lessons-glendale.html" class="footer-link">Glendale</a> &middot; <a href="guitar-lessons-pasadena.html" class="footer-link">Pasadena</a> &middot; <a href="guitar-lessons-burbank.html" class="footer-link">Burbank</a></p>
+    <p class="footer-areas">Orange County: <a href="in-home-irvine.html" class="footer-link">Irvine</a> &middot; <a href="in-home-newport-beach.html" class="footer-link">Newport Beach</a> &middot; <a href="in-home-costa-mesa.html" class="footer-link">Costa Mesa</a> &middot; <a href="in-home-lake-forest.html" class="footer-link">Lake Forest</a> &middot; <a href="in-home-tustin.html" class="footer-link">Tustin</a><br />Los Angeles: <a href="in-home-beverly-hills.html" class="footer-link">Beverly Hills</a> &middot; <a href="in-home-west-hollywood.html" class="footer-link">West Hollywood</a> &middot; <a href="in-home-east-hollywood.html" class="footer-link">East Hollywood</a> &middot; <a href="in-home-burbank.html" class="footer-link">Burbank</a> &middot; <a href="in-home-glendale.html" class="footer-link">Glendale</a> &middot; <a href="in-home-pasadena.html" class="footer-link">Pasadena</a> &middot; <a href="in-home-pacific-palisades.html" class="footer-link">Pacific Palisades</a> &middot; <a href="in-home-malibu.html" class="footer-link">Malibu</a></p>
+    <p><a href="faq.html" class="footer-link">FAQ</a></p>
+    <p><a href="privacy-policy.html" class="footer-link">Privacy Policy</a></p>
+    <p class="footer-copy">© 2026 Music and Mastery</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // One caller is one contact attempt.
+  //
+  // This used to fire on EVERY tap. The Google Ads action it feeds
+  // (7552932935, 'Mountain City Music Co. (web) phone_call_click') counts
+  // MANY_PER_CLICK, and that field is IMMUTABLE through the Ads API because the
+  // action is GA4-imported and GA4 owns its counting. So the over-count could not
+  // be corrected downstream -- it had to be corrected here, at the only point we
+  // control. On 2026-08-23 this reported 3 conversions for 2 real Orange County
+  // callers, on a campaign whose entire measured result is inbound calls.
+  //
+  // Scope is the SESSION, not the page: tapping the number in the header and again
+  // in the footer is one person trying to call once, but a genuine return visit
+  // later is a new contact attempt and should count again.
+  var KEY = 'mcmc_phone_call_click_fired';
+  var firedThisPageview = false;
+
+  function alreadyFired() {
+    if (firedThisPageview) return true;
+    // Private mode and blocked storage throw. Degrade to per-pageview dedupe,
+    // which is still strictly better than firing on every tap, and never drop the
+    // first real signal.
+    try { return window.sessionStorage.getItem(KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function markFired() {
+    firedThisPageview = true;
+    try { window.sessionStorage.setItem(KEY, '1'); } catch (e) {}
+  }
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[href^="tel:"]');
+    if (!link) return;
+    if (alreadyFired()) return;
+    markFired();
+    gtag('event', 'phone_call_click', {
+      event_category: 'engagement',
+      event_label: link.href
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

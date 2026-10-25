@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <!-- Black Friday $20 first month, Nov 1 to Dec 18, 2026 (Jonny 2026-10-24). A temporary promo
+         page: noindex and absent from sitemap.xml. Ads and the index.html promo bar link here.
+         Remove after Dec 18, together with black-friday-thanks.html and the promo bar. -->
+    <meta name="robots" content="noindex,follow">
+    <link rel="canonical" href="https://www.musicandmastery.com/black-friday.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Black Friday: First Month of Music Lessons for $20 | Music &amp; Mastery">
+    <meta name="twitter:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $20. Start in December or January. New students only. Offer ends December 18, 2026.">
+    <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
+    <meta property="og:title" content="Black Friday: First Month of Music Lessons for $20 | Music &amp; Mastery">
+    <meta property="og:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $20. Start in December or January. New students only. Offer ends December 18, 2026.">
+    <meta property="og:url" content="https://www.musicandmastery.com/black-friday.html">
+    <meta property="og:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Music and Mastery">
+    <meta name="description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $20. Start in December or January. New students only. Offer ends December 18, 2026.">
+<!-- Google tag (gtag.js), loaded after the page's first paint. Why and how this keeps every hit:
+     see the note on piano-lessons-orange-county.html (speed, 2026-10-19). -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-11066542604');
+  gtag('config', 'G-SPQ1FGTKTV');
+  // Dynamic number insertion, same wiring as piano-lessons-orange-county.html. Google Ads
+  // points the Black Friday ads here, so a caller from one of them must be able to register
+  // as a call, not only as a tap. Conversion action 7741120696 ('Website call - M&M Orange
+  // County', WEBSITE_CALL, ONE_PER_CLICK, 60s floor). scripts/check-dni.mjs lists this page.
+  gtag('config', 'AW-11066542604/NfzuCLjBoOscEIyU-Jwp', {
+    'phone_conversion_number': '(760) 573-2120'
+  });
+  (function () {
+    var url = 'https://www.googletagmanager.com/gtag/js?id=AW-11066542604';
+    function load() {
+      if (load.done) return; load.done = true;
+      var s = document.createElement('script'); s.async = true; s.src = url;
+      document.head.appendChild(s);
+    }
+    function soon() { requestAnimationFrame(function () { setTimeout(load, 0); }); }
+    try {
+      if (window.PerformanceObserver && (PerformanceObserver.supportedEntryTypes || []).indexOf('paint') !== -1) {
+        new PerformanceObserver(function (list) {
+          if (list.getEntriesByName('first-contentful-paint').length) soon();
+        }).observe({ type: 'paint', buffered: true });
+        setTimeout(load, 3000);   // a tab opened in the background never paints; load anyway
+      } else {
+        window.addEventListener('load', load);
+      }
+    } catch (e) { load(); }
+  })();
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Black Friday: First Month of Music Lessons for $20 | Music &amp; Mastery</title>
+  <link rel="icon" href="brand_assets/logo/mm-favicon-64.png" type="image/png" />
+  <link rel="apple-touch-icon" href="brand_assets/logo/mm-apple-touch-180.png" />
+  <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/worksans-latin.woff2" crossorigin>
+  <!-- DATE GATE. The offer ends December 18, 2026, Pacific time. From December 19 on, every
+       element marked .bf-live (the form, the buttons, the promo row) is hidden and every
+       .bf-ended-msg shows instead. This runs in <head>, before the body is drawn, so a late
+       visitor never sees a button flash and disappear. Before November 1 the page works in
+       full: only the ads and the homepage promo bar wait for November. -->
+  <script>
+  (function () {
+    var END_AFTER = '2026-12-18';
+    function pacificToday() {
+      try {
+        var o = {};
+        new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' })
+          .formatToParts(new Date()).forEach(function (p) { o[p.type] = p.value; });
+        if (o.year && o.month && o.day) return o.year + '-' + o.month + '-' + o.day;
+      } catch (e) {}
+      // No time zone support: Pacific is UTC-8 for the whole of Nov 2 to Dec 31.
+      return new Date(Date.now() - 8 * 3600 * 1000).toISOString().slice(0, 10);
+    }
+    if (pacificToday() > END_AFTER) document.documentElement.classList.add('bf-ended');
+  })();
+  </script>
+  <style>
+
+    /* Self-hosted Google Fonts (latin subset) */
+    @font-face {
+      font-family: "Work Sans";
+      font-style: normal; font-weight: 100 900; font-display: swap;
+      src: url(/brand_assets/fonts/worksans-latin.woff2) format("woff2");
+    }
+    :root {
+      --light-purple: #e4e3ff;
+      --dark-purple: #726edd;
+      --accent: #4f4ab8;
+      --gold: #c6954f;
+      --cream: #f6f1e8;
+      --cream-grad: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
+      --cream-deep: #efe7d8;
+      --black: #0d0d0d;
+      --off-white: #f9f8ff;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Work Sans', sans-serif; color: var(--black); background: #fff; margin: 0; padding: 0; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Work Sans', sans-serif; }
+    [hidden] { display: none !important; }
+
+    /* DATE GATE (see the script in <head>) */
+    .bf-ended-msg { display: none; }
+    .bf-ended .bf-live { display: none !important; }
+    .bf-ended .bf-ended-msg { display: block; }
+
+    /* STICKY TOP: offer row above the nav, both stick together (from the OC guitar page) */
+    .topbar { position: sticky; top: 0; z-index: 100; }
+    .promo-bar { background: var(--accent); color: #fff; text-align: center; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.01em; padding: 9px 20px; line-height: 1.35; }
+    .promo-bar .promo-free { color: #e6c684; font-weight: 800; }
+
+    /* NAV */
+    .nav { background: #fff; box-shadow: 0 4px 22px rgba(116,130,151,0.15); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .nav-logo img { height: 56px; width: auto; }
+    .nav-logo:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: 4px; border-radius: 8px; }
+
+    /* BUTTONS */
+    @keyframes glow-pulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(114,110,221,0.45), 0 0 40px rgba(114,110,221,0.15); }
+      50%       { box-shadow: 0 6px 30px rgba(114,110,221,0.65), 0 0 60px rgba(114,110,221,0.28); }
+    }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px; border-radius: 9999px; padding: 14px 32px; text-decoration: none; cursor: pointer; border: none; transition: transform 0.15s, box-shadow 0.15s, background 0.2s; position: relative; overflow: hidden; }
+    .btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.38) 50%, transparent 80%); transform: translateX(-150%); pointer-events: none; border-radius: inherit; }
+    .btn:hover::after { transform: translateX(150%); transition: transform 0.55s ease; }
+    .btn:active { transform: scale(0.96) !important; }
+    .btn:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: 3px; }
+    .btn-primary { background: #5f5bc8; color: #fff; animation: glow-pulse 2.5s ease-in-out infinite; }
+    .btn-primary:hover { background: #4d4aab; animation: none; box-shadow: 0 6px 28px rgba(114,110,221,0.6); transform: translateY(-1px); }
+    .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(79,74,184,0.32); }
+    .btn-accent:hover { background: #3f3a9e; box-shadow: 0 6px 24px rgba(79,74,184,0.42); transform: translateY(-1px); }
+    .btn-accent-lg { font-size: 18px; padding: 18px 44px; }
+
+    /* HERO */
+    @keyframes hero-fade-a { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes hero-fade-b { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+    @keyframes blur-fade-in {
+      from { opacity: 0; filter: blur(6px); transform: translateY(6px); }
+      to   { opacity: 1; filter: blur(0px); transform: translateY(0); }
+    }
+    .blur-fade { animation: blur-fade-in 0.8s ease-out both; }
+    .blur-fade-1 { animation-delay: 0.06s; }
+    .blur-fade-2 { animation-delay: 0.16s; }
+    .blur-fade-3 { animation-delay: 0.26s; }
+    .hero { background: var(--cream-grad); padding: 96px 32px 88px; position: relative; overflow: hidden; text-align: center; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%); animation: hero-fade-a 12s ease-in-out infinite; z-index: 0; }
+    .hero::after  { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, #f1ece2 0%, #e9e3f3 50%, #dcd6f0 100%); animation: hero-fade-b 12s ease-in-out infinite; z-index: 0; }
+    .bf-hero-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.01em; color: #8a6224; background: rgba(198,149,79,0.14); border: 1px solid rgba(198,149,79,0.32); border-radius: 9999px; padding: 7px 16px; margin-bottom: 28px; }
+    .hero-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(40px, 6vw, 72px); line-height: 1.06; letter-spacing: -0.035em; color: var(--black); margin: 0 0 22px; text-wrap: balance; }
+    .hero-heading .accent-word { color: var(--dark-purple); }
+    .hero-sub { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: clamp(18px, 2.2vw, 23px); line-height: 1.5; color: #34305f; margin: 0 auto 32px; max-width: 620px; }
+    .bf-cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .small-print { font-size: 14px; line-height: 1.5; color: #55555f; margin: 0; }
+
+    /* SHARED SECTION TYPE */
+    .sec-h2 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0 0 32px; text-align: center; }
+
+    /* WHAT THE $20 COVERS. One card, four lines, read top to bottom like a receipt. */
+    .covers { background: #fff; padding: 88px 32px; }
+    .covers-inner { max-width: 720px; margin: 0 auto; }
+    .covers-card { background: #fff; border: 1.5px solid rgba(114,110,221,0.18); border-top: 4px solid var(--gold); border-radius: 20px; padding: 12px 32px; box-shadow: 0 1px 2px rgba(13,13,13,0.04), 0 14px 40px rgba(114,110,221,0.12); }
+    .covers-list { list-style: none; padding: 0; margin: 0; }
+    .covers-list li { position: relative; padding: 20px 0 20px 44px; font-size: 18px; line-height: 1.55; color: #2c2c36; border-bottom: 1px dashed rgba(114,110,221,0.28); }
+    .covers-list li:last-child { border-bottom: none; }
+    .covers-list li::before { content: '\2713'; position: absolute; left: 0; top: 19px; width: 28px; height: 28px; border-radius: 50%; background: var(--dark-purple); color: #fff; font-weight: 900; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+
+    /* HOW IT WORKS. A real sequence, so it is numbered. */
+    .steps { background: var(--cream-grad); padding: 88px 32px; text-align: center; }
+    .steps-inner { max-width: 640px; margin: 0 auto; }
+    .steps-list { list-style: none; padding: 0; margin: 0 auto 36px; max-width: 520px; text-align: left; display: flex; flex-direction: column; gap: 18px; }
+    .steps-list li { display: flex; align-items: flex-start; gap: 16px; font-size: 17px; line-height: 1.6; color: #2c2c36; }
+    .step-n { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--dark-purple); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; margin-top: -1px; }
+
+    /* LEARNING FOR YOURSELF. The site's adults block, from index.html via the OC guitar page. */
+    .adults-section { background: var(--accent); padding: 96px 32px; text-align: center; position: relative; overflow: hidden; }
+    .adults-section::before { content: '\266A'; position: absolute; font-size: 420px; line-height: 1; color: rgba(255,255,255,0.05); top: 50%; left: 50%; transform: translate(-50%, -52%) rotate(12deg); pointer-events: none; font-family: serif; }
+    .adults-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+    .adults-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(32px, 4.4vw, 54px); line-height: 1.1; letter-spacing: -0.03em; color: #fff; margin: 0 0 20px; text-wrap: balance; }
+    .adults-body { font-size: 19px; line-height: 1.7; color: rgba(255,255,255,0.92); margin: 0 0 28px; }
+    .adults-gift { display: inline-block; font-size: 16px; line-height: 1.55; font-weight: 600; color: #241a08; background: #e6c684; border-radius: 14px; padding: 12px 20px; margin: 0 0 32px; }
+    .adults-section .btn-light { background: #fff; color: var(--accent); }
+    .adults-section .btn-light:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(0,0,0,0.22); }
+    .adults-section .btn-light:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+    .adults-cta { display: block; }
+
+    /* AFTER THE FIRST MONTH + QUESTIONS (the local-section look) */
+    .after { background: #fff; padding: 88px 32px 40px; }
+    .after-inner { max-width: 720px; margin: 0 auto; }
+    .after-body { font-size: 18px; line-height: 1.75; color: #3a3a4a; margin: 0; }
+    .faq { background: #fff; padding: 40px 32px 96px; }
+    .faq-inner { max-width: 720px; margin: 0 auto; border-top: 1.5px solid rgba(114,110,221,0.15); padding-top: 48px; }
+    .faq-item { border-bottom: 1px solid rgba(114,110,221,0.14); }
+    .faq-item > summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; padding: 14px 0; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.4; color: var(--black); }
+    .faq-item > summary::-webkit-details-marker { display: none; }
+    .faq-item > summary::after { content: '+'; font-weight: 700; font-size: 22px; line-height: 1; color: var(--dark-purple); flex-shrink: 0; }
+    .faq-item[open] > summary::after { content: '\2212'; }
+    .faq-item > summary:focus-visible { outline: 2px solid var(--dark-purple); outline-offset: 2px; }
+    .faq-a { font-size: 16px; line-height: 1.7; color: #4a4a58; margin: 0; padding: 0 0 18px; }
+
+    /* FINAL CALL TO ACTION + FORM */
+    .form-section { background: var(--cream-grad); padding: 96px 32px; }
+    .form-inner { max-width: 600px; margin: 0 auto; }
+    .form-section .sec-h2 { margin-bottom: 36px; }
+    /* .topbar is sticky at about 104px tall, so every #form link lands with the heading clear of it. */
+    #form { scroll-margin-top: 112px; }
+    .bf-form { background: #fff; border-radius: 20px; padding: 36px 32px 28px; border: 1.5px solid rgba(114,110,221,0.18); box-shadow: 0 1px 2px rgba(13,13,13,0.04), 0 18px 50px rgba(114,110,221,0.14); text-align: left; }
+    .bf-field { border: 0; padding: 0; margin: 0 0 22px; min-width: 0; }
+    .bf-label { display: block; padding: 0; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.35; color: var(--black); margin: 0 0 8px; }
+    .bf-opt { font-weight: 500; color: #6a6a78; }
+    .bf-input, .bf-select, .bf-textarea { display: block; width: 100%; min-height: 50px; font-family: 'Work Sans', sans-serif; font-size: 16px; line-height: 1.4; color: var(--black); background: #fff; border: 1.5px solid rgba(13,13,13,0.20); border-radius: 12px; padding: 12px 14px; transition: border-color 0.15s, box-shadow 0.15s; }
+    .bf-textarea { min-height: 104px; resize: vertical; }
+    .bf-select { appearance: none; -webkit-appearance: none; padding-right: 44px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%234f4ab8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+    .bf-input:hover, .bf-select:hover, .bf-textarea:hover { border-color: rgba(114,110,221,0.55); }
+    .bf-input:focus, .bf-select:focus, .bf-textarea:focus { outline: none; border-color: var(--dark-purple); box-shadow: 0 0 0 3px rgba(114,110,221,0.25); }
+    .bf-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .bf-choice { position: relative; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 12px 16px; border: 1.5px solid rgba(13,13,13,0.20); border-radius: 12px; background: #fff; font-weight: 600; font-size: 16px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+    .bf-choice:hover { border-color: rgba(114,110,221,0.55); }
+    .bf-choice input { width: 20px; height: 20px; margin: 0; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
+    .bf-choice:has(input:checked) { border-color: var(--dark-purple); background: rgba(114,110,221,0.08); }
+    .bf-choice:has(input:focus-visible) { box-shadow: 0 0 0 3px rgba(114,110,221,0.35); }
+    .bf-submit { width: 100%; margin-top: 6px; }
+    .bf-submit[disabled] { opacity: 0.7; cursor: progress; transform: none !important; }
+    .bf-form .small-print { text-align: center; margin-top: 14px; }
+    .bf-error { margin: 16px 0 0; padding: 14px 16px; border-radius: 12px; background: #fff4f0; border: 1.5px solid #e7b9a8; color: #5a2614; font-size: 16px; line-height: 1.55; }
+    .bf-error a { color: #5a2614; font-weight: 800; }
+    .bf-ended-box { background: #fff; border-radius: 20px; padding: 32px; border: 1.5px solid rgba(114,110,221,0.18); text-align: center; font-size: 18px; line-height: 1.6; color: #2c2c36; margin: 0; }
+    .bf-ended-box a, .hero .bf-ended-msg a { color: var(--accent); font-weight: 700; display: inline-block; padding: 10px 2px; }
+    .bf-error a, .form-noscript a { display: inline-block; padding: 10px 0; }
+    .hero .bf-ended-msg { font-size: 18px; font-weight: 600; color: #2c2c36; margin: 0; }
+    .form-noscript { padding: 28px 24px; text-align: center; font-size: 16px; line-height: 1.6; color: #3a3a4a; background: #fff; border-radius: 20px; }
+    .form-noscript a { color: var(--accent); font-weight: 700; }
+
+    /* Review wall tap targets to 44px on this page only (css/lp-proof.css is shared by 34 pages
+       and loads after this block, hence the extra .rv-section in each selector). */
+    .rv-section .rv-chip { min-height: 44px; }
+    .rv-section .rv-more { display: inline-flex; align-items: center; min-height: 44px; margin-top: 0; }
+
+    /* FOOTER */
+    footer { background: var(--black); padding: 56px 32px; text-align: center; }
+    .footer-simple { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .footer-simple p { margin: 0; }
+    .footer-lessons, .footer-areas, .footer-sibling { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.6); }
+    .footer-areas a { white-space: nowrap; }
+    .footer-contact a, .footer-link { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .footer-contact a:hover, .footer-link:hover { color: #fff; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 4px; }
+    .footer-cities { font-size: 13px; color: rgba(255,255,255,0.8); }
+
+    @media (max-width: 768px) {
+      .promo-bar { font-size: 12px; padding: 8px 14px; }
+      .nav-inner { padding: 0 20px; }
+      .nav-logo img { height: 40px; }
+      .nav-inner .btn-primary { padding: 9px 16px; font-size: 13px; white-space: nowrap; }
+      .hero { padding: 52px 20px 52px; }
+      .hero-heading { font-size: clamp(36px, 10vw, 52px); }
+      .hero-eyebrow { font-size: 13px; margin-bottom: 22px; }
+      .hero-sub { font-size: 18px; margin-bottom: 28px; }
+      .btn-accent-lg { font-size: 17px; padding: 16px 32px; }
+      .bf-cta-wrap .btn-accent-lg { width: 100%; max-width: 340px; }
+      .sec-h2 { margin-bottom: 24px; }
+      .covers { padding: 56px 20px; }
+      .covers-card { padding: 4px 20px; }
+      .covers-list li { font-size: 17px; padding: 18px 0 18px 40px; }
+      .covers-list li::before { top: 18px; width: 26px; height: 26px; font-size: 13px; }
+      .steps { padding: 56px 20px; }
+      .steps-list li { font-size: 16px; }
+      .adults-section { padding: 64px 20px; }
+      .adults-section::before { font-size: 260px; }
+      .adults-body { font-size: 17px; }
+      .after { padding: 56px 20px 28px; }
+      .after-body { font-size: 17px; line-height: 1.7; }
+      .faq { padding: 28px 20px 64px; }
+      .faq-inner { padding-top: 36px; }
+      .form-section { padding: 64px 16px; }
+      .bf-form { padding: 26px 18px 22px; }
+      footer { padding: 40px 20px; }
+      .footer-contact { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+      @keyframes blur-fade-in {
+        from { opacity: 0; transform: translateY(6px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .btn-primary { animation: none; box-shadow: 0 4px 20px rgba(114,110,221,0.45); }
+      .hero::before { animation: none; opacity: 1; }
+      .hero::after  { animation: none; opacity: 0; }
+    }
+    /* The bar needs about 430px, so narrower phones get the tighter nav from the OC guitar
+       page; below 360px the nav button hides and the hero button carries the action. */
+    @media (max-width: 430px) {
+      .nav-inner { padding: 0 14px; gap: 10px; }
+      .nav-inner .btn-primary { padding: 9px 12px; font-size: 12px; flex-shrink: 0; }
+      .nav-logo > span > span { font-size: 18px !important; }
+    }
+    @media (max-width: 374px) { .nav-logo > span > span { font-size: 17px !important; } }
+    @media (max-width: 359px) { .nav-inner .btn-primary { display: none; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="/css/lp-proof.css?v=22b0314054">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="promo-bar bf-live">
+    <span class="promo-free">Black Friday:</span> your first month of lessons is $20 through December 18.
+  </div>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+        <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family: 'Work Sans', sans-serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
+      </a>
+      <a href="#form" class="btn btn-primary bf-live">Get the $20 month</a>
+    </div>
+  </nav>
+</div>
+
+<main>
+
+<section class="hero">
+  <div class="bf-hero-inner">
+    <div class="hero-eyebrow blur-fade blur-fade-1">Black Friday offer, ends December 18</div>
+    <h1 class="hero-heading blur-fade blur-fade-2">Hear your child play <span class="accent-word">the songs they love</span>.</h1>
+    <p class="hero-sub blur-fade blur-fade-2">Your first month of weekly 30-minute lessons is $20. A teacher comes to your home across Orange County and Los Angeles, and you choose a December or January start.</p>
+    <div class="bf-cta-wrap blur-fade blur-fade-3">
+      <a href="#form" class="btn btn-accent btn-accent-lg bf-live">Get the $20 month</a>
+      <p class="small-print bf-live">New students only. Offer ends December 18, 2026.</p>
+      <p class="bf-ended-msg">This offer ended December 18, 2026. <a href="index.html">Go to our homepage</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="covers">
+  <div class="covers-inner">
+    <h2 class="sec-h2">What the $20 covers</h2>
+    <div class="covers-card">
+      <ul class="covers-list">
+        <li>Four weekly 30-minute lessons in your home</li>
+        <li>A DOJ and FBI background-checked teacher</li>
+        <li>Our online lesson curriculum for guitar and piano students</li>
+        <li>A printed lesson book for guitar and piano students, which your teacher brings to the first lesson</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="steps-inner">
+    <h2 class="sec-h2">How it works</h2>
+    <ol class="steps-list">
+      <li><span class="step-n">1</span><span>Tell us who the lessons are for and what they want to play.</span></li>
+      <li><span class="step-n">2</span><span>We match a teacher and a weekly time, then send your $20 invoice.</span></li>
+      <li><span class="step-n">3</span><span>Lessons start in December or January, whichever you picked.</span></li>
+    </ol>
+    <a href="#form" class="btn btn-accent btn-accent-lg bf-live">Get the $20 month</a>
+  </div>
+</section>
+
+<section class="adults-section">
+  <div class="adults-inner">
+    <h2 class="adults-heading">Learning for yourself?</h2>
+    <p class="adults-body">The $20 first month is open to adults too. Finally nail the solo you've always wanted to learn, with a teacher who comes to you.</p>
+    <p class="adults-gift">Giving lessons as a gift? Pick a January start when you sign up.</p>
+    <div class="adults-cta bf-live"><a href="#form" class="btn btn-light">Get the $20 month</a></div>
+  </div>
+</section>
+
+<!-- REVIEW WALL, unchanged from the landing pages. Cards come from /js/reviews.js; the
+     same-company caveat stays in this header and on every card (load-bearing on this brand). -->
+<section class="rv-section" id="reviews">
+  <div class="rv-inner">
+    <div class="rv-head">
+      <div class="rv-head-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="rv-score"><strong>5.0</strong> from 65 Google reviews</p>
+      <h2 class="rv-heading">What families say</h2>
+      <p class="rv-caveat">Music and Mastery and Mountain City Music Co. are the same company. Mountain City Music Co. is our original name. These are <a href="https://share.google/vff7oOhVweOWzDic5" target="_blank" rel="noopener">Google reviews</a> from Mountain City Music families in the High Desert and Inland Empire, quoted exactly as they were written.</p>
+    </div>
+    <div class="rv-wall" data-review-wall></div>
+    <noscript><p class="rv-caveat" style="text-align:center;margin-top:24px;"><a href="https://share.google/vff7oOhVweOWzDic5" target="_blank" rel="noopener">Read all 65 reviews on Google</a></p></noscript>
+  </div>
+</section>
+
+<section class="after">
+  <div class="after-inner">
+    <h2 class="sec-h2">After the first month</h2>
+    <p class="after-body">Lessons continue month to month at our regular tuition: $300 a month for 60-minute lessons, $240 for 45 minutes, or $160 for 30 minutes, the same length as your $20 month. There's no long-term contract. Tell us before your next monthly invoice and you won't be billed again.</p>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="faq-inner">
+    <h2 class="sec-h2">Questions</h2>
+    <details class="faq-item">
+      <summary>Can I keep a lower price after the first month?</summary>
+      <p class="faq-a">Yes. Within 7 days of paying the $20, you can switch to a 7-month plan with $20 off every month at any lesson length: $280 a month for 60 minutes, $220 for 45, or $140 for 30. Your first month moves to the plan price, so you pay the difference, then six more months at the plan price. If you stop early, you don't owe anything back.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Who can get the $20 month?</summary>
+      <p class="faq-a">New students who pay for their own lessons. It isn't available for lessons paid through a charter school, and it replaces our usual free first lesson. One $20 month per student. The offer ends December 18, 2026. The money-back guarantee doesn't apply to the $20 month.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Which instruments?</summary>
+      <p class="faq-a">Guitar, piano, bass, ukulele, drums, and music production. Guitar and piano students also get the printed lesson book.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Can we start in January?</summary>
+      <p class="faq-a">Yes. Pick December or January when you sign up.</p>
+    </details>
+  </div>
+</section>
+
+<!-- FINAL CALL TO ACTION. Every "Get the $20 month" button scrolls here. The form posts to the
+     same lead endpoint the scheduling widget uses, tagged offer "bf20" so the server handles the
+     lead as a $20 month and keeps it off the standard lead follow-ups. -->
+<section class="form-section" id="form">
+  <div class="form-inner">
+    <h2 class="sec-h2 bf-live">Your first month is $20 through December 18.</h2>
+    <p class="bf-ended-msg bf-ended-box">This offer ended December 18, 2026. <a href="index.html">Go to our homepage</a></p>
+
+    <form class="bf-form bf-live" id="bf-form" action="#form" method="post" hidden>
+      <fieldset class="bf-field">
+        <legend class="bf-label">Who are the lessons for?</legend>
+        <div class="bf-choices">
+          <label class="bf-choice"><input type="radio" name="lesson_for" value="child" required>My child</label>
+          <label class="bf-choice"><input type="radio" name="lesson_for" value="self">Myself</label>
+        </div>
+      </fieldset>
+
+      <div class="bf-field">
+        <label class="bf-label" for="bf-name">Your name</label>
+        <input class="bf-input" type="text" id="bf-name" name="client_name" autocomplete="name" required>
+      </div>
+
+      <div class="bf-field">
+        <label class="bf-label" for="bf-email">Email</label>
+        <input class="bf-input" type="email" id="bf-email" name="email" autocomplete="email" inputmode="email" required>
+      </div>
+
+      <div class="bf-field">
+        <label class="bf-label" for="bf-phone">Phone</label>
+        <input class="bf-input" type="tel" id="bf-phone" name="phone" autocomplete="tel" inputmode="tel" required>
+      </div>
+
+      <div class="bf-field">
+        <label class="bf-label" for="bf-instrument">Instrument</label>
+        <select class="bf-select" id="bf-instrument" name="instrument" required>
+          <option value="" selected disabled>Choose one</option>
+          <option value="Guitar">Guitar</option>
+          <option value="Piano">Piano</option>
+          <option value="Bass">Bass</option>
+          <option value="Ukulele">Ukulele</option>
+          <option value="Drums">Drums</option>
+          <option value="Music Production">Music Production</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="bf-field" id="bf-other-wrap" hidden>
+        <label class="bf-label" for="bf-other">Which instrument?</label>
+        <input class="bf-input" type="text" id="bf-other" name="instrument_other" autocomplete="off">
+      </div>
+
+      <div class="bf-field" id="bf-age-wrap" hidden>
+        <label class="bf-label" for="bf-age">Student's age <span class="bf-opt">(optional)</span></label>
+        <input class="bf-input" type="text" id="bf-age" name="student_age" inputmode="numeric" autocomplete="off">
+      </div>
+
+      <div class="bf-field">
+        <label class="bf-label" for="bf-city">City</label>
+        <input class="bf-input" type="text" id="bf-city" name="city" autocomplete="address-level2" required>
+      </div>
+
+      <fieldset class="bf-field">
+        <legend class="bf-label">Start in</legend>
+        <div class="bf-choices">
+          <label class="bf-choice"><input type="radio" name="start_timing" value="december" required>December</label>
+          <label class="bf-choice"><input type="radio" name="start_timing" value="january">January</label>
+        </div>
+      </fieldset>
+
+      <div class="bf-field">
+        <label class="bf-label" for="bf-notes">What do they want to play? <span class="bf-opt">(optional)</span></label>
+        <textarea class="bf-textarea" id="bf-notes" name="notes" rows="3"></textarea>
+      </div>
+
+      <!-- Honeypot, the same off-screen technique as js/scheduling-widget.js. A person never sees
+           or reaches it; a bot that fills every field fills this one too. -->
+      <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" name="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
+
+      <button type="submit" class="btn btn-accent btn-accent-lg bf-submit" id="bf-submit">Get the $20 month</button>
+      <p class="small-print">New students only. Offer ends December 18, 2026.</p>
+      <p class="bf-error" id="bf-error" role="alert" hidden>Something went wrong sending your details. Please call or text us at <a href="tel:7605732120">(760) 573-2120</a>.</p>
+    </form>
+    <noscript>
+      <div class="form-noscript bf-live">
+        <p>This form needs JavaScript. Call or text us at <a href="tel:7605732120">(760) 573-2120</a>.</p>
+      </div>
+    </noscript>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-simple">
+    <p class="footer-cities">Music and Mastery &nbsp;•&nbsp; Proudly Serving Orange County: Irvine, Newport Beach &amp; Tustin</p>
+    <p class="footer-contact">
+      <a href="mailto:jonny@mtncitymusic.com">jonny@mtncitymusic.com</a>
+      &nbsp;•&nbsp;
+      <a href="tel:7605732120">(760) 573-2120</a>
+    </p>
+    <p class="footer-lessons">Lessons: <a href="piano-lessons-orange-county.html" class="footer-link">Piano</a> &middot; <a href="guitar-lessons-orange-county.html" class="footer-link">Guitar</a> &middot; <a href="voice-lessons-orange-county.html" class="footer-link">Voice</a> &middot; <a href="bass-lessons-orange-county.html" class="footer-link">Bass</a> &middot; <a href="ukulele-lessons-orange-county.html" class="footer-link">Ukulele</a></p>
+    <p class="footer-areas">Piano lessons: <a href="piano-lessons-orange-county.html" class="footer-link">Orange County</a> &middot; <a href="piano-lessons-irvine.html" class="footer-link">Irvine</a> &middot; <a href="piano-lessons-newport-beach.html" class="footer-link">Newport Beach</a> &middot; <a href="piano-lessons-tustin.html" class="footer-link">Tustin</a> &middot; <a href="piano-lessons-los-angeles.html" class="footer-link">Los Angeles</a> &middot; <a href="piano-lessons-glendale.html" class="footer-link">Glendale</a> &middot; <a href="piano-lessons-pasadena.html" class="footer-link">Pasadena</a> &middot; <a href="piano-lessons-burbank.html" class="footer-link">Burbank</a><br />Guitar lessons: <a href="guitar-lessons-orange-county.html" class="footer-link">Orange County</a> &middot; <a href="guitar-lessons-irvine.html" class="footer-link">Irvine</a> &middot; <a href="guitar-lessons-newport-beach.html" class="footer-link">Newport Beach</a> &middot; <a href="guitar-lessons-tustin.html" class="footer-link">Tustin</a> &middot; <a href="guitar-lessons-los-angeles.html" class="footer-link">Los Angeles</a> &middot; <a href="guitar-lessons-glendale.html" class="footer-link">Glendale</a> &middot; <a href="guitar-lessons-pasadena.html" class="footer-link">Pasadena</a> &middot; <a href="guitar-lessons-burbank.html" class="footer-link">Burbank</a></p>
+    <p class="footer-areas">Orange County: <a href="in-home-irvine.html" class="footer-link">Irvine</a> &middot; <a href="in-home-newport-beach.html" class="footer-link">Newport Beach</a> &middot; <a href="in-home-costa-mesa.html" class="footer-link">Costa Mesa</a> &middot; <a href="in-home-lake-forest.html" class="footer-link">Lake Forest</a> &middot; <a href="in-home-tustin.html" class="footer-link">Tustin</a><br />Los Angeles: <a href="in-home-beverly-hills.html" class="footer-link">Beverly Hills</a> &middot; <a href="in-home-west-hollywood.html" class="footer-link">West Hollywood</a> &middot; <a href="in-home-east-hollywood.html" class="footer-link">East Hollywood</a> &middot; <a href="in-home-burbank.html" class="footer-link">Burbank</a> &middot; <a href="in-home-glendale.html" class="footer-link">Glendale</a> &middot; <a href="in-home-pasadena.html" class="footer-link">Pasadena</a> &middot; <a href="in-home-pacific-palisades.html" class="footer-link">Pacific Palisades</a> &middot; <a href="in-home-malibu.html" class="footer-link">Malibu</a></p>
+    <p><a href="faq.html" class="footer-link">FAQ</a></p>
+    <p><a href="privacy-policy.html" class="footer-link" target="_blank" rel="noopener">Privacy Policy</a></p>
+    <p><a href="terms-of-service.html" class="footer-link" target="_blank" rel="noopener">Terms of Service</a></p>
+    <p class="footer-copy">© 2026 Music and Mastery</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // THE BLACK FRIDAY FORM. Plain HTML, posted as JSON to the widget's lead endpoint
+  // (window.MCMC_SCHEDULING_API on every page, plus /api/scheduling/lead). The browser's own
+  // required-field checks run first: the submit event only fires once every required field
+  // is filled, so there are no hand-written field errors to keep in step with the markup.
+  var API = 'https://cron-runner-production-a510.up.railway.app/api/scheduling/lead';
+  var form = document.getElementById('bf-form');
+  if (!form) return;
+  form.hidden = false;   // hidden in the markup so a no-JS visitor sees the call-us note instead
+
+  var submit = document.getElementById('bf-submit');
+  var errorBox = document.getElementById('bf-error');
+  var otherWrap = document.getElementById('bf-other-wrap');
+  var otherInput = document.getElementById('bf-other');
+  var ageWrap = document.getElementById('bf-age-wrap');
+  var LABEL = submit.textContent;
+
+  function value(name) {
+    var el = form.elements[name];
+    return el ? String(el.value || '').trim() : '';
+  }
+
+  // "Other" asks which instrument (and requires it); "My child" offers the age field.
+  function syncConditionalFields() {
+    var other = value('instrument') === 'Other';
+    otherWrap.hidden = !other;
+    otherInput.required = other;
+    ageWrap.hidden = value('lesson_for') !== 'child';
+  }
+  form.addEventListener('change', syncConditionalFields);
+  syncConditionalFields();
+
+  // Same rule as the widget's isTestSubmission(): a rehearsal ("ZZTEST Mia", "Test", test@...)
+  // still reaches the server, where ZZTEST keeps it out of the real lists, but it must never
+  // reach Google Ads or GA4 as a family. black-friday-thanks.html records nothing on test=1.
+  function isTestSubmission(name, email) {
+    var first = name.split(/\s+/)[0].toLowerCase();
+    return first.indexOf('zztest') === 0 || first === 'test' || email.toLowerCase().indexOf('test@') === 0;
+  }
+
+  // Enhanced conversions, exactly as js/scheduling-widget.js stashUserData() does it: the Ads
+  // conversion fires on the thanks page, gtag state does not survive the navigation, so the
+  // identifiers ride in sessionStorage (never the URL). The thanks page reads and deletes them.
+  var USER_DATA_KEY = 'mm_ec_user_data';
+  function stashUserData(name, email, phone) {
+    try {
+      var parts = name.split(/\s+/).filter(Boolean);
+      var digits = phone.replace(/\D/g, '');
+      var e164 = digits.length === 10 ? '+1' + digits : (digits.length === 11 && digits[0] === '1' ? '+' + digits : '');
+      var ud = {};
+      if (email) ud.email = email.toLowerCase();
+      if (e164) ud.phone_number = e164;
+      if (parts[0]) {
+        ud.address = { first_name: parts[0] };
+        if (parts.length > 1) ud.address.last_name = parts[parts.length - 1];
+      }
+      window.sessionStorage.setItem(USER_DATA_KEY, JSON.stringify(ud));
+    } catch (e) { /* storage blocked: the conversion still fires, unenhanced */ }
+  }
+
+  function fail() {
+    errorBox.hidden = false;
+    submit.disabled = false;
+    submit.textContent = LABEL;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errorBox.hidden = true;
+
+    // A filled honeypot never sends. A person whose autofill reached it still gets a way out.
+    if (form.elements.honeypot.value) { fail(); return; }
+
+    var lessonFor = value('lesson_for');
+    var instrument = value('instrument');
+    var payload = {
+      lesson_for: lessonFor,
+      client_name: value('client_name'),
+      email: value('email'),
+      phone: value('phone'),
+      instrument: instrument,
+      city: value('city'),
+      start_timing: value('start_timing'),
+      brand_source: 'musicandmastery',
+      offer: 'bf20',
+      honeypot: ''
+    };
+    if (instrument === 'Other') payload.instrument_other = value('instrument_other');
+    if (lessonFor === 'child' && value('student_age')) payload.student_age = value('student_age');
+    if (value('notes')) payload.notes = value('notes');
+
+    submit.disabled = true;
+    submit.textContent = 'Sending';
+
+    fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      if (res.status !== 200) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).then(function (data) {
+      if (!data || data.success !== true) throw new Error('not accepted');
+      var test = isTestSubmission(payload.client_name, payload.email);
+      if (test) {
+        try { window.sessionStorage.removeItem(USER_DATA_KEY); } catch (e) {}
+      } else {
+        stashUserData(payload.client_name, payload.email, payload.phone);
+        if (typeof gtag === 'function') {
+          try { gtag('event', 'form_submission', { form_name: 'black_friday_20' }); } catch (e) {}
+        }
+      }
+      window.location.href = 'black-friday-thanks.html?type=lead' + (test ? '&test=1' : '');
+    }).catch(fail);
+  });
+})();
+</script>
+<script>
+(function () {
+  // One caller is one contact attempt. Copied unchanged from guitar-lessons-orange-county.html,
+  // where the reasons are written out: session-scoped dedupe of phone_call_click, and the tap
+  // yields whenever dynamic number insertion has swapped the number (that call is measured).
+  var KEY = 'mcmc_phone_call_click_fired';
+  var firedThisPageview = false;
+
+  function alreadyFired() {
+    if (firedThisPageview) return true;
+    try { return window.sessionStorage.getItem(KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function markFired() {
+    firedThisPageview = true;
+    try { window.sessionStorage.setItem(KEY, '1'); } catch (e) {}
+  }
+
+  var PAGE_NUMBER = '7605732120';
+
+  function nationalDigits(value) {
+    var d = String(value || '').replace(/\D/g, '');
+    return (d.length === 11 && d.charAt(0) === '1') ? d.slice(1) : d;
+  }
+
+  function callIsBeingMeasured(link) {
+    var dialled = nationalDigits(link.getAttribute('href'));
+    return dialled.length >= 10 && dialled !== PAGE_NUMBER;
+  }
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[href^="tel:"]');
+    if (!link) return;
+    if (callIsBeingMeasured(link)) return;
+    if (alreadyFired()) return;
+    markFired();
+    gtag('event', 'phone_call_click', {
+      event_category: 'engagement',
+      event_label: link.href
+    });
+  });
+})();
+</script>
+
+<script src="/js/reviews.js?v=949f4d7874" defer></script>
+</body>
+</html>

@@ -602,6 +602,34 @@
 </head>
 <body>
 
+<!-- BLACK FRIDAY PROMO BAR (Jonny 2026-10-24). Visible Nov 1 to Dec 18, 2026, Pacific time, and
+     links to black-friday.html. It ships hidden and the script right after it reveals it inside
+     the window before the page is drawn, so outside the window it takes no space and nothing
+     jumps. Styling is the .promo-bar from guitar-lessons-orange-county.html, scoped to #bf-promo.
+     Kept in one block here, away from the hero, so it comes out in one cut after Dec 18. -->
+<style>
+  #bf-promo { display: flex; flex-direction: column; justify-content: center; min-height: 44px; background: #4f4ab8; color: #fff; text-align: center; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.01em; line-height: 1.35; padding: 8px 20px; text-decoration: none; }
+  #bf-promo[hidden] { display: none; }
+  #bf-promo .promo-free { color: #e6c684; font-weight: 800; }
+  #bf-promo .promo-link { color: #fff; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; margin-left: 4px; }
+  #bf-promo:hover .promo-link { color: #e6c684; }
+  #bf-promo:focus-visible { outline: 3px solid #e6c684; outline-offset: -3px; }
+  @media (max-width: 768px) { #bf-promo { font-size: 12px; padding: 7px 14px; } }
+</style>
+<a id="bf-promo" href="black-friday.html" hidden><span><span class="promo-free">Black Friday:</span> your first month of lessons is $20 through December 18. <span class="promo-link">See the offer</span></span></a>
+<script>
+(function () {
+  var bar = document.getElementById('bf-promo');
+  try {
+    var o = {};
+    new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' })
+      .formatToParts(new Date()).forEach(function (p) { o[p.type] = p.value; });
+    var today = o.year + '-' + o.month + '-' + o.day;
+    if (today >= '2026-11-01' && today <= '2026-12-18') bar.hidden = false;
+  } catch (e) { /* no time zone support: the bar stays hidden */ }
+})();
+</script>
+
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">

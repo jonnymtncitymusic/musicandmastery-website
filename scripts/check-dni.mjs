@@ -29,6 +29,9 @@ export const AD_LANDING_PAGES = {
   'guitar-lessons-orange-county.html': OC,
   'piano-lessons-los-angeles.html': LA,
   'guitar-lessons-los-angeles.html': LA,
+  // Black Friday $20 month, Nov 1 to Dec 18, 2026 (Jonny 2026-10-24). Its copy names Orange
+  // County, so it carries the OC call action. Remove with the page after Dec 18.
+  'black-friday.html': OC,
 };
 
 // City pages (2026-10-22) are generated from data/city-pages.json and take ad clicks through
