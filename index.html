@@ -914,9 +914,14 @@
     <p class="chips-subheading">Take individual lessons in any style or skill, or work through a full course from beginner to advanced.</p>
   </div>
   <div class="chips-track-wrapper">
+    <!-- Each row loops by sliding half its width, so half a row must be wider than the screen or
+         its right edge shows empty space. The first two copies of each set are the original
+         ones; the rest fill screens up to about 2090px, aria-hidden and out of the tab order so
+         screen readers and keyboards meet each chip twice as before. Adding copies to a row means
+         multiplying its animation-duration by the same factor, or the row scrolls faster. -->
     <!-- Row 1 scroll left -->
     <div style="overflow:hidden;width:100%;">
-      <div class="chips-track left">
+      <div class="chips-track left" style="animation-duration:180s;">
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Guitar</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Piano</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Bass</div>
@@ -929,11 +934,47 @@
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Drums</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Ukulele</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Guitar</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Piano</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Bass</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Drums</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Ukulele</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Guitar</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Piano</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Bass</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Drums</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Ukulele</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Guitar</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Piano</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Bass</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Drums</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Ukulele</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Guitar</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Piano</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Bass</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Drums</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Ukulele</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Guitar</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Piano</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Bass</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Drums</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Ukulele</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Guitar</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Piano</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Bass</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Drums</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Ukulele</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Music Theory</div>
       </div>
     </div>
     <!-- Row 2 scroll right -->
     <div style="overflow:hidden;width:100%;">
-      <div class="chips-track right">
+      <div class="chips-track right" style="animation-duration:90s;">
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Music Theory</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Ear Training</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Rhythm &amp; Timing</div>
@@ -954,11 +995,31 @@
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Composition</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Songwriting</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Arranging</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Ear Training</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Rhythm &amp; Timing</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Scales &amp; Modes</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Chord Progressions</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Sight-Reading</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Improvisation</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Composition</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Songwriting</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Arranging</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Music Theory</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Ear Training</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Rhythm &amp; Timing</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Scales &amp; Modes</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Chord Progressions</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Sight-Reading</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Improvisation</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Composition</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Songwriting</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Arranging</div>
       </div>
     </div>
     <!-- Row 3 scroll left -->
     <div style="overflow:hidden;width:100%;">
-      <div class="chips-track left" style="animation-duration:50s;">
+      <div class="chips-track left" style="animation-duration:100s;">
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Classical</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Jazz</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Rock</div>
@@ -983,11 +1044,35 @@
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Celtic</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Gospel</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Reggae</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Classical</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Jazz</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Rock</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Pop</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Folk</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Blues</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">R&amp;B</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Country</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Musical Theatre</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Celtic</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Gospel</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Reggae</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Classical</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Jazz</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Rock</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Pop</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Folk</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Blues</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">R&amp;B</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Country</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Musical Theatre</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Celtic</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Gospel</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Reggae</div>
       </div>
     </div>
     <!-- Row 4 scroll right -->
     <div style="overflow:hidden;width:100%;">
-      <div class="chips-track right" style="animation-duration:55s;">
+      <div class="chips-track right" style="animation-duration:110s;">
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Beginner</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Intermediate</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Advanced</div>
@@ -1004,6 +1089,22 @@
         <div class="chip" onclick="openModal()" role="button" tabindex="0">In-Home</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Exam Prep</div>
         <div class="chip" onclick="openModal()" role="button" tabindex="0">Performance Coaching</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Beginner</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Intermediate</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Advanced</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Kids (Ages 5+)</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Adults</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">In-Home</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Exam Prep</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Performance Coaching</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Beginner</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Intermediate</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Advanced</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Kids (Ages 5+)</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Adults</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">In-Home</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Exam Prep</div>
+        <div class="chip" onclick="openModal()" role="button" tabindex="-1" aria-hidden="true">Performance Coaching</div>
       </div>
     </div>
   </div>
