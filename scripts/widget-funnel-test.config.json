@@ -3,5 +3,7 @@
   "city": "Irvine",
   "inlinePage": "/in-home-irvine.html",
   "modalPage": "/index.html",
-  "leadOnlyPage": "/beginner-costa-mesa.html"
+  "leadOnlyPage": "/beginner-costa-mesa.html",
+  "smsConsent": true,
+  "smsBusinessName": "Music and Mastery"
 }

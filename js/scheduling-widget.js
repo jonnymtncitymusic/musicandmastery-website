@@ -62,6 +62,19 @@
   const CITY_OTHER = '__other__';
   const CITY_OTHER_LABEL = 'Other / my city is not listed';
 
+  // SMS opt-in (2026-10-28), the same box as mtncitymusic.com's, for the carrier
+  // registration of the Music and Mastery number. The carriers' rules shape it: the box is
+  // OPTIONAL and starts UNCHECKED, it is its own consent and never bundled into submitting
+  // the form, and the wording names the business, what the texts are about, that frequency
+  // varies, that rates may apply, STOP and HELP, and links the privacy policy and terms. The
+  // exact wording travels with the submission as sms_consent_text, so the record shows what
+  // the family agreed to even after this copy changes.
+  const SMS_CONSENT_TEXT =
+    'Yes, text me about my lessons. I agree to receive text messages from Music and ' +
+    'Mastery about scheduling, lesson reminders and my account, including billing. ' +
+    'Message frequency varies. Message and data rates may apply. Reply STOP to opt out ' +
+    'or HELP for help. Consent is not required to book a lesson.';
+
   // AI call consent, on the LEAD form only (2026-10-15). Shown directly above every
   // lead-form send button, with no checkbox: sending the form is the agreement, and the
   // wording says agreeing is not required and gives the number to call instead. The exact
@@ -312,6 +325,7 @@
       clientName: '',
       clientEmail: '',
       clientPhone: '',
+      smsConsent: false,   // the optional SMS box; unticked on every fresh form
       studentAge: '',
       lessonFor: '',    // 'child' | 'self'. Empty until answered; the API treats empty as unknown.
       startTiming: '',  // 'asap' | 'within_month' | 'exploring'
@@ -765,6 +779,8 @@
           ${fieldErrorHtml('phone')}
         </div>
 
+        ${renderSmsConsent()}
+
         <div class="sw-field ${fieldErrorClass('address')}">
           <label class="sw-label" for="sw-address-final">Lesson Address</label>
           <input type="text" id="sw-address-final" class="sw-input" placeholder="Full address where lessons will take place" value="${state.address}">
@@ -900,6 +916,8 @@
           <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
         </div>
 
+        ${renderSmsConsent()}
+
         <div class="sw-field">
           <label class="sw-label" for="sw-notes">${state.noTimesFit ? 'Which days and times work for you?' : 'Anything else we should know?'} <span class="sw-optional">(optional)</span></label>
           <input type="text" id="sw-notes" class="sw-input" placeholder="${state.noTimesFit ? 'e.g., evenings after 5, or weekends' : 'e.g., student age, experience level, preferred days'}" value="${state.notes}">
@@ -918,6 +936,33 @@
     `;
   }
 
+  function renderSmsConsent() {
+    // A <label> wraps the box so the whole sentence is the tap target on a phone. The
+    // links are absolute so they still work when the widget sits in the modal on a page
+    // in a subfolder, and open in a new tab so reading the policy never loses the form.
+    return `
+        <div class="sw-field sw-consent">
+          <label class="sw-consent-label" for="sw-sms-consent">
+            <input type="checkbox" id="sw-sms-consent" ${state.smsConsent ? 'checked' : ''}>
+            <span>${SMS_CONSENT_TEXT}
+              <a href="https://www.musicandmastery.com/privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a>
+              and <a href="https://www.musicandmastery.com/terms-of-service.html" target="_blank" rel="noopener">Terms</a>.
+            </span>
+          </label>
+        </div>
+    `;
+  }
+
+  // What the submission carries about SMS. Consent is only recorded against a phone
+  // number: a ticked box with no number is consent to text nobody.
+  function smsConsentFields() {
+    const consented = !!state.smsConsent && !!state.clientPhone.trim();
+    return {
+      sms_consent: consented,
+      sms_consent_text: consented ? SMS_CONSENT_TEXT : undefined,
+      sms_consent_page: consented ? window.location.origin + window.location.pathname : undefined,
+    };
+  }
 
   // The disclosure above a lead-form send button. The office number is a tap-to-call
   // link, because "call us instead" is the alternative the wording offers.
@@ -1020,6 +1065,8 @@
         ` : ''}
 
         ${contactFields()}
+
+        ${renderSmsConsent()}
 
         <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" id="sw-hp" name="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 
@@ -1178,6 +1225,9 @@
 
     const phoneInput = document.getElementById('sw-phone');
     if (phoneInput) phoneInput.addEventListener('input', e => { state.clientPhone = e.target.value; clearFieldError('phone'); });
+
+    const smsBox = document.getElementById('sw-sms-consent');
+    if (smsBox) smsBox.addEventListener('change', e => { state.smsConsent = e.target.checked; });
 
     const addrFinal = document.getElementById('sw-address-final');
     if (addrFinal) addrFinal.addEventListener('input', e => { state.address = e.target.value; clearFieldError('address'); });
@@ -1370,6 +1420,7 @@
           .filter(Boolean).join('. ') || undefined,
         brand_source: BRAND_SOURCE,
         ...aiCallConsentFields(),
+        ...smsConsentFields(),
         honeypot: '',
       });
 
@@ -1455,6 +1506,7 @@
         lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
         lesson_for: state.lessonFor || undefined,
+        ...smsConsentFields(),
         honeypot: '',
       });
 
@@ -1515,6 +1567,7 @@
         lesson_length: state.lessonLength,
         lesson_for: state.lessonFor || undefined,
         callback_requested: true,
+        ...smsConsentFields(),
         honeypot: '',
       });
       // The callback path is a conversion like any other, and it was the one path that
@@ -1655,6 +1708,12 @@
       .sw-ai-consent { font-size: 13px; color: #333; line-height: 1.5; text-align: left; margin: 4px 0 14px; }
       .sw-ai-consent a { color: #4f4ab8; text-decoration: underline; white-space: nowrap; }
       .sw-ai-consent + .sw-step2-actions { margin-top: 0; }
+      .sw-consent-label {
+        display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
+        font-size: 12px; line-height: 1.5; color: #595959; text-align: left;
+      }
+      .sw-consent-label input { flex-shrink: 0; width: 18px; height: 18px; margin: 1px 0 0; accent-color: #4f4ab8; cursor: pointer; }
+      .sw-consent-label a { color: #4f4ab8; }
 
       /* Trial banner (top of step 1) */
       .sw-trial-banner {

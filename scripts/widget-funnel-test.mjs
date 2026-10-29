@@ -428,7 +428,7 @@ async function findSlots(page) {
         check('10 it is not required', box && box.required === false, JSON.stringify(box));
         const t = (box && box.text) || '';
         check('10 the wording names the business, STOP, HELP and rates',
-          /Mountain City Music Co\./.test(t) && /STOP/.test(t) && /HELP/.test(t) &&
+          t.includes(CONFIG.smsBusinessName || 'Mountain City Music Co.') && /STOP/.test(t) && /HELP/.test(t) &&
           /rates may apply/i.test(t) && /frequency varies/i.test(t), t);
         check('10 it links the privacy policy and the terms',
           box && box.links.some(h => /privacy-policy/.test(h)) &&
