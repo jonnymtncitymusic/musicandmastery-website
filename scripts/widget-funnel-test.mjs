@@ -162,6 +162,20 @@ function stubApi(req, availability, stripRedirect = false, availabilityStatus = 
     body: JSON.stringify(body) });
   if (url.includes('/cities')) return json({ cities: [city, 'Somewhere Else'] });
   if (url.includes('/availability')) {
+    // A function answers per request, so a case can treat the filtered search and the
+    // unfiltered retry differently. It returns a body, an HTTP status, or 'abort'.
+    if (typeof availability === 'function') {
+      let body = {};
+      try { body = JSON.parse(req.postData() || '{}'); } catch (e) { body = {}; }
+      const answer = availability(body);
+      if (answer === 'abort') return req.abort('failed');
+      if (typeof answer === 'number') {
+        return req.respond({ status: answer, headers: cors, contentType: 'application/json',
+          body: JSON.stringify({ detail: 'scheduler unavailable' }) });
+      }
+      return json(answer);
+    }
+    if (availabilityStatus === 'abort') return req.abort('failed');
     if (availabilityStatus !== 200) {
       return req.respond({ status: availabilityStatus, headers: cors, contentType: 'application/json',
         body: JSON.stringify({ detail: 'scheduler unavailable' }) });
@@ -703,6 +717,161 @@ async function findSlots(page) {
       check('13 a real submission still records the conversion', real.conversion && real.submission === 'lead',
         JSON.stringify(real));
     });
+
+    // ── 14. Day/time picks: widen an empty search, carry the picks to the lead ─
+    // Saturday alone finds nothing in any city, and that used to drop the visitor on the
+    // lead form with no trace of what they asked for, even while real times sat on other
+    // days. A filtered search that comes back empty runs once more with no filter; only
+    // when that is empty too does the lead form open, and the lead carries the picks. A
+    // failed search opens the lead form instead of stranding the visitor on step 1.
+    {
+      const WIDENED_NOTE = 'No openings on the days you picked. Here are the closest times.';
+      const PICKED_DAYS = [5];
+      const PICKED_TIMES = [{ start: '17:00', end: '21:00' }];
+      // Filtered requests get `filtered`, unfiltered ones get `open`. Either may be a
+      // number (that HTTP status) or 'abort' (a network failure).
+      const byFilter = (filtered, open) => body =>
+        (body.preferred_days || body.preferred_times) ? filtered : open;
+      const availCalls = () => apiCalls.filter(c => c.url.includes('/availability'))
+        .map(c => { try { return JSON.parse(c.body || '{}'); } catch (e) { return {}; } });
+      const lastLead = () => {
+        const call = [...apiCalls].reverse().find(c => c.url.includes('/lead'));
+        try { return JSON.parse(call?.body || '{}'); } catch (e) { return {}; }
+      };
+      const tap = async (page, sel) => {
+        await page.$eval(sel, el => el.scrollIntoView({ block: 'center' }));
+        await page.click(sel);
+      };
+      const findWithPicks = async page => {
+        await page.waitForSelector('#sw-instrument');
+        await page.select('#sw-instrument', 'Guitar');
+        if (await page.$('#sw-city')) {
+          const has = await page.$$eval('#sw-city option', (o, c) => o.some(x => x.value === c), city);
+          if (has) await page.select('#sw-city', city);
+        }
+        await tap(page, '.sw-pill[data-day="5"]');
+        await tap(page, '.sw-pill[data-time="evening"]');
+        await tap(page, '#sw-find');
+      };
+      const submitLead = async page => {
+        await page.waitForSelector('#sw-submit-lead', { timeout: 8000 });
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
+        await page.type('#sw-phone', '7605551234');
+        if (await page.$('[data-lessonfor="child"]')) await tap(page, '[data-lessonfor="child"]');
+        const before = apiCalls.filter(c => c.url.includes('/lead')).length;
+        await tap(page, '#sw-submit-lead');
+        await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
+          { timeout: 8000 });
+        return apiCalls.filter(c => c.url.includes('/lead')).length > before;
+      };
+      const leadCarriesPicks = (tag, body) => {
+        check(`${tag} the lead carries the picked days`,
+          JSON.stringify(body.preferred_days) === JSON.stringify(PICKED_DAYS), JSON.stringify(body));
+        check(`${tag} the lead carries the picked times`,
+          JSON.stringify(body.preferred_times) === JSON.stringify(PICKED_TIMES), JSON.stringify(body));
+        check(`${tag} the lead carries the city`, body.city === city, JSON.stringify(body));
+      };
+      const leadSubtext = page => page.$eval('.sw-subtext', el => el.textContent);
+
+      // 14a. Picks find nothing, the open search finds times: shown, with the line.
+      await isolate('14a', async () => {
+        const start = apiCalls.length;
+        const page = await newPage(browser, base, inlinePage,
+          { availability: byFilter(AVAIL_EMPTY, AVAIL_FULL) });
+        await findWithPicks(page);
+        await page.waitForSelector('.sw-slot', { timeout: 8000 });
+        const calls = apiCalls.slice(start).filter(c => c.url.includes('/availability'))
+          .map(c => JSON.parse(c.body || '{}'));
+        check('14a searched twice', calls.length === 2, JSON.stringify(calls));
+        check('14a the first search sent the picks',
+          JSON.stringify(calls[0]?.preferred_days) === JSON.stringify(PICKED_DAYS) &&
+          JSON.stringify(calls[0]?.preferred_times) === JSON.stringify(PICKED_TIMES), JSON.stringify(calls[0]));
+        check('14a the second search had no day/time filter',
+          calls[1] && !('preferred_days' in calls[1]) && !('preferred_times' in calls[1]) &&
+          calls[1].city === city && calls[1].instrument === 'Guitar', JSON.stringify(calls[1]));
+        const note = await page.$eval('.sw-widened-note', el => el.textContent.trim()).catch(() => null);
+        check('14a the line above the times is the exact wording', note === WIDENED_NOTE, String(note));
+        const above = await page.evaluate(() => {
+          const n = document.querySelector('.sw-widened-note');
+          const s = document.querySelector('.sw-slots-container');
+          return !!(n && s && (n.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING));
+        });
+        check('14a the line sits above the times', above);
+        const slots = evt(await events(page), 'widget_slots');
+        check('14a widget_slots fired once, shown, widened',
+          slots.length === 1 && slots[0][1].outcome === 'shown' && slots[0][1].widened === 1 &&
+          slots[0][1].slot_count === 3, JSON.stringify(slots));
+        await page.close();
+      });
+
+      // 14b. A plain search that finds times shows no line and searches once.
+      await isolate('14b', async () => {
+        const start = apiCalls.length;
+        const page = await newPage(browser, base, inlinePage);
+        await findSlots(page);
+        await page.waitForSelector('.sw-slot', { timeout: 8000 });
+        check('14b no line when nothing was filtered out', !(await page.$('.sw-widened-note')));
+        check('14b searched once', apiCalls.slice(start).filter(c => c.url.includes('/availability')).length === 1);
+        await page.close();
+      });
+
+      // 14c. Both searches empty: the lead form, and the lead carries the picks.
+      await isolate('14c', async () => {
+        const start = apiCalls.length;
+        const page = await newPage(browser, base, inlinePage,
+          { availability: AVAIL_EMPTY, stripRedirect: true });
+        await findWithPicks(page);
+        await page.waitForSelector('#sw-submit-lead', { timeout: 8000 });
+        check('14c searched twice before giving up',
+          apiCalls.slice(start).filter(c => c.url.includes('/availability')).length === 2);
+        const sub = await leadSubtext(page);
+        check('14c with nothing open at all, it says there is no opening', /don't have an opening/.test(sub), sub);
+        const slots = evt(await events(page), 'widget_slots');
+        check('14c widget_slots fired once, empty, widened',
+          slots.length === 1 && slots[0][1].outcome === 'empty' && slots[0][1].widened === 1, JSON.stringify(slots));
+        check('14c the lead was sent', await submitLead(page));
+        leadCarriesPicks('14c', lastLead());
+        await page.close();
+      });
+
+      // 14d. No picks: the lead leaves the keys out entirely.
+      await isolate('14d', async () => {
+        const page = await newPage(browser, base, inlinePage,
+          { availability: AVAIL_EMPTY, stripRedirect: true });
+        await findSlots(page);
+        check('14d the lead was sent', await submitLead(page));
+        const body = lastLead();
+        check('14d a lead with no picks sends no preferred_* keys',
+          !('preferred_days' in body) && !('preferred_times' in body), JSON.stringify(body));
+        await page.close();
+      });
+
+      // 14e-g. The search fails (5xx, network, or the widened retry): the lead form opens.
+      for (const [tag, what, availability, availabilityStatus] of [
+        ['14e', 'a 5xx', AVAIL_FULL, 503],
+        ['14f', 'a network failure', AVAIL_FULL, 'abort'],
+        ['14g', 'a failed widened retry', byFilter(AVAIL_EMPTY, 500), 200],
+      ]) {
+        await isolate(tag, async () => {
+          const page = await newPage(browser, base, inlinePage,
+            { availability, availabilityStatus, stripRedirect: true });
+          await findWithPicks(page);
+          const reached = await page.waitForSelector('#sw-submit-lead', { timeout: 8000 })
+            .then(() => true, () => false);
+          check(`${tag} ${what} opens the lead form`, reached);
+          if (!reached) { await page.close(); return; }
+          const sub = await leadSubtext(page);
+          check(`${tag} ${what} never claims there is no opening`, !/don't have an opening/.test(sub), sub);
+          const errs = evt(await events(page), 'widget_error');
+          check(`${tag} ${what} is still reported as widget_error`,
+            errs.length === 1 && errs[0][1].stage === 'availability', JSON.stringify(errs));
+          check(`${tag} the lead was sent`, await submitLead(page));
+          leadCarriesPicks(tag, lastLead());
+          await page.close();
+        });
+      }
+    }
 
   } catch (e) {
     check('the harness itself ran to completion', false, String((e && e.message) || e));

@@ -166,13 +166,16 @@
   // The one event that says whether we had anything to offer. 'empty' is a visitor who
   // told us their city and their instrument and got a wall, which is a coverage problem
   // wearing a conversion problem's clothes. 'skipped' never had a lookup to do.
-  function trackSlots(outcome, count) {
-    track('widget_slots', {
+  //
+  // widened: 1 means the visitor's day/time picks found nothing, so the search ran again
+  // with no filter and this outcome is the result of that second search.
+  function trackSlots(outcome, count, widened) {
+    track('widget_slots', Object.assign({
       outcome: outcome,
       slot_count: count,
       instrument: state.instrument || '',
       city: funnelCity(),
-    });
+    }, widened ? { widened: 1 } : {}));
   }
 
   // An error is not a decision. Without this, a failing backend and a visitor
@@ -320,6 +323,8 @@
       preferredTimes: [],    // array of strings: 'morning' | 'afternoon' | 'evening'
       cities: [],
       slots: null,
+      widened: false,          // the picks found nothing; these are the unfiltered times
+      searchFailed: false,     // the availability call failed; the lead form is the way on
       selectedSlot: null,
       filterInstructor: '',
       clientName: '',
@@ -374,6 +379,21 @@
   ];
   let state = freshState();
 
+  // The visitor's day and time picks, in the shape the availability search takes.
+  // The lead carries them too: a family who asked for Saturday mornings and got the
+  // lead form used to reach Jonny with no hint of when they wanted lessons. Keys are
+  // left out when nothing was picked.
+  function preferenceFields() {
+    const days = state.preferredDays.slice().sort((a, b) => a - b);
+    const times = TIME_BUCKETS
+      .filter(t => state.preferredTimes.includes(t.key))
+      .map(t => t.range);
+    return {
+      preferred_days: days.length ? days : undefined,
+      preferred_times: times.length ? times : undefined,
+    };
+  }
+
   // ─── API ───────────────────────────────────────────────────────────────────
   // Brand scoped. Both brands share one scheduler, and unscoped this returned all 22
   // cities: a Music & Mastery visitor was offered Hesperia, Victorville and Apple Valley,
@@ -387,16 +407,30 @@
     return data.cities || [];
   }
 
+  // A hung request used to leave the visitor on a spinner with no way forward. After
+  // AVAILABILITY_TIMEOUT_MS it counts as a failure, and a failure opens the lead form.
+  const AVAILABILITY_TIMEOUT_MS = 15000;
+
   async function fetchAvailability(params) {
-    const res = await fetch(`${API_BASE}/api/scheduling/availability`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      // Scoped for the same reason as the city list. A city travels in a request body and
-      // a body is not a dropdown, so this is re-stated rather than assumed.
-      body: JSON.stringify({ ...params, brand: BRAND_SOURCE }),
-    });
-    if (!res.ok) throw new Error('Could not load availability');
-    return res.json();
+    const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), AVAILABILITY_TIMEOUT_MS) : null;
+    try {
+      const res = await fetch(`${API_BASE}/api/scheduling/availability`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // Scoped for the same reason as the city list. A city travels in a request body and
+        // a body is not a dropdown, so this is re-stated rather than assumed.
+        body: JSON.stringify({ ...params, brand: BRAND_SOURCE }),
+        signal: ctrl ? ctrl.signal : undefined,
+      });
+      if (!res.ok) throw new Error('Could not load availability');
+      return await res.json();
+    } catch (e) {
+      if (e && e.name === 'AbortError') throw new Error('Availability timed out');
+      throw e;
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
   }
 
   async function bookLesson(params) {
@@ -737,6 +771,7 @@
       <div class="sw-step">
         <h3 class="sw-heading">Available Times</h3>
         <p class="sw-subtext">${state.instrument} lessons in ${cityLabel()} (${state.lessonLength} min)</p>
+        ${state.widened ? '<p class="sw-subtext sw-widened-note">No openings on the days you picked. Here are the closest times.</p>' : ''}
         <p class="sw-subtext sw-confirm-note">These are the times we currently have open. We hold the one you pick while we confirm it with your instructor, then email you within 24 hours.</p>
         ${instructorFilter}
         <div class="sw-slots-container">${slotsHtml}</div>
@@ -892,6 +927,11 @@
       ? `We don't have a ${instrumentLabel} instructor listed yet, but we may be able to bring one on for you. Leave your info and we'll reach out within 24 hours.`
       : state.city === CITY_OTHER
         ? `We don't have an instructor listed in ${cityLabel()} yet, but we may be able to reach you. Leave your info and we'll let you know within 24 hours.`
+        // A failed search does not mean there is no opening, so it must not say so. The
+        // error line above the form already says what happened. "No opening" is only
+        // ever said after the unfiltered search came back empty.
+        : state.searchFailed
+        ? `Leave your info and we'll reach out within 24 hours.`
         : `We don't have an opening for ${instrumentLabel} in ${cityLabel()} right now. Leave your info and we'll reach out within 24 hours as we expand.`;
 
     return `
@@ -1278,24 +1318,34 @@
 
     state.loading = true;
     state.error = '';
+    state.widened = false;
+    state.searchFailed = false;
     render();
 
+    const base = {
+      instrument: state.instrument,
+      city: state.city,
+      lesson_length: state.lessonLength,
+      address: state.address || undefined,
+    };
+    const prefs = preferenceFields();
+    const filtered = !!(prefs.preferred_days || prefs.preferred_times);
+    const countOf = r => (r?.recommended ? 1 : 0) + (r?.alternatives?.length || 0);
+
+    let widened = false;
     try {
-      const preferred_times = TIME_BUCKETS
-        .filter(t => state.preferredTimes.includes(t.key))
-        .map(t => t.range);
-      const result = await fetchAvailability({
-        instrument: state.instrument,
-        city: state.city,
-        lesson_length: state.lessonLength,
-        address: state.address || undefined,
-        preferred_days: state.preferredDays.length ? state.preferredDays : undefined,
-        preferred_times: preferred_times.length ? preferred_times : undefined,
-      });
-      const hasSlots = result?.recommended || (result?.alternatives?.length > 0);
-      const slotCount = (result?.recommended ? 1 : 0) + (result?.alternatives?.length || 0);
-      trackSlots(hasSlots ? 'shown' : 'empty', slotCount);
-      if (!hasSlots) {
+      let result = await fetchAvailability({ ...base, ...prefs });
+      // Saturday alone finds nothing anywhere, and that used to send the visitor to a form
+      // saying "We don't have an opening right now" while real times sat on other days. An
+      // empty FILTERED search runs once more with no filter, and those times are shown with
+      // a line saying why.
+      if (filtered && countOf(result) === 0) {
+        widened = true;
+        result = await fetchAvailability(base);
+      }
+      const slotCount = countOf(result);
+      trackSlots(slotCount > 0 ? 'shown' : 'empty', slotCount, widened);
+      if (slotCount === 0) {
         // No instructor available — capture as lead instead of dead-end
         state.mode = 'lead';
         state.step = 5;
@@ -1303,14 +1353,20 @@
       } else {
         state.mode = 'booking';
         state.slots = result;
+        state.widened = widened;
         state.selectedSlot = null;
         state.filterInstructor = '';
         state.step = 2;
       }
     } catch (e) {
-      trackSlots('error', 0);
+      trackSlots('error', 0, widened);
       trackError('availability', e && e.message);
+      // A failed search used to leave the visitor stuck on this step with no way to
+      // reach us but the phone. The lead form is the way on, and it carries the picks.
       state.error = 'Could not load availability. Please try again or call us at (760) 573-2120.';
+      state.searchFailed = true;
+      state.mode = 'lead';
+      state.step = 5;
     }
 
     state.loading = false;
@@ -1418,6 +1474,7 @@
         notes: [state.city === CITY_OTHER ? `City not on our list: ${cityLabel()}` : '',
           state.noTimesFit ? 'Saw our open times and none suited them' : '', state.notes.trim()]
           .filter(Boolean).join('. ') || undefined,
+        ...preferenceFields(),
         brand_source: BRAND_SOURCE,
         ...aiCallConsentFields(),
         ...smsConsentFields(),

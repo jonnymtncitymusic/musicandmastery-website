@@ -836,13 +836,14 @@ document.querySelectorAll('a[href="#form"]').forEach(link => {
 <!-- Music & Mastery lead capture widget -->
 <script>window.MCMC_SCHEDULING_API = 'https://cron-runner-production-a510.up.railway.app';</script>
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
-<!-- Lead capture only: no bookable availability behind this page, so a slot
-     picker would search, find nothing, and dead-end the visitor. -->
-<script>window.MCMC_LEAD_ONLY = true;</script>
+<!-- Booking flow ON (Jonny 2026-10-28): drums has live times in Irvine, Newport
+     Beach and Tustin (checked against the scheduler that day). A city with no drums
+     instructor returns nothing and falls through to the lead form. -->
+<script>window.MCMC_LEAD_ONLY = false;</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <!-- This page sells one instrument, so the form opens on it. A ?book= value in the URL still overrides this. -->
 <script>window.MCMC_PREFILL_INSTRUMENT = 'Drums';</script>
-<script src="/js/scheduling-widget.js?v=20261028"></script>
+<script src="/js/scheduling-widget.js?v=2026102802"></script>
 
 <script>
 (function(){
