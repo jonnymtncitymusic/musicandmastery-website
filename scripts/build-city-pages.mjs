@@ -95,6 +95,15 @@ export function buildPage(page, sourceHtml) {
   h = h.replace(new RegExp(`across (?:${list})`, 'g'), `in ${city}`);
   h = h.replace(new RegExp(`We come to (?:${list})\\.`, 'g'), `We come to homes all over ${city}.`);
 
+  // 3b. The line under the featured teacher naming the region's other teachers of this
+  //     instrument (Jonny 2026-10-30). Who covers which city differs (Armando: Irvine only), so
+  //     each city's line is written out in data/city-pages.json rather than cut from a list.
+  const also = DATA.sources[src].alsoTeach;
+  if (also) {
+    if (!also[city]) throw new Error(`rule "teacher also": data/city-pages.json has no alsoTeach line for ${city}`);
+    h = replaceOnce(h, 'teacher also', also.region, also[city]);
+  }
+
   // 4. Every remaining list of the region's cities names this city, except on protected lines.
   const re = listRegex(region.cities);
   let listed = 0;

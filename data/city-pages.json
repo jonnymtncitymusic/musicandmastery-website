@@ -19,7 +19,14 @@
     "Burbank": {"slug": "burbank", "region": "la", "neighborhoods": ["Magnolia Park", "the Rancho", "the Media District", "the Burbank Hills"]}
   },
   "sources": {
-    "piano-lessons-orange-county.html": {"region": "oc", "instrument": "piano"},
+    "piano-lessons-orange-county.html": {"region": "oc", "instrument": "piano",
+      "alsoTeach": {
+        "_about": "The line under the featured teacher that names the region's other teachers of this instrument, written out per city because who covers where differs (Armando: Irvine only). Facts from instructor_config.json and instructors.html (Jonny 2026-10-30). The region page must carry `region` word for word.",
+        "region": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Irvine, Newport Beach and Tustin. <a href=\"instructors.html\">Armando Salazar</a> teaches piano in Irvine.",
+        "Irvine": "<a href=\"instructors.html\">Arthur Chou</a> and <a href=\"instructors.html\">Armando Salazar</a> also teach piano in Irvine.",
+        "Newport Beach": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Newport Beach.",
+        "Tustin": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Tustin."
+      }},
     "guitar-lessons-orange-county.html": {"region": "oc", "instrument": "guitar"},
     "piano-lessons-los-angeles.html": {"region": "la", "instrument": "piano"},
     "guitar-lessons-los-angeles.html": {"region": "la", "instrument": "guitar"}
