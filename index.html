@@ -602,7 +602,7 @@
 </head>
 <body>
 
-<!-- BLACK FRIDAY PROMO BAR (Jonny 2026-10-24). Visible Nov 1 to Dec 18, 2026, Pacific time, and
+<!-- BLACK FRIDAY PROMO BAR (Jonny 2026-10-24). Visible Nov 5 to Dec 18, 2026, Pacific time, and
      links to black-friday.html. It ships hidden and the script right after it reveals it inside
      the window before the page is drawn, so outside the window it takes no space and nothing
      jumps. Styling is the .promo-bar from guitar-lessons-orange-county.html, scoped to #bf-promo.
@@ -625,7 +625,7 @@
     new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' })
       .formatToParts(new Date()).forEach(function (p) { o[p.type] = p.value; });
     var today = o.year + '-' + o.month + '-' + o.day;
-    if (today >= '2026-11-01' && today <= '2026-12-18') bar.hidden = false;
+    if (today >= '2026-11-05' && today <= '2026-12-18') bar.hidden = false;
   } catch (e) { /* no time zone support: the bar stays hidden */ }
 })();
 </script>
