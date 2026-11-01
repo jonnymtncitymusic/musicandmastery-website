@@ -433,6 +433,56 @@
     }
   }
 
+  // ─── First touch (Jonny 2026-11-01) ────────────────────────────────────────
+  // "Tag every lead with where it came from, so we can count students per ad dollar."
+  // The ad click ids and utm_* a visitor arrived with are saved here and ride with every
+  // lead and booking as `source`. The first touch wins for 30 days, except a new gclid
+  // (or gbraid/wbraid, Google's iOS stand-ins): a new ad click is a new paid touch.
+  // black-friday.html keeps an inline copy under the same key, since it submits without
+  // this widget. Storage can be blocked or throw, and attribution never breaks a booking.
+  const SOURCE_KEY = 'mcmc_first_touch';
+  const SOURCE_PARAMS = ['gclid', 'gbraid', 'wbraid', 'fbclid', 'utm_source', 'utm_medium',
+    'utm_campaign', 'utm_term', 'utm_content'];
+  const SOURCE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+  function savedFirstTouch() {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(SOURCE_KEY) || 'null');
+      if (saved && typeof saved === 'object' && Date.now() - saved.at < SOURCE_TTL_MS) return saved;
+    } catch (e) {}
+    return null;
+  }
+
+  function captureFirstTouch() {
+    const touch = {};
+    try {
+      const params = new URLSearchParams(window.location.search);
+      SOURCE_PARAMS.forEach(function (k) { const v = params.get(k); if (v) touch[k] = v.slice(0, 300); });
+    } catch (e) { return; }
+    if (!Object.keys(touch).length) return;
+    const saved = savedFirstTouch();
+    const newClick = ['gclid', 'gbraid', 'wbraid'].some(function (k) {
+      return touch[k] && (!saved || touch[k] !== saved[k]);
+    });
+    if (saved && !newClick) return;
+    touch.landing_path = window.location.pathname;
+    try { if (document.referrer) touch.referrer = new URL(document.referrer).origin; } catch (e) {}
+    touch.at = Date.now();
+    try { window.localStorage.setItem(SOURCE_KEY, JSON.stringify(touch)); } catch (e) {}
+  }
+  captureFirstTouch();
+
+  // The payload's `source`. Undefined when nothing was saved, so JSON.stringify drops it.
+  function sourceField() {
+    const saved = savedFirstTouch();
+    if (!saved) return undefined;
+    const out = {};
+    SOURCE_PARAMS.concat(['landing_path', 'referrer']).forEach(function (k) {
+      if (typeof saved[k] === 'string' && saved[k]) out[k] = saved[k];
+    });
+    return Object.keys(out).length ? out : undefined;
+  }
+
   async function bookLesson(params) {
     const res = await fetch(`${API_BASE}/api/scheduling/book`, {
       method: 'POST',
@@ -1478,6 +1528,7 @@
         brand_source: BRAND_SOURCE,
         ...aiCallConsentFields(),
         ...smsConsentFields(),
+        source: sourceField(),
         honeypot: '',
       });
 
@@ -1564,6 +1615,7 @@
         lesson_length: state.lessonLength,
         lesson_for: state.lessonFor || undefined,
         ...smsConsentFields(),
+        source: sourceField(),
         honeypot: '',
       });
 
@@ -1625,6 +1677,7 @@
         lesson_for: state.lessonFor || undefined,
         callback_requested: true,
         ...smsConsentFields(),
+        source: sourceField(),
         honeypot: '',
       });
       // The callback path is a conversion like any other, and it was the one path that

@@ -592,6 +592,47 @@
   var API = 'https://cron-runner-production-a510.up.railway.app/api/scheduling/lead';
   var OFFER = 'bf60';
 
+  // First touch (Jonny 2026-11-01: tag every lead with where it came from). An inline copy of
+  // the one in js/scheduling-widget.js, same key and same rules, because this page submits
+  // without the widget: ad click ids and utm_* are saved on arrival, the first touch wins
+  // for 30 days, and a new Google click id overwrites it. Sent as `source`.
+  var SOURCE_KEY = 'mcmc_first_touch';
+  var SOURCE_PARAMS = ['gclid', 'gbraid', 'wbraid', 'fbclid', 'utm_source', 'utm_medium',
+    'utm_campaign', 'utm_term', 'utm_content'];
+  function savedFirstTouch() {
+    try {
+      var saved = JSON.parse(window.localStorage.getItem(SOURCE_KEY) || 'null');
+      if (saved && typeof saved === 'object' && Date.now() - saved.at < 30 * 864e5) return saved;
+    } catch (e) {}
+    return null;
+  }
+  (function captureFirstTouch() {
+    var touch = {};
+    try {
+      var params = new URLSearchParams(window.location.search);
+      SOURCE_PARAMS.forEach(function (k) { var v = params.get(k); if (v) touch[k] = v.slice(0, 300); });
+    } catch (e) { return; }
+    if (!Object.keys(touch).length) return;
+    var saved = savedFirstTouch();
+    var newClick = ['gclid', 'gbraid', 'wbraid'].some(function (k) {
+      return touch[k] && (!saved || touch[k] !== saved[k]);
+    });
+    if (saved && !newClick) return;
+    touch.landing_path = window.location.pathname;
+    try { if (document.referrer) touch.referrer = new URL(document.referrer).origin; } catch (e) {}
+    touch.at = Date.now();
+    try { window.localStorage.setItem(SOURCE_KEY, JSON.stringify(touch)); } catch (e) {}
+  })();
+  function sourceField() {
+    var saved = savedFirstTouch();
+    if (!saved) return undefined;
+    var out = {};
+    SOURCE_PARAMS.concat(['landing_path', 'referrer']).forEach(function (k) {
+      if (typeof saved[k] === 'string' && saved[k]) out[k] = saved[k];
+    });
+    return Object.keys(out).length ? out : undefined;
+  }
+
   // The live count (Jonny 2026-11-01: $60, 15 spots). Shown only once the API answers, so the
   // page never shows a number the server did not give. 0 left flips the page to sold out.
   function showSpots(left) {
@@ -706,6 +747,7 @@
       start_timing: value('start_timing'),
       brand_source: 'musicandmastery',
       offer: OFFER,
+      source: sourceField(),
       honeypot: ''
     };
     if (giftBox.checked) {

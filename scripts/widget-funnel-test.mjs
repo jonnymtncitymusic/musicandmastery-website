@@ -873,6 +873,133 @@ async function findSlots(page) {
       }
     }
 
+    // ── 15. First touch: every lead and booking says where it came from ────
+    // Jonny 2026-11-01: "Tag every lead with where it came from, so we can count students
+    // per ad dollar." Two Google Ads leads had arrived as "home_page direct". The ad click
+    // ids and utm_* a visitor first arrived with are saved for 30 days and sent as `source`;
+    // a later visit with other tags does not replace them, a new gclid does.
+    {
+      const SOURCE_KEYS = ['gclid', 'gbraid', 'wbraid', 'fbclid', 'utm_source', 'utm_medium',
+        'utm_campaign', 'utm_term', 'utm_content', 'landing_path', 'referrer'];
+      const lastSent = part => {
+        const call = [...apiCalls].reverse().find(c => c.url.includes(part));
+        try { return JSON.parse(call?.body || '{}'); } catch (e) { return {}; }
+      };
+      const clearTouch = page => page.evaluate(() => {
+        try { localStorage.removeItem('mcmc_first_touch'); } catch (e) {}
+      });
+      const savedTouch = page => page.evaluate(() => {
+        try { return JSON.parse(localStorage.getItem('mcmc_first_touch') || 'null'); } catch (e) { return 'threw'; }
+      });
+      const sendLead = async page => {
+        await findSlots(page);
+        await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
+        await page.type('#sw-phone', '7605551234');
+        const lessonFor = await page.$('[data-lessonfor="child"]');
+        if (lessonFor) await lessonFor.click();
+        await page.$eval('#sw-submit-lead', el => el.scrollIntoView({ block: 'center' }));
+        await page.click('#sw-submit-lead');
+        await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
+          { timeout: 8000 });
+        return lastSent('/lead');
+      };
+      const sendBooking = async page => {
+        await findSlots(page);
+        await page.waitForSelector('.sw-slot', { timeout: 5000 });
+        await page.click('.sw-slot');
+        const next = await page.$('#sw-next-3');
+        if (next) await next.click();
+        await page.waitForSelector('#sw-submit', { timeout: 5000 });
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
+        await page.type('#sw-phone', '7605551234');
+        await page.type('#sw-address-final', '1 Test St');
+        const lessonFor = await page.$('[data-lessonfor="child"]');
+        if (lessonFor) await lessonFor.click();
+        await page.$eval('#sw-submit', el => el.scrollIntoView({ block: 'center' }));
+        await page.click('#sw-submit');
+        await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
+          { timeout: 8000 });
+        return lastSent('/book');
+      };
+
+      // 15a. An ad click lands, and the lead carries it.
+      await isolate('15a', async () => {
+        const page = await newPage(browser, base, inlinePage, { availability: AVAIL_EMPTY, stripRedirect: true });
+        await clearTouch(page);
+        await page.goto(`${base}${inlinePage}?gclid=GCLID-1&utm_source=google&utm_medium=cpc&utm_campaign=c1&junk=x`,
+          { waitUntil: 'networkidle2' });
+        const src = (await sendLead(page)).source || {};
+        check('15a the lead carries the gclid and utm tags',
+          src.gclid === 'GCLID-1' && src.utm_source === 'google' && src.utm_medium === 'cpc' &&
+          src.utm_campaign === 'c1', JSON.stringify(src));
+        check('15a it carries the landing path without the query', src.landing_path === inlinePage,
+          JSON.stringify(src));
+        check('15a it carries only the allowlisted keys',
+          Object.keys(src).every(k => SOURCE_KEYS.includes(k)), JSON.stringify(src));
+        await page.close();
+      });
+
+      // 15b. A later visit with other tags: the first touch wins, and the booking carries it.
+      await isolate('15b', async () => {
+        const page = await newPage(browser, base, `${inlinePage}?utm_source=newsletter`, { stripRedirect: true });
+        const src = (await sendBooking(page)).source || {};
+        check('15b the booking carries the first touch, not the later visit',
+          src.gclid === 'GCLID-1' && src.utm_source === 'google', JSON.stringify(src));
+        await page.close();
+      });
+
+      // 15c. A new ad click is a new paid touch, and replaces the first.
+      await isolate('15c', async () => {
+        const page = await newPage(browser, base, `${inlinePage}?gclid=GCLID-2`);
+        const saved = await savedTouch(page);
+        check('15c a new gclid replaces the saved touch',
+          saved && saved.gclid === 'GCLID-2' && !saved.utm_source, JSON.stringify(saved));
+        await clearTouch(page);
+        await page.close();
+      });
+
+      // 15d. No tags at all (direct, organic, an old visitor): no source field is sent.
+      await isolate('15d', async () => {
+        const page = await newPage(browser, base, inlinePage, { availability: AVAIL_EMPTY, stripRedirect: true });
+        await clearTouch(page);
+        const body = await sendLead(page);
+        check('15d an untagged visit sends no source', !('source' in body), JSON.stringify(body));
+        await page.close();
+      });
+
+      // 15e. Storage blocked (private mode, a strict browser): the widget still works.
+      await isolate('15e', async () => {
+        const page = await browser.newPage();
+        const pageErrors = [];
+        page.on('pageerror', e => pageErrors.push(String(e)));
+        await page.evaluateOnNewDocument(() => {
+          Object.defineProperty(window, 'localStorage', { get() { throw new Error('storage blocked'); } });
+        });
+        await page.setRequestInterception(true);
+        page.on('request', req => stubApi(req, AVAIL_FULL));
+        await page.goto(`${base}${inlinePage}?gclid=GCLID-3`, { waitUntil: 'networkidle2' });
+        await findSlots(page);
+        const reached = await page.waitForSelector('.sw-slot', { timeout: 5000 }).then(() => true, () => false);
+        check('15e blocked storage still reaches the slot grid', reached);
+        check('15e blocked storage raises no uncaught page error', pageErrors.length === 0, pageErrors.join(' | '));
+        await page.close();
+      });
+
+      // 15f. The Black Friday page submits without the widget and keeps its own copy.
+      await isolate('15f', async () => {
+        const page = await newPage(browser, base, '/black-friday.html?gclid=BF-1&utm_campaign=bf');
+        const saved = await savedTouch(page);
+        check('15f the Black Friday page saves the first touch',
+          saved && saved.gclid === 'BF-1' && saved.utm_campaign === 'bf' &&
+          saved.landing_path === '/black-friday.html', JSON.stringify(saved));
+        await clearTouch(page);
+        await page.close();
+      });
+    }
+
   } catch (e) {
     check('the harness itself ran to completion', false, String((e && e.message) || e));
   } finally {
