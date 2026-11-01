@@ -78,6 +78,7 @@ export function buildPage(page, sourceHtml) {
   h = replaceOnce(h, 'title/og/twitter', ` in ${region.label} | Music and Mastery`, ` in ${city} | Music and Mastery`, { min: 3 });
   h = replaceOnce(h, 'service name', `"name": "In-Home ${Inst} Lessons in ${region.label}"`, `"name": "In-Home ${Inst} Lessons in ${city}"`);
   h = replaceOnce(h, 'promo bar', `${inst} lessons across ${region.label}`, `${inst} lessons in ${city}`);
+  h = replaceOnce(h, 'near-you neighborhoods', / ?<span class="near-hoods">[^<]*<\/span>/, '');
   h = replaceOnce(h, 'eyebrow', `<span>${region.label}</span><`, `<span>${city}</span><`);
   h = replaceOnce(h, 'reading h2', new RegExp(`<h2>What ${esc(region.label)} (Parents|Families) Are Reading</h2>`, 'g'), `<h2>What ${city} $1 Are Reading</h2>`);
   h = h.replace(new RegExp(`${inst} lessons (?:near you )?in ${esc(region.label)}\\. From`), `${inst} lessons near you in ${city}. From`);
