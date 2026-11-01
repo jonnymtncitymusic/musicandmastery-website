@@ -19,6 +19,15 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  // Bots and copies off the live site send nothing (Jonny 2026-11-01). The weekly website check,
+  // PageSpeed and Puppeteer all set navigator.webdriver, and test runs on localhost were counted
+  // as ad-page visitors with no time on the page. The script still loads, so speed scores stay honest.
+  try {
+    if (navigator.webdriver === true || !/(^|\.)musicandmastery\.com$/.test(location.hostname)) {
+      window['ga-disable-G-SPQ1FGTKTV'] = true;
+      window['ga-disable-AW-11066542604'] = true;
+    }
+  } catch (e) {}
   gtag('js', new Date());
   gtag('config', 'AW-11066542604');
   gtag('config', 'G-SPQ1FGTKTV');
@@ -135,6 +144,8 @@
     .hero::after  { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, #f1ece2 0%, #e9e3f3 50%, #dcd6f0 100%); animation: hero-fade-b 12s ease-in-out infinite; z-index: 0; }
     .hero-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
     .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: rgba(198,149,79,0.12); border: 1px solid rgba(198,149,79,0.25); border-radius: 9999px; padding: 6px 14px; margin-bottom: 28px; }
+    /* Phones: instrument on one line, place on the next, never a lone word wrapped (2026-11-01). */
+    @media (max-width: 520px) { .hero-eyebrow { flex-direction: column; gap: 2px; border-radius: 16px; } .eyebrow-sep { display: none; } }
     .hero-heading { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(40px, 6vw, 72px); line-height: 1.06; letter-spacing: -0.035em; color: var(--black); margin: 0 0 20px; }
     .hero-heading .accent-word { color: var(--dark-purple); }
     .hero-sub { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: clamp(20px, 2.5vw, 28px); color: var(--dark-purple); margin: 0 0 20px; letter-spacing: -0.01em; }
@@ -615,7 +626,7 @@
      the title and the meta description rather than leaving the page with the H1. -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow blur-fade blur-fade-1">Los Angeles, CA</div>
+    <div class="hero-eyebrow blur-fade blur-fade-1">In-Home Piano Lessons<span class="eyebrow-sep">·</span><span>Los Angeles</span></div>
     <h1 class="hero-heading blur-fade blur-fade-2" data-hl-test="la-piano-h1-2026-10-07" data-hl-b="Hear your child play &lt;span class=&quot;accent-word&quot;&gt;the songs they love&lt;/span&gt;, at your own piano.">
       Is there a piano in your home that <span class="accent-word">nobody plays</span>?
     </h1>
