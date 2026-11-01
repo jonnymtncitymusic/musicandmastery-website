@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-    <!-- Black Friday $20 first month, Nov 5 to Dec 18, 2026 (Jonny 2026-10-24; start moved from Nov 1 on 10-30). A temporary promo
+    <!-- Black Friday first month, Nov 5 to Dec 18, 2026 (Jonny 2026-10-24 at $20; start moved from Nov 1 on 10-30; $60 with 15 spots, a live counter and gifts from current families on 2026-11-01). A temporary promo
          page: noindex and absent from sitemap.xml. Ads and the index.html promo bar link here.
          Remove after Dec 18, together with black-friday-thanks.html and the promo bar. -->
     <meta name="robots" content="noindex,follow">
     <link rel="canonical" href="https://www.musicandmastery.com/black-friday.html">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Black Friday: First Month of Music Lessons for $20 | Music and Mastery">
-    <meta name="twitter:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $20. Start in December or January. New students only. Offer ends December 18, 2026.">
+    <meta name="twitter:title" content="Black Friday: First Month of Music Lessons for $60 | Music and Mastery">
+    <meta name="twitter:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $60. 15 families only. Start in December or January. Offer ends December 18, 2026.">
     <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
-    <meta property="og:title" content="Black Friday: First Month of Music Lessons for $20 | Music and Mastery">
-    <meta property="og:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $20. Start in December or January. New students only. Offer ends December 18, 2026.">
+    <meta property="og:title" content="Black Friday: First Month of Music Lessons for $60 | Music and Mastery">
+    <meta property="og:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $60. 15 families only. Start in December or January. Offer ends December 18, 2026.">
     <meta property="og:url" content="https://www.musicandmastery.com/black-friday.html">
     <meta property="og:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Music and Mastery">
-    <meta name="description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $20. Start in December or January. New students only. Offer ends December 18, 2026.">
+    <meta name="description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $60. 15 families only. Start in December or January. Offer ends December 18, 2026.">
 <!-- Google tag (gtag.js), loaded after the page's first paint. Why and how this keeps every hit:
      see the note on piano-lessons-orange-county.html (speed, 2026-10-19). -->
 <script>
@@ -54,7 +54,7 @@
   })();
 </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Black Friday: First Month of Music Lessons for $20 | Music and Mastery</title>
+  <title>Black Friday: First Month of Music Lessons for $60 | Music and Mastery</title>
   <link rel="icon" href="brand_assets/logo/mm-favicon-64.png" type="image/png" />
   <link rel="apple-touch-icon" href="brand_assets/logo/mm-apple-touch-180.png" />
   <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/worksans-latin.woff2" crossorigin>
@@ -162,7 +162,7 @@
     /* SHARED SECTION TYPE */
     .sec-h2 { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.12; letter-spacing: -0.025em; color: var(--black); margin: 0 0 32px; text-align: center; }
 
-    /* WHAT THE $20 COVERS. One card, four lines, read top to bottom like a receipt. */
+    /* WHAT THE $60 COVERS. One card, four lines, read top to bottom like a receipt. */
     .covers { background: #fff; padding: 88px 32px; }
     .covers-inner { max-width: 720px; margin: 0 auto; }
     .covers-card { background: #fff; border: 1.5px solid rgba(114,110,221,0.18); border-top: 4px solid var(--gold); border-radius: 20px; padding: 12px 32px; box-shadow: 0 1px 2px rgba(13,13,13,0.04), 0 14px 40px rgba(114,110,221,0.12); }
@@ -234,6 +234,26 @@
     .bf-ended-box a, .hero .bf-ended-msg a { color: var(--accent); font-weight: 700; display: inline-block; padding: 10px 2px; }
     .bf-error a, .form-noscript a { display: inline-block; padding: 10px 0; }
     .hero .bf-ended-msg { font-size: 18px; font-weight: 600; color: #2c2c36; margin: 0; }
+
+    /* SPOTS COUNTER + SOLD OUT (Jonny 2026-11-01: 15 spots, live count from the lead API).
+       The count shows only after the API answers; a failed fetch leaves it hidden, never a
+       made-up number. html.bf-soldout swaps every .bf-live block for .bf-soldout-msg. */
+    .bf-counter { display: inline-flex; align-items: baseline; gap: 10px; background: var(--black); color: #fff; border-radius: 18px; padding: 12px 22px; margin: -8px auto 28px; box-shadow: 0 8px 28px rgba(0,0,0,0.18); }
+    .bf-counter[hidden], .bf-form-count[hidden] { display: none; }
+    .bf-count-num { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 44px; line-height: 1; letter-spacing: -0.03em; color: #e6c684; }
+    .bf-count-text { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 18px; }
+    .bf-form-count { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 18px; color: #5a2614; text-align: center; margin: -20px 0 28px; }
+    .bf-soldout-msg { display: none; }
+    html.bf-soldout:not(.bf-ended) .bf-soldout-msg { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+    html.bf-soldout .bf-live { display: none !important; }
+    .bf-soldout-head { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 20px; line-height: 1.4; color: var(--black); margin: 0; }
+    .bf-soldout-sub { font-size: 17px; line-height: 1.6; color: #2c2c36; max-width: 520px; margin: 0; }
+    .bf-soldout-sub a { color: var(--accent); font-weight: 700; white-space: nowrap; }
+    .bf-gift-toggle { display: flex; gap: 12px; align-items: flex-start; font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px; line-height: 1.45; color: #34305f; background: rgba(114,110,221,0.08); border: 1.5px solid rgba(114,110,221,0.25); border-radius: 12px; padding: 14px 16px; margin: 0 0 22px; cursor: pointer; }
+    .bf-gift-toggle input { width: 20px; height: 20px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--accent); }
+    .bf-gift-fields { margin: 0 0 22px; padding-bottom: 4px; border-bottom: 1.5px solid rgba(114,110,221,0.18); }
+    .bf-gift-fields[hidden] { display: none; }
+    .bf-gift-note { margin: 0 0 18px; font-size: 16px; color: #4a4a58; }
     .form-noscript { padding: 28px 24px; text-align: center; font-size: 16px; line-height: 1.6; color: #3a3a4a; background: #fff; border-radius: 20px; }
     .form-noscript a { color: var(--accent); font-weight: 700; }
 
@@ -317,14 +337,14 @@
 
 <div class="topbar">
   <div class="promo-bar bf-live">
-    <span class="promo-free">Black Friday:</span> your first month of lessons is $20 through December 18.
+    <span class="promo-free">Black Friday:</span> your first month of lessons is $60, for 15 families only.
   </div>
   <nav class="nav">
     <div class="nav-inner">
       <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
         <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family: 'Work Sans', sans-serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
       </a>
-      <a href="#form" class="btn btn-primary bf-live">Get the $20 month</a>
+      <a href="#form" class="btn btn-primary bf-live">Claim a $60 spot</a>
     </div>
   </nav>
 </div>
@@ -335,18 +355,24 @@
   <div class="bf-hero-inner">
     <div class="hero-eyebrow blur-fade blur-fade-1">Black Friday offer, ends December 18</div>
     <h1 class="hero-heading blur-fade blur-fade-2">Hear your child play <span class="accent-word">the songs they love</span>.</h1>
-    <p class="hero-sub blur-fade blur-fade-2">Your first month of weekly 30-minute lessons is $20. A teacher comes to your home across Orange County and Los Angeles, and you choose a December or January start.</p>
+    <p class="hero-sub blur-fade blur-fade-2">Your first month of weekly 30-minute lessons is $60. A teacher comes to your home across Orange County and Los Angeles, and you choose a December or January start. We're taking 15 families.</p>
+    <div class="bf-counter blur-fade blur-fade-2 bf-live" hidden aria-live="polite"><span class="bf-count-num" data-bf-count>15</span><span class="bf-count-text">of 15 spots left</span></div>
     <div class="bf-cta-wrap blur-fade blur-fade-3">
-      <a href="#form" class="btn btn-accent btn-accent-lg bf-live">Get the $20 month</a>
-      <p class="small-print bf-live">New students only. Offer ends December 18, 2026.</p>
+      <a href="#form" class="btn btn-accent btn-accent-lg bf-live">Claim a $60 spot</a>
+      <p class="small-print bf-live">New students only. Ends December 18, 2026, or when all 15 spots are taken.</p>
       <p class="bf-ended-msg">This offer ended December 18, 2026. <a href="index.html">Go to our homepage</a></p>
+      <div class="bf-soldout-msg">
+        <p class="bf-soldout-head">All 15 Black Friday spots are taken.</p>
+        <p class="bf-soldout-sub">You can still book a free first lesson at our regular tuition. If a spot opens up, call or text <a href="tel:7605732120">(760) 573-2120</a> and we'll hold it for you.</p>
+        <a href="index.html" class="btn btn-primary">Book a free first lesson</a>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="covers">
   <div class="covers-inner">
-    <h2 class="sec-h2">What the $20 covers</h2>
+    <h2 class="sec-h2">What the $60 covers</h2>
     <div class="covers-card">
       <ul class="covers-list">
         <li>Four weekly 30-minute lessons in your home</li>
@@ -363,19 +389,19 @@
     <h2 class="sec-h2">How it works</h2>
     <ol class="steps-list">
       <li><span class="step-n">1</span><span>Tell us who the lessons are for and what they want to play.</span></li>
-      <li><span class="step-n">2</span><span>We match a teacher and a weekly time, then send your $20 invoice.</span></li>
+      <li><span class="step-n">2</span><span>We match a teacher and a weekly time, then send your $60 invoice.</span></li>
       <li><span class="step-n">3</span><span>Lessons start in December or January, whichever you picked.</span></li>
     </ol>
-    <a href="#form" class="btn btn-accent btn-accent-lg bf-live">Get the $20 month</a>
+    <a href="#form" class="btn btn-accent btn-accent-lg bf-live">Claim a $60 spot</a>
   </div>
 </section>
 
 <section class="adults-section">
   <div class="adults-inner">
     <h2 class="adults-heading">Learning for yourself?</h2>
-    <p class="adults-body">The $20 first month is open to adults too. Finally nail the solo you've always wanted to learn, with a teacher who comes to you.</p>
-    <p class="adults-gift">Giving lessons as a gift? Pick a January start when you sign up.</p>
-    <div class="adults-cta bf-live"><a href="#form" class="btn btn-light">Get the $20 month</a></div>
+    <p class="adults-body">The $60 first month is open to adults too. Finally nail the solo you've always wanted to learn, with a teacher who comes to you.</p>
+    <p class="adults-gift">Already a Music and Mastery family? Buy the $60 month for a friend. It goes on your next invoice.</p>
+    <div class="adults-cta bf-live"><a href="#form" class="btn btn-light">Claim a $60 spot</a></div>
   </div>
 </section>
 
@@ -397,7 +423,7 @@
 <section class="after">
   <div class="after-inner">
     <h2 class="sec-h2">After the first month</h2>
-    <p class="after-body">Lessons continue month to month at our regular tuition: $300 a month for 60-minute lessons, $240 for 45 minutes, or $160 for 30 minutes, the same length as your $20 month. There's no long-term contract. Tell us before your next monthly invoice and you won't be billed again.</p>
+    <p class="after-body">Lessons continue month to month at our regular tuition: $300 a month for 60-minute lessons, $240 for 45 minutes, or $160 for 30 minutes, the same length as your $60 month. There's no long-term contract. Tell us before your next monthly invoice and you won't be billed again.</p>
   </div>
 </section>
 
@@ -405,12 +431,12 @@
   <div class="faq-inner">
     <h2 class="sec-h2">Questions</h2>
     <details class="faq-item">
-      <summary>Can I keep a lower price after the first month?</summary>
-      <p class="faq-a">Yes. Within 7 days of paying the $20, you can switch to a 7-month plan with $20 off every month at any lesson length: $280 a month for 60 minutes, $220 for 45, or $140 for 30. Your first month moves to the plan price, so you pay the difference, then six more months at the plan price. If you stop early, you don't owe anything back.</p>
+      <summary>Who can get the $60 month?</summary>
+      <p class="faq-a">New students who pay for their own lessons. It isn't available for lessons paid through a charter school, and it replaces our usual free first lesson. One $60 month per student. Only 15 families get it, counted across Mountain City Music Co. and Music and Mastery. The offer ends December 18, 2026, or sooner if the spots fill. The money-back guarantee doesn't apply to the $60 month.</p>
     </details>
     <details class="faq-item">
-      <summary>Who can get the $20 month?</summary>
-      <p class="faq-a">New students who pay for their own lessons. It isn't available for lessons paid through a charter school, and it replaces our usual free first lesson. One $20 month per student. The offer ends December 18, 2026. The money-back guarantee doesn't apply to the $20 month.</p>
+      <summary>Can I buy it for a friend?</summary>
+      <p class="faq-a">Yes, if your family already takes lessons with us. Check the gift box on the form and give us your friend's details. The $60 goes on your next invoice, and we contact your friend to set up lessons. If your friend stays past the first month, your family gets a free lesson.</p>
     </details>
     <details class="faq-item">
       <summary>Which instruments?</summary>
@@ -423,35 +449,59 @@
   </div>
 </section>
 
-<!-- FINAL CALL TO ACTION. Every "Get the $20 month" button scrolls here. The form posts to the
-     same lead endpoint the scheduling widget uses, tagged offer "bf20" so the server handles the
-     lead as a $20 month and keeps it off the standard lead follow-ups. -->
+<!-- FINAL CALL TO ACTION. Every "Claim a $60 spot" button scrolls here. The form posts to the
+     same lead endpoint the scheduling widget uses, tagged offer "bf60" so the server handles the
+     lead as a $60 month, keeps it off the standard lead follow-ups, and refuses spot 16. -->
 <section class="form-section" id="form">
   <div class="form-inner">
-    <h2 class="sec-h2 bf-live">Your first month is $20 through December 18.</h2>
+    <h2 class="sec-h2 bf-live">Claim one of the 15 spots for $60.</h2>
+    <p class="bf-form-count bf-live" hidden><span data-bf-count>15</span> of 15 spots left</p>
     <p class="bf-ended-msg bf-ended-box">This offer ended December 18, 2026. <a href="index.html">Go to our homepage</a></p>
+    <div class="bf-soldout-msg bf-ended-box">
+      <p class="bf-soldout-head">All 15 Black Friday spots are taken.</p>
+      <p class="bf-soldout-sub">You can still book a free first lesson at our regular tuition. If a spot opens up, call or text <a href="tel:7605732120">(760) 573-2120</a> and we'll hold it for you.</p>
+      <a href="index.html" class="btn btn-primary">Book a free first lesson</a>
+    </div>
 
     <form class="bf-form bf-live" id="bf-form" action="#form" method="post" hidden>
+      <label class="bf-gift-toggle"><input type="checkbox" id="bf-gift" name="gift"><span>I'm a current Music and Mastery family buying this as a gift for a friend</span></label>
+
+      <div class="bf-gift-fields" id="bf-gift-fields" hidden>
+        <div class="bf-field">
+          <label class="bf-label" for="bf-gift-name">Your name</label>
+          <input class="bf-input" type="text" id="bf-gift-name" name="gift_from_name" autocomplete="name" disabled>
+        </div>
+        <div class="bf-field">
+          <label class="bf-label" for="bf-gift-email">Your email</label>
+          <input class="bf-input" type="email" id="bf-gift-email" name="gift_from_email" autocomplete="email" inputmode="email" disabled>
+        </div>
+        <div class="bf-field">
+          <label class="bf-label" for="bf-gift-phone">Your phone <span class="bf-opt">(optional)</span></label>
+          <input class="bf-input" type="tel" id="bf-gift-phone" name="gift_from_phone" autocomplete="tel" inputmode="tel" disabled>
+        </div>
+        <p class="bf-gift-note">The $60 goes on your next invoice. Now tell us about your friend.</p>
+      </div>
+
       <fieldset class="bf-field">
         <legend class="bf-label">Who are the lessons for?</legend>
         <div class="bf-choices">
-          <label class="bf-choice"><input type="radio" name="lesson_for" value="child" required>My child</label>
-          <label class="bf-choice"><input type="radio" name="lesson_for" value="self">Myself</label>
+          <label class="bf-choice"><input type="radio" name="lesson_for" value="child" required><span data-self="My child" data-gift="Their child">My child</span></label>
+          <label class="bf-choice"><input type="radio" name="lesson_for" value="self"><span data-self="Myself" data-gift="My friend">Myself</span></label>
         </div>
       </fieldset>
 
       <div class="bf-field">
-        <label class="bf-label" for="bf-name">Your name</label>
+        <label class="bf-label" for="bf-name" data-self="Your name" data-gift="Your friend's name">Your name</label>
         <input class="bf-input" type="text" id="bf-name" name="client_name" autocomplete="name" required>
       </div>
 
       <div class="bf-field">
-        <label class="bf-label" for="bf-email">Email</label>
+        <label class="bf-label" for="bf-email" data-self="Email" data-gift="Your friend's email">Email</label>
         <input class="bf-input" type="email" id="bf-email" name="email" autocomplete="email" inputmode="email" required>
       </div>
 
       <div class="bf-field">
-        <label class="bf-label" for="bf-phone">Phone</label>
+        <label class="bf-label" for="bf-phone" data-self="Phone" data-gift="Your friend's phone">Phone</label>
         <input class="bf-input" type="tel" id="bf-phone" name="phone" autocomplete="tel" inputmode="tel" required>
       </div>
 
@@ -501,8 +551,8 @@
            or reaches it; a bot that fills every field fills this one too. -->
       <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" name="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 
-      <button type="submit" class="btn btn-accent btn-accent-lg bf-submit" id="bf-submit">Get the $20 month</button>
-      <p class="small-print">New students only. Offer ends December 18, 2026.</p>
+      <button type="submit" class="btn btn-accent btn-accent-lg bf-submit" id="bf-submit">Claim a $60 spot</button>
+      <p class="small-print">New students only. Ends December 18, 2026, or when all 15 spots are taken.</p>
       <p class="bf-error" id="bf-error" role="alert" hidden>Something went wrong sending your details. Please call or text us at <a href="tel:7605732120">(760) 573-2120</a>.</p>
     </form>
     <noscript>
@@ -540,6 +590,25 @@
   // required-field checks run first: the submit event only fires once every required field
   // is filled, so there are no hand-written field errors to keep in step with the markup.
   var API = 'https://cron-runner-production-a510.up.railway.app/api/scheduling/lead';
+  var OFFER = 'bf60';
+
+  // The live count (Jonny 2026-11-01: $60, 15 spots). Shown only once the API answers, so the
+  // page never shows a number the server did not give. 0 left flips the page to sold out.
+  function showSpots(left) {
+    if (typeof left !== 'number') return;
+    if (left <= 0) { document.documentElement.classList.add('bf-soldout'); return; }
+    document.querySelectorAll('[data-bf-count]').forEach(function (el) { el.textContent = left; });
+    document.querySelectorAll('.bf-counter, .bf-form-count').forEach(function (el) { el.hidden = false; });
+  }
+  function refreshSpots() {
+    fetch('https://cron-runner-production-a510.up.railway.app/api/scheduling/offers/' + OFFER + '/spots', { cache: 'no-store' })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (data) { if (data) showSpots(data.spots_left); })
+      .catch(function () { /* counter stays hidden */ });
+  }
+  refreshSpots();
+  setInterval(refreshSpots, 60000);
+
   var form = document.getElementById('bf-form');
   if (!form) return;
   form.hidden = false;   // hidden in the markup so a no-JS visitor sees the call-us note instead
@@ -550,6 +619,24 @@
   var otherInput = document.getElementById('bf-other');
   var ageWrap = document.getElementById('bf-age-wrap');
   var LABEL = submit.textContent;
+  var giftBox = document.getElementById('bf-gift');
+  var giftFields = document.getElementById('bf-gift-fields');
+
+  // A gift: the giver's own details appear, and the main fields become the friend's.
+  // Hidden gift inputs are disabled, so they are never validated and never sent.
+  function syncGift() {
+    var gift = giftBox.checked;
+    giftFields.hidden = !gift;
+    giftFields.querySelectorAll('input').forEach(function (el) {
+      el.disabled = !gift;
+      el.required = gift && el.name !== 'gift_from_phone';
+    });
+    form.querySelectorAll('[data-gift]').forEach(function (el) {
+      el.textContent = gift ? el.getAttribute('data-gift') : el.getAttribute('data-self');
+    });
+  }
+  giftBox.addEventListener('change', syncGift);
+  syncGift();
 
   function value(name) {
     var el = form.elements[name];
@@ -618,9 +705,14 @@
       city: value('city'),
       start_timing: value('start_timing'),
       brand_source: 'musicandmastery',
-      offer: 'bf20',
+      offer: OFFER,
       honeypot: ''
     };
+    if (giftBox.checked) {
+      payload.gift_from_name = value('gift_from_name');
+      payload.gift_from_email = value('gift_from_email');
+      if (value('gift_from_phone')) payload.gift_from_phone = value('gift_from_phone');
+    }
     if (instrument === 'Other') payload.instrument_other = value('instrument_other');
     if (lessonFor === 'child' && value('student_age')) payload.student_age = value('student_age');
     if (value('notes')) payload.notes = value('notes');
@@ -636,6 +728,14 @@
       if (res.status !== 200) throw new Error('HTTP ' + res.status);
       return res.json();
     }).then(function (data) {
+      // Someone else took the last spot while this visitor filled the form.
+      if (data && data.sold_out) {
+        submit.disabled = false;
+        submit.textContent = LABEL;
+        showSpots(0);
+        window.scrollTo({ top: 0 });
+        return;
+      }
       if (!data || data.success !== true) throw new Error('not accepted');
       var test = isTestSubmission(payload.client_name, payload.email);
       if (test) {
@@ -643,10 +743,10 @@
       } else {
         stashUserData(payload.client_name, payload.email, payload.phone);
         if (typeof gtag === 'function') {
-          try { gtag('event', 'form_submission', { form_name: 'black_friday_20' }); } catch (e) {}
+          try { gtag('event', 'form_submission', { form_name: giftBox.checked ? 'black_friday_60_gift' : 'black_friday_60' }); } catch (e) {}
         }
       }
-      window.location.href = 'black-friday-thanks.html?type=lead' + (test ? '&test=1' : '');
+      window.location.href = 'black-friday-thanks.html?type=lead' + (test ? '&test=1' : '') + (giftBox.checked ? '&gift=1' : '');
     }).catch(fail);
   });
 })();

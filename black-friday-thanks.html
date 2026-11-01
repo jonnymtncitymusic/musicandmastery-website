@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-    <!-- Thanks page for black-friday.html (Black Friday $20 first month, Nov 5 to Dec 18, 2026).
+    <!-- Thanks page for black-friday.html (Black Friday $60 first month, Nov 5 to Dec 18, 2026).
          A copy of thank-you.html: same head tags and the same conversion gate, unchanged. The
          visible message is the offer's own. Remove after Dec 18 with black-friday.html. -->
     <link rel="canonical" href="https://www.musicandmastery.com/black-friday-thanks.html">
     <meta name="robots" content="noindex,follow">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Thank You for Reaching Out | Music and Mastery">
-    <meta name="twitter:description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $20 invoice.">
+    <meta name="twitter:description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $60 invoice.">
     <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
     <meta property="og:title" content="Thank You for Reaching Out | Music and Mastery">
-    <meta property="og:description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $20 invoice.">
+    <meta property="og:description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $60 invoice.">
     <meta property="og:url" content="https://www.musicandmastery.com/black-friday-thanks.html">
     <meta property="og:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Music and Mastery">
-    <meta name="description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $20 invoice.">
+    <meta name="description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $60 invoice.">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11066542604"></script>
 <script>
@@ -421,7 +421,13 @@
 
     <h1 class="ty-heading">You're all set,<br><span class="accent">we'll be in touch.</span></h1>
 
-    <p class="ty-sub">Thank you. We&#39;ll reach out within 24 hours to match a teacher and a weekly time, then send your $20 invoice.</p>
+    <p class="ty-sub" id="ty-sub">Thank you. We&#39;ll reach out within 24 hours to match a teacher and a weekly time, then send your $60 invoice.</p>
+    <script>
+      // A gift (black-friday.html adds &gift=1): the friend gets the call, the giver gets the bill.
+      if (/[?&]gift=1(&|$)/.test(window.location.search)) {
+        document.getElementById('ty-sub').textContent = "Thank you. Your gift holds one of the 15 spots. We'll reach out to your friend within 24 hours, and the $60 goes on your next invoice.";
+      }
+    </script>
 
     <div class="ty-actions">
       <a href="index.html" class="btn btn-primary">Back to Home</a>

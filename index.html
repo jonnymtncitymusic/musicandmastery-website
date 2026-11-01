@@ -616,7 +616,7 @@
   #bf-promo:focus-visible { outline: 3px solid #e6c684; outline-offset: -3px; }
   @media (max-width: 768px) { #bf-promo { font-size: 12px; padding: 7px 14px; } }
 </style>
-<a id="bf-promo" href="black-friday.html" hidden><span><span class="promo-free">Black Friday:</span> your first month of lessons is $20 through December 18. <span class="promo-link">See the offer</span></span></a>
+<a id="bf-promo" href="black-friday.html" hidden><span><span class="promo-free">Black Friday:</span> your first month of lessons is $60, for 15 families only. <span class="promo-link">See the offer</span></span></a>
 <script>
 (function () {
   var bar = document.getElementById('bf-promo');
@@ -625,7 +625,15 @@
     new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' })
       .formatToParts(new Date()).forEach(function (p) { o[p.type] = p.value; });
     var today = o.year + '-' + o.month + '-' + o.day;
-    if (today >= '2026-11-05' && today <= '2026-12-18') bar.hidden = false;
+    if (today >= '2026-11-05' && today <= '2026-12-18') {
+      bar.hidden = false;
+      // The 15 spots are counted by the lead API (Jonny 2026-11-01). Sold out takes the bar
+      // down; an API that does not answer leaves it up, and the offer page says sold out.
+      fetch('https://cron-runner-production-a510.up.railway.app/api/scheduling/offers/bf60/spots', { cache: 'no-store' })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (d) { if (d && d.open === false) bar.hidden = true; })
+        .catch(function () {});
+    }
   } catch (e) { /* no time zone support: the bar stays hidden */ }
 })();
 </script>
