@@ -578,7 +578,7 @@
     // Only the lead form carries the AI-call disclosure, and only its leads can get the AI's call
     // (claude-n8n-bridge lead_ring.js), so only this branch says so. A booking never hears it.
     document.getElementById('ty-step-call').textContent =
-      "Jonny will give you a quick call to confirm a few details. If he's with a student, his AI assistant may call first to collect them, and Jonny follows up himself.";
+      "Jonny will give you a quick call to confirm a few details. If he's unavailable, his AI assistant may call first to collect them, and Jonny follows up himself.";
     // city arrives from the query string. This sentence is assembled from DOM
     // nodes so the value can only ever become text. The innerHTML concatenation
     // that used to live here let ?city=<img src=x onerror=...> run script on our
