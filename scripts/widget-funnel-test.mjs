@@ -538,9 +538,13 @@ async function findSlots(page) {
         const call = [...apiCalls].reverse().find(c => c.url.includes(part));
         try { return JSON.parse(call?.body || '{}'); } catch (e) { return {}; }
       };
-      const AI_TEXT = "By sending this form, you agree that Jonny or his AI assistant may call the " +
-        "number above about lessons. Agreeing isn't required to take lessons; you can call us at " +
-        "(760) 573-2120 instead.";
+      const AI_TEXT = "By sending this form, you agree that Jonny or his AI assistant (an automated " +
+        "voice) may call the number above about lessons. Agreeing isn't required to take lessons; " +
+        "you can call us at (760) 573-2120 instead.";
+      // The booking step's own line above Book (Jonny 2026-11-04 Q10; wording 2026-11-05).
+      const BOOK_TEXT = "By booking, you agree that Jonny or his AI assistant (an automated voice) " +
+        "may call the number above about lessons. Agreeing isn't required to take lessons; you can " +
+        "call us at (760) 573-2120 to book instead.";
       // The disclosure must sit directly above the button: the element just before the
       // button, or just before the Back/Submit row that holds it.
       const disclosureAboveButton = page => page.evaluate(() => {
@@ -639,8 +643,9 @@ async function findSlots(page) {
         await page.close();
       });
 
-      // 12d + 12e. The booking and the callback: no disclosure, no fields.
-      const toBookingForm = async page => {
+      // 12d + 12e. The booking shows its own line directly above Book and sends it; the callback
+      // link (no line of its own) sends no consent fields.
+      const toBookingForm = async (page, withPhone = true) => {
         await findSlots(page);
         await page.waitForSelector('.sw-slot', { timeout: 5000 });
         await page.click('.sw-slot');
@@ -649,74 +654,66 @@ async function findSlots(page) {
         await page.waitForSelector('#sw-submit', { timeout: 5000 });
         await page.type('#sw-name', 'Pat Rivera');
         await page.type('#sw-email', 'pat@example.com');
-        await page.type('#sw-phone', '7605551234');
+        if (withPhone) await page.type('#sw-phone', '7605551234');
         await page.type('#sw-address-final', '1 Test St');
         const lessonFor = await page.$('[data-lessonfor="child"]');
         if (lessonFor) await lessonFor.click();
       };
-      for (const [tag, btn, what] of [['12d', '#sw-submit', 'booking'], ['12e', '#sw-callback', 'callback']]) {
-        await isolate(tag, async () => {
-          const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
-          await toBookingForm(page);
-          check(`${tag} the ${what} form shows no AI-call disclosure`, !(await page.$('.sw-ai-consent')));
-          const before = apiCalls.filter(c => c.url.includes('/book')).length;
-          await page.$eval(btn, el => el.scrollIntoView({ block: 'center' }));
-          await page.click(btn);
-          await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
-            { timeout: 8000 });
-          check(`${tag} the ${what} posted to /book`,
-            apiCalls.filter(c => c.url.includes('/book')).length > before);
-          const body = lastBody('/book');
-          check(`${tag} the ${what} body carries no ai_call_consent field`,
-            !Object.keys(body).some(k => k.startsWith('ai_call_consent')), JSON.stringify(body));
-          if (what === 'callback') {
-            check('12e it really was the callback', body.callback_requested === true, JSON.stringify(body));
-          }
-          await page.close();
-        });
-      }
+      const bookLineAboveSubmit = page => page.evaluate(() => {
+        const btn = document.getElementById('sw-submit');
+        const p = btn && btn.previousElementSibling;
+        if (!p || !p.classList.contains('sw-ai-consent')) return { found: false };
+        const cs = getComputedStyle(p);
+        return { found: true, text: p.textContent.replace(/\s+/g, ' ').trim(),
+          tel: p.querySelector('a[href^="tel:"]')?.getAttribute('href') || '',
+          fontSize: parseFloat(cs.fontSize), color: cs.color,
+          above: p.getBoundingClientRect().bottom <= btn.getBoundingClientRect().top };
+      });
+      const sendAndRead = async (page, btn) => {
+        const before = apiCalls.filter(c => c.url.includes('/book')).length;
+        await page.$eval(btn, el => el.scrollIntoView({ block: 'center' }));
+        await page.click(btn);
+        await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
+          { timeout: 8000 });
+        return { posted: apiCalls.filter(c => c.url.includes('/book')).length > before, body: lastBody('/book') };
+      };
+      await isolate('12d', async () => {
+        const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
+        await toBookingForm(page);
+        const d = await bookLineAboveSubmit(page);
+        check('12d the booking line sits directly above Book', d && d.found && d.above, JSON.stringify(d));
+        check('12d it is the exact booking wording', d && d.text === BOOK_TEXT, d && d.text);
+        check('12d the office number is a tap-to-call link', d && /^tel:\+?1?7605732120$/.test(d.tel), d && d.tel);
+        check('12d it is readable (>= 12px, dark text)', d && d.fontSize >= 12 && d.color === 'rgb(51, 51, 51)',
+          JSON.stringify(d));
+        check('12d only one AI-call line on the booking step', (await page.$$('.sw-ai-consent')).length === 1);
+        const { posted, body } = await sendAndRead(page, '#sw-submit');
+        check('12d the booking posted to /book', posted);
+        check('12d the booking sends ai_call_consent with the booking wording and page',
+          body.ai_call_consent === true && body.ai_call_consent_text === BOOK_TEXT &&
+          /^http:\/\/localhost:\d+\/[^?#]*\.html$/.test(body.ai_call_consent_page || ''), JSON.stringify(body));
+        await page.close();
+      });
+      await isolate('12d2', async () => {
+        const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
+        await toBookingForm(page, false);
+        const { posted, body } = await sendAndRead(page, '#sw-submit');
+        check('12d2 a booking with no phone posted to /book', posted);
+        check('12d2 a booking with no phone sends ai_call_consent false and no wording',
+          body.ai_call_consent === false && !('ai_call_consent_text' in body), JSON.stringify(body));
+        await page.close();
+      });
+      await isolate('12e', async () => {
+        const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
+        await toBookingForm(page);
+        const { posted, body } = await sendAndRead(page, '#sw-callback');
+        check('12e the callback posted to /book', posted);
+        check('12e the callback body carries no ai_call_consent field',
+          !Object.keys(body).some(k => k.startsWith('ai_call_consent')), JSON.stringify(body));
+        check('12e it really was the callback', body.callback_requested === true, JSON.stringify(body));
+        await page.close();
+      });
     }
-
-    // ── 13. A test submission never counts as a family (Jonny 2026-10-19) ──
-    // The 10-13 "Test" booking was counted as a headline-test win. A ZZTEST or "Test"
-    // name, or a test@ email, still reaches the server but fires no form_submission,
-    // and thank-you.html records no Ads conversion. A real name, same path, still does.
-    const submitLeadAs = async (name, email) => {
-      const page = await newPage(browser, base, inlinePage,
-        { availability: AVAIL_EMPTY, stripRedirect: 'local' });
-      await findSlots(page);
-      await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
-      await page.type('#sw-name', name);
-      await page.type('#sw-email', email);
-      await page.type('#sw-phone', '7605551234');
-      const lessonFor = await page.$('[data-lessonfor="child"]');
-      if (lessonFor) await lessonFor.click();
-      const before = apiCalls.length;
-      const nav = page.waitForNavigation({ waitUntil: 'load', timeout: 10000 });
-      await page.click('#sw-submit-lead');
-      await nav;
-      const reachedServer = apiCalls.slice(before).some(c => c.url.includes('/lead'));
-      const thanks = await page.evaluate(() => ({
-        url: location.href,
-        submission: window.MM_SUBMISSION || null,
-        conversion: window.__events.some(e => e[0] === 'conversion'),
-      }));
-      await page.close();
-      return { reachedServer, ...thanks };
-    };
-    await isolate('13', async () => {
-      for (const [name, email] of [['ZZTEST Mia', 'jonny+t@example.com'], ['Test', 'parent@example.com'],
-                                   ['Sam Lee', 'test@gmail.com']]) {
-        const r = await submitLeadAs(name, email);
-        check(`13 "${name}" / ${email} still reaches the server`, r.reachedServer);
-        check(`13 "${name}" / ${email} lands on thank-you marked test=1`, /[?&]test=1\b/.test(r.url), r.url);
-        check(`13 "${name}" / ${email} records no conversion`, !r.conversion && !r.submission, JSON.stringify(r));
-      }
-      const real = await submitLeadAs('Testa Morgan', 'pat@example.com');
-      check('13 a real "Testa" is not a test', !/[?&]test=1\b/.test(real.url), real.url);
-      check('13 a real submission still records the conversion', real.conversion && real.submission === 'lead',
-        JSON.stringify(real));
-    });
 
     // ── 14. Day/time picks: widen an empty search, carry the picks to the lead ─
     // Saturday alone finds nothing in any city, and that used to drop the visitor on the

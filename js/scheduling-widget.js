@@ -79,12 +79,25 @@
   // lead-form send button, with no checkbox: sending the form is the agreement, and the
   // wording says agreeing is not required and gives the number to call instead. The exact
   // wording travels with the submission as ai_call_consent_text, so the record shows what
-  // the visitor saw even after this copy changes. The booking and callback paths
-  // (/api/scheduling/book) neither show it nor send it.
+  // the visitor saw even after this copy changes. The booking step has its own line
+  // (AI_CALL_CONSENT_BOOKING_TEXT, below); the callback path shows and sends neither.
   const AI_CALL_CONSENT_TEXT =
-    'By sending this form, you agree that Jonny or his AI assistant may call the number ' +
-    'above about lessons. Agreeing isn\'t required to take lessons; you can call us at ' +
-    '(760) 573-2120 instead.';
+    'By sending this form, you agree that Jonny or his AI assistant (an automated voice) ' +
+    'may call the number above about lessons. Agreeing isn\'t required to take lessons; ' +
+    'you can call us at (760) 573-2120 instead.';
+
+  // The same disclosure above the booking step's Book button (Jonny 2026-11-04,
+  // ~/brainstorms/2026-11-04-lead-contact-notifications.md Q10: "same line as the lead form,
+  // above Book"; "(an automated voice)" added to both 2026-11-05 after an Opus review). A
+  // booking whose ring Jonny misses gets an AI call for the sign-up details, so only a
+  // booking sent with this wording can get one. Sent as ai_call_consent_text with Book only;
+  // the "have an instructor call you first" link sends no AI consent. "to book instead"
+  // (Opus review 2026-11-05): Book is the only online way to book, so the line says the
+  // phone books without agreeing.
+  const AI_CALL_CONSENT_BOOKING_TEXT =
+    'By booking, you agree that Jonny or his AI assistant (an automated voice) may call ' +
+    'the number above about lessons. Agreeing isn\'t required to take lessons; you can ' +
+    'call us at (760) 573-2120 to book instead.';
 
   // ─── Funnel instrumentation ────────────────────────────────────────────────
   // Until now this widget fired three events and all three were terminal: a lead, a
@@ -844,6 +857,7 @@
         <div class="sw-pay-headline">Your first lesson is free</div>
         <div class="sw-pay-subtext">Nothing to pay today. This is a relaxed first lesson to meet your teacher, with no obligation to continue. If you keep going, it's $${MONTHLY_RATES[state.lessonLength]}/mo for your weekly ${state.lessonLength}-minute lesson, based on four lessons a month.</div>
         <div class="sw-pay-subtext sw-confirm-note">We hold this time while we confirm it with ${state.selectedSlot ? state.selectedSlot.instructor_name : 'your instructor'}, then email you within 24 hours.</div>
+        ${renderAiCallConsent(AI_CALL_CONSENT_BOOKING_TEXT)}
         <button id="sw-submit" class="sw-btn sw-btn-primary" ${state.loading ? 'disabled' : ''}>
           ${state.loading ? '<span class="sw-spinner"></span> Booking...' : 'Book My Free Lesson'}
         </button>
@@ -1006,20 +1020,21 @@
 
   // The disclosure above a lead-form send button. The office number is a tap-to-call
   // link, because "call us instead" is the alternative the wording offers.
-  function renderAiCallConsent() {
-    const html = AI_CALL_CONSENT_TEXT.replace('(760) 573-2120',
+  function renderAiCallConsent(text = AI_CALL_CONSENT_TEXT) {
+    const html = text.replace('(760) 573-2120',
       '<a href="tel:+17605732120">(760) 573-2120</a>');
     return `<p class="sw-fineprint sw-ai-consent">${html}</p>`;
   }
 
-  // What a LEAD submission carries about the AI call. Like the SMS consent, it is only
-  // recorded against a phone number: agreeing to calls with no number is agreeing to
-  // nothing. Never spread into a /book body.
-  function aiCallConsentFields() {
+  // What a submission carries about the AI call: the lead form's wording, or the booking
+  // line's on Book. Like the SMS consent, it is only recorded against a phone number:
+  // agreeing to calls with no number is agreeing to nothing. Never spread into the
+  // callback request, which shows no line.
+  function aiCallConsentFields(text = AI_CALL_CONSENT_TEXT) {
     if (!state.clientPhone.trim()) return { ai_call_consent: false };
     return {
       ai_call_consent: true,
-      ai_call_consent_text: AI_CALL_CONSENT_TEXT,
+      ai_call_consent_text: text,
       ai_call_consent_page: window.location.origin + window.location.pathname,
     };
   }
@@ -1564,6 +1579,7 @@
         lesson_length: state.lessonLength,
         lesson_for: state.lessonFor || undefined,
         ...smsConsentFields(),
+        ...aiCallConsentFields(AI_CALL_CONSENT_BOOKING_TEXT),
         honeypot: '',
       });
 
