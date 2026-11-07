@@ -346,6 +346,7 @@
       smsConsent: false,   // the optional SMS box; unticked on every fresh form
       studentAge: '',
       lessonFor: '',    // 'child' | 'self'. Empty until answered; the API treats empty as unknown.
+      howHeard: '',     // one of HOW_HEARD_OPTIONS, or '' (optional, never required)
       startTiming: '',  // 'asap' | 'within_month' | 'exploring'
       notes: '',
       loading: false,
@@ -532,6 +533,25 @@
     { v: 'child', label: 'My child' },
     { v: 'self',  label: 'Myself' },
   ];
+
+  // "How did you hear about us?" (2026-11-07). Optional on purpose: it must never cost a lead.
+  // The labels are the exact values the API stores (HOW_HEARD_CHOICES in api/scheduling_api.py,
+  // cron-runner); anything else is stored as unknown. The weekly social report counts them.
+  const HOW_HEARD_OPTIONS = ['Instagram', 'TikTok', 'Facebook', 'Google search',
+    'Friend or family', "My child's school", 'Other'];
+
+  function renderHowHeardField() {
+    return `
+      <div class="sw-field">
+        <span class="sw-label" id="sw-howheard-label">How did you hear about us? <span class="sw-optional">(optional)</span></span>
+        <div class="sw-pill-row" role="group" aria-labelledby="sw-howheard-label">
+          ${HOW_HEARD_OPTIONS.map((label, i) => `
+            <button type="button" id="sw-howheard-${i}" class="sw-pill ${state.howHeard === label ? 'sw-pill-on' : ''}" aria-pressed="${state.howHeard === label ? 'true' : 'false'}" data-howheard="${i}">${label}</button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
 
   // One helper for all three forms (booking, no-match lead, lead-only). The three
   // used to differ in what they asked, which is how the booking path ended up
@@ -827,6 +847,7 @@
           ${fieldErrorHtml('phone')}
         </div>
 
+        ${renderHowHeardField()}
         ${renderSmsConsent()}
 
         <div class="sw-field ${fieldErrorClass('address')}">
@@ -970,6 +991,7 @@
           <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
         </div>
 
+        ${renderHowHeardField()}
         ${renderSmsConsent()}
 
         <div class="sw-field">
@@ -1121,6 +1143,7 @@
 
         ${contactFields()}
 
+        ${renderHowHeardField()}
         ${renderSmsConsent()}
 
         <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" id="sw-hp" name="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
@@ -1219,6 +1242,14 @@
         const k = btn.dataset.time;
         const i = state.preferredTimes.indexOf(k);
         if (i >= 0) state.preferredTimes.splice(i, 1); else state.preferredTimes.push(k);
+        render();
+      });
+    });
+
+    document.querySelectorAll('.sw-pill[data-howheard]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const label = HOW_HEARD_OPTIONS[Number(btn.dataset.howheard)] || '';
+        state.howHeard = state.howHeard === label ? '' : label;   // a second tap clears it
         render();
       });
     });
@@ -1483,6 +1514,7 @@
         city: cityLabel().trim() || undefined,
         student_age: state.studentAge.trim() || undefined,
         lesson_for: state.lessonFor || undefined,
+        how_heard: state.howHeard || undefined,
         start_timing: state.startTiming || undefined,
         // An unlisted city is flagged in the notes so the lead email says WHY this is a
         // lead and not a booking, without the backend needing to know the sentinel.
@@ -1578,6 +1610,7 @@
         lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
         lesson_for: state.lessonFor || undefined,
+        how_heard: state.howHeard || undefined,
         ...smsConsentFields(),
         ...aiCallConsentFields(AI_CALL_CONSENT_BOOKING_TEXT),
         honeypot: '',
@@ -1639,6 +1672,7 @@
         lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
         lesson_for: state.lessonFor || undefined,
+        how_heard: state.howHeard || undefined,
         callback_requested: true,
         ...smsConsentFields(),
         honeypot: '',

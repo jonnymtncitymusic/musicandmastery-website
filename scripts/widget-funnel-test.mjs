@@ -756,6 +756,7 @@ async function findSlots(page) {
         await page.type('#sw-email', 'pat@example.com');
         await page.type('#sw-phone', '7605551234');
         if (await page.$('[data-lessonfor="child"]')) await tap(page, '[data-lessonfor="child"]');
+        await tap(page, '.sw-pill[data-howheard="1"]');   // "How did you hear about us?" TikTok
         const before = apiCalls.filter(c => c.url.includes('/lead')).length;
         await tap(page, '#sw-submit-lead');
         await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'),
@@ -768,6 +769,7 @@ async function findSlots(page) {
         check(`${tag} the lead carries the picked times`,
           JSON.stringify(body.preferred_times) === JSON.stringify(PICKED_TIMES), JSON.stringify(body));
         check(`${tag} the lead carries the city`, body.city === city, JSON.stringify(body));
+        check(`${tag} the lead carries how they heard about us`, body.how_heard === 'TikTok', JSON.stringify(body));
       };
       const leadSubtext = page => page.$eval('.sw-subtext', el => el.textContent);
 
