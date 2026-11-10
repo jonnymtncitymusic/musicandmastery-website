@@ -14,6 +14,42 @@
   // 'mcmc' (default) = Mountain City Music Co | 'musicandmastery' = Music & Mastery
   const BRAND_SOURCE = window.MCMC_BRAND_SOURCE || 'mcmc';
 
+  // First-touch ad tags (Conversions by source, 2026-11-09): which ad, search or site first brought this
+  // visitor, kept 90 days in this browser and sent with a lead or a booking, so the hub can credit the source.
+  // Only the ad parameters, the referring site's host and the landing path: never anything the visitor typed.
+  // The first touch is kept; a later visit never replaces it. Storage blocked (private mode) = this visit only.
+  const FIRST_TOUCH_KEY = 'mcmc_first_touch';
+  const FIRST_TOUCH_DAYS = 90;
+  const FIRST_TOUCH_TAGS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+                            'gclid', 'gbraid', 'wbraid', 'fbclid'];
+  function bareHost(h) { return String(h || '').toLowerCase().replace(/^www\./, ''); }
+  function readFirstTouch() {
+    try {
+      const t = JSON.parse(window.localStorage.getItem(FIRST_TOUCH_KEY) || 'null');
+      if (t && t.first_seen && (Date.now() - Date.parse(t.first_seen)) < FIRST_TOUCH_DAYS * 864e5) return t;
+    } catch (e) { /* storage blocked or bad JSON: no stored touch */ }
+    return null;
+  }
+  function captureFirstTouch() {
+    const stored = readFirstTouch();
+    if (stored) return stored;
+    const t = { first_seen: new Date().toISOString() };
+    try {
+      const q = new URLSearchParams(window.location.search);
+      FIRST_TOUCH_TAGS.forEach(function (k) { const v = q.get(k); if (v) t[k] = v.slice(0, 200); });
+    } catch (e) { /* no URLSearchParams: no tags */ }
+    try {
+      if (document.referrer) {
+        const h = new URL(document.referrer).hostname;
+        if (h && bareHost(h) !== bareHost(window.location.hostname)) t.referrer = h.slice(0, 200);
+      }
+    } catch (e) { /* unreadable referrer */ }
+    t.landing = String(window.location.pathname || '/').slice(0, 200);
+    try { window.localStorage.setItem(FIRST_TOUCH_KEY, JSON.stringify(t)); } catch (e) { /* this visit only */ }
+    return t;
+  }
+  const FIRST_TOUCH = captureFirstTouch();
+
   // Optional: where to send the user after successful lead capture
   // (e.g. 'https://www.musicandmastery.com/thank-you.html' for Google Ads conversion).
   // If unset, shows the inline confirmation step.
@@ -453,7 +489,7 @@
       headers: { 'Content-Type': 'application/json' },
       // brand_source rides along the way it already does on submitLead. Without it a
       // Music & Mastery booking reached Jonny's inbox wearing no brand at all.
-      body: JSON.stringify({ ...params, brand_source: BRAND_SOURCE }),
+      body: JSON.stringify({ ...params, brand_source: BRAND_SOURCE, attribution: FIRST_TOUCH || readFirstTouch() }),
     });
     if (res.status === 409) {
       const data = await res.json();
@@ -492,7 +528,7 @@
     const res = await fetch(`${API_BASE}/api/scheduling/lead`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(params),
+      body: JSON.stringify({ ...params, attribution: FIRST_TOUCH || readFirstTouch() }),
     });
     if (res.status === 429) throw new Error('Too many requests. Please try again later.');
     if (!res.ok) throw new Error('Submission failed. Please try again.');
