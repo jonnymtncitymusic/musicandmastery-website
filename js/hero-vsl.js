@@ -1,5 +1,9 @@
 /**
- * Hero video ("The Mechanism"), Hormozi's way, on every landing page.
+ * Hero video, Hormozi's way, on every landing page and on start.html (where a Meta lead lands).
+ *
+ * Since 2026-11-11 the video is VSL B (YouTube vRMcILWtQHU, 9:16, 3:15), replacing "The Mechanism"
+ * (bNdyZWVwQSI) on all 46 landing pages (Jonny 2026-11-11: replace, not a split test). GA4 events
+ * from that day carry video 'vsl_b'; earlier ones say 'the_mechanism'.
  *
  * acquisition.com/workshop (checked 2026-10-06) starts its sales video MUTED by itself under
  * the headline, with a "Your Video Is Playing / Click To Unmute" overlay and the CTA right
@@ -33,7 +37,7 @@
   var lastState = null;
 
   function track(name) {
-    try { if (typeof gtag === 'function') gtag('event', name, { video: 'the_mechanism', page: page }); } catch (e) {}
+    try { if (typeof gtag === 'function') gtag('event', name, { video: 'vsl_b', page: page }); } catch (e) {}
   }
   function send(func, args) {
     try { iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: args || [] }), '*'); } catch (e) {}
