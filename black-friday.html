@@ -570,6 +570,12 @@
       <p class="small-print">For families new to us. Ends December 18, 2026, or when all 15 spots are taken.</p>
       <p class="bf-error" id="bf-error" role="alert" hidden>Something went wrong sending your details. Please call or text us at <a href="tel:7605732120">(760) 573-2120</a>.</p>
     </form>
+    <!-- Shown instead of the form when the spots counter does not answer (review 2026-11-12): a
+         page deployed before the lead API, or after a rollback, must never send a $60 family into
+         the free-lesson flow, so the form appears only once /offers/bf60/spots answers 200. -->
+    <div class="form-noscript bf-live" id="bf-unavailable" hidden>
+      <p>Call or text us at <a href="tel:7605732120">(760) 573-2120</a> to claim a spot.</p>
+    </div>
     <noscript>
       <div class="form-noscript bf-live">
         <p>This form needs JavaScript. Call or text us at <a href="tel:7605732120">(760) 573-2120</a>.</p>
@@ -668,18 +674,37 @@
     document.querySelectorAll('[data-bf-count]').forEach(function (el) { el.textContent = left; });
     document.querySelectorAll('.bf-counter, .bf-form-count').forEach(function (el) { el.hidden = false; });
   }
+  // The form is shown only once the counter answers 200 with a count (review 2026-11-12): that
+  // route exists only where the lead API knows the offer, so a signup can never reach an API
+  // that would treat it as a free-lesson lead. Until then, or if it never answers, the call-us
+  // note shows instead; a later failed refresh never hides a form a family is filling in.
+  var formShown = false;
+  function revealForm() {
+    if (formShown) return;
+    formShown = true;
+    document.getElementById('bf-form').hidden = false;
+    document.getElementById('bf-unavailable').hidden = true;
+  }
+  function showUnavailable() {
+    if (!formShown) document.getElementById('bf-unavailable').hidden = false;
+  }
   function refreshSpots() {
     fetch('https://cron-runner-production-a510.up.railway.app/api/scheduling/offers/' + OFFER + '/spots', { cache: 'no-store' })
-      .then(function (res) { return res.ok ? res.json() : null; })
-      .then(function (data) { if (data) showSpots(data.spots_left); })
-      .catch(function () { /* counter stays hidden */ });
+      .then(function (res) { return res.status === 200 ? res.json() : null; })
+      .then(function (data) {
+        if (data && typeof data.spots_left === 'number') { revealForm(); showSpots(data.spots_left); }
+        else showUnavailable();
+      })
+      .catch(showUnavailable);
   }
   refreshSpots();
+  setTimeout(showUnavailable, 8000);   // a counter that never answers
   setInterval(refreshSpots, 60000);
 
   var form = document.getElementById('bf-form');
   if (!form) return;
-  form.hidden = false;   // hidden in the markup so a no-JS visitor sees the call-us note instead
+  // Hidden in the markup: a no-JS visitor sees the call-us note, and revealForm() shows it once
+  // the counter answers.
 
   var submit = document.getElementById('bf-submit');
   var errorBox = document.getElementById('bf-error');
@@ -721,13 +746,21 @@
   form.addEventListener('change', syncConditionalFields);
   syncConditionalFields();
 
-  // Same rule as the widget's isTestSubmission(): a rehearsal ("ZZTEST Mia", "Test", test@...)
-  // still reaches the server, where ZZTEST keeps it out of the real lists, but it must never
-  // reach Google Ads or GA4 as a family. black-friday-thanks.html records nothing on test=1.
-  function isTestSubmission(name, email) {
-    var first = name.split(/\s+/)[0].toLowerCase();
-    return first.indexOf('zztest') === 0 || first === 'test' || email.toLowerCase().indexOf('test@') === 0;
+  // A rehearsal ("ZZTEST Mia", "Test", test@...), the family's or, for a gift, the friend's or
+  // the giver's: the lead API's is_rehearsal_signup, word for word (review 2026-11-12), so a
+  // launch check takes no spot there and never reaches Google Ads or GA4 as a family here.
+  // black-friday-thanks.html records nothing on test=1.
+  function isTestPerson(name, email) {
+    name = String(name || '').trim().toLowerCase();
+    email = String(email || '').trim().toLowerCase();
+    var first = name.split(/\s+/)[0] || '';
+    return name.indexOf('zztest') !== -1 || email.indexOf('zztest') !== -1 || first === 'test' ||
+      email.indexOf('test@') === 0;
   }
+  function isTestSubmission(p) {
+    return isTestPerson(p.client_name, p.email) || isTestPerson(p.gift_from_name, p.gift_from_email);
+  }
+  window.MCMC_BF_IS_TEST = isTestSubmission;   // read by scripts/widget-funnel-test.mjs (16h)
 
   // Enhanced conversions, exactly as js/scheduling-widget.js stashUserData() does it: the Ads
   // conversion fires on the thanks page, gtag state does not survive the navigation, so the
@@ -806,7 +839,7 @@
         return;
       }
       if (!data || data.success !== true) throw new Error('not accepted');
-      var test = isTestSubmission(payload.client_name, payload.email);
+      var test = isTestSubmission(payload);
       if (test) {
         try { window.sessionStorage.removeItem(USER_DATA_KEY); } catch (e) {}
       } else {

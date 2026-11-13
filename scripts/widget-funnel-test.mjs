@@ -872,26 +872,50 @@ async function findSlots(page) {
       }
     }
 
-    // ── 16. Black Friday page: when to start (one campaign, remove after Dec 18, 2026) ─
+    // ── 16. Black Friday page (one campaign, remove after Dec 18, 2026) ────────────────
     // Jonny 2026-11-12: a filmed ad says "we can get you started as early as next week", so the
-    // page offers "Right away" (sent as "asap") beside December and January. From December 1
+    // page offers "Right away" (sent as "asap") beside December and January; from December 1
     // "Right away" already means December, so December is hidden; from December 19 the form is
-    // gone. The page submits without the widget and sends the same `attribution`.
+    // gone. Review 2026-11-12: the form shows only once the spots counter answers 200; a sold-out
+    // reply or a counter at 0 shows sold out; a rehearsal is marked test=1 and records no
+    // conversion; the page's test rule is the lead API's. Every wait below resolves on a request
+    // the page makes, never on a timeout that is swallowed.
     {
       const BF_CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*',
         'Access-Control-Allow-Methods': 'GET,POST,OPTIONS' };
-      // The page at a fixed Pacific moment: Date is replaced before any page script runs.
-      const bfPage = async (route, isoNow) => {
+      const NOV = '2026-11-12T20:00:00Z';
+      const within = (promise, ms, what) => Promise.race([promise, new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`no ${what} within ${ms} ms`)), ms))]);
+      let bfSeq = 0;
+      // The page at a fixed moment (Date replaced before any page script runs), its API stubbed:
+      // `spots` is the counter's answer ({ status, body } or 'abort'), `lead` the signup reply.
+      const bfPage = async (route, isoNow, { spots = { status: 200, body: { offer: 'bf60', cap: 15,
+        spots_left: 9, open: true, ends: '2026-12-18' } }, lead = { success: true, lead_id: 1,
+        spots_left: 8, message: 'ok' } } = {}) => {
         const page = await browser.newPage();
-        const posts = [];
-        await page.evaluateOnNewDocument(fixed => {
+        const posts = [], navs = [], events = [];
+        let gotPost, gotNav;
+        const firstPost = new Promise(r => { gotPost = r; });
+        const firstNav = new Promise(r => { gotNav = r; });
+        const hook = `__bfEvent${++bfSeq}`;
+        await page.exposeFunction(hook, name => events.push(name));
+        await page.evaluateOnNewDocument((fixed, hookName) => {
           const RealDate = Date;
           class FixedDate extends RealDate {
             constructor(...a) { super(...(a.length ? a : [fixed])); }
             static now() { return fixed; }
           }
           window.Date = FixedDate;
-        }, Date.parse(isoNow));
+          window.dataLayer = window.dataLayer || [];
+          const push = window.dataLayer.push.bind(window.dataLayer);
+          window.dataLayer.push = function () {
+            for (const a of arguments) {
+              const arr = Array.from(a || []);
+              if (arr[0] === 'event') try { window[hookName](arr[1]); } catch (e) {}
+            }
+            return push.apply(null, arguments);
+          };
+        }, Date.parse(isoNow), hook);
         await page.setRequestInterception(true);
         page.on('request', req => {
           const url = req.url();
@@ -899,24 +923,32 @@ async function findSlots(page) {
             return req.abort();
           }
           if (req.isNavigationRequest() && url.includes('black-friday-thanks')) {
+            navs.push(url);
+            gotNav(url);
             return req.respond({ status: 200, contentType: 'text/html', body: '<p>thanks</p>' });
           }
           if (!url.includes('/api/scheduling/')) return req.continue();
           if (req.method() === 'OPTIONS') return req.respond({ status: 204, headers: BF_CORS, body: '' });
-          const json = body => req.respond({ status: 200, headers: BF_CORS, contentType: 'application/json',
+          const json = (status, body) => req.respond({ status, headers: BF_CORS, contentType: 'application/json',
             body: JSON.stringify(body) });
           if (url.includes('/offers/bf60/spots')) {
-            return json({ offer: 'bf60', cap: 15, spots_left: 9, open: true, ends: '2026-12-18' });
+            if (spots === 'abort') return req.abort('failed');
+            return json(spots.status, spots.body || { detail: 'Not Found' });
           }
           if (url.includes('/lead')) {
             try { posts.push(JSON.parse(req.postData() || '{}')); } catch (e) { posts.push({}); }
-            return json({ success: true, lead_id: 1, spots_left: 8, message: 'ok' });
+            gotPost(posts[posts.length - 1]);
+            return json(200, lead);
           }
-          return json({});
+          return json(200, {});
         });
         await page.goto(`${base}${route}`, { waitUntil: 'networkidle2' });
-        return { page, posts };
+        return { page, posts, navs, events, firstPost, firstNav };
       };
+      const shown = (page, sel) => page.$eval(sel, el => {
+        const b = el.getBoundingClientRect();
+        return b.width > 0 && b.height > 0;
+      }).catch(() => false);
       // Each start choice as the visitor sees it: its value, its label, and whether it shows.
       const startChoices = page => page.$$eval('input[name="start_timing"]', els => els.map(el => {
         const label = el.closest('label');
@@ -924,24 +956,33 @@ async function findSlots(page) {
         return { value: el.value, text: label.textContent.trim(), shown: box.width > 0 && box.height > 0,
           required: el.required };
       }));
-      const fillAndSend = async (page, posts, start) => {
+      // Fill the form and send it; returns the one body this submit posted.
+      const fillAndSend = async (bf, { start = 'asap', name = 'Pat Rivera', email = 'pat@example.com',
+        gift = null } = {}) => {
+        const { page, posts, firstPost } = bf;
         await page.$eval('#bf-form', el => el.scrollIntoView());
+        if (gift) {
+          await page.$eval('#bf-gift', el => el.click());
+          await page.type('#bf-gift-name', gift.name);
+          await page.type('#bf-gift-email', gift.email);
+          if (gift.phone) await page.type('#bf-gift-phone', gift.phone);
+        }
         await page.$eval('input[name="lesson_for"][value="child"]', el => el.closest('label').click());
-        await page.type('#bf-name', 'ZZTEST Parent');
-        await page.type('#bf-email', 'zztest@example.com');
+        await page.type('#bf-name', name);
+        await page.type('#bf-email', email);
         await page.type('#bf-phone', '7605551234');
         await page.select('#bf-instrument', 'Piano');
         await page.type('#bf-city', city);
-        if (start) await page.$eval(`input[name="start_timing"][value="${start}"]`, el => el.closest('label').click());
+        await page.$eval(`input[name="start_timing"][value="${start}"]`, el => el.closest('label').click());
         await page.click('#bf-submit');
-        await page.waitForFunction(() => location.href.includes('black-friday-thanks'), { timeout: 5000 })
-          .catch(() => {});
-        return posts[posts.length - 1];
+        const body = await within(firstPost, 5000, 'signup POST');
+        if (posts.length !== 1) throw new Error(`expected one POST, saw ${posts.length}`);
+        return body;
       };
 
       // 16a. November: three choices, in order, all shown, and the Christmas line stays.
       await isolate('16a', async () => {
-        const { page } = await bfPage('/black-friday.html', '2026-11-12T20:00:00Z');
+        const { page } = await bfPage('/black-friday.html', NOV);
         const choices = await startChoices(page);
         check('16a the picker offers Right away, December and January, in that order',
           JSON.stringify(choices.map(c => [c.value, c.text])) ===
@@ -950,70 +991,196 @@ async function findSlots(page) {
         check('16a all three are shown in November', choices.every(c => c.shown), JSON.stringify(choices));
         check('16a the required choice is one that is always shown',
           choices.filter(c => c.required).map(c => c.value).join() === 'asap', JSON.stringify(choices));
-        const html = await page.content();
         check('16a the Christmas line is still under the picker',
-          html.includes('Giving it to your child for Christmas? Pick a January start.'));
+          (await page.content()).includes('Giving it to your child for Christmas? Pick a January start.'));
         await page.close();
       });
 
-      // 16b. "Right away" posts "asap", tagged with the offer, the brand and the ad that brought them.
+      // 16b. "Right away" posts "asap", tagged with the offer, the brand and the ad that brought them,
+      //      and a real family goes to the thanks page with a form_submission event and no test flag.
       await isolate('16b', async () => {
-        const { page, posts } = await bfPage('/black-friday.html?fbclid=BF-FB-1&utm_campaign=bf60',
-          '2026-11-12T20:00:00Z');
-        const sentBody = await fillAndSend(page, posts, 'asap');
-        check('16b Right away is sent as start_timing "asap"', sentBody && sentBody.start_timing === 'asap',
+        const bf = await bfPage('/black-friday.html?fbclid=BF-FB-1&utm_campaign=bf60', NOV);
+        const sentBody = await fillAndSend(bf, { start: 'asap' });
+        check('16b Right away is sent as start_timing "asap"', sentBody.start_timing === 'asap',
           JSON.stringify(sentBody));
         check('16b the signup carries offer bf60 and this brand',
-          sentBody && sentBody.offer === 'bf60' && sentBody.brand_source === brand, JSON.stringify(sentBody));
-        const at = (sentBody && sentBody.attribution) || {};
+          sentBody.offer === 'bf60' && sentBody.brand_source === brand, JSON.stringify(sentBody));
+        const at = sentBody.attribution || {};
         check('16b it carries the first-touch ad tags as attribution',
           at.fbclid === 'BF-FB-1' && at.utm_campaign === 'bf60' && at.landing === '/black-friday.html' &&
           typeof at.first_seen === 'string' && !('source' in sentBody), JSON.stringify(sentBody));
-        await page.close();
+        const nav = await within(bf.firstNav, 5000, 'thanks navigation');
+        check('16b a real family lands on the thanks page with no test flag',
+          /type=lead/.test(nav) && !/test=1/.test(nav) && !/gift=1/.test(nav), nav);
+        check('16b a real family fires form_submission', bf.events.includes('form_submission'),
+          bf.events.join());
+        await bf.page.close();
       });
 
-      // 16c. December and January post their own values.
+      // 16c. December and January post their own values (one POST each, read from that submit).
       for (const start of ['december', 'january']) {
         await isolate(`16c ${start}`, async () => {
-          const { page, posts } = await bfPage('/black-friday.html', '2026-11-12T20:00:00Z');
-          const sentBody = await fillAndSend(page, posts, start);
-          check(`16c ${start} is sent as start_timing "${start}"`, sentBody && sentBody.start_timing === start,
+          const bf = await bfPage('/black-friday.html', NOV);
+          const sentBody = await fillAndSend(bf, { start });
+          check(`16c ${start} is sent as start_timing "${start}"`, sentBody.start_timing === start,
             JSON.stringify(sentBody));
-          await page.close();
+          await bf.page.close();
         });
       }
 
       // 16d. From December 1 (Pacific), December is hidden and Right away still sends.
       await isolate('16d', async () => {
-        const { page, posts } = await bfPage('/black-friday.html', '2026-12-01T08:30:00Z');
-        const shown = (await startChoices(page)).filter(c => c.shown).map(c => c.value);
+        const bf = await bfPage('/black-friday.html', '2026-12-01T08:30:00Z');
+        const visible = (await startChoices(bf.page)).filter(c => c.shown).map(c => c.value);
         check('16d on December 1 the picker shows Right away and January only',
-          shown.join() === 'asap,january', shown.join());
-        const sentBody = await fillAndSend(page, posts, 'asap');
-        check('16d a December signup still sends "asap"', sentBody && sentBody.start_timing === 'asap',
+          visible.join() === 'asap,january', visible.join());
+        const sentBody = await fillAndSend(bf, { start: 'asap' });
+        check('16d a December signup still sends "asap"', sentBody.start_timing === 'asap',
           JSON.stringify(sentBody));
-        await page.close();
+        await bf.page.close();
       });
 
       // 16e. November 30 at 11:30 PM Pacific is still November: December still shows.
       await isolate('16e', async () => {
         const { page } = await bfPage('/black-friday.html', '2026-12-01T07:30:00Z');
-        const shown = (await startChoices(page)).filter(c => c.shown).map(c => c.value);
-        check('16e late on November 30 Pacific all three still show', shown.join() === 'asap,december,january',
-          shown.join());
+        const visible = (await startChoices(page)).filter(c => c.shown).map(c => c.value);
+        check('16e late on November 30 Pacific all three still show', visible.join() === 'asap,december,january',
+          visible.join());
         await page.close();
       });
 
       // 16f. December 19 (Pacific): the offer has ended and the form is not shown.
       await isolate('16f', async () => {
         const { page } = await bfPage('/black-friday.html', '2026-12-19T20:00:00Z');
-        const formShown = await page.$eval('#bf-form', el => {
-          const b = el.getBoundingClientRect();
-          return b.width > 0 && b.height > 0;
-        });
-        check('16f after December 18 the form is gone', !formShown);
+        check('16f after December 18 the form is gone', !(await shown(page, '#bf-form')));
         await page.close();
       });
+
+      // 16g. The form waits for the counter: a 404 (the lead API without the offer: a site shipped
+      //      first, or a rollback) or no answer shows the call-us note, never the form.
+      for (const [label, spots] of [['404', { status: 404 }], ['500', { status: 500 }], ['no answer', 'abort']]) {
+        await isolate(`16g ${label}`, async () => {
+          const { page } = await bfPage('/black-friday.html', NOV, { spots });
+          check(`16g counter ${label}: the form is not shown`, !(await shown(page, '#bf-form')));
+          check(`16g counter ${label}: the call-us note is shown`, await shown(page, '#bf-unavailable'));
+          await page.close();
+        });
+      }
+      await isolate('16g 200', async () => {
+        const { page } = await bfPage('/black-friday.html', NOV);
+        check('16g counter 200: the form is shown and the note is not',
+          (await shown(page, '#bf-form')) && !(await shown(page, '#bf-unavailable')));
+        check('16g counter 200: the count is shown', (await page.$eval('[data-bf-count]', el => el.textContent)) === '9');
+        await page.close();
+      });
+
+      // 16h. The page's rehearsal rule is the lead API's is_rehearsal_signup (the same table as
+      //      test_offer_lead.py's test_the_rehearsal_rule).
+      await isolate('16h', async () => {
+        const { page } = await bfPage('/black-friday.html', NOV);
+        const table = [
+          [['ZZTEST Mia', 'mia@x.com'], true], [['Mia', 'zztest@x.com'], true], [['mia zztest', ''], true],
+          [['Test', 'a@x.com'], true], [['test Smith', 'a@x.com'], true], [['Ana', 'TEST@x.com'], true],
+          [['Ana', 'a@x.com', 'ZZTEST Giver', 'g@x.com'], true], [['Ana', 'a@x.com', 'Gia', 'test@x.com'], true],
+          [['Testa Rossi', 'a@x.com'], false], [['Ana', 'contest@x.com'], false], [['Ana', 'atest@x.com'], false],
+          [['Ana', 'a@x.com', 'Gia', 'g@x.com'], false], [['', null], false],
+        ];
+        const got = await page.evaluate(rows => rows.map(([a]) => window.MCMC_BF_IS_TEST({
+          client_name: a[0], email: a[1], gift_from_name: a[2], gift_from_email: a[3] })), table);
+        const wrong = table.filter((row, i) => got[i] !== row[1]).map(r => JSON.stringify(r[0]));
+        check('16h the page and the lead API agree on every rehearsal case', wrong.length === 0, wrong.join(' '));
+        await page.close();
+      });
+
+      // 16i. A rehearsal goes to the thanks page with test=1 and fires no form_submission; a gift
+      //      sends the giver's details and gift=1.
+      await isolate('16i', async () => {
+        const bf = await bfPage('/black-friday.html', NOV);
+        const sentBody = await fillAndSend(bf, { name: 'Ana Friend', email: 'ana@example.com',
+          gift: { name: 'ZZTEST Giver', email: 'giver@example.com', phone: '7605550199' } });
+        check('16i a gift sends the giver\'s name, email and phone',
+          sentBody.gift_from_name === 'ZZTEST Giver' && sentBody.gift_from_email === 'giver@example.com' &&
+          sentBody.gift_from_phone === '7605550199' && sentBody.client_name === 'Ana Friend',
+          JSON.stringify(sentBody));
+        const nav = await within(bf.firstNav, 5000, 'thanks navigation');
+        check('16i a rehearsal gift lands on thanks with test=1 and gift=1', /test=1/.test(nav) && /gift=1/.test(nav), nav);
+        check('16i a rehearsal fires no form_submission', !bf.events.includes('form_submission'), bf.events.join());
+        await bf.page.close();
+      });
+
+      // 16j. Sold out while they filled the form: the reply flips the page, nothing navigates.
+      await isolate('16j', async () => {
+        const bf = await bfPage('/black-friday.html', NOV, { lead: { success: false, sold_out: true, spots_left: 0 } });
+        await fillAndSend(bf);
+        await bf.page.waitForFunction(() => document.documentElement.classList.contains('bf-soldout'), { timeout: 5000 });
+        check('16j a sold-out reply hides the form and shows sold out',
+          !(await shown(bf.page, '#bf-form')) && (await shown(bf.page, '#form .bf-soldout-msg')));
+        check('16j a sold-out reply stays on the page with no conversion event',
+          bf.navs.length === 0 && !bf.events.includes('form_submission'), bf.navs.join() + ' ' + bf.events.join());
+        await bf.page.close();
+      });
+
+      // 16k. The counter at 0 shows sold out from the first paint of the answer.
+      await isolate('16k', async () => {
+        const { page } = await bfPage('/black-friday.html', NOV, { spots: { status: 200, body: { offer: 'bf60',
+          cap: 15, spots_left: 0, open: false, ends: '2026-12-18' } } });
+        check('16k a counter at 0 shows sold out, not the form',
+          (await page.evaluate(() => document.documentElement.classList.contains('bf-soldout'))) &&
+          !(await shown(page, '#bf-form')) && (await shown(page, '#form .bf-soldout-msg')));
+        await page.close();
+      });
+
+      // 16l. The thanks page: a rehearsal (test=1) records no conversion, a real one does.
+      for (const [qs, expect] of [['?type=lead&test=1', false], ['?type=lead', true], ['?type=lead&test=1&gift=1', false]]) {
+        await isolate(`16l ${qs}`, async () => {
+          const page = await browser.newPage();
+          const events = [];
+          const hook = `__bfThanks${++bfSeq}`;
+          await page.exposeFunction(hook, name => events.push(name));
+          await page.evaluateOnNewDocument(hookName => {
+            window.dataLayer = window.dataLayer || [];
+            const push = window.dataLayer.push.bind(window.dataLayer);
+            window.dataLayer.push = function () {
+              for (const a of arguments) {
+                const arr = Array.from(a || []);
+                if (arr[0] === 'event') try { window[hookName](arr[1]); } catch (e) {}
+              }
+              return push.apply(null, arguments);
+            };
+          }, hook);
+          await page.setRequestInterception(true);
+          page.on('request', req => /googletagmanager|google-analytics|doubleclick|gstatic|googleusercontent/
+            .test(req.url()) ? req.abort() : req.continue());
+          await page.goto(`${base}/black-friday-thanks.html${qs}`, { waitUntil: 'load' });
+          await page.evaluate(() => new Promise(r => setTimeout(r, 50)));
+          check(`16l thanks${qs} ${expect ? 'records' : 'records no'} conversion`,
+            events.includes('conversion') === expect, events.join());
+          await page.close();
+        });
+      }
+
+      // 16m. The homepage bar: shown in the window while open, gone when the counter says closed.
+      for (const [label, iso, open, expect] of [['open', NOV, true, true], ['sold out', NOV, false, false],
+        ['after Dec 18', '2026-12-19T20:00:00Z', true, false]]) {
+        await isolate(`16m ${label}`, async () => {
+          const { page } = await bfPage('/index.html', iso, { spots: { status: 200, body: { offer: 'bf60',
+            cap: 15, spots_left: open ? 9 : 0, open, ends: '2026-12-18' } } });
+          await page.evaluate(() => new Promise(r => setTimeout(r, 50)));
+          check(`16m the homepage bar is ${expect ? 'shown' : 'hidden'} (${label})`,
+            (await shown(page, '#bf-promo, #promo-bar')) === expect);
+          await page.close();
+        });
+      }
+
+      // 16n. /black-friday (no .html) redirects to the page; the catch-all rewrite would serve the
+      //      homepage. Vercel runs redirects before rewrites, so the rule only has to exist.
+      {
+        const vercel = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8'));
+        const rule = (vercel.redirects || []).find(r => r.source === '/black-friday');
+        check('16n /black-friday redirects to /black-friday.html (temporary)',
+          rule && rule.destination === '/black-friday.html' && rule.permanent === false &&
+          fs.existsSync(path.join(ROOT, 'black-friday.html')), JSON.stringify(rule));
+      }
     }
 
   } catch (e) {
