@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <link rel="canonical" href="https://www.musicandmastery.com/watch-next.html">
+    <meta name="robots" content="noindex,follow">
+    <meta property="og:title" content="What happens next | Music and Mastery">
+    <meta property="og:site_name" content="Music and Mastery">
+<!-- Google tag (gtag.js). Page views and the video events only: no conversion fires on this page.
+     Bots and copies off the live site send nothing (the start.html / landing-page guard). -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11066542604"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  try {
+    if (navigator.webdriver === true || !/(^|\.)musicandmastery\.com$/.test(location.hostname)) {
+      window['ga-disable-G-SPQ1FGTKTV'] = true;
+      window['ga-disable-AW-11066542604'] = true;
+    }
+  } catch (e) {}
+  gtag('js', new Date());
+  gtag('config', 'AW-11066542604');
+  gtag('config', 'G-SPQ1FGTKTV');
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What happens next | Music and Mastery</title>
+  <link rel="icon" href="brand_assets/logo/mm-favicon-64.png" type="image/png" />
+  <link rel="apple-touch-icon" href="brand_assets/logo/mm-apple-touch-180.png" />
+  <link rel="preload" as="font" type="font/woff2" href="/brand_assets/fonts/worksans-latin.woff2" crossorigin>
+  <style>
+
+    /* Self-hosted Google Fonts (latin subset) */
+
+
+    @font-face {
+      font-family: "Work Sans";
+      font-style: normal; font-weight: 100 900; font-display: swap;
+      src: url(/brand_assets/fonts/worksans-latin.woff2) format("woff2");
+    }
+    :root {
+      --light-purple: #e4e3ff;
+      --dark-purple: #726edd;
+      --accent: #4f4ab8;
+      --gold: #c6954f;
+      --cream: #f6f1e8;
+      --cream-grad: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
+      --cream-deep: #efe7d8;
+      --black: #0d0d0d;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Work Sans', sans-serif; color: var(--black); background: #fff; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    h1,h2,h3 { font-family: 'Work Sans', sans-serif; }
+
+    /* NAV */
+    .nav { background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 22px rgba(116,130,151,0.15); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 56px; width: auto; }
+
+    /* HERO GRADIENT */
+    @keyframes hero-fade-a {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+    @keyframes hero-fade-b {
+      0%, 100% { opacity: 0; }
+      50%       { opacity: 1; }
+    }
+
+    /* MAIN */
+    .ty-section {
+      flex: 1;
+      background: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 32px;
+      text-align: center;
+    }
+    .ty-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(125deg, #f7f2ea 0%, #f1ece2 45%, #e7e3f6 100%);
+      animation: hero-fade-a 12s ease-in-out;
+      z-index: 0;
+    }
+    .ty-section::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(125deg, #f1ece2 0%, #e9e3f3 50%, #dcd6f0 100%);
+      animation: hero-fade-b 12s ease-in-out;
+      z-index: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ty-section::before, .ty-section::after { animation: none; }
+    }
+    .ty-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* CHECK ICON */
+    .ty-check {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--dark-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 36px;
+      box-shadow: 0 12px 40px rgba(114,110,221,0.35);
+      animation: pop-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes pop-in {
+      from { opacity: 0; transform: scale(0.6); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .ty-check svg { width: 44px; height: 44px; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+    .ty-eyebrow {
+      display: inline-block;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(198,149,79,0.12);
+      border: 1px solid rgba(198,149,79,0.30);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      margin-bottom: 24px;
+      animation: fade-up 0.6s 0.15s ease-out both;
+    }
+    .ty-heading {
+      font-weight: 900;
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 1.06;
+      letter-spacing: -0.035em;
+      color: var(--black);
+      margin: 0 0 20px;
+      animation: fade-up 0.6s 0.25s ease-out both;
+    }
+    .ty-heading .accent { color: var(--dark-purple); }
+    .ty-sub {
+      font-size: 20px;
+      line-height: 1.65;
+      color: #3a3a4a;
+      margin: 0 auto 48px;
+      max-width: 480px;
+      animation: fade-up 0.6s 0.35s ease-out both;
+    }
+    .ty-what-next {
+      background: rgba(255,255,255,0.6);
+      border: 1.5px solid rgba(114,110,221,0.18);
+      border-radius: 20px;
+      padding: 36px 40px;
+      margin-bottom: 40px;
+      text-align: left;
+      animation: fade-up 0.6s 0.45s ease-out both;
+      backdrop-filter: blur(8px);
+    }
+    .ty-what-next h2 {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--dark-purple);
+      margin: 0 0 20px;
+    }
+    .ty-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; counter-reset: step; }
+    .ty-steps li { display: flex; align-items: flex-start; gap: 14px; font-size: 16px; line-height: 1.55; color: #333; counter-increment: step; }
+    .ty-steps li::before {
+      content: counter(step);
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--dark-purple); color: #fff;
+      font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+    }
+    .ty-booking-card {
+      background: linear-gradient(135deg, #f9f8ff 0%, #ede9ff 100%);
+      border: 1.5px solid rgba(114,110,221,0.25);
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      text-align: left;
+      animation: fade-up 0.6s 0.4s ease-out both;
+      box-shadow: 0 4px 16px rgba(114,110,221,0.12);
+    }
+    .ty-booking-card h2 {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dark-purple);
+      margin: 0 0 16px;
+    }
+    .ty-booking-details {
+      margin: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 18px;
+    }
+    .ty-booking-details dt {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      align-self: center;
+    }
+    .ty-booking-details dd {
+      margin: 0;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 16px;
+      color: var(--black);
+    }
+    .ty-booking-details .ty-paid {
+      color: #1a8a3e;
+      font-weight: 700;
+    }
+
+    .ty-actions {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      animation: fade-up 0.6s 0.55s ease-out both;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Work Sans', sans-serif; font-weight: 700; font-size: 15px;
+      border-radius: 9999px; padding: 14px 32px; text-decoration: none;
+      cursor: pointer; border: none;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+    }
+    .btn:active { transform: scale(0.96); }
+    .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .btn-primary { background: #5f5bc8; color: #fff; box-shadow: 0 4px 20px rgba(114,110,221,0.45); }
+    .btn-primary:hover { background: #4d4aab; transform: translateY(-1px); box-shadow: 0 6px 28px rgba(114,110,221,0.6); }
+    .btn-secondary { background: #fff; color: var(--black); border: 2px solid var(--black); }
+    .btn-secondary:hover { background: var(--black); color: #fff; transform: translateY(-1px); }
+
+    /* FOOTER */
+    footer { background: var(--black); padding: 40px 32px; text-align: center; }
+    .footer-simple { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .footer-simple p { margin: 0; }
+    .footer-lessons, .footer-areas, .footer-sibling { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.6); }
+    .footer-areas a { white-space: nowrap; }
+    .footer-contact a, .footer-link { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .footer-contact a:hover, .footer-link:hover { color: #fff; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.55); }
+
+    /* TRUST BADGES */
+    .trust-badges { background: #fff; padding: 0 32px 0; border-bottom: 1px solid #f0eeff; }
+    .trust-badges-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+    .trust-badge { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 28px 12px; position: relative; transition: transform 0.2s cubic-bezier(0.34,1.2,0.64,1); }
+    .trust-badge:hover { transform: translateY(-2px); }
+    .trust-badge:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: rgba(114,110,221,0.12); }
+    .trust-badge-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; flex-shrink: 0; }
+    .trust-badge-icon svg { width: 24px; height: 24px; }
+    .trust-badge-icon.icon-offer { background: rgba(79,74,184,0.1); }
+    .trust-badge-icon.icon-offer svg { stroke: var(--accent); }
+    .trust-badge-icon.icon-home { background: rgba(114,110,221,0.1); }
+    .trust-badge-icon.icon-home svg { stroke: var(--dark-purple); }
+    .trust-badge-icon.icon-shield { background: rgba(114,110,221,0.1); }
+    .trust-badge-icon.icon-shield svg { stroke: var(--dark-purple); }
+    .trust-badge-icon.icon-guarantee { background: rgba(114,110,221,0.1); }
+    .trust-badge-icon.icon-guarantee svg { stroke: var(--dark-purple); }
+    .trust-badge-icon.icon-contract { background: rgba(114,110,221,0.1); }
+    .trust-badge-icon.icon-contract svg { stroke: var(--dark-purple); }
+    .trust-badge-label { font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 13px; color: var(--black); line-height: 1.3; margin-bottom: 2px; }
+    .trust-badge-label.label-accent { color: #4f4ab8; }
+    .trust-badge-sub { font-size: 12px; color: #595959; line-height: 1.3; }
+
+    @media (max-width: 768px) {
+      .nav-inner { padding: 0 20px; }
+      .nav-logo img { height: 40px; }
+      .ty-section { padding: 72px 20px; }
+      .ty-what-next { padding: 28px 24px; }
+      .ty-actions { flex-direction: column; align-items: center; }
+      .ty-actions .btn { width: 100%; max-width: 320px; }
+      .ty-section::before { animation: none; opacity: 1; }
+      .ty-section::after  { animation: none; opacity: 0; }
+      footer { padding: 32px 20px; }
+      .trust-badges { padding: 0 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .trust-badges-inner { grid-template-columns: repeat(5, minmax(140px, 1fr)); min-width: 700px; }
+      .trust-badge { padding: 20px 10px; }
+      .trust-badge-icon { width: 36px; height: 36px; border-radius: 10px; }
+      .trust-badge-icon svg { width: 20px; height: 20px; }
+      .trust-badge-label { font-size: 12px; }
+      .trust-badge-sub { font-size: 11px; }
+    }
+    /* VSL player (VSLs in signup, 2026-11-13). The landing-page hero video's box and card: muted on
+       load, "Your video is playing / Tap to unmute" over it while it plays. Behaviour in
+       js/vsl-player.js, the YouTube id in js/vsl-ids.js. The box is the video's own 9:16 shape from
+       the first paint, so nothing jumps when it starts. */
+    .hero-vsl { position: relative; width: min(100%, 320px, calc(56vh * 9 / 16)); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 20px; overflow: hidden; background: #1a1a2e; box-shadow: 0 24px 60px rgba(114,110,221,0.24), 0 6px 18px rgba(0,0,0,0.10); }
+    .hero-vsl[hidden] { display: none; }
+    .hero-vsl-frame, .hero-vsl-frame iframe, .hero-vsl-btn { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-vsl-frame iframe { border: 0; }
+    .hero-vsl-btn { z-index: 2; padding: 0; border: 0; background: none; cursor: pointer; display: none; align-items: center; justify-content: center; }
+    .hero-vsl.is-live .hero-vsl-btn { display: flex; }
+    .hero-vsl.is-engaged .hero-vsl-btn { display: none; }
+    .hero-vsl-btn:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: -3px; }
+    .hero-vsl-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 20px; max-width: 78%; border-radius: 16px; background: rgba(114,110,221,0.92); border: 2px solid rgba(255,255,255,0.85); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; line-height: 1.25; text-align: center; box-shadow: 0 12px 34px rgba(20,18,40,0.35); transition: transform 0.15s; }
+    .hero-vsl-btn:hover .hero-vsl-card { transform: scale(1.04); }
+    .hero-vsl-btn:active .hero-vsl-card { transform: scale(0.98); }
+    .hero-vsl-icon { width: 34px; height: 34px; }
+    .hero-vsl-sub { font-weight: 600; font-size: 14px; opacity: 0.92; }
+    /* WATCH PAGES (VSLs in signup, 2026-11-13): headline, the video playing muted, then the line and
+       Call / Text, the order Hormozi's pages use on a phone. On a phone the video takes what the
+       screen has left after the header, headline, line and buttons, so all of it fits the first
+       screen (the 100vh line is the fallback for browsers without svh). */
+    .watch-section { align-items: flex-start; padding: 48px 32px 64px; }
+    .watch-section .ty-heading { font-size: clamp(32px, 4vw, 48px); margin-bottom: 24px; }
+    .watch-section .hero-vsl { width: min(100%, 320px, max(160px, calc((100vh - 450px) * 9 / 16))); width: min(100%, 320px, max(160px, calc((100svh - 450px) * 9 / 16))); margin: 0 auto 24px; }
+    .watch-line { margin: 0 auto 20px; }
+    .watch-actions .btn { min-width: 150px; }
+    @media (max-width: 768px) {
+      .watch-section { padding: 20px 20px 40px; }
+      .watch-section .ty-heading { font-size: clamp(26px, 7.6vw, 36px); margin-bottom: 14px; }
+      .watch-section .hero-vsl { width: min(100%, 320px, max(140px, calc((100vh - 340px) * 9 / 16))); width: min(100%, 320px, max(140px, calc((100svh - 340px) * 9 / 16))); margin-bottom: 14px; }
+      .watch-line { font-size: 16px; line-height: 1.5; margin-bottom: 14px; }
+      .watch-actions { flex-direction: row; }
+      .watch-actions .btn { width: auto; min-width: 0; flex: 1 1 0; max-width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span style="display:inline-flex;align-items:center;gap:10px;"><img src="brand_assets/logo/mm-icon-trim.png" alt="Music and Mastery" width="61" height="112" style="height:56px;width:auto;" /><span style="font-family: 'Work Sans', sans-serif;font-weight:600;font-size:clamp(20px,4.5vw,26px);color:var(--black);line-height:1;letter-spacing:.01em;">Music <img src="brand_assets/logo/mm-ampersand.png" alt="and" style="height:0.78em;width:auto;display:inline-block;vertical-align:-0.04em;margin:0 0.05em;" /> Mastery</span></span>
+    </a>
+  </div>
+</nav>
+
+<main>
+
+<!-- WHAT HAPPENS NEXT, VSL A lead cut (VSLs in signup, 2026-11-13). The drip's text and emails link
+     here with ?src= (text, email, booking-email), which rides along on the GA4 events. -->
+<section class="ty-section watch-section">
+  <div class="ty-inner">
+    <h1 class="ty-heading">Here's what happens next</h1>
+    <div class="hero-vsl" data-vsl="vsl_a_lead">
+      <div class="hero-vsl-frame">
+        <iframe title="What happens next" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <button type="button" class="hero-vsl-btn" aria-label="Turn on the sound and play the video from the start">
+        <span class="hero-vsl-card">
+          <svg class="hero-vsl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a8 8 0 0 1 0 11"/></svg>
+          <span>Your video is playing</span>
+          <span class="hero-vsl-sub">Tap to unmute</span>
+        </span>
+      </button>
+    </div>
+    <p class="ty-sub watch-line">Questions before we talk? Call or text me at (657) 245-5538.</p>
+    <div class="ty-actions watch-actions">
+      <a href="tel:+16572455538" class="btn btn-primary" data-ga="vsl_call_tap">Call</a>
+      <a href="sms:+16572455538" class="btn btn-secondary" data-ga="vsl_text_tap">Text</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-simple">
+    <p class="footer-contact">
+      <a href="mailto:jonny@mtncitymusic.com">jonny@mtncitymusic.com</a>
+    </p>
+    <p class="footer-lessons">Lessons: <a href="piano-lessons-orange-county.html" class="footer-link">Piano</a> &middot; <a href="guitar-lessons-orange-county.html" class="footer-link">Guitar</a> &middot; <a href="voice-lessons-orange-county.html" class="footer-link">Voice</a> &middot; <a href="bass-lessons-orange-county.html" class="footer-link">Bass</a> &middot; <a href="ukulele-lessons-orange-county.html" class="footer-link">Ukulele</a></p>
+    <p class="footer-areas">Piano lessons: <a href="piano-lessons-orange-county.html" class="footer-link">Orange County</a> &middot; <a href="piano-lessons-irvine.html" class="footer-link">Irvine</a> &middot; <a href="piano-lessons-newport-beach.html" class="footer-link">Newport Beach</a> &middot; <a href="piano-lessons-tustin.html" class="footer-link">Tustin</a> &middot; <a href="piano-lessons-los-angeles.html" class="footer-link">Los Angeles</a> &middot; <a href="piano-lessons-glendale.html" class="footer-link">Glendale</a> &middot; <a href="piano-lessons-pasadena.html" class="footer-link">Pasadena</a> &middot; <a href="piano-lessons-burbank.html" class="footer-link">Burbank</a><br />Guitar lessons: <a href="guitar-lessons-orange-county.html" class="footer-link">Orange County</a> &middot; <a href="guitar-lessons-irvine.html" class="footer-link">Irvine</a> &middot; <a href="guitar-lessons-newport-beach.html" class="footer-link">Newport Beach</a> &middot; <a href="guitar-lessons-tustin.html" class="footer-link">Tustin</a> &middot; <a href="guitar-lessons-los-angeles.html" class="footer-link">Los Angeles</a> &middot; <a href="guitar-lessons-glendale.html" class="footer-link">Glendale</a> &middot; <a href="guitar-lessons-pasadena.html" class="footer-link">Pasadena</a> &middot; <a href="guitar-lessons-burbank.html" class="footer-link">Burbank</a></p>
+    <p class="footer-areas">Orange County: <a href="in-home-irvine.html" class="footer-link">Irvine</a> &middot; <a href="in-home-newport-beach.html" class="footer-link">Newport Beach</a> &middot; <a href="in-home-tustin.html" class="footer-link">Tustin</a><br />Los Angeles: <a href="in-home-west-hollywood.html" class="footer-link">West Hollywood</a> &middot; <a href="in-home-east-hollywood.html" class="footer-link">East Hollywood</a> &middot; <a href="in-home-burbank.html" class="footer-link">Burbank</a> &middot; <a href="in-home-glendale.html" class="footer-link">Glendale</a> &middot; <a href="in-home-pasadena.html" class="footer-link">Pasadena</a></p>
+    <p><a href="instructors.html" class="footer-link">Instructors</a></p>
+    <p><a href="faq.html" class="footer-link">FAQ</a></p>
+    <p><a href="privacy-policy.html" class="footer-link">Privacy Policy</a></p>
+    <p class="footer-copy">© 2026 Music and Mastery</p>
+  </div>
+</footer>
+
+<!-- VSL player: the id first, then the player. -->
+<script src="/js/vsl-ids.js?v=9c50eb3389" defer></script>
+<script src="/js/vsl-player.js?v=c76d62ddb5" defer></script>
+<script>
+// Call / Text taps, for GA4 only, with the video and the ?src= value. Deliberately not the site's
+// phone_call_click: that event feeds a Google Ads conversion, and everyone here is a lead already.
+(function () {
+  var box = document.querySelector('.hero-vsl[data-vsl]');
+  var video = box ? box.getAttribute('data-vsl') : '';
+  var page = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
+  var src = '';
+  try { src = (new URLSearchParams(location.search).get('src') || '').slice(0, 40); } catch (e) {}
+  document.querySelectorAll('.watch-actions a[data-ga]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var p = { video: video, page: page };
+      if (src) p.src = src;
+      try { if (typeof gtag === 'function') gtag('event', a.getAttribute('data-ga'), p); } catch (e) {}
+    });
+  });
+})();
+</script>
+</body>
+</html>

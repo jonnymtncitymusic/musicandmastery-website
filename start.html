@@ -454,20 +454,26 @@
        inside the first screen from 320x540 up (scratchpad measure.mjs, 2026-11-11). From 1100px
        css/lp-proof.css puts the video in its own column and these rules stop mattering. */
     .hero.start-hero { padding-top: 40px; }
-    .start-hero .hero-vsl { width: min(100%, 320px, calc(40vh * 9 / 16)); margin: 0 auto 20px; }
-    @supports (height: 100svh) { .start-hero .hero-vsl { width: min(100%, 320px, max(100px, calc((100svh - 400px) * 9 / 16))); } }
+    .start-hero .hero-vsl { width: min(100%, 320px, calc(36vh * 9 / 16)); margin: 0 auto 20px; }
+    @supports (height: 100svh) { .start-hero .hero-vsl { width: min(100%, 320px, max(100px, calc((100svh - 440px) * 9 / 16))); } }
     .hero.start-hero .hero-heading { margin-bottom: 16px; font-size: clamp(30px, 5vw, 52px); }
+    /* The one line above the video (VSLs in signup, 2026-11-13). It costs ~40px of a phone screen,
+       so the video's height rules above and below take 40px more off, and the button stays inside
+       the first screen at the 2026-11-11 sizes. */
+    .start-hero .vsl-lede { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 16px; line-height: 1.35; color: #3a3a4a; margin: 0 auto 12px; text-wrap: balance; }
+    .hero-vsl[hidden] { display: none; }
     @media (max-width: 768px) {
       .hero.start-hero { padding-top: 20px; }
       .hero.start-hero .hero-heading { font-size: clamp(26px, 7.6vw, 36px); margin-bottom: 14px; }
-      @supports (height: 100svh) { .start-hero .hero-vsl { width: min(100%, 320px, max(100px, calc((100svh - 330px) * 9 / 16))); } }
+      @supports (height: 100svh) { .start-hero .hero-vsl { width: min(100%, 320px, max(100px, calc((100svh - 370px) * 9 / 16))); } }
+      .start-hero .vsl-lede { font-size: 15px; margin-bottom: 10px; }
     }
     @media (max-width: 1099px) and (max-height: 700px) {
       .start-hero .hero-vsl-card { font-size: 13px; padding: 10px 8px; gap: 4px; max-width: 88%; }
       .start-hero .hero-vsl-sub { font-size: 12px; }
       .start-hero .hero-vsl-icon { width: 22px; height: 22px; }
     }
-    @media (min-width: 1100px) { .hero.start-hero { padding-top: 100px; } .hero.start-hero .hero-heading { font-size: clamp(40px, 6vw, 72px); } }
+    @media (min-width: 1100px) { .hero.start-hero { padding-top: 100px; } .hero.start-hero .hero-heading { font-size: clamp(40px, 6vw, 72px); } .start-hero .vsl-lede { text-align: left; margin: 0 0 20px; } }
     .hero-vsl-frame, .hero-vsl-frame iframe, .hero-vsl-btn { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-vsl-frame iframe { border: 0; }
     .hero-vsl-btn { z-index: 2; padding: 0; border: 0; background: none; cursor: pointer; display: none; align-items: center; justify-content: center; }
@@ -542,15 +548,20 @@
 <!-- HERO. Where a Meta lead lands: the "Book My Free Lesson" button at the end of the Instant
      Form (form v3, 2026-11-11) opens this page. Laid out the way Hormozi's live page is
      (acquisition.com/marketing-workshop, checked 2026-11-11 at 390x844): headline, then the video
-     playing muted, then the button, all inside the first phone screen. The video is VSL B, the
-     same one as the landing pages' hero (js/hero-vsl.js). The button opens the booking form. -->
+     playing muted, then the button, all inside the first phone screen. The button opens the booking form.
+     Since 2026-11-13 the video is VSL A's 'lead' cut, the post-signup video (it was VSL B, which now
+     runs as the Meta ad itself), with one line above it; the heading and the calendar are unchanged
+     (~/brainstorms/2026-11-13-vsls-in-signup-process.md, Q13). Same player and card as the landing
+     pages' hero, driven by js/vsl-player.js with its id in js/vsl-ids.js. -->
 <section class="hero start-hero">
   <div class="hero-inner">
     <h1 class="hero-heading blur-fade blur-fade-2">Thanks. Now pick your <span class="accent-word">free lesson time</span>.</h1>
 
-    <div class="hero-vsl blur-fade blur-fade-3">
+    <p class="vsl-lede blur-fade blur-fade-2">Watch this first: what happens next (3 minutes)</p>
+
+    <div class="hero-vsl blur-fade blur-fade-3" data-vsl="vsl_a_lead">
       <div class="hero-vsl-frame">
-        <iframe data-src="https://www.youtube-nocookie.com/embed/vRMcILWtQHU?autoplay=1&amp;mute=1&amp;rel=0&amp;playsinline=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;enablejsapi=1" title="How Music and Mastery lessons work" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe title="What happens next" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <button type="button" class="hero-vsl-btn" aria-label="Turn on the sound and play the video from the start">
         <span class="hero-vsl-card">
@@ -822,7 +833,8 @@
 <script src="/js/scheduling-widget.js?v=2026110901"></script>
 
 
-<script src="/js/hero-vsl.js?v=52fd0c7015" defer></script>
+<script src="/js/vsl-ids.js?v=9c50eb3389" defer></script>
+<script src="/js/vsl-player.js?v=c76d62ddb5" defer></script>
 <script src="/js/reviews.js?v=949f4d7874" defer></script>
 </body>
 </html>

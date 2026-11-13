@@ -390,6 +390,25 @@
       .trust-badge-label { font-size: 12px; }
       .trust-badge-sub { font-size: 11px; }
     }
+    /* VSL player (VSLs in signup, 2026-11-13). The landing-page hero video's box and card: muted on
+       load, "Your video is playing / Tap to unmute" over it while it plays. Behaviour in
+       js/vsl-player.js, the YouTube id in js/vsl-ids.js. The box is the video's own 9:16 shape from
+       the first paint, so nothing jumps when it starts. */
+    .hero-vsl { position: relative; width: min(100%, 320px, calc(56vh * 9 / 16)); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 20px; overflow: hidden; background: #1a1a2e; box-shadow: 0 24px 60px rgba(114,110,221,0.24), 0 6px 18px rgba(0,0,0,0.10); }
+    .hero-vsl[hidden] { display: none; }
+    .hero-vsl-frame, .hero-vsl-frame iframe, .hero-vsl-btn { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-vsl-frame iframe { border: 0; }
+    .hero-vsl-btn { z-index: 2; padding: 0; border: 0; background: none; cursor: pointer; display: none; align-items: center; justify-content: center; }
+    .hero-vsl.is-live .hero-vsl-btn { display: flex; }
+    .hero-vsl.is-engaged .hero-vsl-btn { display: none; }
+    .hero-vsl-btn:focus-visible { outline: 3px solid var(--dark-purple); outline-offset: -3px; }
+    .hero-vsl-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 20px; max-width: 78%; border-radius: 16px; background: rgba(114,110,221,0.92); border: 2px solid rgba(255,255,255,0.85); color: #fff; font-family: 'Work Sans', sans-serif; font-weight: 800; font-size: 17px; line-height: 1.25; text-align: center; box-shadow: 0 12px 34px rgba(20,18,40,0.35); transition: transform 0.15s; }
+    .hero-vsl-btn:hover .hero-vsl-card { transform: scale(1.04); }
+    .hero-vsl-btn:active .hero-vsl-card { transform: scale(0.98); }
+    .hero-vsl-icon { width: 34px; height: 34px; }
+    .hero-vsl-sub { font-weight: 600; font-size: 14px; opacity: 0.92; }
+    /* thank-you.html: the video sits above the thank-you words (VSLs in signup, Q6). */
+    .ty-vsl { margin: 0 auto 32px; }
   </style>
     <script type="application/ld+json">
 {
@@ -477,6 +496,29 @@
 <!-- THANK YOU -->
 <section class="ty-section">
   <div class="ty-inner">
+
+    <!-- VSL A (VSLs in signup, 2026-11-13): after a lead form the 'lead' cut, after a booking or a
+         callback request (a family who picked a time) the 'booked' cut. The widget puts ?type= on
+         every redirect here (lead | booking | callback); no type at all is treated as a lead. -->
+    <div class="hero-vsl ty-vsl" data-vsl="vsl_a_lead">
+      <div class="hero-vsl-frame">
+        <iframe title="What happens next" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <button type="button" class="hero-vsl-btn" aria-label="Turn on the sound and play the video from the start">
+        <span class="hero-vsl-card">
+          <svg class="hero-vsl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a8 8 0 0 1 0 11"/></svg>
+          <span>Your video is playing</span>
+          <span class="hero-vsl-sub">Tap to unmute</span>
+        </span>
+      </button>
+    </div>
+    <script>
+      (function () {
+        var t = null;
+        try { t = new URLSearchParams(location.search).get('type'); } catch (e) {}
+        if (t === 'booking' || t === 'callback') document.querySelector('.ty-vsl').setAttribute('data-vsl', 'vsl_a_booked');
+      })();
+    </script>
 
     <div class="ty-check">
       <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
@@ -655,5 +697,8 @@
 
 <!-- Credits a booking to the headline this browser saw (headline test, Hormozi edit #7). -->
 <script src="/js/headline-test.js?v=0ca85c8bf0" defer></script>
+<!-- VSL player: the id first, then the player. -->
+<script src="/js/vsl-ids.js?v=9c50eb3389" defer></script>
+<script src="/js/vsl-player.js?v=c76d62ddb5" defer></script>
 </body>
 </html>
