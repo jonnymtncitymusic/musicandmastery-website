@@ -407,8 +407,9 @@
     .hero-vsl-btn:active .hero-vsl-card { transform: scale(0.98); }
     .hero-vsl-icon { width: 34px; height: 34px; }
     .hero-vsl-sub { font-weight: 600; font-size: 14px; opacity: 0.92; }
-    /* thank-you.html: the video sits above the thank-you words (VSLs in signup, Q6). */
-    .ty-vsl { margin: 0 auto 32px; }
+    /* thank-you.html: the video sits right under the thank-you heading, above the rest of the
+       words (VSLs in signup Q6; heading first, Jonny 2026-11-13). */
+    .ty-vsl { margin: 8px auto 32px; }
   </style>
     <script type="application/ld+json">
 {
@@ -497,7 +498,16 @@
 <section class="ty-section">
   <div class="ty-inner">
 
-    <!-- VSL A (VSLs in signup, 2026-11-13): after a lead form the 'lead' cut, after a booking or a
+    <div class="ty-check">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+
+    <div class="ty-eyebrow" id="ty-eyebrow">Form Received</div>
+
+    <h1 class="ty-heading" id="ty-headline">You're all set,<br><span class="accent">we'll be in touch.</span></h1>
+
+    <!-- VSL A (VSLs in signup, 2026-11-13), right under the thank-you heading so the family reads
+         the thank-you first (Jonny 2026-11-13). After a lead form the 'lead' cut, after a booking or a
          callback request (a family who picked a time) the 'booked' cut. The widget puts ?type= on
          every redirect here (lead | booking | callback); no type at all is treated as a lead. -->
     <div class="hero-vsl ty-vsl" data-vsl="vsl_a_lead">
@@ -519,14 +529,6 @@
         if (t === 'booking' || t === 'callback') document.querySelector('.ty-vsl').setAttribute('data-vsl', 'vsl_a_booked');
       })();
     </script>
-
-    <div class="ty-check">
-      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-
-    <div class="ty-eyebrow" id="ty-eyebrow">Form Received</div>
-
-    <h1 class="ty-heading" id="ty-headline">You're all set,<br><span class="accent">we'll be in touch.</span></h1>
 
     <p class="ty-sub" id="ty-sub">
       Thank you for reaching out to Music and Mastery.

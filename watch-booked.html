@@ -332,7 +332,9 @@
     @media (max-width: 768px) {
       .watch-section { padding: 20px 20px 40px; }
       .watch-section .ty-heading { font-size: clamp(26px, 7.6vw, 36px); margin-bottom: 14px; }
-      .watch-section .hero-vsl { width: min(100%, 320px, max(140px, calc((100vh - 340px) * 9 / 16))); width: min(100%, 320px, max(140px, calc((100svh - 340px) * 9 / 16))); margin-bottom: 14px; }
+      /* This page's heading runs a line longer than watch-next.html's, so its video gives that line back
+         and may shrink further on the smallest in-app screens, keeping Call / Text in the first screen. */
+      .watch-section .hero-vsl { width: min(100%, 320px, max(110px, calc((100vh - 375px) * 9 / 16))); width: min(100%, 320px, max(110px, calc((100svh - 375px) * 9 / 16))); margin-bottom: 14px; }
       .watch-line { font-size: 16px; line-height: 1.5; margin-bottom: 14px; }
       .watch-actions { flex-direction: row; }
       .watch-actions .btn { width: auto; min-width: 0; flex: 1 1 0; max-width: 160px; }
@@ -356,7 +358,7 @@
      here with ?src= (text, email, booking-email), which rides along on the GA4 events. -->
 <section class="ty-section watch-section">
   <div class="ty-inner">
-    <h1 class="ty-heading">You're booked. Here's what happens next</h1>
+    <h1 class="ty-heading">Thanks for booking. Here's what happens next</h1>
     <div class="hero-vsl" data-vsl="vsl_a_booked">
       <div class="hero-vsl-frame">
         <iframe title="What happens next" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
