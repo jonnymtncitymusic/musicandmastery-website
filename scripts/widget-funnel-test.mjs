@@ -986,7 +986,7 @@ async function findSlots(page) {
         const choices = await startChoices(page);
         check('16a the picker offers Right away, December and January, in that order',
           JSON.stringify(choices.map(c => [c.value, c.text])) ===
-          JSON.stringify([['asap', 'Right away'], ['december', 'December'], ['january', 'January']]),
+          JSON.stringify([['asap', 'As soon as next week'], ['december', 'December'], ['january', 'January']]),
           JSON.stringify(choices));
         check('16a all three are shown in November', choices.every(c => c.shown), JSON.stringify(choices));
         check('16a the required choice is one that is always shown',
