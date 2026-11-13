@@ -872,6 +872,150 @@ async function findSlots(page) {
       }
     }
 
+    // ── 16. Black Friday page: when to start (one campaign, remove after Dec 18, 2026) ─
+    // Jonny 2026-11-12: a filmed ad says "we can get you started as early as next week", so the
+    // page offers "Right away" (sent as "asap") beside December and January. From December 1
+    // "Right away" already means December, so December is hidden; from December 19 the form is
+    // gone. The page submits without the widget and sends the same `attribution`.
+    {
+      const BF_CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': 'GET,POST,OPTIONS' };
+      // The page at a fixed Pacific moment: Date is replaced before any page script runs.
+      const bfPage = async (route, isoNow) => {
+        const page = await browser.newPage();
+        const posts = [];
+        await page.evaluateOnNewDocument(fixed => {
+          const RealDate = Date;
+          class FixedDate extends RealDate {
+            constructor(...a) { super(...(a.length ? a : [fixed])); }
+            static now() { return fixed; }
+          }
+          window.Date = FixedDate;
+        }, Date.parse(isoNow));
+        await page.setRequestInterception(true);
+        page.on('request', req => {
+          const url = req.url();
+          if (/googletagmanager|google-analytics|doubleclick|gstatic|fonts\.googleapis|googleusercontent/.test(url)) {
+            return req.abort();
+          }
+          if (req.isNavigationRequest() && url.includes('black-friday-thanks')) {
+            return req.respond({ status: 200, contentType: 'text/html', body: '<p>thanks</p>' });
+          }
+          if (!url.includes('/api/scheduling/')) return req.continue();
+          if (req.method() === 'OPTIONS') return req.respond({ status: 204, headers: BF_CORS, body: '' });
+          const json = body => req.respond({ status: 200, headers: BF_CORS, contentType: 'application/json',
+            body: JSON.stringify(body) });
+          if (url.includes('/offers/bf60/spots')) {
+            return json({ offer: 'bf60', cap: 15, spots_left: 9, open: true, ends: '2026-12-18' });
+          }
+          if (url.includes('/lead')) {
+            try { posts.push(JSON.parse(req.postData() || '{}')); } catch (e) { posts.push({}); }
+            return json({ success: true, lead_id: 1, spots_left: 8, message: 'ok' });
+          }
+          return json({});
+        });
+        await page.goto(`${base}${route}`, { waitUntil: 'networkidle2' });
+        return { page, posts };
+      };
+      // Each start choice as the visitor sees it: its value, its label, and whether it shows.
+      const startChoices = page => page.$$eval('input[name="start_timing"]', els => els.map(el => {
+        const label = el.closest('label');
+        const box = label.getBoundingClientRect();
+        return { value: el.value, text: label.textContent.trim(), shown: box.width > 0 && box.height > 0,
+          required: el.required };
+      }));
+      const fillAndSend = async (page, posts, start) => {
+        await page.$eval('#bf-form', el => el.scrollIntoView());
+        await page.$eval('input[name="lesson_for"][value="child"]', el => el.closest('label').click());
+        await page.type('#bf-name', 'ZZTEST Parent');
+        await page.type('#bf-email', 'zztest@example.com');
+        await page.type('#bf-phone', '7605551234');
+        await page.select('#bf-instrument', 'Piano');
+        await page.type('#bf-city', city);
+        if (start) await page.$eval(`input[name="start_timing"][value="${start}"]`, el => el.closest('label').click());
+        await page.click('#bf-submit');
+        await page.waitForFunction(() => location.href.includes('black-friday-thanks'), { timeout: 5000 })
+          .catch(() => {});
+        return posts[posts.length - 1];
+      };
+
+      // 16a. November: three choices, in order, all shown, and the Christmas line stays.
+      await isolate('16a', async () => {
+        const { page } = await bfPage('/black-friday.html', '2026-11-12T20:00:00Z');
+        const choices = await startChoices(page);
+        check('16a the picker offers Right away, December and January, in that order',
+          JSON.stringify(choices.map(c => [c.value, c.text])) ===
+          JSON.stringify([['asap', 'Right away'], ['december', 'December'], ['january', 'January']]),
+          JSON.stringify(choices));
+        check('16a all three are shown in November', choices.every(c => c.shown), JSON.stringify(choices));
+        check('16a the required choice is one that is always shown',
+          choices.filter(c => c.required).map(c => c.value).join() === 'asap', JSON.stringify(choices));
+        const html = await page.content();
+        check('16a the Christmas line is still under the picker',
+          html.includes('Giving it to your child for Christmas? Pick a January start.'));
+        await page.close();
+      });
+
+      // 16b. "Right away" posts "asap", tagged with the offer, the brand and the ad that brought them.
+      await isolate('16b', async () => {
+        const { page, posts } = await bfPage('/black-friday.html?fbclid=BF-FB-1&utm_campaign=bf60',
+          '2026-11-12T20:00:00Z');
+        const sentBody = await fillAndSend(page, posts, 'asap');
+        check('16b Right away is sent as start_timing "asap"', sentBody && sentBody.start_timing === 'asap',
+          JSON.stringify(sentBody));
+        check('16b the signup carries offer bf60 and this brand',
+          sentBody && sentBody.offer === 'bf60' && sentBody.brand_source === brand, JSON.stringify(sentBody));
+        const at = (sentBody && sentBody.attribution) || {};
+        check('16b it carries the first-touch ad tags as attribution',
+          at.fbclid === 'BF-FB-1' && at.utm_campaign === 'bf60' && at.landing === '/black-friday.html' &&
+          typeof at.first_seen === 'string' && !('source' in sentBody), JSON.stringify(sentBody));
+        await page.close();
+      });
+
+      // 16c. December and January post their own values.
+      for (const start of ['december', 'january']) {
+        await isolate(`16c ${start}`, async () => {
+          const { page, posts } = await bfPage('/black-friday.html', '2026-11-12T20:00:00Z');
+          const sentBody = await fillAndSend(page, posts, start);
+          check(`16c ${start} is sent as start_timing "${start}"`, sentBody && sentBody.start_timing === start,
+            JSON.stringify(sentBody));
+          await page.close();
+        });
+      }
+
+      // 16d. From December 1 (Pacific), December is hidden and Right away still sends.
+      await isolate('16d', async () => {
+        const { page, posts } = await bfPage('/black-friday.html', '2026-12-01T08:30:00Z');
+        const shown = (await startChoices(page)).filter(c => c.shown).map(c => c.value);
+        check('16d on December 1 the picker shows Right away and January only',
+          shown.join() === 'asap,january', shown.join());
+        const sentBody = await fillAndSend(page, posts, 'asap');
+        check('16d a December signup still sends "asap"', sentBody && sentBody.start_timing === 'asap',
+          JSON.stringify(sentBody));
+        await page.close();
+      });
+
+      // 16e. November 30 at 11:30 PM Pacific is still November: December still shows.
+      await isolate('16e', async () => {
+        const { page } = await bfPage('/black-friday.html', '2026-12-01T07:30:00Z');
+        const shown = (await startChoices(page)).filter(c => c.shown).map(c => c.value);
+        check('16e late on November 30 Pacific all three still show', shown.join() === 'asap,december,january',
+          shown.join());
+        await page.close();
+      });
+
+      // 16f. December 19 (Pacific): the offer has ended and the form is not shown.
+      await isolate('16f', async () => {
+        const { page } = await bfPage('/black-friday.html', '2026-12-19T20:00:00Z');
+        const formShown = await page.$eval('#bf-form', el => {
+          const b = el.getBoundingClientRect();
+          return b.width > 0 && b.height > 0;
+        });
+        check('16f after December 18 the form is gone', !formShown);
+        await page.close();
+      });
+    }
+
   } catch (e) {
     check('the harness itself ran to completion', false, String((e && e.message) || e));
   } finally {

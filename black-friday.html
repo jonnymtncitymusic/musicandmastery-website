@@ -9,15 +9,15 @@
     <link rel="canonical" href="https://www.musicandmastery.com/black-friday.html">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Black Friday: First Month of Music Lessons for $60 | Music and Mastery">
-    <meta name="twitter:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $60. 15 families only. Start in December or January. Offer ends December 18, 2026.">
+    <meta name="twitter:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $60. 15 families only. Start right away or in December or January. Offer ends December 18, 2026.">
     <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
     <meta property="og:title" content="Black Friday: First Month of Music Lessons for $60 | Music and Mastery">
-    <meta property="og:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $60. 15 families only. Start in December or January. Offer ends December 18, 2026.">
+    <meta property="og:description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $60. 15 families only. Start right away or in December or January. Offer ends December 18, 2026.">
     <meta property="og:url" content="https://www.musicandmastery.com/black-friday.html">
     <meta property="og:image" content="https://lh3.googleusercontent.com/d/1708U5j1FqU8ZyZLZOxh8DjArXKh4AIsw">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Music and Mastery">
-    <meta name="description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $60. 15 families only. Start in December or January. Offer ends December 18, 2026.">
+    <meta name="description" content="Weekly 30-minute music lessons in your home across Orange County and Los Angeles, first month $60. 15 families only. Start right away or in December or January. Offer ends December 18, 2026.">
 <!-- Google tag (gtag.js), loaded after the page's first paint. Why and how this keeps every hit:
      see the note on piano-lessons-orange-county.html (speed, 2026-10-19). -->
 <script>
@@ -76,7 +76,10 @@
       // No time zone support: Pacific is UTC-8 for the whole of Nov 2 to Dec 31.
       return new Date(Date.now() - 8 * 3600 * 1000).toISOString().slice(0, 10);
     }
-    if (pacificToday() > END_AFTER) document.documentElement.classList.add('bf-ended');
+    var today = pacificToday();
+    if (today > END_AFTER) document.documentElement.classList.add('bf-ended');
+    // From December 1 a "Right away" start is a December start, so the picker drops December.
+    if (today >= '2026-12-01') document.documentElement.classList.add('bf-december');
   })();
   </script>
   <style>
@@ -225,6 +228,11 @@
     .bf-choice input { width: 20px; height: 20px; margin: 0; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
     .bf-choice:has(input:checked) { border-color: var(--dark-purple); background: rgba(114,110,221,0.08); }
     .bf-choice:has(input:focus-visible) { box-shadow: 0 0 0 3px rgba(114,110,221,0.35); }
+    /* Start picker: "Right away" on its own row, December and January under it. From Dec 1
+       (html.bf-december) December is hidden and the two left share a row. */
+    .bf-start-choices .bf-start-now { grid-column: 1 / -1; }
+    html.bf-december .bf-start-choices .bf-start-dec { display: none; }
+    html.bf-december .bf-start-choices .bf-start-now { grid-column: auto; }
     .bf-submit { width: 100%; margin-top: 6px; }
     .bf-submit[disabled] { opacity: 0.7; cursor: progress; transform: none !important; }
     .bf-form .small-print { text-align: center; margin-top: 14px; }
@@ -355,7 +363,7 @@
   <div class="bf-hero-inner">
     <div class="hero-eyebrow blur-fade blur-fade-1">Black Friday offer, ends December 18</div>
     <h1 class="hero-heading blur-fade blur-fade-2">Hear your child play <span class="accent-word">the songs they love</span>.</h1>
-    <p class="hero-sub blur-fade blur-fade-2">Your first month of weekly 30-minute lessons is $60. A teacher comes to your home across Orange County and Los Angeles, and you choose a December or January start. We're taking 15 families.</p>
+    <p class="hero-sub blur-fade blur-fade-2">Your first month of weekly 30-minute lessons is $60. A teacher comes to your home across Orange County and Los Angeles, and you can start right away or in December or January. We're taking 15 families.</p>
     <div class="bf-counter blur-fade blur-fade-2 bf-live" hidden aria-live="polite"><span class="bf-count-num" data-bf-count>15</span><span class="bf-count-text">of 15 spots left</span></div>
     <div class="bf-cta-wrap blur-fade blur-fade-3">
       <a href="#form" class="btn btn-accent btn-accent-lg bf-live">Claim a $60 spot</a>
@@ -390,7 +398,7 @@
     <ol class="steps-list">
       <li><span class="step-n">1</span><span>Tell us who the lessons are for and what they want to play.</span></li>
       <li><span class="step-n">2</span><span>We match a teacher and a weekly time, then send your $60 invoice.</span></li>
-      <li><span class="step-n">3</span><span>Lessons start in December or January, whichever you picked.</span></li>
+      <li><span class="step-n">3</span><span>Lessons start right away or in December or January, whichever you picked.</span></li>
     </ol>
     <a href="#form" class="btn btn-accent btn-accent-lg bf-live">Claim a $60 spot</a>
   </div>
@@ -444,7 +452,7 @@
     </details>
     <details class="faq-item">
       <summary>Can we start in January?</summary>
-      <p class="faq-a">Yes. Pick December or January when you sign up.</p>
+      <p class="faq-a">Yes. Pick January when you sign up. You can also start right away or in December.</p>
     </details>
   </div>
 </section>
@@ -535,9 +543,15 @@
       </div>
 
       <fieldset class="bf-field">
-        <legend class="bf-label">Start in</legend>
-        <div class="bf-choices">
-          <label class="bf-choice"><input type="radio" name="start_timing" value="december" required>December</label>
+        <legend class="bf-label">When should lessons start?</legend>
+        <!-- "Right away" (Jonny 2026-11-12: a filmed ad says "we can get you started as early as
+             next week") sends "asap", the lead API's existing ASAP value, so the alert is marked HOT.
+             From December 1 it already means December, so the date gate in <head> hides the
+             December choice. "required" sits on the choice that never hides: a required radio
+             the browser cannot show would block the submit with no message. -->
+        <div class="bf-choices bf-start-choices">
+          <label class="bf-choice bf-start-now"><input type="radio" name="start_timing" value="asap" required>Right away</label>
+          <label class="bf-choice bf-start-dec"><input type="radio" name="start_timing" value="december">December</label>
           <label class="bf-choice"><input type="radio" name="start_timing" value="january">January</label>
         </div>
         <p class="bf-opt" style="margin: 8px 0 0;">Giving it to your child for Christmas? Pick a January start.</p>
@@ -593,46 +607,58 @@
   var API = 'https://cron-runner-production-a510.up.railway.app/api/scheduling/lead';
   var OFFER = 'bf60';
 
-  // First touch (Jonny 2026-11-01: tag every lead with where it came from). An inline copy of
-  // the one in js/scheduling-widget.js, same key and same rules, because this page submits
-  // without the widget: ad click ids and utm_* are saved on arrival, the first touch wins
-  // for 30 days, and a new Google click id overwrites it. Sent as `source`.
-  var SOURCE_KEY = 'mcmc_first_touch';
-  var SOURCE_PARAMS = ['gclid', 'gbraid', 'wbraid', 'fbclid', 'utm_source', 'utm_medium',
-    'utm_campaign', 'utm_term', 'utm_content'];
-  function savedFirstTouch() {
-    try {
-      var saved = JSON.parse(window.localStorage.getItem(SOURCE_KEY) || 'null');
-      if (saved && typeof saved === 'object' && Date.now() - saved.at < 30 * 864e5) return saved;
-    } catch (e) {}
+  // First-touch ad tags (Conversions by source, 2026-11-09), sent as `attribution` like the
+  // booking widget's. The same code as js/first-touch.js and js/scheduling-widget.js, copied
+  // here because this page submits without the widget: only a visit with ad tags or from
+  // another site is kept (90 days, session storage when local storage is blocked), the first
+  // one kept is never replaced, and an untagged visit is sent with this one request only.
+  var FIRST_TOUCH_KEY = 'mcmc_first_touch';
+  var FIRST_TOUCH_DAYS = 90;
+  var FIRST_TOUCH_TAGS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+                          'gclid', 'gbraid', 'wbraid', 'fbclid'];
+  function ftStores() {
+    var out = [];
+    try { if (window.localStorage) out.push(window.localStorage); } catch (e) { /* blocked */ }
+    try { if (window.sessionStorage) out.push(window.sessionStorage); } catch (e) { /* blocked */ }
+    return out;
+  }
+  function ftBareHost(h) { return String(h || '').toLowerCase().replace(/^www\./, ''); }
+  function readFirstTouch() {
+    var stores = ftStores();
+    for (var i = 0; i < stores.length; i++) {
+      try {
+        var t = JSON.parse(stores[i].getItem(FIRST_TOUCH_KEY) || 'null');
+        if (t && typeof t === 'object' && t.first_seen &&
+            (Date.now() - Date.parse(t.first_seen)) < FIRST_TOUCH_DAYS * 864e5) return t;
+      } catch (e) { /* unreadable: try the next store */ }
+    }
     return null;
   }
-  (function captureFirstTouch() {
-    var touch = {};
+  function captureFirstTouch() {
+    var stored = readFirstTouch();
+    if (stored) return stored;
+    var t = { first_seen: new Date().toISOString() };
+    var meaningful = false;
     try {
-      var params = new URLSearchParams(window.location.search);
-      SOURCE_PARAMS.forEach(function (k) { var v = params.get(k); if (v) touch[k] = v.slice(0, 300); });
-    } catch (e) { return; }
-    if (!Object.keys(touch).length) return;
-    var saved = savedFirstTouch();
-    var newClick = ['gclid', 'gbraid', 'wbraid'].some(function (k) {
-      return touch[k] && (!saved || touch[k] !== saved[k]);
-    });
-    if (saved && !newClick) return;
-    touch.landing_path = window.location.pathname;
-    try { if (document.referrer) touch.referrer = new URL(document.referrer).origin; } catch (e) {}
-    touch.at = Date.now();
-    try { window.localStorage.setItem(SOURCE_KEY, JSON.stringify(touch)); } catch (e) {}
-  })();
-  function sourceField() {
-    var saved = savedFirstTouch();
-    if (!saved) return undefined;
-    var out = {};
-    SOURCE_PARAMS.concat(['landing_path', 'referrer']).forEach(function (k) {
-      if (typeof saved[k] === 'string' && saved[k]) out[k] = saved[k];
-    });
-    return Object.keys(out).length ? out : undefined;
+      var q = new URLSearchParams(window.location.search);
+      FIRST_TOUCH_TAGS.forEach(function (k) { var v = q.get(k); if (v) { t[k] = v.slice(0, 200); meaningful = true; } });
+    } catch (e) { /* no URLSearchParams: no tags */ }
+    try {
+      if (document.referrer) {
+        var h = new URL(document.referrer).hostname;
+        if (h && ftBareHost(h) !== ftBareHost(window.location.hostname)) { t.referrer = h.slice(0, 200); meaningful = true; }
+      }
+    } catch (e) { /* unreadable referrer */ }
+    t.landing = String(window.location.pathname || '/').slice(0, 200);
+    if (meaningful) {
+      var stores = ftStores();
+      for (var i = 0; i < stores.length; i++) {
+        try { stores[i].setItem(FIRST_TOUCH_KEY, JSON.stringify(t)); break; } catch (e) { /* try the next store */ }
+      }
+    }
+    return t;
   }
+  var FIRST_TOUCH = captureFirstTouch();
 
   // The live count (Jonny 2026-11-01: $60, 15 spots). Shown only once the API answers, so the
   // page never shows a number the server did not give. 0 left flips the page to sold out.
@@ -748,7 +774,7 @@
       start_timing: value('start_timing'),
       brand_source: 'musicandmastery',
       offer: OFFER,
-      source: sourceField(),
+      attribution: FIRST_TOUCH || readFirstTouch(),
       honeypot: ''
     };
     if (giftBox.checked) {
