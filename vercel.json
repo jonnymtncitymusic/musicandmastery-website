@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/black-friday",
+      "destination": "/black-friday.html",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/((?!.*\\.html$)(?!.*\\.).*)",
