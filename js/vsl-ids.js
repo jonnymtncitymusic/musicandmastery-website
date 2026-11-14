@@ -13,9 +13,9 @@
  */
 window.VSL_IDS = {
   // VSL A, the post-signup video, two cuts (start.html and watch-next.html play the lead cut,
-  // watch-booked.html the booked cut, thank-you.html picks one from ?type=). TEMP: both are VSL B's
-  // id so the pages render. The real unlisted uploads go here once Jonny approves the final VSL A.
-  vsl_a_lead: 'vRMcILWtQHU',   // "You just asked about music lessons... I'll call you very soon"
-  vsl_a_booked: 'vRMcILWtQHU', // "You've already picked a time for your first free lesson"
+  // watch-booked.html the booked cut, thank-you.html picks one from ?type=). Jonny's approved finals,
+  // unlisted on the channel, uploaded 2026-11-13 (VSLs in signup grill Q26).
+  vsl_a_lead: 'WMB7g5Z65xY',   // "You just asked about music lessons... I'll call you very soon", 3:15
+  vsl_a_booked: 'JSGK0kV6TbM', // "You've already picked a time for your first free lesson", 3:11
 };
-window.VSL_TEMP = ['vsl_a_lead', 'vsl_a_booked'];
+window.VSL_TEMP = [];
