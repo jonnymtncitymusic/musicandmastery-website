@@ -1191,11 +1191,11 @@ async function findSlots(page) {
         });
       }
 
-      // 16q. The thanks page's line: a repeat says the spot covers one child (siblings never get one,
+      // 16q. The thanks page's line: a repeat says the spot covers one student (siblings never get one,
       //      Jonny 2026-11-14), a repeat gift promises nothing, a first gift and a signup keep theirs.
       //      Whole lines, word for word as approved, so a lost sentence can't pass (review 2026-11-15).
       for (const [qs, line] of [
-        ['?type=lead&repeat=1', "Thank you. Your family already has a Black Friday spot, and it covers one child. We'll reach out within 24 hours."],
+        ['?type=lead&repeat=1', "Thank you. Your family already has a Black Friday spot, and it covers one student. We'll reach out within 24 hours."],
         ['?type=lead&repeat=1&gift=1', "Thank you. We'll reach out to you within 24 hours about this gift."],
         ['?type=lead&gift=1', "Thank you. Your gift holds one of the 15 spots. We'll reach out to your friend within 24 hours, and we'll send you the $60 invoice."],
         ['?type=lead', "Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $60 invoice."],

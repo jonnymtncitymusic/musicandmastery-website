@@ -427,7 +427,7 @@
     <script>
       // A gift (black-friday.html adds &gift=1): the friend gets the call, the giver gets the bill.
       // A repeat (&repeat=1: the family already holds its one spot, review 2026-11-14) promises nothing
-      // new: one Black Friday spot covers one child (Jonny 2026-11-14), and a second gift is
+      // new: one Black Friday spot covers one student (Jonny 2026-11-14; "student" 2026-11-15, adults can sign up too), and a second gift is
       // confirmed by hand. Wording approved by Jonny 2026-11-14.
       (function () {
         var q = window.location.search;
@@ -436,7 +436,7 @@
         if (repeat) {
           sub.textContent = gift
             ? "Thank you. We'll reach out to you within 24 hours about this gift."
-            : "Thank you. Your family already has a Black Friday spot, and it covers one child. We'll reach out within 24 hours.";
+            : "Thank you. Your family already has a Black Friday spot, and it covers one student. We'll reach out within 24 hours.";
         } else if (gift) {
           sub.textContent = "Thank you. Your gift holds one of the 15 spots. We'll reach out to your friend within 24 hours, and we'll send you the $60 invoice.";
         }
