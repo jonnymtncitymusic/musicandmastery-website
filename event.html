@@ -76,6 +76,7 @@
        It is added only once the form has sent, because the player starts itself as soon as it loads. */
     .hero-vsl { position: relative; width: min(100%, 300px, calc(56vh * 9 / 16)); aspect-ratio: 9 / 16; margin: 14px auto 16px; border-radius: 20px; overflow: hidden; background: #1a1a2e; box-shadow: 0 24px 60px rgba(114,110,221,0.24), 0 6px 18px rgba(0,0,0,0.10); }
     .hero-vsl[hidden] { display: none; }
+    .hero-vsl-b { margin: 4px auto 18px; }
     .hero-vsl-frame, .hero-vsl-frame iframe, .hero-vsl-btn { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-vsl-frame iframe { border: 0; }
     .hero-vsl-btn { z-index: 2; padding: 0; border: 0; background: none; cursor: pointer; display: none; align-items: center; justify-content: center; min-height: 0; border-radius: 0; }
@@ -95,6 +96,21 @@
   <main class="wrap">
     <p class="brand"><img src="/brand_assets/logo/mm-icon-trim.png" alt="" width="61" height="112"><span>Music <img class="amp" src="/brand_assets/logo/mm-ampersand.png" alt="and"> Mastery</span></p>
     <h1>Your free focus lesson</h1>
+    <!-- VSL B, the pre-signup video (Jonny 2026-11-15, "Add VSL B above the form"): the landing pages' hero player,
+         js/hero-vsl.js, which takes the FIRST .hero-vsl on the page (this one, with no data-vsl). VSL A after the form
+         is the one with data-vsl, played by js/vsl-player.js; this box is removed then, so only one video plays. -->
+    <div class="hero-vsl hero-vsl-b" id="vsl-b">
+      <div class="hero-vsl-frame">
+        <iframe data-src="https://www.youtube-nocookie.com/embed/vRMcILWtQHU?autoplay=1&amp;mute=1&amp;rel=0&amp;playsinline=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;enablejsapi=1" title="How Music and Mastery lessons work" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <button type="button" class="hero-vsl-btn" aria-label="Turn on the sound and play the video from the start">
+        <span class="hero-vsl-card">
+          <svg class="hero-vsl-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a8 8 0 0 1 0 11"/></svg>
+          <span>Your video is playing</span>
+          <span class="hero-vsl-sub">Tap to unmute</span>
+        </span>
+      </button>
+    </div>
     <p class="lede">Thanks for stopping by our booth. Leave your details and we'll text you to set up a free first lesson at your home. It's a music lesson that helps your child focus at home and at school, so we call it a focus lesson.</p>
 
     <div class="card" id="card">
@@ -148,6 +164,7 @@
     </footer>
   </main>
 
+  <script src="/js/hero-vsl.js?v=52fd0c7015" defer></script>
   <script>
   (function () {
     'use strict';
@@ -234,6 +251,8 @@
         document.getElementById('card').innerHTML =
           '<div class="done" role="status"><h2>Thanks, ' + first + '.</h2>' + VSL +
           '<p>We\'ll ' + how + ' you soon to find a time for your free lesson.</p></div>';
+        var vslB = document.getElementById('vsl-b');
+        if (vslB) vslB.parentNode.removeChild(vslB);   // stops VSL B, so VSL A is the only video playing
         try { document.getElementById('card').scrollIntoView({ block: 'start', behavior: 'smooth' }); } catch (x) { /* old browser */ }
         startVideo();
         if (typeof gtag === 'function') gtag('event', 'event_booth_signup', { event_ref: event || 'none' });
