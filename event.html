@@ -161,6 +161,9 @@
       var f = form.elements;
       var name = f.name.value.trim(), phone = f.phone.value.trim(), email = f.email.value.trim();
       if (!name) { show('Please add your name.'); f.name.focus(); return; }
+      if (phone && phone.replace(/\D/g, '').length < 10) {
+        show('That phone number needs all 10 digits. Or leave it blank and add an email.'); f.phone.focus(); return;
+      }
       if (phone.replace(/\D/g, '').length < 10 && !email) {
         show('Please leave a mobile number or an email so we can reach you.'); f.phone.focus(); return;
       }
