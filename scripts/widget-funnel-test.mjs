@@ -1191,6 +1191,25 @@ async function findSlots(page) {
         });
       }
 
+      // 16q. The thanks page's line: a repeat says the spot covers one child (siblings never get one,
+      //      Jonny 2026-11-14), a repeat gift promises nothing, a first gift keeps its line.
+      for (const [qs, want, notWant] of [
+        ['?type=lead&repeat=1', 'already has a Black Friday spot, and it covers one child', '$60 invoice'],
+        ['?type=lead&repeat=1&gift=1', 'reach out to you within 24 hours about this gift', 'holds one of the 15 spots'],
+        ['?type=lead&gift=1', 'holds one of the 15 spots', 'covers one child'],
+      ]) {
+        await isolate(`16q ${qs}`, async () => {
+          const page = await browser.newPage();
+          await page.setRequestInterception(true);
+          page.on('request', req => /googletagmanager|google-analytics|doubleclick|gstatic|googleusercontent/
+            .test(req.url()) ? req.abort() : req.continue());
+          await page.goto(`${base}/black-friday-thanks.html${qs}`, { waitUntil: 'load' });
+          const sub = await page.$eval('#ty-sub', el => el.textContent);
+          check(`16q thanks${qs} says the right thing`, sub.includes(want) && !sub.includes(notWant), sub);
+          await page.close();
+        });
+      }
+
       // 16m. The homepage bar: shown in the window while open, gone when the counter says closed.
       for (const [label, iso, open, expect] of [['open', NOV, true, true], ['sold out', NOV, false, false],
         ['after Dec 18', '2026-12-19T20:00:00Z', true, false]]) {
