@@ -1192,11 +1192,13 @@ async function findSlots(page) {
       }
 
       // 16q. The thanks page's line: a repeat says the spot covers one child (siblings never get one,
-      //      Jonny 2026-11-14), a repeat gift promises nothing, a first gift keeps its line.
-      for (const [qs, want, notWant] of [
-        ['?type=lead&repeat=1', 'already has a Black Friday spot, and it covers one child', '$60 invoice'],
-        ['?type=lead&repeat=1&gift=1', 'reach out to you within 24 hours about this gift', 'holds one of the 15 spots'],
-        ['?type=lead&gift=1', 'holds one of the 15 spots', 'covers one child'],
+      //      Jonny 2026-11-14), a repeat gift promises nothing, a first gift and a signup keep theirs.
+      //      Whole lines, word for word as approved, so a lost sentence can't pass (review 2026-11-15).
+      for (const [qs, line] of [
+        ['?type=lead&repeat=1', "Thank you. Your family already has a Black Friday spot, and it covers one child. We'll reach out within 24 hours."],
+        ['?type=lead&repeat=1&gift=1', "Thank you. We'll reach out to you within 24 hours about this gift."],
+        ['?type=lead&gift=1', "Thank you. Your gift holds one of the 15 spots. We'll reach out to your friend within 24 hours, and we'll send you the $60 invoice."],
+        ['?type=lead', "Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $60 invoice."],
       ]) {
         await isolate(`16q ${qs}`, async () => {
           const page = await browser.newPage();
@@ -1205,7 +1207,7 @@ async function findSlots(page) {
             .test(req.url()) ? req.abort() : req.continue());
           await page.goto(`${base}/black-friday-thanks.html${qs}`, { waitUntil: 'load' });
           const sub = await page.$eval('#ty-sub', el => el.textContent);
-          check(`16q thanks${qs} says the right thing`, sub.includes(want) && !sub.includes(notWant), sub);
+          check(`16q thanks${qs} says the approved line`, sub.trim() === line, sub);
           await page.close();
         });
       }
