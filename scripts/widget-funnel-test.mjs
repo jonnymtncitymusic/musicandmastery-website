@@ -884,6 +884,8 @@ async function findSlots(page) {
       const BF_CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*',
         'Access-Control-Allow-Methods': 'GET,POST,OPTIONS' };
       const NOV = '2026-11-12T20:00:00Z';
+      // The enhanced-conversion details the BF page stashes for its thanks page (USER_DATA_KEY).
+      const EC_KEY = 'mm_ec_user_data';
       const within = (promise, ms, what) => Promise.race([promise, new Promise((_, reject) =>
         setTimeout(() => reject(new Error(`no ${what} within ${ms} ms`)), ms))]);
       let bfSeq = 0;
@@ -1130,8 +1132,38 @@ async function findSlots(page) {
         await page.close();
       });
 
+      // 16o. A repeat reply (the family already holds a spot) is not a new lead: thanks with repeat=1,
+      //      no form_submission and no enhanced-conversion details (review 2026-11-14).
+      await isolate('16o', async () => {
+        const bf = await bfPage('/black-friday.html', NOV, { lead: { success: true, lead_id: 1, repeat: true,
+          spots_left: 8, message: 'ok' } });
+        await fillAndSend(bf, {});
+        const nav = await within(bf.firstNav, 5000, 'thanks navigation');
+        check('16o a repeat lands on thanks with repeat=1 and no test flag', /repeat=1/.test(nav) && !/test=1/.test(nav), nav);
+        check('16o a repeat fires no form_submission', !bf.events.includes('form_submission'), bf.events.join());
+        await bf.page.waitForFunction(() => /thanks/.test(document.body ? document.body.textContent : ''), { timeout: 5000 });
+        const stash = await bf.page.evaluate(k => sessionStorage.getItem(k), EC_KEY);
+        check('16o a repeat stashes no enhanced-conversion details', stash === null, String(stash));
+        await bf.page.close();
+      });
+
+      // 16p. A real gift: enhanced conversions get the giver's details (the person on the device),
+      //      not the friend's (review 2026-11-14).
+      await isolate('16p', async () => {
+        const bf = await bfPage('/black-friday.html', NOV);
+        await fillAndSend(bf, { name: 'Ana Friend', email: 'ana@example.com',
+          gift: { name: 'Gina Giver', email: 'gina@example.com', phone: '7605550199' } });
+        const nav = await within(bf.firstNav, 5000, 'thanks navigation');
+        check('16p a real gift lands on thanks with gift=1 and no test flag', /gift=1/.test(nav) && !/test=1/.test(nav), nav);
+        await bf.page.waitForFunction(() => /thanks/.test(document.body ? document.body.textContent : ''), { timeout: 5000 });
+        const stash = JSON.parse(await bf.page.evaluate(k => sessionStorage.getItem(k), EC_KEY) || '{}');
+        check('16p a gift stashes the giver\'s email and phone, not the friend\'s',
+          stash.email === 'gina@example.com' && stash.phone_number === '+17605550199', JSON.stringify(stash));
+        await bf.page.close();
+      });
+
       // 16l. The thanks page: a rehearsal (test=1) records no conversion, a real one does.
-      for (const [qs, expect] of [['?type=lead&test=1', false], ['?type=lead', true], ['?type=lead&test=1&gift=1', false]]) {
+      for (const [qs, expect] of [['?type=lead&test=1', false], ['?type=lead', true], ['?type=lead&test=1&gift=1', false], ['?type=lead&repeat=1', false], ['?type=lead&repeat=1&gift=1', false]]) {
         await isolate(`16l ${qs}`, async () => {
           const page = await browser.newPage();
           const events = [];

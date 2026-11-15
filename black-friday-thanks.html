@@ -68,7 +68,9 @@
     }
     // A test submission (the widget's isTestSubmission: ZZTEST or "Test" names, test@
     // emails) still shows this page but records nothing, here or in the headline test.
-    if (qs.get('test') === '1') {
+    // A repeat (the API kept the family's one spot, review 2026-11-14) is the same lead again,
+    // so it records nothing either.
+    if (qs.get('test') === '1' || qs.get('repeat') === '1') {
       try { window.sessionStorage.removeItem('mm_ec_user_data'); } catch (e) {}
       return;
     }

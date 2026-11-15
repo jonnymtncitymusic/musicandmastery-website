@@ -840,15 +840,22 @@
       }
       if (!data || data.success !== true) throw new Error('not accepted');
       var test = isTestSubmission(payload);
-      if (test) {
+      // A family that already holds a spot sent the form again (a changed detail, a sibling, a
+      // second gift). The API kept their one spot and said repeat: not a new lead, so no second
+      // conversion here or on the thanks page (review 2026-11-14).
+      var repeat = data.repeat === true;
+      if (test || repeat) {
         try { window.sessionStorage.removeItem(USER_DATA_KEY); } catch (e) {}
       } else {
-        stashUserData(payload.client_name, payload.email, payload.phone);
+        // On a gift the person on this device is the giver, so enhanced conversions get the
+        // giver's details, not the friend's (review 2026-11-14).
+        if (giftBox.checked) stashUserData(payload.gift_from_name, payload.gift_from_email, payload.gift_from_phone || '');
+        else stashUserData(payload.client_name, payload.email, payload.phone);
         if (typeof gtag === 'function') {
           try { gtag('event', 'form_submission', { form_name: giftBox.checked ? 'black_friday_60_gift' : 'black_friday_60' }); } catch (e) {}
         }
       }
-      window.location.href = 'black-friday-thanks.html?type=lead' + (test ? '&test=1' : '') + (giftBox.checked ? '&gift=1' : '');
+      window.location.href = 'black-friday-thanks.html?type=lead' + (test ? '&test=1' : '') + (repeat ? '&repeat=1' : '') + (giftBox.checked ? '&gift=1' : '');
     }).catch(fail);
   });
 })();
