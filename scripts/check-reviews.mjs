@@ -58,7 +58,7 @@ for (const r of rows) {
 const LANDING = fs.readdirSync(ROOT).filter(f => /^(beginner-|in-home-).*\.html$|-lessons-(orange-county|los-angeles)\.html$/.test(f));
 if (LANDING.length !== 34) fail(`expected 34 landing pages, found ${LANDING.length}`);
 const CAVEAT = 'Music and Mastery and Mountain City Music Co. are the same company. Mountain City Music Co. is our original name.';
-const tokens = { 'js/reviews.js': hash('js/reviews.js'), 'css/lp-proof.css': hash('css/lp-proof.css'), 'js/hero-vsl.js': hash('js/hero-vsl.js'), 'js/headline-test.js': hash('js/headline-test.js') };
+const tokens = { 'js/reviews.js': hash('js/reviews.js'), 'css/lp-proof.css': hash('css/lp-proof.css'), 'js/hero-vsl.js': hash('js/hero-vsl.js') };
 for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html'))) {
   const t = read(f);
   for (const [asset, v] of Object.entries(tokens)) {
@@ -83,29 +83,12 @@ for (const f of LANDING) {
   for (const m of t.matchAll(/<strong>(\d\.\d)<\/strong> from/g)) if (+m[1] !== data.average) fail(`${f}: says ${m[1]}, data says ${data.average}`);
   if ((t.match(/class="hero-vsl-btn"/g) || []).length !== 1) fail(`${f}: hero video must have exactly one unmute button`);
 }
-// 4. Headline test (Hormozi edit #7): the paid pages each run one, picked before paint, and the
-//    thank-you page credits conversions to it. A test id ends in its start date so a new
-//    challenger never mixes its numbers with the last one.
-const PAID = ['piano-lessons-orange-county.html', 'piano-lessons-los-angeles.html',
-  'guitar-lessons-los-angeles.html', 'guitar-lessons-orange-county.html'];
-//    The picker is pasted into each page (it must run before paint), so every copy must be the
-//    same bytes: a fix made on one page only would split how the arms are drawn.
-const testIds = new Set();
-const pickers = new Map();
-for (const f of PAID) {
+// 4. The headline tests ended (Jonny 2026-11-16, "no longer relevant"): every page shows its one headline, and
+//    nothing loads the retired js/headline-test.js.
+for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html'))) {
   const t = read(f);
-  const h1 = t.match(/<h1[^>]*data-hl-test="([a-z0-9-]+-\d{4}-\d{2}-\d{2})"[^>]*data-hl-b="([^"]+)"[^>]*>[\s\S]*?<\/h1>\s*(?:<!--[\s\S]*?-->\s*)?<script>([\s\S]*?)<\/script>/);
-  if (!h1) { fail(`${f}: headline test missing, or the inline picker is not right after the <h1>`); continue; }
-  if (testIds.has(h1[1])) fail(`${f}: test id ${h1[1]} is used on two pages`);
-  testIds.add(h1[1]);
-  if (!pickers.has(h1[3])) pickers.set(h1[3], []);
-  pickers.get(h1[3]).push(f);
-  if (/\u2014|&mdash;/.test(h1[2])) fail(`${f}: challenger headline has an em dash`);
-  if (!t.includes('/js/headline-test.js?v=')) fail(`${f}: does not load js/headline-test.js`);
+  if (t.includes('/js/headline-test.js') || t.includes('data-hl-test=')) fail(`${f}: still runs the retired headline test`);
 }
-if (pickers.size > 1) fail(`the inline headline picker differs between pages: ${[...pickers.values()].map(fs => fs.join(' + ')).join(' vs ')}`);
-if (!read('thank-you.html').includes('/js/headline-test.js?v=')) fail('thank-you.html: does not load js/headline-test.js, so no booking is ever credited to a headline');
-if (!read('thank-you.html').includes('window.MM_SUBMISSION = ')) fail('thank-you.html: its conversion gate no longer sets window.MM_SUBMISSION, so js/headline-test.js credits no booking');
 
 // 5. FAQ structured data mirrors the visible FAQ, question and answer, on every landing page.
 //    website-copy.md: a visible fix that leaves the FAQPage JSON-LD behind has bitten twice, and
