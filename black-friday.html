@@ -53,6 +53,42 @@
     } catch (e) { load(); }
   })();
 </script>
+<!-- Meta Pixel for the Black Friday ads on Facebook and Instagram (Kevin at 7 Figure Media runs
+     them). The fbq() stub queues every call at once and fbevents.js loads after the first paint,
+     the same way and for the same reason as gtag above. This page records PageView only. The Lead
+     is on black-friday-thanks.html, inside the gate that guards the Google conversion. autoConfig
+     is off (Meta's "Manual Only mode"), so the pixel sends no button clicks or page metadata of
+     its own: nothing fires after a visitor starts typing, and no form detail can ride on an event.
+     The privacy policy (section 5) says we send Meta no name, email or phone, which also needs
+     Automatic Advanced Matching left off in Events Manager. Remove after Dec 18 with this page. -->
+<script>
+  !function (f, b) {
+    if (f.fbq) return;
+    var n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+    if (!f._fbq) f._fbq = n;
+    n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+    function load() {
+      if (load.done) return; load.done = true;
+      var s = b.createElement('script'); s.async = true;
+      s.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      b.head.appendChild(s);
+    }
+    function soon() { requestAnimationFrame(function () { setTimeout(load, 0); }); }
+    try {
+      if (f.PerformanceObserver && (PerformanceObserver.supportedEntryTypes || []).indexOf('paint') !== -1) {
+        new PerformanceObserver(function (list) {
+          if (list.getEntriesByName('first-contentful-paint').length) soon();
+        }).observe({ type: 'paint', buffered: true });
+        setTimeout(load, 3000);   // a tab opened in the background never paints; load anyway
+      } else {
+        f.addEventListener('load', load);
+      }
+    } catch (e) { load(); }
+  }(window, document);
+  fbq('set', 'autoConfig', false, '2272717903284636');   // before init, per Meta
+  fbq('init', '2272717903284636');
+  fbq('track', 'PageView');
+</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Black Friday: First Month of Music Lessons for $60 | Music and Mastery</title>
   <link rel="icon" href="brand_assets/logo/mm-favicon-64.png" type="image/png" />
@@ -342,6 +378,7 @@
 <link rel="stylesheet" href="/css/lp-proof.css?v=22b0314054">
 </head>
 <body>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=2272717903284636&amp;ev=PageView&amp;noscript=1"></noscript>
 
 <div class="topbar">
   <div class="promo-bar bf-live">

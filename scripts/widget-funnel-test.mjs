@@ -133,7 +133,7 @@ function stubApi(req, availability, stripRedirect = false, availabilityStatus = 
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
   };
-  if (/googletagmanager|google-analytics|doubleclick|gstatic|fonts\.googleapis/.test(url)) {
+  if (/googletagmanager|google-analytics|doubleclick|gstatic|fonts\.googleapis|connect\.facebook\.net|facebook\.com/.test(url)) {
     return req.abort();
   }
   // A successful submit sets window.location to the thank-you page, which destroys the
@@ -895,7 +895,7 @@ async function findSlots(page) {
         spots_left: 9, open: true, ends: '2026-12-18' } }, lead = { success: true, lead_id: 1,
         spots_left: 8, message: 'ok' } } = {}) => {
         const page = await browser.newPage();
-        const posts = [], navs = [], events = [];
+        const posts = [], navs = [], events = [], metaReqs = [];
         let gotPost, gotNav;
         const firstPost = new Promise(r => { gotPost = r; });
         const firstNav = new Promise(r => { gotNav = r; });
@@ -921,6 +921,8 @@ async function findSlots(page) {
         await page.setRequestInterception(true);
         page.on('request', req => {
           const url = req.url();
+          // Meta too (the pixel, 16r): recorded, then refused, so no test hit ever reaches the ad account.
+          if (/connect\.facebook\.net|facebook\.com/.test(url)) { metaReqs.push(url); return req.abort(); }
           if (/googletagmanager|google-analytics|doubleclick|gstatic|fonts\.googleapis|googleusercontent/.test(url)) {
             return req.abort();
           }
@@ -945,7 +947,7 @@ async function findSlots(page) {
           return json(200, {});
         });
         await page.goto(`${base}${route}`, { waitUntil: 'networkidle2' });
-        return { page, posts, navs, events, firstPost, firstNav };
+        return { page, posts, navs, events, metaReqs, firstPost, firstNav };
       };
       const shown = (page, sel) => page.$eval(sel, el => {
         const b = el.getBoundingClientRect();
@@ -1181,7 +1183,7 @@ async function findSlots(page) {
             };
           }, hook);
           await page.setRequestInterception(true);
-          page.on('request', req => /googletagmanager|google-analytics|doubleclick|gstatic|googleusercontent/
+          page.on('request', req => /googletagmanager|google-analytics|doubleclick|gstatic|googleusercontent|connect\.facebook\.net|facebook\.com/
             .test(req.url()) ? req.abort() : req.continue());
           await page.goto(`${base}/black-friday-thanks.html${qs}`, { waitUntil: 'load' });
           await page.evaluate(() => new Promise(r => setTimeout(r, 50)));
@@ -1203,7 +1205,7 @@ async function findSlots(page) {
         await isolate(`16q ${qs}`, async () => {
           const page = await browser.newPage();
           await page.setRequestInterception(true);
-          page.on('request', req => /googletagmanager|google-analytics|doubleclick|gstatic|googleusercontent/
+          page.on('request', req => /googletagmanager|google-analytics|doubleclick|gstatic|googleusercontent|connect\.facebook\.net|facebook\.com/
             .test(req.url()) ? req.abort() : req.continue());
           await page.goto(`${base}/black-friday-thanks.html${qs}`, { waitUntil: 'load' });
           const sub = await page.$eval('#ty-sub', el => el.textContent);
@@ -1211,6 +1213,128 @@ async function findSlots(page) {
           await page.close();
         });
       }
+
+      // 16r. The Meta pixel (the Black Friday ads run on Facebook and Instagram), review 2026-11-15.
+      //      One pixel id in every place on both pages (init, autoConfig, the landing noscript), and not
+      //      the stand-in. autoConfig is off before init (Meta's Manual Only mode), so nothing fires
+      //      once a visitor starts typing. The landing page records PageView and adds fbevents.js only
+      //      after its first paint. The thanks page records no PageView, and one Lead exactly where the
+      //      Google conversion fires (16l), never again on a refresh. No test request reaches Meta.
+      const pixelSrc = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
+      const idsIn = src => [...src.matchAll(/fbq\('(?:init|set)'[^)]*?'(\d+)'\)|facebook\.com\/tr\?id=(\d+)/g)]
+        .map(m => m[1] || m[2]);
+      const landingIds = idsIn(pixelSrc('black-friday.html'));
+      const thanksIds = idsIn(pixelSrc('black-friday-thanks.html'));
+      const pixelId = landingIds[0];
+      check('16r one Meta pixel id in every place on both pages (init, autoConfig, noscript)',
+        landingIds.length === 3 && thanksIds.length === 2 && /^\d{15,16}$/.test(pixelId || '') &&
+        [...landingIds, ...thanksIds].every(id => id === pixelId), JSON.stringify({ landingIds, thanksIds }));
+      // Red until Kevin's id replaces the stand-in, so the stand-in can never ship by accident.
+      check('16r the pixel id is the real one, not the stand-in', pixelId !== '1234567890123456', String(pixelId));
+      check('16r the landing page sends no Lead of its own (the thanks page owns it)',
+        !/fbq\(\s*'track'\s*,\s*'Lead'/.test(pixelSrc('black-friday.html')), 'black-friday.html calls fbq track Lead');
+      const fbqCalls = page => page.evaluate(() => window.__fbq);
+      const isCall = (c, a, b) => c[0] === a && c[1] === b;
+      // autoConfig off for this pixel, set before its init.
+      const manualOnly = calls => {
+        const set = calls.findIndex(c => isCall(c, 'set', 'autoConfig') && c[2] === false && c[3] === pixelId);
+        const init = calls.findIndex(c => isCall(c, 'init', pixelId));
+        return set !== -1 && init !== -1 && set < init;
+      };
+      const queuedCalls = page => page.evaluate(() =>
+        ((window.fbq && window.fbq.queue) || []).map(a => Array.from(a)));
+      for (const [qs, expect] of [['?type=lead', true], ['?type=lead&gift=1', true], ['?type=lead&test=1', false],
+        ['?type=lead&test=1&gift=1', false], ['?type=lead&repeat=1', false], ['?type=lead&repeat=1&gift=1', false]]) {
+        await isolate(`16r ${qs}`, async () => {
+          const page = await browser.newPage();
+          // The pixel snippet steps aside when fbq already exists (`if (f.fbq) return;`), so this
+          // recorder owns every call and fbevents.js is never fetched.
+          await page.evaluateOnNewDocument(() => {
+            window.__fbq = [];
+            window.fbq = function () { window.__fbq.push(Array.from(arguments)); };
+          });
+          await page.setRequestInterception(true);
+          page.on('request', req => /googletagmanager|google-analytics|doubleclick|gstatic|googleusercontent|connect\.facebook\.net|facebook\.com/
+            .test(req.url()) ? req.abort() : req.continue());
+          await page.goto(`${base}/black-friday-thanks.html${qs}`, { waitUntil: 'load' });
+          await page.evaluate(() => new Promise(r => setTimeout(r, 50)));
+          const calls = await fbqCalls(page);
+          check(`16r thanks${qs} inits the pixel in Manual Only mode and records no PageView`,
+            manualOnly(calls) && !calls.some(c => isCall(c, 'track', 'PageView')), JSON.stringify(calls));
+          const leads = calls.filter(c => isCall(c, 'track', 'Lead'));
+          check(`16r thanks${qs} ${expect ? 'records one' : 'records no'} Meta Lead`,
+            leads.length === (expect ? 1 : 0) && (!expect || leads[0][2].content_name ===
+              (qs.includes('gift=1') ? 'black_friday_60_gift' : 'black_friday_60')), JSON.stringify(calls));
+          if (expect) {
+            await page.reload({ waitUntil: 'load' });
+            await page.evaluate(() => new Promise(r => setTimeout(r, 50)));
+            const again = await fbqCalls(page);
+            check(`16r thanks${qs} refreshed records no second Lead`,
+              manualOnly(again) && !again.some(c => isCall(c, 'track', 'Lead')), JSON.stringify(again));
+          }
+          await page.close();
+        });
+      }
+      // The shipped path on the thanks page, no recorder: the page's own stub queues Manual Only, init
+      // and the gated Lead, and asks for fbevents.js (refused here).
+      await isolate('16r thanks real stub', async () => {
+        const page = await browser.newPage();
+        const asked = [];
+        await page.setRequestInterception(true);
+        page.on('request', req => {
+          const url = req.url();
+          if (/connect\.facebook\.net|facebook\.com/.test(url)) { asked.push(url); return req.abort(); }
+          return /googletagmanager|google-analytics|doubleclick|gstatic|googleusercontent/.test(url)
+            ? req.abort() : req.continue();
+        });
+        await page.goto(`${base}/black-friday-thanks.html?type=lead`, { waitUntil: 'load' });
+        await page.evaluate(() => new Promise(r => setTimeout(r, 50)));
+        const queued = await queuedCalls(page);
+        check('16r thanks (real stub) queues Manual Only, init and one Lead, and no PageView',
+          manualOnly(queued) && !queued.some(c => isCall(c, 'track', 'PageView')) &&
+          queued.filter(c => isCall(c, 'track', 'Lead')).length === 1, JSON.stringify(queued));
+        check('16r thanks (real stub) asks for fbevents.js', asked.some(u => u.includes('/en_US/fbevents.js')),
+          asked.join() || 'no request');
+        await page.close();
+      });
+      await isolate('16r landing', async () => {
+        const bf = await bfPage('/black-friday.html', NOV);
+        const queued = await queuedCalls(bf.page);
+        check('16r the landing page queues Manual Only, init and PageView',
+          manualOnly(queued) && queued.some(c => isCall(c, 'track', 'PageView')), JSON.stringify(queued));
+        const t0 = Date.now();
+        while (!bf.metaReqs.some(u => u.includes('/en_US/fbevents.js')) && Date.now() - t0 < 4000) {
+          await new Promise(r => setTimeout(r, 50));
+        }
+        check('16r the landing page asks for fbevents.js (refused here, so nothing reaches Meta)',
+          bf.metaReqs.some(u => u.includes('connect.facebook.net/en_US/fbevents.js')), bf.metaReqs.join() || 'no request');
+        await bf.page.close();
+      });
+      // The reason the landing page has its own loader is speed (the 2026-10-19 note): fbevents.js
+      // must go in after the first paint, timed inside the page.
+      await isolate('16r landing paint order', async () => {
+        const page = await browser.newPage();
+        await page.evaluateOnNewDocument(() => {
+          window.__fbAt = null;
+          new MutationObserver(muts => {
+            for (const m of muts) for (const n of m.addedNodes) {
+              if (window.__fbAt === null && n.tagName === 'SCRIPT' && /fbevents\.js/.test(n.src || '')) {
+                window.__fbAt = performance.now();
+              }
+            }
+          }).observe(document, { childList: true, subtree: true });
+        });
+        await page.setRequestInterception(true);
+        page.on('request', req => /googletagmanager|google-analytics|doubleclick|gstatic|fonts\.googleapis|googleusercontent|connect\.facebook\.net|facebook\.com|\/api\/scheduling\//
+          .test(req.url()) ? req.abort() : req.continue());
+        await page.goto(`${base}/black-friday.html`, { waitUntil: 'load' });
+        await page.waitForFunction(() => window.__fbAt !== null, { polling: 100, timeout: 4000 });
+        const t = await page.evaluate(() => ({ fb: window.__fbAt,
+          fcp: (performance.getEntriesByName('first-contentful-paint')[0] || {}).startTime }));
+        check('16r the landing page adds fbevents.js only after its first paint',
+          typeof t.fcp === 'number' && t.fb >= t.fcp, JSON.stringify(t));
+        await page.close();
+      });
 
       // 16m. The homepage bar: shown in the window while open, gone when the counter says closed.
       for (const [label, iso, open, expect] of [['open', NOV, true, true], ['sold out', NOV, false, false],

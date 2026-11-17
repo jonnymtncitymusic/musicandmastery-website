@@ -18,6 +18,24 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Music and Mastery">
     <meta name="description" content="Thank you. We'll reach out within 24 hours to match a teacher and a weekly time, then send your $60 invoice.">
+<!-- Meta Pixel for the Black Friday ads (see black-friday.html). The only event here is the Lead
+     in the gate below, so it fires only where the Google conversion does: a real submission,
+     never a rehearsal (test=1), a repeat (repeat=1), a refresh or Back. No PageView on purpose:
+     a conversion built in Meta on "URL contains black-friday-thanks" then matches only real
+     Leads, not every rehearsal and refresh (review 2026-11-15). autoConfig off as on the
+     landing page. -->
+<script>
+  !function (f, b, e, v, n, t, s) {
+    if (f.fbq) return;
+    n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+    if (!f._fbq) f._fbq = n;
+    n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+    t = b.createElement(e); t.async = true; t.src = v;
+    s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+  }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('set', 'autoConfig', false, '2272717903284636');   // before init, per Meta
+  fbq('init', '2272717903284636');
+</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11066542604"></script>
 <script>
@@ -112,6 +130,12 @@
     // import action 7552928555 already wired. Faster path to measurement than
     // pre-registering generate_lead from scratch.
     gtag('event', 'Form_Submission_via_Google_Ads', leadPayload);
+    // Meta Lead for the Black Friday ads (pixel in the head), at Google's lead value. It sits inside
+    // this gate, so Meta counts exactly the submissions the Google conversion counts.
+    try {
+      fbq('track', 'Lead', { content_name: qs.get('gift') === '1' ? 'black_friday_60_gift' : 'black_friday_60',
+        currency: leadPayload.currency, value: leadPayload.value });
+    } catch (e) {}
   });
 </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
