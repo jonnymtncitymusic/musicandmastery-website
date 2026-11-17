@@ -99,7 +99,19 @@ export function buildPage(page, sourceHtml) {
   // 3b. The line under the featured teacher naming the region's other teachers of this
   //     instrument (Jonny 2026-10-30). Who covers which city differs (Armando: Irvine only), so
   //     each city's line is written out in data/city-pages.json rather than cut from a list.
-  const also = DATA.sources[src].alsoTeach;
+  // 3a. A city whose featured teacher is someone else (data/city-pages.json `featured`, Jonny
+  //     2026-11-17: Newport Beach piano is Arthur's): its teacher section comes whole from the
+  //     named page. Its city list is cut by rule 4 like every other list, and it has no
+  //     "also teach" line of its own.
+  const feat = (DATA.sources[src].featured || {})[city];
+  if (feat) {
+    const fromHtml = fs.readFileSync(path.join(ROOT, feat.from), 'utf8');
+    const sec = /<section class="teacher">[\s\S]*?<\/section>/;
+    const block = (fromHtml.match(sec) || [])[0];
+    if (!block) throw new Error(`rule "featured teacher": ${feat.from} has no teacher section`);
+    h = replaceOnce(h, 'featured teacher', sec, () => block);
+  }
+  const also = feat ? null : DATA.sources[src].alsoTeach;
   if (also) {
     if (!also[city]) throw new Error(`rule "teacher also": data/city-pages.json has no alsoTeach line for ${city}`);
     h = replaceOnce(h, 'teacher also', also.region, also[city]);
