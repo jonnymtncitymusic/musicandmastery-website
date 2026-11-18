@@ -21,11 +21,14 @@
   "sources": {
     "piano-lessons-orange-county.html": {"region": "oc", "instrument": "piano",
       "alsoTeach": {
-        "_about": "The line under the featured teacher that names the region's other teachers of this instrument, written out per city because who covers where differs (Armando: Irvine only). Facts from instructor_config.json and instructors.html (Jonny 2026-10-30). The region page must carry `region` word for word.",
-        "region": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Irvine, Newport Beach and Tustin. <a href=\"instructors.html\">Armando Salazar</a> teaches piano in Irvine.",
-        "Irvine": "<a href=\"instructors.html\">Arthur Chou</a> and <a href=\"instructors.html\">Armando Salazar</a> also teach piano in Irvine.",
-        "Newport Beach": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Newport Beach.",
+        "_about": "The line under the featured teacher that names the region's other teachers of this instrument, written out per city because who covers where differs. Facts from instructor_config.json and instructors.html (Jonny 2026-10-30). The region page must carry `region` word for word. 2026-11-17: Armando Salazar dropped (Inland Empire only since his 2026-11-07 email); Newport Beach has no line because its featured teacher is Arthur (see `featured`).",
+        "region": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Irvine, Newport Beach and Tustin.",
+        "Irvine": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Irvine.",
         "Tustin": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Tustin."
+      },
+      "featured": {
+        "_about": "A city whose featured teacher differs from the region page's: its whole teacher section is copied from the named page, and its city list is cut to this city like every other list. Newport Beach came off Giovanni Raimondo's Fridays on 2026-11-17 (Jonny; cron-runner 46a62f1), so Newport Beach piano features Arthur Chou with the block the OC guitar page shows.",
+        "Newport Beach": {"from": "guitar-lessons-orange-county.html"}
       }},
     "guitar-lessons-orange-county.html": {"region": "oc", "instrument": "guitar"},
     "piano-lessons-los-angeles.html": {"region": "la", "instrument": "piano"},
