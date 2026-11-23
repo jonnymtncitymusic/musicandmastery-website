@@ -104,7 +104,11 @@ export function buildPage(page, sourceHtml) {
   //     named page. Its city list is cut by rule 4 like every other list, and it has no
   //     "also teach" line of its own.
   const feat = (DATA.sources[src].featured || {})[city];
-  if (feat) {
+  if (feat && feat.none) {
+    // No teacher this page can honestly feature yet (data/city-pages.json `featured.<city>.none`
+    // says why): the section goes, and so does its "also teach" line.
+    h = replaceOnce(h, 'no featured teacher', /\n?<section class="teacher">[\s\S]*?<\/section>/, '');
+  } else if (feat) {
     const fromHtml = fs.readFileSync(path.join(ROOT, feat.from), 'utf8');
     const sec = /<section class="teacher">[\s\S]*?<\/section>/;
     const block = (fromHtml.match(sec) || [])[0];
@@ -115,6 +119,13 @@ export function buildPage(page, sourceHtml) {
   if (also) {
     if (!also[city]) throw new Error(`rule "teacher also": data/city-pages.json has no alsoTeach line for ${city}`);
     h = replaceOnce(h, 'teacher also', also.region, also[city]);
+  }
+
+  // 3c. A city with no bookable teacher for this instrument takes the lead form instead of the
+  //     booking widget (data/city-pages.json `leadOnly`, Jonny 2026-11-23: Newport Beach guitar
+  //     after Arthur Chou retired, "Lead form until Garrett is in").
+  if ((DATA.sources[src].leadOnly || {})[city]) {
+    h = replaceOnce(h, 'lead only', '<script>window.MCMC_LEAD_ONLY = false;</script>', '<script>window.MCMC_LEAD_ONLY = true;</script>');
   }
 
   // 4. Every remaining list of the region's cities names this city, except on protected lines.

@@ -3,49 +3,174 @@
   "regions": {
     "oc": {
       "label": "Orange County",
-      "cities": ["Irvine", "Newport Beach", "Tustin"]
+      "cities": [
+        "Irvine",
+        "Newport Beach",
+        "Tustin"
+      ]
     },
     "la": {
       "label": "Los Angeles",
-      "cities": ["Burbank", "Glendale", "Pasadena", "Hollywood", "East Hollywood", "West Hollywood"]
+      "cities": [
+        "Burbank",
+        "Glendale",
+        "Pasadena",
+        "Hollywood",
+        "East Hollywood",
+        "West Hollywood"
+      ]
     }
   },
   "cities": {
-    "Irvine": {"slug": "irvine", "region": "oc", "neighborhoods": ["Woodbridge", "Northwood", "Turtle Rock", "University Park"]},
-    "Newport Beach": {"slug": "newport-beach", "region": "oc", "neighborhoods": ["Corona del Mar", "Eastbluff", "Newport Heights", "Westcliff"]},
-    "Tustin": {"slug": "tustin", "region": "oc", "neighborhoods": ["Old Town", "Tustin Ranch", "Tustin Legacy", "Tustin Meadows"]},
-    "Glendale": {"slug": "glendale", "region": "la", "neighborhoods": ["Montrose", "Verdugo Woodlands", "Rossmoyne", "Chevy Chase"]},
-    "Pasadena": {"slug": "pasadena", "region": "la", "neighborhoods": ["Bungalow Heaven", "Linda Vista", "Hastings Ranch", "Madison Heights"]},
-    "Burbank": {"slug": "burbank", "region": "la", "neighborhoods": ["Magnolia Park", "the Rancho", "the Media District", "the Burbank Hills"]}
+    "Irvine": {
+      "slug": "irvine",
+      "region": "oc",
+      "neighborhoods": [
+        "Woodbridge",
+        "Northwood",
+        "Turtle Rock",
+        "University Park"
+      ]
+    },
+    "Newport Beach": {
+      "slug": "newport-beach",
+      "region": "oc",
+      "neighborhoods": [
+        "Corona del Mar",
+        "Eastbluff",
+        "Newport Heights",
+        "Westcliff"
+      ]
+    },
+    "Tustin": {
+      "slug": "tustin",
+      "region": "oc",
+      "neighborhoods": [
+        "Old Town",
+        "Tustin Ranch",
+        "Tustin Legacy",
+        "Tustin Meadows"
+      ]
+    },
+    "Glendale": {
+      "slug": "glendale",
+      "region": "la",
+      "neighborhoods": [
+        "Montrose",
+        "Verdugo Woodlands",
+        "Rossmoyne",
+        "Chevy Chase"
+      ]
+    },
+    "Pasadena": {
+      "slug": "pasadena",
+      "region": "la",
+      "neighborhoods": [
+        "Bungalow Heaven",
+        "Linda Vista",
+        "Hastings Ranch",
+        "Madison Heights"
+      ]
+    },
+    "Burbank": {
+      "slug": "burbank",
+      "region": "la",
+      "neighborhoods": [
+        "Magnolia Park",
+        "the Rancho",
+        "the Media District",
+        "the Burbank Hills"
+      ]
+    }
   },
   "sources": {
-    "piano-lessons-orange-county.html": {"region": "oc", "instrument": "piano",
+    "piano-lessons-orange-county.html": {
+      "region": "oc",
+      "instrument": "piano",
       "alsoTeach": {
-        "_about": "The line under the featured teacher that names the region's other teachers of this instrument, written out per city because who covers where differs. Facts from instructor_config.json and instructors.html (Jonny 2026-10-30). The region page must carry `region` word for word. 2026-11-17: Armando Salazar dropped (Inland Empire only since his 2026-11-07 email); Newport Beach has no line because its featured teacher is Arthur (see `featured`).",
-        "region": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Irvine, Newport Beach and Tustin.",
-        "Irvine": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Irvine.",
-        "Tustin": "<a href=\"instructors.html\">Arthur Chou</a> also teaches piano in Tustin."
+        "_about": "The line under the featured teacher that names the region's other teachers of this instrument, written out per city because who covers where differs. Facts from instructor_config.json and instructors.html (Jonny 2026-10-30). The region page must carry `region` word for word. 2026-11-17: Armando Salazar dropped (Inland Empire only since his 2026-11-07 email); Newport Beach has no line because its featured teacher is Arthur (see `featured`). 2026-11-23: Arthur Chou retired 2026-11-22; Jinous Muvahhit (bookable 2026-11-23, cron-runner c6a5033) teaches piano in all three OC cities. Her name carries no link until her bio is on instructors.html (instructor profile form, asked 2026-11-23).",
+        "region": "Jinous Muvahhit also teaches piano in Irvine, Newport Beach and Tustin.",
+        "Irvine": "Jinous Muvahhit also teaches piano in Irvine.",
+        "Tustin": "Jinous Muvahhit also teaches piano in Tustin."
       },
       "featured": {
-        "_about": "A city whose featured teacher differs from the region page's: its whole teacher section is copied from the named page, and its city list is cut to this city like every other list. Newport Beach came off Giovanni Raimondo's Fridays on 2026-11-17 (Jonny; cron-runner 46a62f1), so Newport Beach piano features Arthur Chou with the block the OC guitar page shows.",
-        "Newport Beach": {"from": "guitar-lessons-orange-county.html"}
-      }},
-    "guitar-lessons-orange-county.html": {"region": "oc", "instrument": "guitar"},
-    "piano-lessons-los-angeles.html": {"region": "la", "instrument": "piano"},
-    "guitar-lessons-los-angeles.html": {"region": "la", "instrument": "guitar"}
+        "_about": "A city whose featured teacher differs from the region page's: its whole teacher section is copied from the named page, and its city list is cut to this city like every other list. Newport Beach came off Giovanni Raimondo's Fridays on 2026-11-17 (Jonny; cron-runner 46a62f1), so Newport Beach piano features Arthur Chou with the block the OC guitar page shows. `none` instead of `from`: the city page shows no teacher section (2026-11-23: Arthur retired; Newport Beach piano is Jinous Muvahhit's, who has no bio or photo on the site yet).",
+        "Newport Beach": {
+          "none": "Jinous Muvahhit is Newport Beach's piano teacher (2026-11-23) and has no bio or photo on the site yet; feature her once her profile form answer is on instructors.html."
+        }
+      }
+    },
+    "guitar-lessons-orange-county.html": {
+      "region": "oc",
+      "instrument": "guitar",
+      "featured": {
+        "_about": "See piano-lessons-orange-county.html featured._about.",
+        "Newport Beach": {
+          "none": "No bookable guitar teacher in Newport Beach since Arthur Chou retired 2026-11-22 (Giovanni Raimondo is booked for Irvine and Tustin)."
+        }
+      },
+      "leadOnly": {
+        "_about": "Cities whose page takes the lead form, not the booking widget, because nobody is bookable for this instrument there (Jonny 2026-11-23).",
+        "Newport Beach": "Lead form until Garrett Wilmoth is bookable (Jonny 2026-11-23)."
+      }
+    },
+    "piano-lessons-los-angeles.html": {
+      "region": "la",
+      "instrument": "piano"
+    },
+    "guitar-lessons-los-angeles.html": {
+      "region": "la",
+      "instrument": "guitar"
+    }
   },
   "pages": [
-    {"city": "Irvine", "instrument": "piano"},
-    {"city": "Newport Beach", "instrument": "piano"},
-    {"city": "Tustin", "instrument": "piano"},
-    {"city": "Irvine", "instrument": "guitar"},
-    {"city": "Newport Beach", "instrument": "guitar"},
-    {"city": "Tustin", "instrument": "guitar"},
-    {"city": "Glendale", "instrument": "piano"},
-    {"city": "Pasadena", "instrument": "piano"},
-    {"city": "Burbank", "instrument": "piano"},
-    {"city": "Glendale", "instrument": "guitar"},
-    {"city": "Pasadena", "instrument": "guitar"},
-    {"city": "Burbank", "instrument": "guitar"}
+    {
+      "city": "Irvine",
+      "instrument": "piano"
+    },
+    {
+      "city": "Newport Beach",
+      "instrument": "piano"
+    },
+    {
+      "city": "Tustin",
+      "instrument": "piano"
+    },
+    {
+      "city": "Irvine",
+      "instrument": "guitar"
+    },
+    {
+      "city": "Newport Beach",
+      "instrument": "guitar"
+    },
+    {
+      "city": "Tustin",
+      "instrument": "guitar"
+    },
+    {
+      "city": "Glendale",
+      "instrument": "piano"
+    },
+    {
+      "city": "Pasadena",
+      "instrument": "piano"
+    },
+    {
+      "city": "Burbank",
+      "instrument": "piano"
+    },
+    {
+      "city": "Glendale",
+      "instrument": "guitar"
+    },
+    {
+      "city": "Pasadena",
+      "instrument": "guitar"
+    },
+    {
+      "city": "Burbank",
+      "instrument": "guitar"
+    }
   ]
 }

@@ -467,7 +467,8 @@
     .hero-vsl-sub { font-weight: 600; font-size: 14px; opacity: 0.92; }
 
     /* MEET THE TEACHER (2026-10-19). A buyer review found no teacher named on any landing
-       page. Every fact here is copied from Arthur's bio on instructors.html; nothing is added.
+       page. Every fact here is copied from Giovanni Raimondo's bio on instructors.html; nothing is added
+       (Arthur Chou until he retired 2026-11-22; Giovanni since 2026-11-23, booked for guitar in Newport Beach).
        The block names him without promising he is the only teacher, because the scheduler
        can also offer another instructor in a few cities on some days. */
     .teacher { background: var(--off-white); padding: 80px 32px; border-bottom: 1px solid #f0eeff; }
@@ -727,29 +728,6 @@
 
 <!-- MEET THE TEACHER (2026-10-19). Facts only from instructors.html. Cities are the ones the
      live scheduler offers (/api/scheduling/cities?brand=musicandmastery, checked 2026-10-19). -->
-<section class="teacher">
-  <div class="teacher-inner">
-    <div class="teacher-photo">
-      <picture>
-        <source srcset="brand_assets/instructors/Arthur%20Chou.webp" type="image/webp" />
-        <img src="brand_assets/instructors/Arthur%20Chou.jpg" width="900" height="1125" loading="lazy" alt="Arthur Chou playing an electric guitar" />
-      </picture>
-    </div>
-    <div class="teacher-head">
-      <h2>Meet Arthur Chou</h2>
-      <p class="teacher-role">Guitar and piano teacher</p>
-    </div>
-    <div class="teacher-body">
-      <p class="teacher-lede">Arthur comes to homes in Newport Beach.</p>
-      <ul class="teacher-facts">
-          <li>Graduated with High Honors from Musicians Institute, with a degree in guitar performance.</li>
-          <li>More than five years of teaching and playing live.</li>
-          <li>Plays pop, rock, funk, R&amp;B, blues and fusion.</li>
-      </ul>
-        <p class="teacher-note">He plans each lesson around the student&#39;s own goals.</p>
-    </div>
-  </div>
-</section>
 
 <!-- THE THREE NUMBERED BLOCKS at ~2.6 / 3.2 / 3.7, each with a real photo.
      These are MECHANICS, which the copy playbook permits anywhere AFTER a dream. The
@@ -1203,7 +1181,7 @@
 <script>window.MCMC_BRAND_SOURCE = 'musicandmastery';</script>
 <!-- Booking flow ON: every city and instrument this page offers has real,
      day-scoped instructor availability behind it. -->
-<script>window.MCMC_LEAD_ONLY = false;</script>
+<script>window.MCMC_LEAD_ONLY = true;</script>
 <script>window.MCMC_THANK_YOU_REDIRECT = 'https://www.musicandmastery.com/thank-you.html';</script>
 <!-- This page sells one instrument, so the form opens on it. A ?book= value in the URL still overrides this. -->
 <script>window.MCMC_PREFILL_INSTRUMENT = 'Guitar';</script>
