@@ -4,6 +4,11 @@
       "source": "/black-friday",
       "destination": "/black-friday.html",
       "permanent": false
+    },
+    {
+      "source": "/pricing",
+      "destination": "/pricing.html",
+      "permanent": false
     }
   ],
   "rewrites": [
