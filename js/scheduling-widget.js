@@ -32,6 +32,9 @@
     return out;
   }
   function ftBareHost(h) { return String(h || '').toLowerCase().replace(/^www\./, ''); }
+  // A visitor's own typed value put back into an input's value="..." when a step re-renders: escaped so a quote or
+  // an angle bracket stays part of the value (review 2026-11-25).
+  function escAttr(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function readFirstTouch() {
     var stores = ftStores();
     for (var i = 0; i < stores.length; i++) {
@@ -638,7 +641,7 @@
     return `
       <div class="sw-field ${fieldErrorClass('studentName')}">
         <label class="sw-label" for="sw-student-name">Student's First Name</label>
-        <input type="text" id="sw-student-name" class="sw-input" placeholder="Your child's first name" maxlength="${STUDENT_NAME_MAX}" autocomplete="off" value="${state.studentName}">
+        <input type="text" id="sw-student-name" class="sw-input" placeholder="Your child's first name" maxlength="${STUDENT_NAME_MAX}" autocomplete="off" value="${escAttr(state.studentName)}">
         ${fieldErrorHtml('studentName')}
       </div>
     `;
@@ -748,7 +751,7 @@
         ${state.instrument === 'Other' ? `
           <div class="sw-field ${fieldErrorClass('instrumentOther')}">
             <label class="sw-label" for="sw-instrument-other">Which instrument?</label>
-            <input type="text" id="sw-instrument-other" class="sw-input" placeholder="e.g., Violin, Saxophone, Drums" value="${state.instrumentOther}">
+            <input type="text" id="sw-instrument-other" class="sw-input" placeholder="e.g., Violin, Saxophone, Drums" value="${escAttr(state.instrumentOther)}">
             ${fieldErrorHtml('instrumentOther')}
           </div>
         ` : ''}
@@ -780,7 +783,7 @@
 
         <div class="sw-field">
           <label class="sw-label" for="sw-address">Your Address <span class="sw-optional">(optional, for more accurate matching)</span></label>
-          <input type="text" id="sw-address" class="sw-input" placeholder="123 Main St" value="${state.address}">
+          <input type="text" id="sw-address" class="sw-input" placeholder="123 Main St" value="${escAttr(state.address)}">
         </div>
 
         <div class="sw-field">
@@ -913,19 +916,19 @@
 
         <div class="sw-field ${fieldErrorClass('name')}">
           <label class="sw-label" for="sw-name">Your Name</label>
-          <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
+          <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${escAttr(state.clientName)}">
           ${fieldErrorHtml('name')}
         </div>
 
         <div class="sw-field ${fieldErrorClass('email')}">
           <label class="sw-label" for="sw-email">Email</label>
-          <input type="email" id="sw-email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
+          <input type="email" id="sw-email" class="sw-input" placeholder="your@email.com" value="${escAttr(state.clientEmail)}">
           ${fieldErrorHtml('email')}
         </div>
 
         <div class="sw-field ${fieldErrorClass('phone')}">
           <label class="sw-label" for="sw-phone">Phone</label>
-          <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
+          <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${escAttr(state.clientPhone)}">
           ${fieldErrorHtml('phone')}
         </div>
 
@@ -934,7 +937,7 @@
 
         <div class="sw-field ${fieldErrorClass('address')}">
           <label class="sw-label" for="sw-address-final">Lesson Address</label>
-          <input type="text" id="sw-address-final" class="sw-input" placeholder="Full address where lessons will take place" value="${state.address}">
+          <input type="text" id="sw-address-final" class="sw-input" placeholder="Full address where lessons will take place" value="${escAttr(state.address)}">
           ${fieldErrorHtml('address')}
         </div>
 
@@ -1060,17 +1063,17 @@
 
         <div class="sw-field">
           <label class="sw-label" for="sw-name">Your Name</label>
-          <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
+          <input type="text" id="sw-name" class="sw-input" placeholder="First and last name" value="${escAttr(state.clientName)}">
         </div>
 
         <div class="sw-field">
           <label class="sw-label" for="sw-email">Email</label>
-          <input type="email" id="sw-email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
+          <input type="email" id="sw-email" class="sw-input" placeholder="your@email.com" value="${escAttr(state.clientEmail)}">
         </div>
 
         <div class="sw-field">
           <label class="sw-label" for="sw-phone">Phone</label>
-          <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
+          <input type="tel" id="sw-phone" class="sw-input" placeholder="(555) 123-4567" value="${escAttr(state.clientPhone)}">
         </div>
 
         ${renderHowHeardField()}
@@ -1078,7 +1081,7 @@
 
         <div class="sw-field">
           <label class="sw-label" for="sw-notes">${state.noTimesFit ? 'Which days and times work for you?' : 'Anything else we should know?'} <span class="sw-optional">(optional)</span></label>
-          <input type="text" id="sw-notes" class="sw-input" placeholder="${state.noTimesFit ? 'e.g., evenings after 5, or weekends' : 'e.g., student age, experience level, preferred days'}" value="${state.notes}">
+          <input type="text" id="sw-notes" class="sw-input" placeholder="${state.noTimesFit ? 'e.g., evenings after 5, or weekends' : 'e.g., student age, experience level, preferred days'}" value="${escAttr(state.notes)}">
         </div>
 
         <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" id="sw-hp" name="sw-hp" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
@@ -1151,19 +1154,19 @@
     const name = `
         <div class="sw-field ${fieldErrorClass('name')}">
           <label class="sw-label" for="sw-name">Your Name</label>
-          <input type="text" id="sw-name" name="name" autocomplete="name" class="sw-input" placeholder="First and last name" value="${state.clientName}">
+          <input type="text" id="sw-name" name="name" autocomplete="name" class="sw-input" placeholder="First and last name" value="${escAttr(state.clientName)}">
           ${fieldErrorHtml('name')}
         </div>`;
     const email = `
         <div class="sw-field ${fieldErrorClass('email')}">
           <label class="sw-label" for="sw-email">Email</label>
-          <input type="email" id="sw-email" name="email" autocomplete="email" class="sw-input" placeholder="your@email.com" value="${state.clientEmail}">
+          <input type="email" id="sw-email" name="email" autocomplete="email" class="sw-input" placeholder="your@email.com" value="${escAttr(state.clientEmail)}">
           ${fieldErrorHtml('email')}
         </div>`;
     const phone = `
         <div class="sw-field ${fieldErrorClass('phone')}">
           <label class="sw-label" for="sw-phone">Phone</label>
-          <input type="tel" id="sw-phone" name="phone" autocomplete="tel" class="sw-input" placeholder="(555) 123-4567" value="${state.clientPhone}">
+          <input type="tel" id="sw-phone" name="phone" autocomplete="tel" class="sw-input" placeholder="(555) 123-4567" value="${escAttr(state.clientPhone)}">
           ${fieldErrorHtml('phone')}
         </div>`;
     return PHONE_FIRST ? phone + name + email : name + email + phone;
@@ -1218,7 +1221,7 @@
         ${state.instrument === 'Other' ? `
           <div class="sw-field ${fieldErrorClass('instrumentOther')}">
             <label class="sw-label" for="sw-instrument-other">Which instrument?</label>
-            <input type="text" id="sw-instrument-other" class="sw-input" placeholder="e.g., Violin, Saxophone" value="${state.instrumentOther}">
+            <input type="text" id="sw-instrument-other" class="sw-input" placeholder="e.g., Violin, Saxophone" value="${escAttr(state.instrumentOther)}">
             ${fieldErrorHtml('instrumentOther')}
           </div>
         ` : ''}
