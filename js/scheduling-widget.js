@@ -401,6 +401,7 @@
       smsConsent: false,   // the optional SMS box; unticked on every fresh form
       studentAge: '',
       lessonFor: '',    // 'child' | 'self'. Empty until answered; the API treats empty as unknown.
+      studentName: '',  // the student's first name: the booking form asks it once lessonFor is 'child'
       howHeard: '',     // one of HOW_HEARD_OPTIONS, or '' (optional, never required)
       startTiming: '',  // 'asap' | 'within_month' | 'exploring'
       notes: '',
@@ -623,6 +624,31 @@
         ${fieldErrorHtml('lessonFor')}
       </div>
     `;
+  }
+
+  // The student's first name (Jonny 2026-11-25), asked on the BOOKING form only, and only once
+  // "My child" is picked: for "Myself" the visitor is the student and the API sends their own
+  // name on. After a booking, the intake call uses it to tell a new time for the same child
+  // from a sibling's booking. The lead forms do not ask it. The API keeps at most
+  // STUDENT_NAME_MAX characters, so the box stops there too.
+  const STUDENT_NAME_MAX = 60;
+
+  function renderStudentNameField() {
+    if (state.lessonFor !== 'child') return '';
+    return `
+      <div class="sw-field ${fieldErrorClass('studentName')}">
+        <label class="sw-label" for="sw-student-name">Student's First Name</label>
+        <input type="text" id="sw-student-name" class="sw-input" placeholder="Your child's first name" maxlength="${STUDENT_NAME_MAX}" autocomplete="off" value="${state.studentName}">
+        ${fieldErrorHtml('studentName')}
+      </div>
+    `;
+  }
+
+  // What a booking sends as student_name: the typed name for a child, and nothing otherwise.
+  // An absent key reads as "not given" on the API, the same as an older cached widget.
+  function studentNameField() {
+    if (state.lessonFor !== 'child') return undefined;
+    return state.studentName.trim().slice(0, STUDENT_NAME_MAX) || undefined;
   }
 
   // ─── Render ────────────────────────────────────────────────────────────────
@@ -883,6 +909,7 @@
         </div>
 
         ${renderLessonForField()}
+        ${renderStudentNameField()}
 
         <div class="sw-field ${fieldErrorClass('name')}">
           <label class="sw-label" for="sw-name">Your Name</label>
@@ -1313,9 +1340,13 @@
       btn.addEventListener('click', () => {
         state.lessonFor = btn.dataset.lessonfor;
         clearFieldError('lessonFor');
+        if (state.lessonFor !== 'child') clearFieldError('studentName');   // the field is gone
         render();
       });
     });
+
+    const studentNameInput = document.getElementById('sw-student-name');
+    if (studentNameInput) studentNameInput.addEventListener('input', e => { state.studentName = e.target.value; clearFieldError('studentName'); });
 
     // Step 2
     document.querySelectorAll('.sw-slot').forEach(btn => {
@@ -1631,6 +1662,9 @@
     if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) { setFieldError('email', 'Please enter a valid email.'); bad = true; }
     if (!state.address.trim()) { setFieldError('address', 'Please enter your lesson address.'); bad = true; }
     if (!state.lessonFor) { setFieldError('lessonFor', 'Please tell us who the lesson is for.'); bad = true; }
+    if (state.lessonFor === 'child' && !state.studentName.trim()) {
+      setFieldError('studentName', "Please enter the student's first name."); bad = true;
+    }
     if (bad) { render(); return; }
 
     // Honeypot check
@@ -1665,6 +1699,7 @@
         lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
         lesson_for: state.lessonFor || undefined,
+        student_name: studentNameField(),
         how_heard: state.howHeard || undefined,
         ...smsConsentFields(),
         ...aiCallConsentFields(AI_CALL_CONSENT_BOOKING_TEXT),
@@ -1713,6 +1748,9 @@
       if (!state.clientEmail.trim() || !state.clientEmail.includes('@')) throw new Error('Please enter a valid email.');
       if (!state.address.trim()) throw new Error('Please enter your lesson address.');
       if (!state.lessonFor) throw new Error('Please tell us who the lesson is for.');
+      if (state.lessonFor === 'child' && !state.studentName.trim()) {
+        throw new Error("Please enter the student's first name.");
+      }
 
       const result = await bookLesson({
         client_name: state.clientName.trim(),
@@ -1727,6 +1765,7 @@
         lesson_date: state.selectedSlot.date,
         lesson_length: state.lessonLength,
         lesson_for: state.lessonFor || undefined,
+        student_name: studentNameField(),
         how_heard: state.howHeard || undefined,
         callback_requested: true,
         ...smsConsentFields(),

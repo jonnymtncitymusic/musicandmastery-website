@@ -658,6 +658,8 @@ async function findSlots(page) {
         await page.type('#sw-address-final', '1 Test St');
         const lessonFor = await page.$('[data-lessonfor="child"]');
         if (lessonFor) await lessonFor.click();
+        // "My child" makes the booking ask the student's first name (case 17).
+        if (await page.$('#sw-student-name')) await page.type('#sw-student-name', 'Maya');
       };
       const bookLineAboveSubmit = page => page.evaluate(() => {
         const btn = document.getElementById('sw-submit');
@@ -870,6 +872,159 @@ async function findSlots(page) {
           await page.close();
         });
       }
+    }
+
+    // ── 17. The student's first name on the BOOKING form (Jonny 2026-11-25) ───────────────
+    // After a booking, the intake call tells a new time for the same child from a sibling's
+    // booking by this name. Shown and required once "My child" is picked, never for "Myself"
+    // (the API sends the visitor's own name on), and sent to /book as student_name. The lead
+    // forms do not ask it. The callback link posts to /book too, so it needs the name as well.
+    {
+      const STUDENT_LABEL = "Student's First Name";
+      const STUDENT_PLACEHOLDER = "Your child's first name";
+      const STUDENT_ERROR = "Please enter the student's first name.";
+      const bookCalls = () => apiCalls.filter(c => c.url.includes('/book'));
+      const lastBook = () => {
+        try { return JSON.parse(bookCalls().slice(-1)[0]?.body || '{}'); } catch (e) { return {}; }
+      };
+      const tap = async (page, sel) => {
+        await page.$eval(sel, el => el.scrollIntoView({ block: 'center' }));
+        await page.click(sel);
+      };
+      // The booking form, filled in except who the lesson is for and the student's name.
+      const toForm = async page => {
+        await findSlots(page);
+        await page.waitForSelector('.sw-slot', { timeout: 5000 });
+        await page.click('.sw-slot');
+        const next = await page.$('#sw-next-3');
+        if (next) await next.click();
+        await page.waitForSelector('#sw-submit', { timeout: 5000 });
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
+        await page.type('#sw-phone', '7605551234');
+        await page.type('#sw-address-final', '1 Test St');
+      };
+      // The field as the visitor sees it, or null when it is not on the form.
+      const field = page => page.evaluate(() => {
+        const input = document.getElementById('sw-student-name');
+        if (!input) return null;
+        const wrap = input.closest('.sw-field');
+        const label = document.querySelector('label[for="sw-student-name"]');
+        const who = document.getElementById('sw-lessonfor-label');
+        return {
+          label: label ? label.textContent.trim() : '', labelClass: label ? label.className : '',
+          placeholder: input.placeholder, inputClass: input.className, type: input.type,
+          maxLength: input.maxLength, value: input.value,
+          error: (wrap.querySelector('.sw-field-error-msg') || {}).textContent || '',
+          errorClass: wrap.classList.contains('sw-field-error'),
+          rightAfterWho: !!who && who.closest('.sw-field').nextElementSibling === wrap,
+        };
+      });
+      // A send the form refuses: no /book POST, the page stays on the form.
+      const refused = async (page, sel, errorSel) => {
+        const before = bookCalls().length;
+        await tap(page, sel);
+        await page.waitForSelector(errorSel, { timeout: 3000 });
+        await page.evaluate(() => new Promise(r => setTimeout(r, 300)));
+        return bookCalls().length === before;
+      };
+      const sent = async (page, sel) => {
+        const before = bookCalls().length;
+        await tap(page, sel);
+        await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'), { timeout: 8000 });
+        return bookCalls().length > before;
+      };
+
+      // 17a. Shown for a child, gone for an adult, in the widget's own field style.
+      await isolate('17a', async () => {
+        const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
+        await toForm(page);
+        check('17a no student name field before "who is this for" is answered', (await field(page)) === null);
+        await tap(page, '[data-lessonfor="child"]');
+        const f = await field(page);
+        check('17a "My child" shows the student name field', !!f);
+        check('17a its label is the approved wording', f && f.label === STUDENT_LABEL, f && f.label);
+        check('17a its placeholder is the approved wording', f && f.placeholder === STUDENT_PLACEHOLDER, f && f.placeholder);
+        check('17a it uses the widget field classes', f && f.labelClass === 'sw-label' && f.inputClass === 'sw-input' &&
+          f.type === 'text', JSON.stringify(f));
+        check('17a it sits right under "Who is this lesson for?"', f && f.rightAfterWho, JSON.stringify(f));
+        check('17a it stops at 60 characters', f && f.maxLength === 60, JSON.stringify(f));
+        await page.type('#sw-student-name', 'Maya');
+        await tap(page, '[data-lessonfor="self"]');
+        check('17a "Myself" takes the field away', (await field(page)) === null);
+        await tap(page, '[data-lessonfor="child"]');
+        const back = await field(page);
+        check('17a back to "My child" keeps what was typed', back && back.value === 'Maya', JSON.stringify(back));
+        await page.close();
+      });
+
+      // 17b. Left empty: Book is refused with the message under the field; filled: sent trimmed.
+      await isolate('17b', async () => {
+        const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
+        await toForm(page);
+        await tap(page, '[data-lessonfor="child"]');
+        check('17b an empty name sends no booking',
+          await refused(page, '#sw-submit', '.sw-field-error #sw-student-name ~ .sw-field-error-msg'));
+        const f = await field(page);
+        check('17b the message is under the field, in the widget error style',
+          f && f.errorClass && f.error.trim() === STUDENT_ERROR, JSON.stringify(f));
+        // Like every other field here, typing clears the error in state and the next render drops the message.
+        await page.type('#sw-student-name', '  Maya  ');
+        check('17b a named child is booked', await sent(page, '#sw-submit'));
+        const body = lastBook();
+        check('17b the booking sends student_name, trimmed, with lesson_for child',
+          body.student_name === 'Maya' && body.lesson_for === 'child', JSON.stringify(body));
+        await page.close();
+      });
+
+      // 17c. "Myself": not asked, not required, not sent (the API uses the visitor's own name).
+      await isolate('17c', async () => {
+        const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
+        await toForm(page);
+        await tap(page, '[data-lessonfor="self"]');
+        check('17c an adult booking goes through with no student name', await sent(page, '#sw-submit'));
+        const body = lastBook();
+        check('17c an adult booking sends no student_name key',
+          !('student_name' in body) && body.lesson_for === 'self', JSON.stringify(body));
+        await page.close();
+      });
+
+      // 17d. The callback link posts to /book as well: same rule.
+      await isolate('17d', async () => {
+        const page = await newPage(browser, base, inlinePage, { stripRedirect: true });
+        await toForm(page);
+        await tap(page, '[data-lessonfor="child"]');
+        check('17d an empty name sends no callback request', await refused(page, '#sw-callback', '.sw-error'));
+        const err = await page.$eval('.sw-error', el => el.textContent.trim()).catch(() => '');
+        check('17d the callback says which field is missing', err === STUDENT_ERROR, err);
+        await page.type('#sw-student-name', 'Maya');
+        check('17d a named child\'s callback request is sent', await sent(page, '#sw-callback'));
+        const body = lastBook();
+        check('17d the callback sends student_name',
+          body.student_name === 'Maya' && body.callback_requested === true, JSON.stringify(body));
+        await page.close();
+      });
+
+      // 17e. The lead form (no times in the city) does not ask it and does not send it.
+      await isolate('17e', async () => {
+        const page = await newPage(browser, base, inlinePage, { availability: AVAIL_EMPTY, stripRedirect: true });
+        await findSlots(page);
+        await page.waitForSelector('#sw-submit-lead', { timeout: 5000 });
+        await page.type('#sw-name', 'Pat Rivera');
+        await page.type('#sw-email', 'pat@example.com');
+        await page.type('#sw-phone', '7605551234');
+        if (await page.$('[data-lessonfor="child"]')) await tap(page, '[data-lessonfor="child"]');
+        check('17e the lead form has no student name field', (await field(page)) === null);
+        const before = apiCalls.filter(c => c.url.includes('/lead')).length;
+        await tap(page, '#sw-submit-lead');
+        await page.waitForFunction(() => window.__events.some(e => e[0] === 'form_submission'), { timeout: 8000 });
+        const calls = apiCalls.filter(c => c.url.includes('/lead'));
+        let body = {};
+        try { body = JSON.parse(calls.slice(-1)[0]?.body || '{}'); } catch (e) { body = {}; }
+        check('17e the lead was sent without a student_name key',
+          calls.length > before && !('student_name' in body), JSON.stringify(body));
+        await page.close();
+      });
     }
 
     // ── 16. Black Friday page (one campaign, remove after Dec 18, 2026) ────────────────
